@@ -140,7 +140,7 @@ Three gates keep this cheap:
 
 ## Typechecking
 
-`block run` transpiles with Babel and never typechecks — a schema change that breaks your code would otherwise fail silently at runtime. So after every schema write (and once at startup) the daemon typechecks your whole project using **your project's own `typescript`** (nothing is bundled; if it isn't installed, the feature quietly reports "unavailable"). It finds the nearest `tsconfig.json` at or above the output file and runs `tsc --noEmit` in a child process, so the daemon never blocks.
+`block run` transpiles with Babel and never typechecks — a schema change that breaks your code would otherwise fail silently at runtime. So after every schema write (and once at startup) the daemon typechecks your whole project using **your project's own `typescript`** (nothing is bundled; if it isn't installed, the feature quietly reports "unavailable"). It finds the nearest `tsconfig.json` — or `jsconfig.json` — at or above the output file and runs `tsc --noEmit` in a child process, so the daemon never blocks.
 
 Results are served at `GET /diagnostics`:
 
@@ -175,6 +175,19 @@ On each schema write the daemon diffs the previous generated file against the ne
 | Field **type changed** | Same: the value's shape changed, so only you can decide what the code should do |
 
 String literals are rewritten only when the type checker confirms what they are — an unrelated `const label = 'Todo'` is never touched. When it can't confirm, it skips and leaves the error for the typecheck panel: under-fixing is the intended failure mode.
+
+### If your extension is JavaScript
+
+Both features are driven by TypeScript, but your code doesn't have to be. A `jsconfig.json` next to (or above) the generated file is enough — it's the same format, and TypeScript reads it with `allowJs` implied:
+
+```json
+{
+  "compilerOptions": {"target": "es2020", "moduleResolution": "bundler", "checkJs": true},
+  "include": ["frontend"]
+}
+```
+
+`.js` and `.jsx` files are analysed and rewritten exactly like `.ts` — the generated file is still TypeScript, and your editor picks up the types from it either way. One asymmetry worth knowing: `jsconfig.json` implies `allowJs` but **not** `checkJs`, so without the `"checkJs": true` above, the typecheck panel has nothing to report on your `.js` files and will happily say "types ok". Fixes work regardless of that setting.
 
 Applied edits are printed to the terminal and the project is re-typechecked immediately, so the panel confirms the fix landed. **Undo is git** — these are ordinary dev-loop edits, same as an editor refactor.
 
