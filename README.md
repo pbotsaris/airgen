@@ -155,6 +155,31 @@ Results are served at `GET /diagnostics`:
 
 The observer polls this after each sync and shows the result in the panel. Paths are project-relative (never absolute).
 
+## Fixing your code when the schema changes
+
+Renaming a field in Airtable regenerates your types instantly — but every `record.fields.contactEmail` in your code is now stale. Start airgen with `--fix` and it offers to rewrite them:
+
+```sh
+npx airgen --fix          # or {"fix": true} in airgen-config.json
+```
+
+On each schema write the daemon diffs the previous generated file against the new one **by ID**, so a rename is an exact fact (`fldEmail000000001` was `contactEmail`, is now `customerEmail`) rather than a guess. It then locates the affected code with the TypeScript language service and shows it in the panel, with an **Apply** button for anything it can rewrite mechanically:
+
+| Change | What happens |
+|---|---|
+| Field renamed | `record.fields.contactEmail` → `.customerEmail`, including destructuring, across `.ts` and `.js` |
+| Table renamed | `useRecords('Projects')` → `useRecords('Projekte')`, plus the `ProjectsRecord` type |
+| Select choice renamed | `status?.name === 'Todo'` → `=== 'Backlog'` |
+| Generated type renamed | `ProjectsRecord`, `ProjectsStatusChoice` and friends where you import them |
+| Field/table **deleted** | Listed with every usage as `file:line` — no automatic fix, the data is gone |
+| Field **type changed** | Same: the value's shape changed, so only you can decide what the code should do |
+
+String literals are rewritten only when the type checker confirms what they are — an unrelated `const label = 'Todo'` is never touched. When it can't confirm, it skips and leaves the error for the typecheck panel: under-fixing is the intended failure mode.
+
+Applied edits are printed to the terminal and the project is re-typechecked immediately, so the panel confirms the fix landed. **Undo is git** — these are ordinary dev-loop edits, same as an editor refactor.
+
+A note on scope: this is the one feature that writes outside the generated file, so it exists only under `--fix`. Edits are confined to your project directory and to source extensions, a pending fix is single-use, and if you edit a file after the analysis ran the apply is refused rather than applied at stale offsets.
+
 ## Daemon security
 
 Any webpage you visit can fire blind cross-origin POSTs at localhost, so the daemon is deliberately locked down:
@@ -162,7 +187,8 @@ Any webpage you visit can fire blind cross-origin POSTs at localhost, so the dae
 - binds `127.0.0.1` only
 - the output path is fixed at startup (`--out` or `airgen-config.json`); client-supplied paths in the payload are **ignored**
 - payloads must be bounded (< 2 MB) strings starting with the airgen header, or they're rejected without writing
-- `GET /diagnostics` is a pure state read (it never triggers a check) and reports cwd-relative paths only
+- `GET /diagnostics` and `GET /fixes` are pure state reads (they never trigger work) and report cwd-relative paths only
+- `POST /apply-fix` exists only under `--fix`, takes an id and nothing else, and applies only edits the daemon computed itself — paths and edits are never accepted from the request
 
 ## Production
 
@@ -203,4 +229,4 @@ All of these are exported identically from `airgen`, `airgen/interface`, and `ai
 | `checkSchemaDrift(base, airgenMeta)` | Pure drift check behind `useSchemaDrift` — returns a `DriftReport` (`{ok, findings, counts}`). |
 | `generateTypeScriptFromBase(base, {hooksModule?})` | The pure generator, if you want to build your own sync flow. `hooksModule` overrides the import specifier baked into the generated file (default `'airgen'`). |
 | `computeSchemaSignature(base)` | Canonical schema hash used for change detection. |
-| `airgen` (bin) | `npx airgen [--port <n>] [--out <path>] [--daemon-only] [-- <block run args>]` — wraps `block run`, daemon exits with it. Output defaults to `./frontend/airtable-schema.ts`; an optional `airgen-config.json` (`{"out", "port"}`) in the cwd overrides defaults, CLI flags override both. Health check at `GET /health`, typecheck results at `GET /diagnostics`. |
+| `airgen` (bin) | `npx airgen [--port <n>] [--out <path>] [--daemon-only] [--fix] [-- <block run args>]` — wraps `block run`, daemon exits with it. Output defaults to `./frontend/airtable-schema.ts`; an optional `airgen-config.json` (`{"out", "port", "fix"}`) in the cwd overrides defaults, CLI flags override both. Health check at `GET /health`, typecheck results at `GET /diagnostics`, pending code fixes at `GET /fixes` + `POST /apply-fix` (only with `--fix`). |
