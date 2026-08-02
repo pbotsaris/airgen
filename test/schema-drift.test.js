@@ -84,13 +84,96 @@ test('removed select choice is a warning naming the choice', () => {
   assert.equal(finding.fieldKey, 'status');
 });
 
-test('choice renamed in place (id kept) is not reported as removed', () => {
+test('choice renamed in place (id kept) warns — the old name is dead in code', () => {
   const base = structuredClone(mockBase);
   const status = base.tables[0].fields.find(field => field.id === 'fldStatus00000001');
   status.options.choices.find(choice => choice.id === 'selTodo000000001').name = 'Backlog';
 
   const report = checkSchemaDrift(base, meta);
-  assert.equal(report.counts.warning, 0);
+  assert.equal(report.counts.breaking, 0);
+  assert.equal(report.counts.warning, 1);
+  const [finding] = report.findings;
+  assert.equal(finding.kind, 'choice-renamed');
+  assert.equal(finding.expected, 'Todo');
+  assert.equal(finding.actual, 'Backlog');
+  assert.equal(finding.fieldKey, 'status');
+});
+
+test('changed formula result type is breaking even though field.type is unchanged', () => {
+  const base = structuredClone(mockBase);
+  base.tables[0].fields.find(field => field.id === 'fldFormula0000001').options.result = {
+    type: 'singleLineText',
+  };
+
+  const report = checkSchemaDrift(base, meta);
+  assert.equal(report.counts.breaking, 1);
+  const [finding] = report.findings;
+  assert.equal(finding.kind, 'result-type-changed');
+  assert.equal(finding.fieldKey, 'daysLeft');
+  assert.equal(finding.expected, 'number');
+  assert.equal(finding.actual, 'singleLineText');
+  assert.match(finding.message, /result/);
+});
+
+test('a formula that loses its result reports the fall back to unknown', () => {
+  const base = structuredClone(mockBase);
+  base.tables[0].fields.find(field => field.id === 'fldFormula0000001').options = {isValid: false};
+
+  const report = checkSchemaDrift(base, meta);
+  assert.equal(report.counts.breaking, 1);
+  assert.equal(report.findings[0].kind, 'result-type-changed');
+  assert.equal(report.findings[0].actual, 'unknown');
+});
+
+test('drift descends into result: a looked-up select choice rename is caught', () => {
+  const lookupBase = structuredClone(mockBase);
+  lookupBase.tables[0].fields.find(field => field.id === 'fldLookup00000001').options.result = {
+    type: 'singleSelect',
+    options: {choices: [{id: 'selLk0000000001', name: 'Alpha'}]},
+  };
+  const lookupMeta = buildAirgenMeta(lookupBase);
+
+  const renamed = structuredClone(lookupBase);
+  renamed.tables[0].fields.find(field => field.id === 'fldLookup00000001').options.result.options.choices[0].name =
+    'Omega';
+
+  const report = checkSchemaDrift(renamed, lookupMeta);
+  assert.equal(report.counts.warning, 1);
+  const [finding] = report.findings;
+  assert.equal(finding.kind, 'choice-renamed');
+  assert.equal(finding.fieldKey, 'taskNames');
+  assert.equal(finding.actual, 'Omega');
+  assert.match(finding.message, /via result/); // the path makes the nesting legible
+});
+
+test('old metas without result are tolerated, not reported as changed', () => {
+  const oldMeta = structuredClone(meta);
+  for (const field of Object.values(oldMeta.tables.Projects.fields)) delete field.result;
+
+  const base = structuredClone(mockBase);
+  base.tables[0].fields.find(field => field.id === 'fldFormula0000001').options.result = {type: 'singleLineText'};
+
+  const report = checkSchemaDrift(base, oldMeta);
+  assert.equal(report.ok, true);
+});
+
+test('old metas with object-form choices still drift-check by id', () => {
+  const oldMeta = structuredClone(meta);
+  const status = oldMeta.tables.Projects.fields.status;
+  // The shape generated files used before choices became a list.
+  status.choices = Object.fromEntries(status.choices.map(choice => [choice.name, choice.id]));
+
+  const unchanged = checkSchemaDrift(mockBase, oldMeta);
+  assert.equal(unchanged.ok, true);
+
+  const base = structuredClone(mockBase);
+  const live = base.tables[0].fields.find(field => field.id === 'fldStatus00000001');
+  live.options.choices = live.options.choices.filter(choice => choice.id !== 'selDone000000001');
+
+  const report = checkSchemaDrift(base, oldMeta);
+  assert.equal(report.counts.warning, 1);
+  assert.equal(report.findings[0].kind, 'choice-removed');
+  assert.equal(report.findings[0].expected, 'Done');
 });
 
 test('additions in the base are not drift', () => {

@@ -18,8 +18,11 @@ export const createTypedHooks = makeCreateTypedHooks(sdk);
 export type {SchemaObserverProps} from './SchemaObserver.js';
 export type {AirgenMeta, AirgenTableMeta, AirgenFieldMeta, Record as TypedRecord} from './useTypedRecords.js';
 export type {SdkBase, SdkTable, SdkField, SdkRecord, BlocksSdkAdapter} from './sdk.js';
-export {generateTypeScriptFromBase, GENERATED_HEADER} from './generator.js';
 export type {BaseLike, TableLike, FieldLike, GeneratorOptions} from './generator.js';
+export type {DriftReport, DriftFinding, DriftSeverity, DriftKind, DriftMetaLike, DriftChoicesLike, DriftResultMetaLike} from './schema-drift.js';
+
+export {generateTypeScriptFromBase, GENERATED_HEADER} from './generator.js';
 export {computeSchemaSignature} from './schema-signature.js';
 export {checkSchemaDrift} from './schema-drift.js';
-export type {DriftReport, DriftFinding, DriftSeverity, DriftKind, DriftMetaLike} from './schema-drift.js';
+
+

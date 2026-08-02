@@ -20,7 +20,23 @@
  * signature to match (see the coupling invariant in CLAUDE.md).
  */
 
-import type {BaseLike, FieldLike, TableLike} from './generator.js';
+import {buildFieldTypeMeta} from './generator.js';
+import type {BaseLike, ChoiceMeta, FieldLike, FieldTypeMeta, TableLike} from './generator.js';
+
+/**
+ * Choices as a generated file records them. Current files use the array form;
+ * files generated before that shape change use a name → id map, which
+ * `normalizeChoices` folds into the same list.
+ */
+export type DriftChoicesLike =
+  | ReadonlyArray<{readonly id: string; readonly name: string}>
+  | {readonly [choiceName: string]: string};
+
+export interface DriftResultMetaLike {
+  readonly type: string;
+  readonly choices?: DriftChoicesLike;
+  readonly result?: DriftResultMetaLike;
+}
 
 /** Structural mirror of `AirgenFieldMeta` — what a generated file bakes in. */
 export interface DriftFieldMetaLike {
@@ -28,7 +44,9 @@ export interface DriftFieldMetaLike {
   /** Raw Airtable field name. Optional: older generated files lack it. */
   readonly name?: string;
   readonly type: string;
-  readonly choices?: {readonly [choiceName: string]: string};
+  readonly choices?: DriftChoicesLike;
+  /** Computed-field result projection. Optional: older generated files lack it. */
+  readonly result?: DriftResultMetaLike;
 }
 
 export interface DriftTableMetaLike {
@@ -48,7 +66,9 @@ export type DriftKind =
   | 'table-missing'
   | 'field-missing'
   | 'field-type-changed'
+  | 'result-type-changed'
   | 'choice-removed'
+  | 'choice-renamed'
   | 'table-renamed'
   | 'field-renamed';
 
@@ -78,14 +98,104 @@ export interface DriftReport {
 
 const SEVERITY_ORDER: {[S in DriftSeverity]: number} = {breaking: 0, warning: 1, info: 2};
 
-function liveChoiceIds(field: FieldLike): Set<string> | null {
-  const choices = field.options?.choices;
-  if (!Array.isArray(choices)) return null;
-  const ids = new Set<string>();
-  for (const choice of choices as Array<{id?: unknown}>) {
-    if (typeof choice?.id === 'string') ids.add(choice.id);
+/** Folds either recorded choice shape into a plain list. */
+function normalizeChoices(choices: DriftChoicesLike | undefined): ChoiceMeta[] | null {
+  if (!choices) return null;
+  if (Array.isArray(choices)) {
+    const list = choices as ReadonlyArray<{id?: unknown; name?: unknown}>;
+    return list
+      .filter(choice => typeof choice?.id === 'string' && typeof choice?.name === 'string')
+      .map(choice => ({id: choice.id as string, name: choice.name as string}));
   }
-  return ids;
+  return Object.entries(choices as {[choiceName: string]: string})
+    .filter(([, id]) => typeof id === 'string')
+    .map(([name, id]) => ({id, name}));
+}
+
+interface ShapeContext {
+  tableKey: string;
+  tableName: string;
+  fieldKey: string;
+  fieldName: string;
+  /** '' at the field itself, then 'result', 'result.result', … */
+  path: string;
+}
+
+function via(path: string): string {
+  return path === '' ? '' : ` (via ${path})`;
+}
+
+/**
+ * Compares the type-relevant projection recorded in the meta against the same
+ * projection of the live field, descending through `result` — a lookup of a
+ * select carries that select's choices, so drift can hide one level down.
+ */
+function compareTypeShape(
+  metaShape: {choices?: DriftChoicesLike; result?: DriftResultMetaLike},
+  liveShape: FieldTypeMeta,
+  context: ShapeContext,
+  findings: DriftFinding[],
+): void {
+  const {tableKey, tableName, fieldKey, fieldName, path} = context;
+  const metaChoices = normalizeChoices(metaShape.choices);
+
+  if (metaChoices) {
+    const liveNamesById = new Map<string, string>();
+    for (const choice of liveShape.choices ?? []) liveNamesById.set(choice.id, choice.name);
+
+    for (const choice of metaChoices) {
+      const liveName = liveNamesById.get(choice.id);
+      if (liveName === undefined) {
+        findings.push({
+          severity: 'warning',
+          kind: 'choice-removed',
+          tableKey,
+          tableName,
+          fieldKey,
+          fieldName,
+          expected: choice.name,
+          message: `choice ${JSON.stringify(choice.name)} removed from ${JSON.stringify(fieldName)} (${tableName})${via(path)}`,
+        });
+      } else if (liveName !== choice.name) {
+        findings.push({
+          severity: 'warning',
+          kind: 'choice-renamed',
+          tableKey,
+          tableName,
+          fieldKey,
+          fieldName,
+          expected: choice.name,
+          actual: liveName,
+          message: `choice renamed: ${JSON.stringify(choice.name)} → ${JSON.stringify(liveName)} in ${JSON.stringify(fieldName)} (${tableName})${via(path)} — code comparing the old name is now dead`,
+        });
+      }
+    }
+  }
+
+  // Files generated before `result` was recorded have none; skip rather than
+  // reporting every computed field as changed.
+  if (!metaShape.result) return;
+
+  const resultPath = path === '' ? 'result' : `${path}.result`;
+  const liveResult = liveShape.result;
+  const liveResultType = liveResult?.type ?? 'unknown';
+
+  if (liveResult === undefined || liveResult.type !== metaShape.result.type) {
+    findings.push({
+      severity: 'breaking',
+      kind: 'result-type-changed',
+      tableKey,
+      tableName,
+      fieldKey,
+      fieldName,
+      expected: metaShape.result.type,
+      actual: liveResultType,
+      message: `field ${JSON.stringify(fieldName)} (${tableName}) changed computed type at ${resultPath}: ${metaShape.result.type} → ${liveResultType}`,
+    });
+    return;
+  }
+
+  compareTypeShape(metaShape.result, liveResult, {...context, path: resultPath}, findings);
 }
 
 export function checkSchemaDrift(base: BaseLike, meta: DriftMetaLike): DriftReport {
@@ -171,24 +281,12 @@ export function checkSchemaDrift(base: BaseLike, meta: DriftMetaLike): DriftRepo
         });
       }
 
-      if (fieldMeta.choices) {
-        const liveIds = liveChoiceIds(liveField);
-        if (liveIds) {
-          for (const [choiceName, choiceId] of Object.entries(fieldMeta.choices)) {
-            if (liveIds.has(choiceId)) continue;
-            findings.push({
-              severity: 'warning',
-              kind: 'choice-removed',
-              tableKey,
-              tableName,
-              fieldKey,
-              fieldName,
-              expected: choiceName,
-              message: `choice ${JSON.stringify(choiceName)} removed from ${JSON.stringify(fieldName)} (${tableName})`,
-            });
-          }
-        }
-      }
+      compareTypeShape(
+        fieldMeta,
+        buildFieldTypeMeta(liveField.type, liveField.options ?? null),
+        {tableKey, tableName, fieldKey, fieldName, path: ''},
+        findings,
+      );
     }
   }
 
