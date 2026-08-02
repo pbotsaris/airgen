@@ -38,15 +38,24 @@ export function findTsconfig(startDir) {
   }
 }
 
-/** Path to the consumer's tsc.js, or null when typescript isn't installed. */
-function resolveTsc(cwd) {
+/**
+ * Root of the consumer's own `typescript` package, or null when it isn't
+ * installed. Resolved per call so installing typescript mid-session heals
+ * without a restart — airgen never ships a copy of its own.
+ */
+export function resolveTypescriptDir(cwd) {
   try {
     const requireFromProject = createRequire(path.join(cwd, 'noop.js'));
-    const pkgPath = requireFromProject.resolve('typescript/package.json');
-    return path.join(path.dirname(pkgPath), 'lib', 'tsc.js');
+    return path.dirname(requireFromProject.resolve('typescript/package.json'));
   } catch {
     return null;
   }
+}
+
+/** Path to the consumer's tsc.js, or null when typescript isn't installed. */
+function resolveTsc(cwd) {
+  const dir = resolveTypescriptDir(cwd);
+  return dir === null ? null : path.join(dir, 'lib', 'tsc.js');
 }
 
 /**

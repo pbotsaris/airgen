@@ -178,5 +178,58 @@ test('unknown airgen-config.json keys fail fast', async () => {
   fs.writeFileSync(path.join(dir, 'airgen-config.json'), JSON.stringify({outDir: 'x'}));
   const {exited, stderr} = launch(['--daemon-only', '-p', '0'], {PATH: '/usr/bin:/bin'}, dir);
   assert.equal(await exited, 1);
-  assert.match(stderr(), /Unknown key "outDir" in airgen-config\.json \(known keys: out, port\)/);
+  assert.match(stderr(), /Unknown key "outDir" in airgen-config\.json \(known keys: out, port, fix\)/);
+});
+
+test('assisted fixes are off unless --fix is passed', async () => {
+  const dir = makeTempDir();
+  const {child, exited, daemonPort} = launch(
+    ['--daemon-only', '-p', '0', '-o', path.join(dir, 'out.ts')],
+    {PATH: '/usr/bin:/bin'}
+  );
+  try {
+    const response = await fetch(`http://127.0.0.1:${await daemonPort}/fixes`);
+    assert.equal(response.status, 404);
+  } finally {
+    child.kill('SIGTERM');
+    await exited;
+  }
+});
+
+test('--fix turns the fix endpoints on', async () => {
+  const dir = makeTempDir();
+  const {child, exited, daemonPort} = launch(
+    ['--daemon-only', '--fix', '-p', '0', '-o', path.join(dir, 'out.ts')],
+    {PATH: '/usr/bin:/bin'}
+  );
+  try {
+    const response = await fetch(`http://127.0.0.1:${await daemonPort}/fixes`);
+    assert.equal(response.status, 200);
+    assert.deepEqual((await response.json()).fixes, []);
+  } finally {
+    child.kill('SIGTERM');
+    await exited;
+  }
+});
+
+test('airgen-config.json can enable fixes too', async () => {
+  const dir = makeTempDir();
+  fs.writeFileSync(path.join(dir, 'airgen-config.json'), JSON.stringify({fix: true, port: 0}));
+  const {child, exited, daemonPort, stdout} = launch(['--daemon-only'], {PATH: '/usr/bin:/bin'}, dir);
+  try {
+    const response = await fetch(`http://127.0.0.1:${await daemonPort}/fixes`);
+    assert.equal(response.status, 200);
+    assert.match(stdout(), /Applying airgen-config\.json \(port, fix\)/);
+  } finally {
+    child.kill('SIGTERM');
+    await exited;
+  }
+});
+
+test('a non-boolean fix key is rejected', async () => {
+  const dir = makeTempDir();
+  fs.writeFileSync(path.join(dir, 'airgen-config.json'), JSON.stringify({fix: 'yes'}));
+  const {exited, stderr} = launch(['--daemon-only', '-p', '0'], {PATH: '/usr/bin:/bin'}, dir);
+  assert.equal(await exited, 1);
+  assert.match(stderr(), /"fix" must be a boolean/);
 });
