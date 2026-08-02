@@ -76,18 +76,19 @@ Import from the entry point that matches your SDK flavor — the three are ident
 
 ```tsx
 import {SchemaObserver} from 'airgen/interface'; // or 'airgen' on the stable SDK
+import {airgenMeta} from './airtable-schema';    // optional: enables drift display
 
 function App() {
   return (
     <>
-      <SchemaObserver />  {/* remove or enabled={false} before release */}
+      <SchemaObserver meta={airgenMeta} />  {/* remove or enabled={false} before release */}
       <MyExtension />
     </>
   );
 }
 ```
 
-The panel shows daemon connection status, table count, last sync time, and a "Copy schema" clipboard fallback for when the daemon isn't running.
+The panel shows daemon connection status, table count, last sync time, and a "Copy schema" clipboard fallback for when the daemon isn't running. Pass the `meta` prop and it also surfaces **schema drift**: live schema vs the `airgenMeta` baked into your generated file, compared by ID — deleted tables/fields and type changes are breaking, removed select choices are warnings, renames are informational.
 
 **3. Import the hooks straight from the generated file:**
 
@@ -103,7 +104,7 @@ projects[0]?.fields.tasks?.[0].id;  // linked record id
 projects[0]?.raw;                   // native SDK Record, escape hatch
 ```
 
-The generated file binds the hooks itself (`export const {useRecords, useTable} = createTypedHooks<TableRecordMap>(airgenMeta)`), so there's no wiring step — and it works from plain JS too: the generic lives inside the generated file, so `useRecords('Projects')` in a `.js` file still gets full autocomplete and field types from the editor's TypeScript service.
+The generated file binds the hooks itself (`export const {useRecords, useTable, useSchemaDrift} = createTypedHooks<TableRecordMap>(airgenMeta)`), so there's no wiring step — and it works from plain JS too: the generic lives inside the generated file, so `useRecords('Projects')` in a `.js` file still gets full autocomplete and field types from the editor's TypeScript service.
 
 Commit `airtable-schema.ts` — it's the source of truth when no dev session is running (CI, teammates without the base open).
 
@@ -116,7 +117,7 @@ Commit `airtable-schema.ts` — it's the source of truth when no dev session is 
   - formulas/rollups/lookups resolve to their computed result type
 - `airgenMeta` — a `const` map of every table/field/choice **ID**.
 - `TableRecordMap` + `TableKey` for hook inference.
-- `useRecords` / `useTable` — hooks already bound to the schema, imported directly from the generated file.
+- `useRecords` / `useTable` / `useSchemaDrift` — hooks already bound to the schema, imported directly from the generated file.
 
 ### Rename survival
 
@@ -146,15 +147,39 @@ Any webpage you visit can fire blind cross-origin POSTs at localhost, so the dae
 
 Remove `<SchemaObserver />` (or pass `enabled={false}`) before releasing. If it ships anyway, a released extension runs from a non-localhost origin, so browsers block the localhost request and the panel just shows "Disconnected" — nothing breaks and nothing is sent anywhere.
 
+### Detecting schema drift in a released extension
+
+Renames never break a running extension (everything resolves by ID), but a **deleted** table or field silently yields `[]`/`undefined`, and a **type change** makes the baked-in types lie. `useSchemaDrift` — exported by the generated file like the other hooks — detects exactly that, live, with no daemon involved:
+
+```tsx
+import {useRecords, useSchemaDrift} from './airtable-schema';
+
+function App() {
+  const drift = useSchemaDrift(); // re-runs only on schema mutations
+
+  return (
+    <>
+      {drift.counts.breaking > 0 && (
+        <Banner text={`This extension is out of date: ${drift.findings[0].message}`} />
+      )}
+      <MyExtension />
+    </>
+  );
+}
+```
+
+The report classifies findings as `breaking` (deleted tables/fields, type changes), `warning` (removed select choices), or `info` (renames — harmless, but your generated file is stale). Wire it to a banner, your error reporting, or just ignore it. The underlying pure function is also exported as `checkSchemaDrift(base, airgenMeta)`.
+
 ## API
 
 All of these are exported identically from `airgen`, `airgen/interface`, and `airgen/base` — the entries differ only in which SDK ui module supplies the hooks and which specifier the generated file imports.
 
 | Export | Description |
 |---|---|
-| `SchemaObserver` | Dev panel component. Props: `daemonUrl` (default `http://localhost:3001`), `debounceMs` (500), `enabled` (true). |
-| `useRecords` / `useTable` (from the **generated file**) | The hooks you actually use — pre-bound to your schema by the generated `airtable-schema.ts`. |
+| `SchemaObserver` | Dev panel component. Props: `daemonUrl` (default `http://localhost:3001`), `debounceMs` (500), `enabled` (true), `meta` (pass `airgenMeta` to surface schema drift). |
+| `useRecords` / `useTable` / `useSchemaDrift` (from the **generated file**) | The hooks you actually use — pre-bound to your schema by the generated `airtable-schema.ts`. |
 | `createTypedHooks<M>(airgenMeta)` | Runtime the generated file calls to bind the hooks; only needed for custom setups. |
+| `checkSchemaDrift(base, airgenMeta)` | Pure drift check behind `useSchemaDrift` — returns a `DriftReport` (`{ok, findings, counts}`). |
 | `generateTypeScriptFromBase(base, {hooksModule?})` | The pure generator, if you want to build your own sync flow. `hooksModule` overrides the import specifier baked into the generated file (default `'airgen'`). |
 | `computeSchemaSignature(base)` | Canonical schema hash used for change detection. |
 | `airgen` (bin) | `npx airgen [--port <n>] [--out <path>] [--daemon-only] [-- <block run args>]` — wraps `block run`, daemon exits with it. Output defaults to `./frontend/airtable-schema.ts`; an optional `airgen-config.json` (`{"out", "port"}`) in the cwd overrides defaults, CLI flags override both. Health check at `GET /health`. |

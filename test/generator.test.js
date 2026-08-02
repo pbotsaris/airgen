@@ -9,6 +9,7 @@ import {spawnSync} from 'node:child_process';
 import {generateTypeScriptFromBase, GENERATED_HEADER} from '../dist/client/generator.js';
 import {computeSchemaSignature} from '../dist/client/schema-signature.js';
 import {mockBase} from './fixtures/mock-base.js';
+import {linkIntoNodeModules} from './helpers.js';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const code = generateTypeScriptFromBase(mockBase);
@@ -89,7 +90,7 @@ test('emits TableRecordMap keyed by sanitized table names', () => {
 
 test('emits ready-to-use hooks bound to the schema', () => {
   assert.match(code, /^import \{createTypedHooks\} from 'airgen';$/m);
-  assert.match(code, /^export const \{useRecords, useTable\} = createTypedHooks<TableRecordMap>\(airgenMeta\);$/m);
+  assert.match(code, /^export const \{useRecords, useTable, useSchemaDrift\} = createTypedHooks<TableRecordMap>\(airgenMeta\);$/m);
 });
 
 test('hooksModule option overrides the runtime import specifier', () => {
@@ -123,12 +124,12 @@ test('generated output compiles under tsc --strict, resolving airgen like a cons
   // Link the built package (and the deps its .d.ts needs) into the temp dir
   // so `import {createTypedHooks} from 'airgen'` typechecks against the real
   // declarations, exactly as it would in a consumer project.
-  const nodeModules = path.join(dir, 'node_modules');
-  fs.mkdirSync(nodeModules);
-  fs.symlinkSync(projectRoot, path.join(nodeModules, 'airgen'), 'dir');
-  for (const dep of ['@airtable', '@types', 'react']) {
-    fs.symlinkSync(path.join(projectRoot, 'node_modules', dep), path.join(nodeModules, dep), 'dir');
-  }
+  linkIntoNodeModules(dir, {
+    airgen: projectRoot,
+    '@airtable': path.join(projectRoot, 'node_modules', '@airtable'),
+    '@types': path.join(projectRoot, 'node_modules', '@types'),
+    react: path.join(projectRoot, 'node_modules', 'react'),
+  });
 
   const result = spawnSync(
     process.execPath,

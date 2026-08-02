@@ -25,7 +25,7 @@ test('each entry point imports only its own SDK ui module', () => {
 });
 
 test('core modules import no SDK paths (structural-types invariant)', () => {
-  for (const name of ['generator.js', 'schema-signature.js', 'SchemaObserver.js', 'useTypedRecords.js', 'sdk.js']) {
+  for (const name of ['generator.js', 'schema-signature.js', 'schema-drift.js', 'SchemaObserver.js', 'useTypedRecords.js', 'sdk.js']) {
     assert.deepEqual(sdkImports(readDist(name)), [], `${name} should not import @airtable/blocks`);
   }
 });

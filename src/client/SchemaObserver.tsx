@@ -17,9 +17,11 @@
  * Blocks component library — the interface SDK doesn't ship one.
  */
 
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { generateTypeScriptFromBase } from './generator.js'
 import { computeSchemaSignature } from './schema-signature.js'
+import { checkSchemaDrift } from './schema-drift.js'
+import type { DriftMetaLike, DriftReport } from './schema-drift.js'
 import type { BlocksSdkAdapter } from './sdk.js'
 
 export interface SchemaObserverProps {
@@ -29,6 +31,11 @@ export interface SchemaObserverProps {
    debounceMs?: number
    /** Disable all work (e.g. in production builds). */
    enabled?: boolean
+   /**
+    * Pass `airgenMeta` from your generated file to surface schema drift
+    * (deleted/renamed tables and fields, type changes) in the panel.
+    */
+   meta?: DriftMetaLike
 }
 
 export interface SchemaObserverConfig {
@@ -71,6 +78,7 @@ export function createSchemaObserver(
       daemonUrl = 'http://localhost:3001',
       debounceMs = 500,
       enabled = true,
+      meta,
    }: SchemaObserverProps): React.ReactElement | null {
       const base = sdk.useBase()
       sdk.useWatchable(base, ['schema'])
@@ -84,6 +92,17 @@ export function createSchemaObserver(
       // A plain string, so it's stable across renders that don't change the
       // schema — the debounce effect below depends on it by value.
       const signature = enabled ? computeSchemaSignature(base) : null
+
+      // Render-time read keyed on the signature: state-only re-renders
+      // (status, copied) never recompute, and no watcher/effect is added, so
+      // the three efficiency gates above are untouched.
+      const drift = useMemo<DriftReport | null>(
+         () =>
+            enabled && meta && signature !== null
+               ? checkSchemaDrift(base, meta)
+               : null,
+         [signature, meta, enabled, base],
+      )
 
       useEffect(() => {
          if (!enabled) return
@@ -185,6 +204,7 @@ export function createSchemaObserver(
                      ? ' · run `npx airgen`'
                      : ''}
             </span>
+            {drift && !drift.ok && <DriftDetails drift={drift} />}
             <button type='button' style={buttonStyle} onClick={copyToClipboard}>
                {copied ? 'Copied!' : 'Copy schema'}
             </button>
@@ -193,6 +213,38 @@ export function createSchemaObserver(
    }
 
    return SchemaObserver
+}
+
+const MAX_DRIFT_LINES = 5
+
+/** One collapsed line in the strip; <details> expands without any state. */
+function DriftDetails({ drift }: { drift: DriftReport }): React.ReactElement {
+   const parts: string[] = []
+   if (drift.counts.breaking > 0) parts.push(`${drift.counts.breaking} breaking`)
+   if (drift.counts.warning > 0) parts.push(`${drift.counts.warning} warning`)
+   if (drift.counts.info > 0) parts.push(`${drift.counts.info} renamed`)
+   const color =
+      drift.counts.breaking > 0
+         ? '#d33030'
+         : drift.counts.warning > 0
+            ? '#b58a00'
+            : '#666666'
+
+   return (
+      <details style={textStyle}>
+         <summary style={{ color, fontWeight: 600, cursor: 'pointer' }}>
+            drift: {parts.join(' · ')}
+         </summary>
+         <div style={{ paddingTop: 4, color: '#333333' }}>
+            {drift.findings.slice(0, MAX_DRIFT_LINES).map((finding, index) => (
+               <div key={index}>{finding.message}</div>
+            ))}
+            {drift.findings.length > MAX_DRIFT_LINES && (
+               <div>+{drift.findings.length - MAX_DRIFT_LINES} more</div>
+            )}
+         </div>
+      </details>
+   )
 }
 
 function getStatusDisplay(status: DaemonStatus): {

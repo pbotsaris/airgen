@@ -256,11 +256,61 @@ function resolveResultType(options: FieldLike['options'], depth: number): Resolv
   return resolveFieldType(result.type, resultOptions, null, depth + 1);
 }
 
-interface FieldMeta {
+export interface FieldMeta {
   id: string;
   name: string;
   type: string;
   choices?: {[choiceName: string]: string};
+}
+
+export interface TableMeta {
+  id: string;
+  name: string;
+  fields: {[fieldKey: string]: FieldMeta};
+}
+
+export interface GeneratedMeta {
+  baseId: string;
+  signature: string;
+  generatedAt: string;
+  tables: {[tableKey: string]: TableMeta};
+}
+
+/**
+ * The `airgenMeta` object a generated file bakes in, as a plain value. The
+ * generator embeds exactly this (JSON.stringify'd); tests and drift checks use
+ * it directly. Keys here MUST match the interface properties the main
+ * generation loop emits — both derive from the same uniqueNames/camelCase
+ * calls, which is what keeps them in lockstep.
+ */
+export function buildAirgenMeta(base: BaseLike): GeneratedMeta {
+  const tableNames = uniqueNames(base.tables, table => pascalCase(table.name));
+  const tables: {[tableKey: string]: TableMeta} = {};
+
+  for (const table of base.tables) {
+    const fieldKeys = uniqueNames(table.fields, field => camelCase(field.name) || field.name);
+    const fields: {[fieldKey: string]: FieldMeta} = {};
+
+    for (const field of table.fields) {
+      const fieldMeta: FieldMeta = {id: field.id, name: field.name, type: field.type};
+      const isSelect = field.type === 'singleSelect' || field.type === 'multipleSelects';
+      const choices = isSelect ? selectChoices(field.options) : null;
+      if (choices) {
+        fieldMeta.choices = {};
+        for (const choice of choices) fieldMeta.choices[choice.name] = choice.id;
+      }
+      fields[fieldKeys.get(field)!] = fieldMeta;
+    }
+
+    tables[tableNames.get(table)!] = {id: table.id, name: table.name, fields};
+  }
+
+  return {
+    baseId: base.id,
+    signature: computeSchemaSignature(base),
+    generatedAt: new Date().toISOString(),
+    tables,
+  };
 }
 
 export interface GeneratorOptions {
@@ -274,13 +324,13 @@ export interface GeneratorOptions {
 
 export function generateTypeScriptFromBase(base: BaseLike, options: GeneratorOptions = {}): string {
   const hooksModule = options.hooksModule ?? 'airgen';
-  const signature = computeSchemaSignature(base);
+  const meta = buildAirgenMeta(base);
+  const signature = meta.signature;
   const tableNames = uniqueNames(base.tables, table => pascalCase(table.name));
 
   const aliasSections: string[] = [];
   const interfaceSections: string[] = [];
   const recordMapEntries: string[] = [];
-  const metaTables: {[tableKey: string]: {id: string; name: string; fields: {[fieldName: string]: FieldMeta}}} = {};
 
   const usedAliasNames = new Set<string>();
 
@@ -289,7 +339,6 @@ export function generateTypeScriptFromBase(base: BaseLike, options: GeneratorOpt
     const interfaceName = `${tableKey}Record`;
 
     const fieldLines: string[] = [];
-    const metaFields: {[fieldKey: string]: FieldMeta} = {};
     // camelCase is lossy ("Soluções" and "Solucoes" both → solucoes), so dedup
     // per table; '' falls back to the raw name, which quoteKey will quote.
     const fieldKeys = uniqueNames(table.fields, field => camelCase(field.name) || field.name);
@@ -321,30 +370,13 @@ export function generateTypeScriptFromBase(base: BaseLike, options: GeneratorOpt
         fieldLines.push(`  /** ${docParts.join(' — ').replace(/\*\//g, '*\\/')} */`);
       }
       fieldLines.push(`  ${quoteKey(fieldKey)}?: ${resolved.ts};`);
-
-      const fieldMeta: FieldMeta = {id: field.id, name: field.name, type: field.type};
-      if (choices) {
-        fieldMeta.choices = {};
-        for (const choice of choices) fieldMeta.choices[choice.name] = choice.id;
-      }
-      // Must be the same key as the interface property above — the runtime
-      // builds record.fields from these meta keys (resolving by fieldMeta.id).
-      metaFields[fieldKey] = fieldMeta;
     }
 
     interfaceSections.push(
       `/** table ${JSON.stringify(table.name)} (${table.id}) */\nexport interface ${interfaceName} {\n${fieldLines.join('\n')}\n}`,
     );
     recordMapEntries.push(`  ${quoteKey(tableKey)}: ${interfaceName};`);
-    metaTables[tableKey] = {id: table.id, name: table.name, fields: metaFields};
   }
-
-  const meta = {
-    baseId: base.id,
-    signature,
-    generatedAt: new Date().toISOString(),
-    tables: metaTables,
-  };
 
   const sections = [
     `${GENERATED_HEADER}\n// Base: ${base.id}${base.name ? ` (${base.name})` : ''}\n// Signature: ${signature}\n/* eslint-disable */`,
@@ -354,7 +386,7 @@ export function generateTypeScriptFromBase(base: BaseLike, options: GeneratorOpt
     ...interfaceSections,
     `export const airgenMeta = ${JSON.stringify(meta, null, 2)} as const;`,
     `export interface TableRecordMap {\n${recordMapEntries.join('\n')}\n}\n\nexport type TableKey = keyof TableRecordMap;`,
-    `export const {useRecords, useTable} = createTypedHooks<TableRecordMap>(airgenMeta);`,
+    `export const {useRecords, useTable, useSchemaDrift} = createTypedHooks<TableRecordMap>(airgenMeta);`,
   ];
 
   return sections.join('\n\n') + '\n';

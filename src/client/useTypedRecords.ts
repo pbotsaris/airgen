@@ -4,7 +4,7 @@
  * Consumers don't call this directly: the generated `airtable-schema.ts` ends
  * with
  *
- *   export const {useRecords, useTable} = createTypedHooks<TableRecordMap>(airgenMeta);
+ *   export const {useRecords, useTable, useSchemaDrift} = createTypedHooks<TableRecordMap>(airgenMeta);
  *
  * so the whole consumer-facing API is `import {useRecords} from
  * './airtable-schema'`. That works from plain JS too — the generic is bound
@@ -20,6 +20,8 @@
  */
 
 import type {BlocksSdkAdapter, SdkBase, SdkRecord, SdkTable} from './sdk.js';
+import {checkSchemaDrift} from './schema-drift.js';
+import type {DriftMetaLike, DriftReport} from './schema-drift.js';
 
 export interface AirgenFieldMeta {
   readonly id: string;
@@ -93,6 +95,19 @@ export function makeCreateTypedHooks(sdk: BlocksSdkAdapter) {
       });
     }
 
-    return {useTable, useRecords};
+    /**
+     * Reactive drift report: live schema vs the meta this file was generated
+     * from. Safe in released extensions — pure reads, no daemon involved.
+     */
+    function useSchemaDrift(): DriftReport {
+      const base = sdk.useBase();
+      sdk.useWatchable(base, ['schema']);
+      // AirgenMeta<M>'s tables are a mapped type over the generic M, which has
+      // no implicit string index while M is unresolved; the shapes are
+      // structurally identical for string keys.
+      return checkSchemaDrift(base, meta as unknown as DriftMetaLike);
+    }
+
+    return {useTable, useRecords, useSchemaDrift};
   };
 }
