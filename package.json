@@ -1,6 +1,6 @@
 {
   "name": "airgen",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Reactive TypeScript type generator for Airtable Custom Extensions: watches the base schema from inside the extension and writes airtable-schema.ts to disk via a local daemon.",
   "license": "MIT",
   "author": "Pedro Botsaris <pedro@antfood.com>",
@@ -51,7 +51,7 @@
     "node": ">=18"
   },
   "peerDependencies": {
-    "@airtable/blocks": ">=1.10.0",
+    "@airtable/blocks": ">=1.10.0 || >=0.0.0-0",
     "react": ">=16.14"
   },
   "devDependencies": {
