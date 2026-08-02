@@ -56,10 +56,11 @@ function readBody(req, maxBytes) {
 export function startDaemon({
   port = 3001,
   host = '127.0.0.1',
-  outPath = './airtable-schema.ts',
+  outPath = './frontend/airtable-schema.ts',
   log = message => console.log(message),
 } = {}) {
   const resolvedOut = path.resolve(process.cwd(), outPath);
+  fs.mkdirSync(path.dirname(resolvedOut), {recursive: true});
 
   const server = http.createServer(async (req, res) => {
     setCorsHeaders(res);

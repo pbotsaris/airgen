@@ -22,9 +22,10 @@ function fakeBlockPath(dir, script) {
   return `${dir}:${process.env.PATH}`;
 }
 
-function launch(args, env) {
+function launch(args, env, cwd) {
   const child = spawn(process.execPath, [BIN, ...args], {
     env: {...process.env, ...env},
+    cwd,
     stdio: ['ignore', 'pipe', 'pipe'],
   });
   let stdout = '';
@@ -43,7 +44,27 @@ function launch(args, env) {
     });
     child.on('exit', () => clearTimeout(timer));
   });
-  return {child, exited, daemonPort, stderr: () => stderr};
+  /** Resolves once stdout matches `re`; unlike asserting on stdout after daemonPort, this can't race the log line. */
+  const waitFor = re =>
+    new Promise((resolve, reject) => {
+      const timer = setTimeout(() => {
+        cleanup();
+        reject(new Error(`stdout never matched ${re}; stdout: ${stdout} stderr: ${stderr}`));
+      }, 5000);
+      const check = () => {
+        if (re.test(stdout)) {
+          cleanup();
+          resolve();
+        }
+      };
+      const cleanup = () => {
+        clearTimeout(timer);
+        child.stdout.off('data', check);
+      };
+      child.stdout.on('data', check);
+      check();
+    });
+  return {child, exited, daemonPort, waitFor, stdout: () => stdout, stderr: () => stderr};
 }
 
 test('exits with `block run`\'s exit code when it finishes', async () => {
@@ -88,4 +109,74 @@ test('--daemon-only runs the daemon without spawning block', async () => {
 
   child.kill('SIGTERM');
   await exited;
+});
+
+test('output path defaults to ./frontend/airtable-schema.ts', async () => {
+  const dir = makeTempDir();
+  const {child, exited, waitFor} = launch(['--daemon-only', '-p', '0'], {PATH: '/usr/bin:/bin'}, dir);
+  try {
+    await waitFor(/Will write schema to .*frontend[\\/]airtable-schema\.ts/);
+    assert.ok(fs.existsSync(path.join(dir, 'frontend')));
+  } finally {
+    child.kill('SIGTERM');
+    await exited;
+  }
+});
+
+test('airgen-config.json supplies out and port', async () => {
+  const dir = makeTempDir();
+  fs.writeFileSync(path.join(dir, 'airgen-config.json'), JSON.stringify({out: 'custom/schema.ts', port: 0}));
+  const {child, exited, daemonPort, waitFor, stdout} = launch(['--daemon-only'], {PATH: '/usr/bin:/bin'}, dir);
+  try {
+    const port = await daemonPort;
+    assert.ok(port > 0); // config port 0 was applied — an ephemeral port, not the 3001 default
+    await waitFor(/Will write schema to .*custom[\\/]schema\.ts/);
+    assert.match(stdout(), /Applying airgen-config\.json \(port, out\)/);
+    assert.ok(fs.existsSync(path.join(dir, 'custom')));
+  } finally {
+    child.kill('SIGTERM');
+    await exited;
+  }
+});
+
+test('CLI flags override airgen-config.json', async () => {
+  const dir = makeTempDir();
+  fs.writeFileSync(path.join(dir, 'airgen-config.json'), JSON.stringify({out: 'config-out.ts'}));
+  const {child, exited, waitFor, stdout} = launch(['--daemon-only', '-p', '0', '-o', 'cli-out.ts'], {PATH: '/usr/bin:/bin'}, dir);
+  try {
+    await waitFor(/Will write schema to .*cli-out\.ts/);
+    assert.doesNotMatch(stdout(), /config-out\.ts/);
+  } finally {
+    child.kill('SIGTERM');
+    await exited;
+  }
+});
+
+test('PORT env var beats the config port', async () => {
+  const dir = makeTempDir();
+  fs.writeFileSync(path.join(dir, 'airgen-config.json'), JSON.stringify({port: 65000}));
+  const {child, exited, daemonPort} = launch(['--daemon-only'], {PATH: '/usr/bin:/bin', PORT: '0'}, dir);
+  try {
+    const port = await daemonPort;
+    assert.notEqual(port, 65000);
+  } finally {
+    child.kill('SIGTERM');
+    await exited;
+  }
+});
+
+test('malformed airgen-config.json fails fast', async () => {
+  const dir = makeTempDir();
+  fs.writeFileSync(path.join(dir, 'airgen-config.json'), '{oops');
+  const {exited, stderr} = launch(['--daemon-only', '-p', '0'], {PATH: '/usr/bin:/bin'}, dir);
+  assert.equal(await exited, 1);
+  assert.match(stderr(), /Invalid airgen-config\.json/);
+});
+
+test('unknown airgen-config.json keys fail fast', async () => {
+  const dir = makeTempDir();
+  fs.writeFileSync(path.join(dir, 'airgen-config.json'), JSON.stringify({outDir: 'x'}));
+  const {exited, stderr} = launch(['--daemon-only', '-p', '0'], {PATH: '/usr/bin:/bin'}, dir);
+  assert.equal(await exited, 1);
+  assert.match(stderr(), /Unknown key "outDir" in airgen-config\.json \(known keys: out, port\)/);
 });

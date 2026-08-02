@@ -17,150 +17,214 @@
  * Blocks component library — the interface SDK doesn't ship one.
  */
 
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {generateTypeScriptFromBase} from './generator.js';
-import {computeSchemaSignature} from './schema-signature.js';
-import type {BlocksSdkAdapter} from './sdk.js';
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { generateTypeScriptFromBase } from './generator.js'
+import { computeSchemaSignature } from './schema-signature.js'
+import type { BlocksSdkAdapter } from './sdk.js'
 
 export interface SchemaObserverProps {
-  /** Where the airgen daemon is listening. */
-  daemonUrl?: string;
-  /** Quiet period after the last schema event before generating + syncing. */
-  debounceMs?: number;
-  /** Disable all work (e.g. in production builds). */
-  enabled?: boolean;
+   /** Where the airgen daemon is listening. */
+   daemonUrl?: string
+   /** Quiet period after the last schema event before generating + syncing. */
+   debounceMs?: number
+   /** Disable all work (e.g. in production builds). */
+   enabled?: boolean
 }
 
 export interface SchemaObserverConfig {
-  /** Module the generated file imports `createTypedHooks` from (default 'airgen'). */
-  hooksModule?: string;
+   /** Module the generated file imports `createTypedHooks` from (default 'airgen'). */
+   hooksModule?: string
 }
 
-type DaemonStatus = 'unknown' | 'connected' | 'disconnected';
+type DaemonStatus = 'unknown' | 'connected' | 'disconnected'
+
+type SignatureState = {
+   last: React.MutableRefObject<string | null>
+   enabled: boolean
+   current: string | null
+   shouldSend: () => boolean
+}
 
 const panelStyle: React.CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: 12,
-  flexWrap: 'wrap',
-  padding: 8,
-  borderBottom: '2px solid #e0e0e0',
-  fontFamily: 'inherit',
-};
+   display: 'flex',
+   alignItems: 'center',
+   gap: 12,
+   flexWrap: 'wrap',
+   padding: 8,
+   borderBottom: '2px solid #e0e0e0',
+   fontFamily: 'inherit',
+}
 
-const textStyle: React.CSSProperties = {fontSize: 11, lineHeight: '14px'};
+const textStyle: React.CSSProperties = { fontSize: 11, lineHeight: '14px' }
 
 const buttonStyle: React.CSSProperties = {
-  ...textStyle,
-  fontWeight: 500,
-  padding: '4px 8px',
-  border: 'none',
-  borderRadius: 3,
-  background: 'rgba(0, 0, 0, 0.05)',
-  color: '#333333',
-  cursor: 'pointer',
-};
+   ...textStyle,
+   fontWeight: 500,
+   padding: '4px 8px',
+   border: 'none',
+   borderRadius: 3,
+   background: 'rgba(0, 0, 0, 0.05)',
+   color: '#333333',
+   cursor: 'pointer',
+}
 
 export function createSchemaObserver(
-  sdk: BlocksSdkAdapter,
-  config: SchemaObserverConfig = {},
+   sdk: BlocksSdkAdapter,
+   config: SchemaObserverConfig = {},
 ): (props: SchemaObserverProps) => React.ReactElement | null {
-  const generatorOptions = {hooksModule: config.hooksModule};
+   const generatorOptions = { hooksModule: config.hooksModule }
 
-  function SchemaObserver({
-    daemonUrl = 'http://localhost:3001',
-    debounceMs = 500,
-    enabled = true,
-  }: SchemaObserverProps): React.ReactElement | null {
-    const base = sdk.useBase();
-    sdk.useWatchable(base, ['schema']);
+   function SchemaObserver({
+      daemonUrl = 'http://localhost:3001',
+      debounceMs = 500,
+      enabled = true,
+   }: SchemaObserverProps): React.ReactElement | null {
+      const base = sdk.useBase()
+      sdk.useWatchable(base, ['schema'])
 
-    const [status, setStatus] = useState<DaemonStatus>('unknown');
-    const [lastSyncedAt, setLastSyncedAt] = useState<string | null>(null);
-    const [copied, setCopied] = useState(false);
-    const lastSentSignature = useRef<string | null>(null);
-    const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+      const [status, setStatus] = useState<DaemonStatus>('unknown')
+      const [lastSyncedAt, setLastSyncedAt] = useState<string | null>(null)
+      const [copied, setCopied] = useState(false)
+      const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-    const signature = enabled ? computeSchemaSignature(base) : null;
+      //     const lastSentSignature = useRef<string | null>(null)
+      //   const signature = enabled ? computeSchemaSignature(base) : null
 
-    useEffect(() => {
-      if (!enabled) return;
-      let cancelled = false;
-      fetch(`${daemonUrl}/health`)
-        .then(response => {
-          if (!cancelled) setStatus(response.ok ? 'connected' : 'disconnected');
-        })
-        .catch(() => {
-          if (!cancelled) setStatus('disconnected');
-        });
-      return () => {
-        cancelled = true;
-      };
-    }, [daemonUrl, enabled]);
+      const signature: SignatureState = {
+         last: useRef<string | null>(null),
+         enabled,
+         current: enabled ? computeSchemaSignature(base) : null,
 
-    useEffect(() => {
-      if (!enabled || signature === null || signature === lastSentSignature.current) {
-        return;
+         shouldSend() {
+            return (
+               this.enabled &&
+               this.current !== null &&
+               this.current !== this.last.current
+            )
+         },
       }
-      if (debounceTimer.current !== null) clearTimeout(debounceTimer.current);
-      debounceTimer.current = setTimeout(async () => {
-        debounceTimer.current = null;
-        // Generate inside the debounced callback: N rapid edits, 1 generation.
-        const code = generateTypeScriptFromBase(base, generatorOptions);
-        try {
-          const response = await fetch(`${daemonUrl}/save-schema`, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({code, signature, tableCount: base.tables.length}),
-          });
-          if (response.ok) {
-            lastSentSignature.current = signature;
-            setLastSyncedAt(new Date().toLocaleTimeString());
-            setStatus('connected');
-          } else {
-            setStatus('disconnected');
-          }
-        } catch {
-          setStatus('disconnected');
-        }
-      }, debounceMs);
-      return () => {
-        if (debounceTimer.current !== null) {
-          clearTimeout(debounceTimer.current);
-          debounceTimer.current = null;
-        }
-      };
-    }, [signature, enabled, daemonUrl, debounceMs, base]);
 
-    const copyToClipboard = useCallback(async () => {
-      try {
-        await navigator.clipboard.writeText(generateTypeScriptFromBase(base, generatorOptions));
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      } catch {
-        // clipboard unavailable in this context; nothing to do
-      }
-    }, [base]);
+      useEffect(() => {
+         if (!enabled) return
 
-    if (!enabled) return null;
+         let cancelled = false
 
-    const statusLabel =
-      status === 'connected' ? '● Connected' : status === 'disconnected' ? '○ Disconnected' : '◌ Connecting…';
-    const statusColor = status === 'connected' ? '#048a0e' : status === 'disconnected' ? '#d33030' : '#666666';
+         fetch(`${daemonUrl}/health`)
+            .then((response) => {
+               if (!cancelled) setStatus(response.ok ? 'connected' : 'disconnected')
+            })
+            .catch(() => {
+               if (!cancelled) setStatus('disconnected')
+            })
+         return () => {
+            cancelled = true
+         }
+      }, [daemonUrl, enabled])
 
-    return (
-      <div style={panelStyle}>
-        <span style={{...textStyle, color: statusColor, fontWeight: 600}}>airgen {statusLabel}</span>
-        <span style={{...textStyle, color: '#666666'}}>
-          {base.tables.length} table{base.tables.length === 1 ? '' : 's'}
-          {lastSyncedAt ? ` · synced ${lastSyncedAt}` : status === 'disconnected' ? ' · run `npx airgen`' : ''}
-        </span>
-        <button type="button" style={buttonStyle} onClick={copyToClipboard}>
-          {copied ? 'Copied!' : 'Copy schema'}
-        </button>
-      </div>
-    );
-  }
+      useEffect(() => {
+         if (debounceTimer.current !== null) clearTimeout(debounceTimer.current)
 
-  return SchemaObserver;
+         debounceTimer.current = setTimeout(async () => {
+            debounceTimer.current = null
+
+            // Generate inside the debounced callback: N rapid edits, 1 generation.
+            const code = generateTypeScriptFromBase(base, generatorOptions)
+            const sig = signature.current
+
+            try {
+               const res = await fetch(`${daemonUrl}/save-schema`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                     code,
+                     sig,
+                     tableCount: base.tables.length,
+                  }),
+               })
+
+               if (!res.ok) return setStatus('disconnected')
+
+               signature.last = signature
+               setLastSyncedAt(new Date().toLocaleTimeString())
+               setStatus('connected')
+            } catch {
+               setStatus('disconnected')
+            }
+         }, debounceMs)
+
+         // cleanup
+         return () => {
+            if (debounceTimer.current !== null) {
+               clearTimeout(debounceTimer.current)
+               debounceTimer.current = null
+            }
+         }
+      }, [signature, enabled, daemonUrl, debounceMs, base])
+
+      const copyToClipboard = useCallback(async () => {
+         try {
+            await navigator.clipboard.writeText(
+               generateTypeScriptFromBase(base, generatorOptions),
+            )
+            setCopied(true)
+            setTimeout(() => setCopied(false), 2000)
+         } catch {
+            // nothing to do
+         }
+      }, [base])
+
+      if (!enabled) return null
+
+      const statusDisplay = getStatusDisplay(status)
+
+      return (
+         <div style={panelStyle}>
+            <span
+               style={{ ...textStyle, color: statusDisplay.color, fontWeight: 600 }}
+            >
+               airgen {statusDisplay.label}
+            </span>
+            <span style={{ ...textStyle, color: '#666666' }}>
+               {base.tables.length} table{base.tables.length === 1 ? '' : 's'}
+               {lastSyncedAt
+                  ? ` · synced ${lastSyncedAt}`
+                  : status === 'disconnected'
+                     ? ' · run `npx airgen`'
+                     : ''}
+            </span>
+            <button type='button' style={buttonStyle} onClick={copyToClipboard}>
+               {copied ? 'Copied!' : 'Copy schema'}
+            </button>
+         </div>
+      )
+   }
+
+   return SchemaObserver
 }
+
+function getStatusDisplay(status: DaemonStatus): {
+   label: string
+   color: string
+} {
+   switch (status) {
+      case 'connected':
+         return {
+            label: '● Connected',
+            color: '#048a0e',
+         }
+
+      case 'disconnected':
+         return {
+            label: '○ Disconnected',
+            color: '#d33030',
+         }
+
+      default:
+         return {
+            label: '◌ Connecting…',
+            color: '#666666',
+         }
+   }
+}
+
+

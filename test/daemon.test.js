@@ -52,7 +52,7 @@ test('OPTIONS preflight is answered', async () => {
 
 test('valid payload is written to the configured path', async () => {
   await withDaemon(async ({url, outPath}) => {
-    const response = await postSchema(url, {code, signature: 'abc', tableCount: 4});
+    const response = await postSchema(url, {code, signature: 'abc', tableCount: 5});
     assert.equal(response.status, 200);
     assert.deepEqual(await response.json(), {ok: true, written: true});
     assert.equal(fs.readFileSync(outPath, 'utf8'), code);
@@ -66,6 +66,21 @@ test('identical payload skips the write', async () => {
     assert.deepEqual(await response.json(), {ok: true, written: false});
     assert.ok(logs.some(line => line.includes('unchanged')));
   });
+});
+
+test('missing parent directories of the output path are created at startup', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'airgen-daemon-test-'));
+  const outPath = path.join(dir, 'nested', 'deep', 'airtable-schema.ts');
+  const server = await startDaemon({port: 0, outPath, log: () => {}});
+  const {port} = server.address();
+  try {
+    const response = await postSchema(`http://127.0.0.1:${port}`, {code});
+    assert.equal(response.status, 200);
+    assert.equal(fs.readFileSync(outPath, 'utf8'), code);
+  } finally {
+    server.close();
+    fs.rmSync(dir, {recursive: true, force: true});
+  }
 });
 
 test('client-supplied filePath is ignored', async () => {

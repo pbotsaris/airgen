@@ -22,48 +22,59 @@ test('emits one interface per table with collision-free names', () => {
   assert.match(code, /export interface MyTableRecord \{/);
   assert.match(code, /export interface MyTable2Record \{/); // "My-Table" collides with "My Table"
   assert.match(code, /export interface T2024PlansRecord \{/); // digit-leading table name
+  assert.match(code, /export interface MinhasSolucoesRecord \{/); // accented table name transliterated
 });
 
-test('quotes field keys that are not valid identifiers', () => {
-  assert.match(code, /^ {2}Name\?: string;$/m);
-  assert.match(code, /^ {2}"Notes!"\?: string;$/m);
-  assert.match(code, /^ {2}"Completion %"\?: number;$/m);
+test('transliterates and camelCases field keys, quoting only when nothing survives', () => {
+  assert.match(code, /^ {2}name\?: string;$/m);
+  assert.match(code, /^ {2}notes\?: string;$/m); // "Notes!"
+  assert.match(code, /^ {2}completion\?: number;$/m); // "Completion %"
+  assert.match(code, /^ {2}contactEmail\?: string;$/m); // "Contact Email"
+  assert.match(code, /^ {2}id\?: number;$/m); // "ID" — all-caps words fold
+  assert.match(code, /^ {2}minhasSolucoes\?: string;$/m); // "minhas soluções"
+  assert.match(code, /^ {2}acao\?: boolean;$/m); // "Ação"
+  assert.match(code, /^ {2}solucoes\?: string;$/m); // "Soluções" and "Solucoes" collide after
+  assert.match(code, /^ {2}solucoes2\?: string;$/m); // transliteration — deduped with a suffix
+  assert.match(code, /^ {2}_2024Total\?: number;$/m); // digit-leading field name
+  assert.match(code, /^ {2}"🎉"\?: string;$/m); // nothing survives — quoted raw name
+  assert.match(code, /Airtable field "Contact Email"/); // raw name kept in the JSDoc
 });
 
 test('select fields become literal unions of choice objects with ids and colors', () => {
   assert.match(code, /export type ProjectsStatusChoice = \{ id: "selTodo000000001"; name: "Todo"; color\?: string \}/);
   assert.match(code, /name: "In \\"Progress\\""/); // quotes in choice names survive escaping
-  assert.match(code, /^ {2}Status\?: ProjectsStatusChoice;$/m);
-  assert.match(code, /^ {2}Tags\?: ProjectsTagsChoice\[\];$/m);
+  assert.match(code, /^ {2}status\?: ProjectsStatusChoice;$/m);
+  assert.match(code, /^ {2}tags\?: ProjectsTagsChoice\[\];$/m);
   // Two tables both have a "Status" select — aliases must not collide
   assert.match(code, /export type T2024PlansStatusChoice = /);
   // Select with no choices falls back to the shared shape
-  assert.match(code, /^ {2}"Empty Select"\?: SelectChoice;$/m);
+  assert.match(code, /^ {2}emptySelect\?: SelectChoice;$/m);
 });
 
 test('maps rich getCellValue shapes, not REST shapes', () => {
-  assert.match(code, /^ {2}Tasks\?: LinkedRecord\[\];$/m);
-  assert.match(code, /^ {2}Files\?: Attachment\[\];$/m);
-  assert.match(code, /^ {2}Owner\?: Collaborator;$/m);
-  assert.match(code, /^ {2}Team\?: Collaborator\[\];$/m);
-  assert.match(code, /^ {2}Barcode\?: \{ text: string; type\?: string \};$/m);
-  assert.match(code, /^ {2}Open\?: \{ label: string; url: string \| null \};$/m);
+  assert.match(code, /^ {2}tasks\?: LinkedRecord\[\];$/m);
+  assert.match(code, /^ {2}files\?: Attachment\[\];$/m);
+  assert.match(code, /^ {2}owner\?: Collaborator;$/m);
+  assert.match(code, /^ {2}team\?: Collaborator\[\];$/m);
+  assert.match(code, /^ {2}barcode\?: \{ text: string; type\?: string \};$/m);
+  assert.match(code, /^ {2}open\?: \{ label: string; url: string \| null \};$/m);
 });
 
 test('resolves formula/rollup/lookup result types, with fallbacks', () => {
-  assert.match(code, /^ {2}"Days Left"\?: number;$/m);
-  assert.match(code, /^ {2}Label\?: string;$/m);
-  assert.match(code, /^ {2}"Total Hours"\?: number;$/m);
-  assert.match(code, /^ {2}"Task Names"\?: Array<string>;$/m);
-  assert.match(code, /"Broken Formula"\?: unknown;/);
+  assert.match(code, /^ {2}daysLeft\?: number;$/m);
+  assert.match(code, /^ {2}label\?: string;$/m);
+  assert.match(code, /^ {2}totalHours\?: number;$/m);
+  assert.match(code, /^ {2}taskNames\?: Array<string>;$/m);
+  assert.match(code, /^ {2}brokenFormula\?: unknown;$/m);
   assert.match(code, /unmapped: someFutureType/);
-  assert.match(code, /"Weird Field"\?: unknown;/);
+  assert.match(code, /^ {2}weirdField\?: unknown;$/m);
 });
 
 test('embeds airgenMeta with ids, choices, and the schema signature', () => {
   assert.match(code, /export const airgenMeta = \{/);
   assert.match(code, /"id": "tblProjects000001"/);
   assert.match(code, /"id": "fldStatus00000001"/);
+  assert.match(code, /"name": "Days Left"/); // raw field name survives under the sanitized key
   assert.match(code, /"Todo": "selTodo000000001"/);
   assert.ok(code.includes(`"signature": "${computeSchemaSignature(mockBase)}"`));
   assert.match(code, /as const;/);

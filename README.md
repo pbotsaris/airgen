@@ -46,6 +46,19 @@ npx airgen -p 3005 -o src/airtable-schema.ts
 npx airgen -- --port 9001         # args after -- are passed to `block run`
 ```
 
+The generated file lands at `./frontend/airtable-schema.ts` by default. To
+change that (or the daemon port) without CLI flags, drop an
+`airgen-config.json` next to where you run airgen:
+
+```json
+{
+  "out": "./frontend/src/airtable-schema.ts",
+  "port": 3005
+}
+```
+
+CLI flags and the `PORT` env var take precedence over the config file.
+
 The daemon lives inside the same process as `block run` and exits the moment
 it exits, so stopping dev (ctrl-C) never leaves anything running. If you'd
 rather manage `block run` yourself, `npx airgen --daemon-only` starts just
@@ -79,14 +92,14 @@ The panel shows daemon connection status, table count, last sync time, and a "Co
 **3. Import the hooks straight from the generated file:**
 
 ```tsx
-// anywhere in your extension
+// anywhere in your extension (the default output lands in frontend/, next to your extension code)
 import {useRecords} from './airtable-schema';
 
 const projects = useRecords('Projects'); // table key is autocompleted & validated
 
-projects[0]?.fields.Status?.name;   // "Todo" | "In Progress" | "Done"
-projects[0]?.fields.Owner?.email;   // string | undefined
-projects[0]?.fields.Tasks?.[0].id;  // linked record id
+projects[0]?.fields.status?.name;   // "Todo" | "In Progress" | "Done"
+projects[0]?.fields.owner?.email;   // string | undefined
+projects[0]?.fields.tasks?.[0].id;  // linked record id
 projects[0]?.raw;                   // native SDK Record, escape hatch
 ```
 
@@ -96,7 +109,7 @@ Commit `airtable-schema.ts` — it's the source of truth when no dev session is 
 
 ## What gets generated
 
-- One `export interface <Table>Record` per table, field keys matching Airtable field names (quoted when needed), all optional (empty cells are `null` in Airtable).
+- One `export interface <Table>Record` per table, all fields optional (empty cells are `null` in Airtable). Field keys are the Airtable names transliterated (Latin accents stripped: `soluções` → `solucoes`) and camelCased (`Contact Email` → `contactEmail`), so they're always plain property accesses; the raw Airtable name is kept in `airgenMeta` and the field's JSDoc. Names with nothing left after sanitization (e.g. emoji-only) fall back to the quoted raw name.
 - Value types mirror **what `record.getCellValue(field)` returns in the Blocks SDK** — not the flatter REST API shapes:
   - selects → literal unions of `{ id: "sel…"; name: "…"; color?: string }`, with a named alias per field (e.g. `ProjectsStatusChoice`)
   - record links → `Array<{ id, name }>`, collaborators → `{ id, email?, name?, profilePicUrl? }`, attachments with thumbnails
@@ -126,7 +139,7 @@ Three gates keep this cheap:
 Any webpage you visit can fire blind cross-origin POSTs at localhost, so the daemon is deliberately locked down:
 
 - binds `127.0.0.1` only
-- the output path is fixed at startup (`--out`); client-supplied paths in the payload are **ignored**
+- the output path is fixed at startup (`--out` or `airgen-config.json`); client-supplied paths in the payload are **ignored**
 - payloads must be bounded (< 2 MB) strings starting with the airgen header, or they're rejected without writing
 
 ## Production
@@ -144,4 +157,4 @@ All of these are exported identically from `airgen`, `airgen/interface`, and `ai
 | `createTypedHooks<M>(airgenMeta)` | Runtime the generated file calls to bind the hooks; only needed for custom setups. |
 | `generateTypeScriptFromBase(base, {hooksModule?})` | The pure generator, if you want to build your own sync flow. `hooksModule` overrides the import specifier baked into the generated file (default `'airgen'`). |
 | `computeSchemaSignature(base)` | Canonical schema hash used for change detection. |
-| `airgen` (bin) | `npx airgen [--port <n>] [--out <path>] [--daemon-only] [-- <block run args>]` — wraps `block run`, daemon exits with it. Health check at `GET /health`. |
+| `airgen` (bin) | `npx airgen [--port <n>] [--out <path>] [--daemon-only] [-- <block run args>]` — wraps `block run`, daemon exits with it. Output defaults to `./frontend/airtable-schema.ts`; an optional `airgen-config.json` (`{"out", "port"}`) in the cwd overrides defaults, CLI flags override both. Health check at `GET /health`. |

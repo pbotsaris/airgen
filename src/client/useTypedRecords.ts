@@ -23,6 +23,8 @@ import type {BlocksSdkAdapter, SdkBase, SdkRecord, SdkTable} from './sdk.js';
 
 export interface AirgenFieldMeta {
   readonly id: string;
+  /** Raw Airtable field name (the map key is the sanitized property name). Optional: older generated files lack it. */
+  readonly name?: string;
   readonly type: string;
   readonly choices?: {readonly [choiceName: string]: string};
 }

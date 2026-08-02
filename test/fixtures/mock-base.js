@@ -1,7 +1,9 @@
 /**
  * Structural Base-like fixture covering every mapped field type plus the
- * awkward cases: quoted field keys, select choices with quotes in names,
- * table-name collisions after sanitization, names starting with digits,
+ * awkward cases: accented names (transliterated + camelCased field keys),
+ * field-key collisions after transliteration, select choices with quotes in
+ * names, table-name collisions after sanitization, names starting with
+ * digits, emoji-only names (fall back to the quoted raw name),
  * formula/rollup result resolution, and an unknown future field type.
  */
 export const mockBase = {
@@ -100,6 +102,18 @@ export const mockBase = {
       id: 'tblMyTable00000002',
       name: 'My-Table',
       fields: [{id: 'fldMt200000000001', name: 'Name', type: 'singleLineText'}],
+    },
+    {
+      id: 'tblSolucoes000001',
+      name: 'Minhas Soluções',
+      fields: [
+        {id: 'fldMs100000000001', name: 'minhas soluções', type: 'singleLineText'},
+        {id: 'fldMs200000000001', name: 'Ação', type: 'checkbox'},
+        {id: 'fldMs300000000001', name: 'Soluções', type: 'singleLineText'},
+        {id: 'fldMs400000000001', name: 'Solucoes', type: 'singleLineText'},
+        {id: 'fldMs500000000001', name: '2024 Total', type: 'number', options: {precision: 0}},
+        {id: 'fldMs600000000001', name: '🎉', type: 'singleLineText'},
+      ],
     },
     {
       id: 'tbl2024Plans000001',

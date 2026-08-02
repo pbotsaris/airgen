@@ -80,19 +80,54 @@ function quoteKey(name: string): string {
   return IDENTIFIER_RE.test(name) ? name : JSON.stringify(name);
 }
 
-function pascalCase(name: string): string {
-  const words = name
+const NON_DECOMPOSABLE: {[ch: string]: string} = {
+  'ß': 'ss', 'ẞ': 'SS', 'æ': 'ae', 'Æ': 'AE', 'œ': 'oe', 'Œ': 'OE',
+  'ø': 'o', 'Ø': 'O', 'đ': 'd', 'Đ': 'D', 'ð': 'd', 'Ð': 'D',
+  'þ': 'th', 'Þ': 'Th', 'ł': 'l', 'Ł': 'L',
+};
+
+/** Latin transliteration: replace non-decomposable chars, then strip combining marks (ç→c, á→a, ê→e). */
+function deaccent(name: string): string {
+  return name
+    .replace(/[ßẞæÆœŒøØđĐðÐþÞłŁ]/g, ch => NON_DECOMPOSABLE[ch])
+    .normalize('NFD')
+    .replace(/\p{M}/gu, '');
+}
+
+function splitWords(name: string): string[] {
+  return deaccent(name)
     .replace(/[^A-Za-z0-9]+/g, ' ')
     .trim()
     .split(/\s+/)
     .filter(Boolean);
-  let result = words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+}
+
+/** ALL-CAPS words fold their body ("ID" → "Id"); mixed-case bodies are preserved. */
+function pascalWord(word: string): string {
+  const body = /^[A-Z0-9]+$/.test(word) ? word.toLowerCase() : word;
+  return body.charAt(0).toUpperCase() + body.slice(1);
+}
+
+function pascalCase(name: string): string {
+  let result = splitWords(name).map(pascalWord).join('');
   if (result === '') result = 'Table';
   if (/^[0-9]/.test(result)) result = 'T' + result;
   return result;
 }
 
-/** Assigns collision-free PascalCase keys, appending 2, 3, … on clashes. */
+/** Returns '' when no words survive sanitization (e.g. emoji-only names) — callers fall back to the raw name. */
+function camelCase(name: string): string {
+  const words = splitWords(name);
+  if (words.length === 0) return '';
+  const first = /^[A-Z0-9]+$/.test(words[0])
+    ? words[0].toLowerCase()
+    : words[0].charAt(0).toLowerCase() + words[0].slice(1);
+  let result = first + words.slice(1).map(pascalWord).join('');
+  if (/^[0-9]/.test(result)) result = '_' + result;
+  return result;
+}
+
+/** Assigns collision-free keys, appending 2, 3, … on clashes. */
 function uniqueNames<T>(items: ReadonlyArray<T>, toName: (item: T) => string): Map<T, string> {
   const used = new Set<string>();
   const assigned = new Map<T, string>();
@@ -223,6 +258,7 @@ function resolveResultType(options: FieldLike['options'], depth: number): Resolv
 
 interface FieldMeta {
   id: string;
+  name: string;
   type: string;
   choices?: {[choiceName: string]: string};
 }
@@ -253,9 +289,13 @@ export function generateTypeScriptFromBase(base: BaseLike, options: GeneratorOpt
     const interfaceName = `${tableKey}Record`;
 
     const fieldLines: string[] = [];
-    const metaFields: {[fieldName: string]: FieldMeta} = {};
+    const metaFields: {[fieldKey: string]: FieldMeta} = {};
+    // camelCase is lossy ("Soluções" and "Solucoes" both → solucoes), so dedup
+    // per table; '' falls back to the raw name, which quoteKey will quote.
+    const fieldKeys = uniqueNames(table.fields, field => camelCase(field.name) || field.name);
 
     for (const field of table.fields) {
+      const fieldKey = fieldKeys.get(field)!;
       // Register a named alias for select fields with known choices.
       let selectAlias: string | null = null;
       const isSelect = field.type === 'singleSelect' || field.type === 'multipleSelects';
@@ -274,19 +314,22 @@ export function generateTypeScriptFromBase(base: BaseLike, options: GeneratorOpt
 
       const resolved = resolveFieldType(field.type, field.options ?? null, selectAlias, 0);
       const docParts: string[] = [];
+      if (fieldKey !== field.name) docParts.push(`Airtable field ${JSON.stringify(field.name)}`);
       if (field.description) docParts.push(field.description.trim());
       if (resolved.comment) docParts.push(resolved.comment);
       if (docParts.length > 0) {
         fieldLines.push(`  /** ${docParts.join(' — ').replace(/\*\//g, '*\\/')} */`);
       }
-      fieldLines.push(`  ${quoteKey(field.name)}?: ${resolved.ts};`);
+      fieldLines.push(`  ${quoteKey(fieldKey)}?: ${resolved.ts};`);
 
-      const fieldMeta: FieldMeta = {id: field.id, type: field.type};
+      const fieldMeta: FieldMeta = {id: field.id, name: field.name, type: field.type};
       if (choices) {
         fieldMeta.choices = {};
         for (const choice of choices) fieldMeta.choices[choice.name] = choice.id;
       }
-      metaFields[field.name] = fieldMeta;
+      // Must be the same key as the interface property above — the runtime
+      // builds record.fields from these meta keys (resolving by fieldMeta.id).
+      metaFields[fieldKey] = fieldMeta;
     }
 
     interfaceSections.push(

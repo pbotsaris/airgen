@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+import fs from 'node:fs';
+import path from 'node:path';
 import {spawn} from 'node:child_process';
 import {startDaemon} from '../src/daemon/server.js';
 
@@ -9,15 +11,57 @@ Usage:
 
 Options:
   -p, --port <n>     Daemon port (default: 3001, or PORT env var)
-  -o, --out <path>   Output file (default: ./airtable-schema.ts)
+  -o, --out <path>   Output file (default: ./frontend/airtable-schema.ts)
       --daemon-only  Start only the daemon; don't spawn \`block run\`
   -h, --help         Show this help
+
+Reads airgen-config.json from the current directory if present, e.g.
+{"out": "./frontend/airtable-schema.ts", "port": 3001}. CLI flags and the
+PORT env var take precedence over the config file.
 
 The daemon lives inside this process and exits when \`block run\` exits,
 so nothing keeps running after you stop working. Render <SchemaObserver />
 in your extension and the output file is rewritten whenever the base
 schema changes.
 `;
+
+const CONFIG_FILE = 'airgen-config.json';
+const CONFIG_KEYS = {out: 'string', port: 'number'};
+
+/** @returns {{out?: string, port?: number} | null} null when no config file exists */
+function loadConfig(cwd) {
+  let raw;
+  try {
+    raw = fs.readFileSync(path.join(cwd, CONFIG_FILE), 'utf8');
+  } catch (error) {
+    if (error?.code === 'ENOENT') return null;
+    process.stderr.write(`Could not read ${CONFIG_FILE}: ${error?.message ?? error}\n`);
+    process.exit(1);
+  }
+  let config;
+  try {
+    config = JSON.parse(raw);
+  } catch (error) {
+    process.stderr.write(`Invalid ${CONFIG_FILE}: ${error?.message ?? error}\n`);
+    process.exit(1);
+  }
+  if (typeof config !== 'object' || config === null || Array.isArray(config)) {
+    process.stderr.write(`Invalid ${CONFIG_FILE}: expected a JSON object\n`);
+    process.exit(1);
+  }
+  for (const [key, value] of Object.entries(config)) {
+    const expected = CONFIG_KEYS[key];
+    if (expected === undefined) {
+      process.stderr.write(`Unknown key ${JSON.stringify(key)} in ${CONFIG_FILE} (known keys: ${Object.keys(CONFIG_KEYS).join(', ')})\n`);
+      process.exit(1);
+    }
+    if (typeof value !== expected) {
+      process.stderr.write(`Invalid ${CONFIG_FILE}: ${JSON.stringify(key)} must be a ${expected}\n`);
+      process.exit(1);
+    }
+  }
+  return config;
+}
 
 function parseArgs(argv) {
   const options = {};
@@ -49,6 +93,21 @@ const daemonOnly = options.daemonOnly === true;
 delete options.daemonOnly;
 if (options.port === undefined && process.env.PORT) {
   options.port = Number(process.env.PORT);
+}
+const config = loadConfig(process.cwd());
+if (config) {
+  const applied = [];
+  if (options.port === undefined && config.port !== undefined) {
+    options.port = config.port;
+    applied.push('port');
+  }
+  if (options.outPath === undefined && config.out !== undefined) {
+    options.outPath = config.out;
+    applied.push('out');
+  }
+  if (applied.length > 0) {
+    console.log(`[airgen] Applying ${CONFIG_FILE} (${applied.join(', ')})`);
+  }
 }
 if (options.port !== undefined && (!Number.isInteger(options.port) || options.port < 0 || options.port > 65535)) {
   process.stderr.write('Invalid port\n');
