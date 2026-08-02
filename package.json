@@ -1,0 +1,53 @@
+{
+  "name": "airgen",
+  "version": "0.1.0",
+  "description": "Reactive TypeScript type generator for Airtable Custom Extensions: watches the base schema from inside the extension and writes airtable-schema.ts to disk via a local daemon.",
+  "type": "module",
+  "bin": {
+    "airgen": "./bin/airgen.js"
+  },
+  "main": "./dist/client/index.js",
+  "types": "./dist/client/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/client/index.d.ts",
+      "default": "./dist/client/index.js"
+    },
+    "./generator": {
+      "types": "./dist/client/generator.d.ts",
+      "default": "./dist/client/generator.js"
+    },
+    "./daemon": "./src/daemon/server.js"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "src/daemon",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "npm run build && node --test test/*.test.js",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "airtable",
+    "blocks",
+    "extension",
+    "typescript",
+    "codegen"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "peerDependencies": {
+    "@airtable/blocks": ">=1.10.0",
+    "react": ">=16.14"
+  },
+  "devDependencies": {
+    "@airtable/blocks": "^1.19.0",
+    "@types/react": "^17.0.0",
+    "react": "^17.0.2",
+    "typescript": "^5.5.0"
+  }
+}
