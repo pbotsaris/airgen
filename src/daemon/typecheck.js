@@ -25,13 +25,27 @@ const FILE_ERROR_RE = /^(.+?)\((\d+),(\d+)\): error (TS\d+): (.*)$/;
 // Config-level errors have no file position: `error TS5083: message`
 const GLOBAL_ERROR_RE = /^error (TS\d+): (.*)$/;
 
-/** Nearest tsconfig.json at or above startDir, or null. A manual walk-up — no
- * point loading the multi-MB typescript module just to find a path. */
-export function findTsconfig(startDir) {
+/**
+ * Config files a consumer project can be driven by, in preference order. A
+ * plain-JS extension has no tsconfig.json, but `jsconfig.json` is the same
+ * format — TypeScript reads it with `allowJs` implied — so both features work
+ * off either one.
+ */
+export const PROJECT_CONFIG_NAMES = ['tsconfig.json', 'jsconfig.json'];
+
+/** The names, as they read in a message: `tsconfig.json or jsconfig.json`. */
+export const PROJECT_CONFIG_LABEL = PROJECT_CONFIG_NAMES.join(' or ');
+
+/** Nearest project config at or above startDir, or null. A manual walk-up — no
+ * point loading the multi-MB typescript module just to find a path. tsconfig
+ * wins when a directory has both. */
+export function findProjectConfig(startDir) {
   let dir = startDir;
   for (;;) {
-    const candidate = path.join(dir, 'tsconfig.json');
-    if (fs.existsSync(candidate)) return candidate;
+    for (const name of PROJECT_CONFIG_NAMES) {
+      const candidate = path.join(dir, name);
+      if (fs.existsSync(candidate)) return candidate;
+    }
     const parent = path.dirname(dir);
     if (parent === dir) return null;
     dir = parent;
@@ -60,7 +74,7 @@ function resolveTsc(cwd) {
 
 /**
  * @param {{cwd: string, startDir: string, log: (msg: string) => void}} options
- *   startDir is where the tsconfig walk-up begins (the output file's dir).
+ *   startDir is where the project-config walk-up begins (the output file's dir).
  */
 export function createTypechecker({cwd, startDir, log}) {
   /** Latest settled (or in-progress) diagnostics — what GET /diagnostics serves. */
@@ -92,7 +106,7 @@ export function createTypechecker({cwd, startDir, log}) {
     };
   }
 
-  function parseOutput(output, baseDir) {
+  function parseOutput(output, baseDir, configName) {
     const errors = [];
     for (const line of output.split(/\r?\n/)) {
       let match = FILE_ERROR_RE.exec(line);
@@ -108,7 +122,7 @@ export function createTypechecker({cwd, startDir, log}) {
       }
       match = GLOBAL_ERROR_RE.exec(line);
       if (match) {
-        errors.push({file: 'tsconfig.json', line: 1, col: 1, code: match[1], message: scrub(match[2])});
+        errors.push({file: configName, line: 1, col: 1, code: match[1], message: scrub(match[2])});
       }
     }
     return errors;
@@ -116,9 +130,9 @@ export function createTypechecker({cwd, startDir, log}) {
 
   function runOnce() {
     return new Promise(resolve => {
-      const tsconfigPath = findTsconfig(startDir);
-      if (!tsconfigPath) {
-        resolve(unavailable('no tsconfig.json found at or above the output directory'));
+      const configPath = findProjectConfig(startDir);
+      if (!configPath) {
+        resolve(unavailable(`no ${PROJECT_CONFIG_LABEL} found at or above the output directory`));
         return;
       }
       const tscJs = resolveTsc(cwd);
@@ -127,9 +141,12 @@ export function createTypechecker({cwd, startDir, log}) {
         return;
       }
 
-      const tsconfigDir = path.dirname(tsconfigPath);
-      const child = spawn(process.execPath, [tscJs, '--noEmit', '-p', tsconfigPath, '--pretty', 'false'], {
-        cwd: tsconfigDir,
+      const configDir = path.dirname(configPath);
+      const configName = path.basename(configPath);
+      // `-p` takes any config path; tsc applies jsconfig's implied options
+      // (allowJs, and NOT checkJs) when the file is named jsconfig.json.
+      const child = spawn(process.execPath, [tscJs, '--noEmit', '-p', configPath, '--pretty', 'false'], {
+        cwd: configDir,
         stdio: ['ignore', 'pipe', 'pipe'],
       });
       activeChild = child;
@@ -153,17 +170,17 @@ export function createTypechecker({cwd, startDir, log}) {
       };
 
       child.on('error', error => {
-        finish(settled([{file: 'tsconfig.json', line: 1, col: 1, code: 'AIRGEN', message: `failed to run tsc: ${scrub(error.message)}`}]));
+        finish(settled([{file: configName, line: 1, col: 1, code: 'AIRGEN', message: `failed to run tsc: ${scrub(error.message)}`}]));
       });
       child.on('close', exitCode => {
         if (timedOut) {
-          finish(settled([{file: 'tsconfig.json', line: 1, col: 1, code: 'AIRGEN', message: `typecheck timed out after ${CHECK_TIMEOUT_MS / 1000}s`}]));
+          finish(settled([{file: configName, line: 1, col: 1, code: 'AIRGEN', message: `typecheck timed out after ${CHECK_TIMEOUT_MS / 1000}s`}]));
           return;
         }
-        const errors = parseOutput(stdout, tsconfigDir);
+        const errors = parseOutput(stdout, configDir, configName);
         if (errors.length === 0 && exitCode !== 0 && exitCode !== null) {
           // Never report a failed check as clean.
-          finish(settled([{file: 'tsconfig.json', line: 1, col: 1, code: 'AIRGEN', message: `tsc exited with code ${exitCode} and no parseable errors`}]));
+          finish(settled([{file: configName, line: 1, col: 1, code: 'AIRGEN', message: `tsc exited with code ${exitCode} and no parseable errors`}]));
           return;
         }
         finish(settled(errors));

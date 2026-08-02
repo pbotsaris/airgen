@@ -66,12 +66,32 @@ export function firstEmail() {
 }
 `;
 
-/** A temp consumer project with airgen + typescript resolvable, like a real one. */
-function makeProject({fix = true, app = APP_TS, legacy = LEGACY_JS} = {}) {
+/**
+ * A plain-JS extension: no tsconfig, no `.ts` source of its own, and — the
+ * point of the case — no `allowJs` anywhere, since jsconfig.json implies it.
+ */
+const JSCONFIG = JSON.stringify({
+  compilerOptions: {target: 'es2020', module: 'es2020', moduleResolution: 'bundler', jsx: 'react'},
+  include: ['src'],
+});
+
+/**
+ * A temp consumer project with airgen + typescript resolvable, like a real one.
+ * `config` picks which config file drives it, and `appName` lets a JS-only
+ * project drop the `.ts` source entirely.
+ */
+function makeProject({
+  fix = true,
+  app = APP_TS,
+  legacy = LEGACY_JS,
+  config = TSCONFIG,
+  configName = 'tsconfig.json',
+  appName = 'app.ts',
+} = {}) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'airgen-codemod-test-'));
-  fs.writeFileSync(path.join(dir, 'tsconfig.json'), TSCONFIG);
+  fs.writeFileSync(path.join(dir, configName), config);
   fs.mkdirSync(path.join(dir, 'src'));
-  fs.writeFileSync(path.join(dir, 'src', 'app.ts'), app);
+  fs.writeFileSync(path.join(dir, 'src', appName), app);
   fs.writeFileSync(path.join(dir, 'src', 'legacy.js'), legacy);
   fs.writeFileSync(path.join(dir, 'src', 'airtable-schema.ts'), generateTypeScriptFromBase(mockBase));
 
@@ -176,6 +196,35 @@ test('a renamed field is located across .ts and .js and rewritten on apply', asy
 
     assert.match(read('legacy.js'), /rows\[0\]\.fields\.customerEmail/);
   });
+});
+
+test('a plain-JS project driven by jsconfig.json gets the same fixes', async () => {
+  const app = `import {useRecords} from './airtable-schema';
+
+export function emails() {
+  return useRecords('Projects').map(project => project.fields.contactEmail);
+}
+`;
+
+  await withProject(
+    {config: JSCONFIG, configName: 'jsconfig.json', app, appName: 'app.js'},
+    async ({url, read}) => {
+      await postSchema(url, regenerate(renameContactEmail));
+      const payload = await waitForFixes(url);
+
+      assert.equal(payload.status, 'ready', payload.reason);
+      const [fix] = payload.fixes;
+      assert.equal(fix.kind, 'field-key-renamed');
+      assert.equal(fix.fixable, true);
+      // Both .js files are in the program even though nothing set allowJs —
+      // that only holds if the file list was resolved as a JS project.
+      assert.deepEqual(fix.files, [path.join('src', 'app.js'), path.join('src', 'legacy.js')]);
+
+      assert.equal((await applyFix(url, fix.id)).status, 200);
+      assert.match(read('app.js'), /project\.fields\.customerEmail/);
+      assert.match(read('legacy.js'), /rows\[0\]\.fields\.customerEmail/);
+    },
+  );
 });
 
 test('a renamed table rewrites the key literal and the record interface', async () => {

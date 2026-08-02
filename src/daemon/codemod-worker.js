@@ -6,7 +6,7 @@
  * returned to the OS when this exits.
  *
  * Protocol: a job JSON arrives on stdin, a result JSON leaves on stdout.
- *   job:    {cwd, tsconfigPath, generatedFile, previousSource, changes[]}
+ *   job:    {cwd, configPath, generatedFile, previousSource, changes[]}
  *   result: {ok, plans: [{changeId, edits[], usages[], skipped?}], reason?}
  *
  * The generated file on disk is already the NEW one (it was written first, so
@@ -32,17 +32,24 @@ function readStdin() {
 }
 
 /**
- * A LanguageService over the consumer's project.
+ * A LanguageService over the consumer's project, driven by their tsconfig.json
+ * or jsconfig.json.
+ *
  * `allowJs` is forced on: the generated hooks are explicitly usable from plain
  * `.js` files, so those must be in the program or renames silently miss them.
+ * Forcing it in `options` afterwards is not enough — `parseJsonConfigFileContent`
+ * resolves the FILE LIST from the options it is given, and only counts `.js`
+ * as a source file when allowJs is on there. So it goes in as `existingOptions`
+ * (which win over the config), and the config path goes in too, so a file named
+ * jsconfig.json gets its implied defaults.
  * This program exists ONLY for rename analysis — diagnostics stay with tsc.
  */
-function createService(ts, {tsconfigPath, overlayPath, overlaySource}) {
-  const tsconfigDir = path.dirname(tsconfigPath);
-  const configFile = ts.readConfigFile(tsconfigPath, ts.sys.readFile);
+function createService(ts, {configPath, overlayPath, overlaySource}) {
+  const tsconfigDir = path.dirname(configPath);
+  const configFile = ts.readConfigFile(configPath, ts.sys.readFile);
   if (configFile.error) return null;
 
-  const parsed = ts.parseJsonConfigFileContent(configFile.config, ts.sys, tsconfigDir);
+  const parsed = ts.parseJsonConfigFileContent(configFile.config, ts.sys, tsconfigDir, {allowJs: true}, configPath);
   const options = {...parsed.options, allowJs: true, checkJs: false, noEmit: true};
 
   const fileNames = new Set(parsed.fileNames.map(file => path.resolve(file)));
@@ -356,12 +363,12 @@ async function main() {
   }
 
   const service = createService(ts, {
-    tsconfigPath: job.tsconfigPath,
+    configPath: job.configPath,
     overlayPath: job.generatedFile,
     overlaySource: job.previousSource,
   });
   if (!service) {
-    process.stdout.write(JSON.stringify({ok: false, reason: 'could not read tsconfig.json'}));
+    process.stdout.write(JSON.stringify({ok: false, reason: `could not read ${path.basename(job.configPath)}`}));
     return;
   }
 

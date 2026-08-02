@@ -24,7 +24,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 import {diffGeneratedFiles} from './schema-diff.js';
-import {findTsconfig, resolveTypescriptDir} from './typecheck.js';
+import {findProjectConfig, resolveTypescriptDir, PROJECT_CONFIG_LABEL} from './typecheck.js';
 
 const WORKER = fileURLToPath(new URL('./codemod-worker.js', import.meta.url));
 const ANALYSIS_TIMEOUT_MS = 120_000;
@@ -159,14 +159,16 @@ export function createCodemod({cwd, outPath, log}) {
       return;
     }
 
-    const tsconfigPath = findTsconfig(path.dirname(generatedFile));
+    // jsconfig.json counts: a plain-JS extension is exactly the codebase that
+    // most needs renames rewritten for it.
+    const configPath = findProjectConfig(path.dirname(generatedFile));
     const typescriptDir = resolveTypescriptDir(cwd);
 
-    if (!tsconfigPath || !typescriptDir) {
+    if (!configPath || !typescriptDir) {
       status = 'unavailable';
-      reason = tsconfigPath
+      reason = configPath
         ? 'typescript not found in project node_modules'
-        : 'no tsconfig.json found at or above the output directory';
+        : `no ${PROJECT_CONFIG_LABEL} found at or above the output directory`;
       return;
     }
 
@@ -176,7 +178,7 @@ export function createCodemod({cwd, outPath, log}) {
     const changes = diff.changes.map(change => ({...change, id: randomUUID()}));
     const result = await runWorker({
       cwd,
-      tsconfigPath,
+      configPath,
       typescriptDir,
       generatedFile,
       previousSource,
@@ -189,7 +191,7 @@ export function createCodemod({cwd, outPath, log}) {
       return;
     }
 
-    const projectRoot = path.dirname(tsconfigPath);
+    const projectRoot = path.dirname(configPath);
     const byId = new Map(changes.map(change => [change.id, change]));
     pending.clear();
 

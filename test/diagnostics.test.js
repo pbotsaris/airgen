@@ -24,18 +24,34 @@ const TSCONFIG = JSON.stringify({
   include: ['src'],
 });
 
+/** A JS project: `checkJs` is what makes tsc report on `.js` at all. */
+const JSCONFIG = JSON.stringify({
+  compilerOptions: {checkJs: true, strict: true},
+  include: ['src'],
+});
+
 /**
- * A temp consumer project the daemon runs in: tsconfig + src/index.ts (with a
- * deliberate type error unless `valid`), typescript symlinked from this
- * repo's devDependency unless `withTypescript: false`. The daemon's outPath
- * sits at the project root, OUTSIDE tsconfig's include, so the generated
- * file's `import 'airgen'` never enters the checked program.
+ * A temp consumer project the daemon runs in: a config file + a source file
+ * (with a deliberate type error unless `valid`), typescript symlinked from
+ * this repo's devDependency unless `withTypescript: false`. The daemon's
+ * outPath sits at the project root, OUTSIDE the config's include, so the
+ * generated file's `import 'airgen'` never enters the checked program.
  */
-async function withProject({withTypescript = true, valid = false} = {}, run) {
+async function withProject(
+  {
+    withTypescript = true,
+    valid = false,
+    config = TSCONFIG,
+    configName = 'tsconfig.json',
+    sourceName = 'index.ts',
+    source = null,
+  } = {},
+  run,
+) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'airgen-diag-test-'));
-  fs.writeFileSync(path.join(dir, 'tsconfig.json'), TSCONFIG);
+  fs.writeFileSync(path.join(dir, configName), config);
   fs.mkdirSync(path.join(dir, 'src'));
-  fs.writeFileSync(path.join(dir, 'src', 'index.ts'), sourceFile(valid));
+  fs.writeFileSync(path.join(dir, 'src', sourceName), source ?? sourceFile(valid));
   if (withTypescript) {
     linkIntoNodeModules(dir, {typescript: path.join(projectRoot, 'node_modules', 'typescript')});
   }
@@ -115,6 +131,24 @@ test('startup check reports type errors with cwd-relative paths', async () => {
     assert.ok(!error.message.includes(os.tmpdir()), 'messages must not leak absolute paths');
     assert.ok(!Number.isNaN(Date.parse(payload.checkedAt)));
   });
+});
+
+test('a jsconfig.json project is typechecked too', async () => {
+  await withProject(
+    {
+      config: JSCONFIG,
+      configName: 'jsconfig.json',
+      sourceName: 'index.js',
+      source: '/** @type {number} */\nconst x = "nope";\nexport {x};\n',
+    },
+    async ({url, logs}) => {
+      const payload = await waitForDiagnostics(url, p => p.status !== 'checking');
+      assert.equal(payload.status, 'errors', payload.reason);
+      assert.equal(payload.errors[0].file, path.join('src', 'index.js'));
+      assert.equal(payload.errors[0].code, 'TS2322');
+      assert.ok(!logs.some(line => /unavailable/.test(line)), logs.join('\n'));
+    },
+  );
 });
 
 test('a schema write after fixing the source rechecks to ok', async () => {
