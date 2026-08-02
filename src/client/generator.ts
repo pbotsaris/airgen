@@ -110,19 +110,25 @@ function pascalWord(word: string): string {
 
 function pascalCase(name: string): string {
   let result = splitWords(name).map(pascalWord).join('');
+
   if (result === '') result = 'Table';
   if (/^[0-9]/.test(result)) result = 'T' + result;
+
   return result;
 }
 
 /** Returns '' when no words survive sanitization (e.g. emoji-only names) — callers fall back to the raw name. */
 function camelCase(name: string): string {
   const words = splitWords(name);
+
   if (words.length === 0) return '';
+
   const first = /^[A-Z0-9]+$/.test(words[0])
     ? words[0].toLowerCase()
     : words[0].charAt(0).toLowerCase() + words[0].slice(1);
+
   let result = first + words.slice(1).map(pascalWord).join('');
+
   if (/^[0-9]/.test(result)) result = '_' + result;
   return result;
 }
@@ -131,17 +137,21 @@ function camelCase(name: string): string {
 function uniqueNames<T>(items: ReadonlyArray<T>, toName: (item: T) => string): Map<T, string> {
   const used = new Set<string>();
   const assigned = new Map<T, string>();
+
   for (const item of items) {
     const baseName = toName(item);
     let candidate = baseName;
     let suffix = 2;
+
     while (used.has(candidate)) {
       candidate = `${baseName}${suffix}`;
       suffix++;
     }
+
     used.add(candidate);
     assigned.set(item, candidate);
   }
+
   return assigned;
 }
 
@@ -153,11 +163,14 @@ interface ChoiceOption {
 
 function selectChoices(options: FieldLike['options']): ChoiceOption[] | null {
   if (!options || !Array.isArray(options.choices)) return null;
+
   const choices: ChoiceOption[] = [];
+
   for (const raw of options.choices as Array<{id?: unknown; name?: unknown; color?: unknown}>) {
     if (typeof raw?.id !== 'string' || typeof raw?.name !== 'string') continue;
     choices.push({id: raw.id, name: raw.name, color: typeof raw.color === 'string' ? raw.color : undefined});
   }
+
   return choices.length > 0 ? choices : null;
 }
 
@@ -171,6 +184,12 @@ interface ResolvedType {
   ts: string;
   comment?: string;
 }
+
+/** How far `options.result` nesting is followed (formula of rollup of lookup…). */
+const MAX_RESULT_DEPTH = 3;
+
+/** Field types whose value type comes from `options.result`. */
+const COMPUTED_TYPES = new Set(['formula', 'rollup', 'multipleLookupValues']);
 
 /**
  * Maps an Airtable field type (FieldType enum string values from
@@ -192,11 +211,13 @@ function resolveFieldType(
     case 'url':
     case 'phoneNumber':
       return {ts: 'string'};
+
     case 'date':
     case 'dateTime':
     case 'createdTime':
     case 'lastModifiedTime':
       return {ts: 'string'};
+
     case 'number':
     case 'percent':
     case 'currency':
@@ -205,62 +226,139 @@ function resolveFieldType(
     case 'count':
     case 'autoNumber':
       return {ts: 'number'};
+
     case 'checkbox':
       return {ts: 'boolean'};
+
     case 'singleSelect': {
       if (selectAlias) return {ts: selectAlias};
       const choices = selectChoices(options);
+
       return {ts: choices ? choiceUnion(choices) : 'SelectChoice'};
     }
     case 'multipleSelects': {
       if (selectAlias) return {ts: `${selectAlias}[]`};
       const choices = selectChoices(options);
+
       return {ts: choices ? `Array<${choiceUnion(choices)}>` : 'SelectChoice[]'};
     }
     case 'multipleRecordLinks':
       return {ts: 'LinkedRecord[]'};
+
     case 'multipleAttachments':
       return {ts: 'Attachment[]'};
+
     case 'singleCollaborator':
     case 'createdBy':
     case 'lastModifiedBy':
       return {ts: 'Collaborator'};
+
     case 'multipleCollaborators':
       return {ts: 'Collaborator[]'};
+
     case 'barcode':
       return {ts: '{ text: string; type?: string }'};
+
     case 'button':
       return {ts: '{ label: string; url: string | null }'};
+
     case 'formula':
     case 'rollup': {
       const result = resolveResultType(options, depth);
       return result ?? {ts: 'unknown', comment: `${type} without a known result type`};
     }
+
     case 'multipleLookupValues': {
       const result = resolveResultType(options, depth);
       return result ? {ts: `Array<${result.ts}>`} : {ts: 'unknown[]', comment: 'lookup without a known result type'};
     }
+
     default:
       return {ts: 'unknown', comment: `unmapped: ${type}`};
   }
 }
 
-/** Formula/rollup/lookup expose their computed type via options.result. */
-function resolveResultType(options: FieldLike['options'], depth: number): ResolvedType | null {
-  if (depth > 3) return null;
+interface ResultFieldConfig {
+  type: string;
+  options: {[key: string]: unknown} | null;
+}
+
+/**
+ * `options.result`, as far as the generator reads it. In the SDK this is a
+ * full `FieldConfig` (see field_core.ts), so it nests: a lookup of a select
+ * carries that select's `choices` here.
+ */
+function resultFieldConfig(options: FieldLike['options']): ResultFieldConfig | null {
   if (!options || !options.result || typeof options.result !== 'object') return null;
   const result = options.result as {type?: unknown; options?: unknown};
   if (typeof result.type !== 'string') return null;
-  const resultOptions =
-    result.options && typeof result.options === 'object' ? (result.options as {[key: string]: unknown}) : null;
-  return resolveFieldType(result.type, resultOptions, null, depth + 1);
+  return {
+    type: result.type,
+    options: result.options && typeof result.options === 'object' ? (result.options as {[key: string]: unknown}) : null,
+  };
 }
 
-export interface FieldMeta {
+/** Formula/rollup/lookup expose their computed type via options.result. */
+function resolveResultType(options: FieldLike['options'], depth: number): ResolvedType | null {
+  if (depth > MAX_RESULT_DEPTH) return null;
+  const result = resultFieldConfig(options);
+  if (!result) return null;
+  return resolveFieldType(result.type, result.options, null, depth + 1);
+}
+
+export interface ChoiceMeta {
+  id: string;
+  name: string;
+}
+
+/** Recursive mirror of `options.result` — same shape as FieldTypeMeta plus its type. */
+export interface ResultMeta extends FieldTypeMeta {
+  type: string;
+}
+
+/**
+ * The part of a field's `options` that changes the *generated type*: exactly
+ * what `resolveFieldType` reads, and nothing cosmetic. Choice `color` is
+ * excluded on purpose — `choiceUnion` emits `color?: string`, not a literal.
+ */
+export interface FieldTypeMeta {
+  choices?: ChoiceMeta[];
+  result?: ResultMeta;
+}
+
+export interface FieldMeta extends FieldTypeMeta {
   id: string;
   name: string;
   type: string;
-  choices?: {[choiceName: string]: string};
+}
+
+/**
+ * Projects a field's options down to what affects its emitted type. This is
+ * the single source of truth behind the three-way coupling in CLAUDE.md:
+ * whatever `resolveFieldType` starts reading must show up here too, or
+ * `buildAirgenMeta` bakes in a stale picture and `checkSchemaDrift` goes blind
+ * to that class of change.
+ */
+export function buildFieldTypeMeta(
+  type: string,
+  options: FieldLike['options'],
+  depth = 0,
+): FieldTypeMeta {
+  const meta: FieldTypeMeta = {};
+
+  if (type === 'singleSelect' || type === 'multipleSelects') {
+    const choices = selectChoices(options);
+    if (choices) meta.choices = choices.map(choice => ({id: choice.id, name: choice.name}));
+  }
+
+  if (COMPUTED_TYPES.has(type) && depth <= MAX_RESULT_DEPTH) {
+    const result = resultFieldConfig(options);
+    if (result) {
+      meta.result = {type: result.type, ...buildFieldTypeMeta(result.type, result.options, depth + 1)};
+    }
+  }
+
+  return meta;
 }
 
 export interface TableMeta {
@@ -276,33 +374,61 @@ export interface GeneratedMeta {
   tables: {[tableKey: string]: TableMeta};
 }
 
+interface FieldPlan {
+  field: FieldLike;
+  /** Sanitized property key, deduped within its table. */
+  key: string;
+}
+
+interface TablePlan {
+  table: TableLike;
+  /** Sanitized table key, deduped across the base. */
+  key: string;
+  interfaceName: string;
+  fields: FieldPlan[];
+}
+
 /**
- * The `airgenMeta` object a generated file bakes in, as a plain value. The
- * generator embeds exactly this (JSON.stringify'd); tests and drift checks use
- * it directly. Keys here MUST match the interface properties the main
- * generation loop emits — both derive from the same uniqueNames/camelCase
- * calls, which is what keeps them in lockstep.
+ * Assigns every sanitized name the file will use, once.
+ *
+ * The meta and the emitted interfaces MUST agree on these keys — the runtime
+ * builds `record.fields` from the meta keys — so both are derived from this one
+ * plan rather than from two parallel `uniqueNames` calls that could drift.
  */
-export function buildAirgenMeta(base: BaseLike): GeneratedMeta {
-  const tableNames = uniqueNames(base.tables, table => pascalCase(table.name));
+function planTables(base: BaseLike): TablePlan[] {
+  const tableKeys = uniqueNames(base.tables, table => pascalCase(table.name));
+
+  return base.tables.map(table => {
+    // camelCase is lossy ("Soluções" and "Solucoes" both → solucoes), so dedup
+    // per table; '' falls back to the raw name, which quoteKey will quote.
+    const fieldKeys = uniqueNames(table.fields, field => camelCase(field.name) || field.name);
+    const key = tableKeys.get(table)!;
+
+    return {
+      table,
+      key,
+      interfaceName: `${key}Record`,
+      fields: table.fields.map(field => ({field, key: fieldKeys.get(field)!})),
+    };
+  });
+}
+
+function buildMetaFromPlan(base: BaseLike, plan: ReadonlyArray<TablePlan>): GeneratedMeta {
   const tables: {[tableKey: string]: TableMeta} = {};
 
-  for (const table of base.tables) {
-    const fieldKeys = uniqueNames(table.fields, field => camelCase(field.name) || field.name);
-    const fields: {[fieldKey: string]: FieldMeta} = {};
+  for (const {table, key, fields} of plan) {
+    const fieldMetas: {[fieldKey: string]: FieldMeta} = {};
 
-    for (const field of table.fields) {
-      const fieldMeta: FieldMeta = {id: field.id, name: field.name, type: field.type};
-      const isSelect = field.type === 'singleSelect' || field.type === 'multipleSelects';
-      const choices = isSelect ? selectChoices(field.options) : null;
-      if (choices) {
-        fieldMeta.choices = {};
-        for (const choice of choices) fieldMeta.choices[choice.name] = choice.id;
-      }
-      fields[fieldKeys.get(field)!] = fieldMeta;
+    for (const {field, key: fieldKey} of fields) {
+      fieldMetas[fieldKey] = {
+        id: field.id,
+        name: field.name,
+        type: field.type,
+        ...buildFieldTypeMeta(field.type, field.options ?? null),
+      };
     }
 
-    tables[tableNames.get(table)!] = {id: table.id, name: table.name, fields};
+    tables[key] = {id: table.id, name: table.name, fields: fieldMetas};
   }
 
   return {
@@ -311,6 +437,15 @@ export function buildAirgenMeta(base: BaseLike): GeneratedMeta {
     generatedAt: new Date().toISOString(),
     tables,
   };
+}
+
+/**
+ * The `airgenMeta` object a generated file bakes in, as a plain value. The
+ * generator embeds exactly this (JSON.stringify'd); tests and drift checks use
+ * it directly.
+ */
+export function buildAirgenMeta(base: BaseLike): GeneratedMeta {
+  return buildMetaFromPlan(base, planTables(base));
 }
 
 export interface GeneratorOptions {
@@ -322,70 +457,108 @@ export interface GeneratorOptions {
   hooksModule?: string;
 }
 
-export function generateTypeScriptFromBase(base: BaseLike, options: GeneratorOptions = {}): string {
-  const hooksModule = options.hooksModule ?? 'airgen';
-  const meta = buildAirgenMeta(base);
-  const signature = meta.signature;
-  const tableNames = uniqueNames(base.tables, table => pascalCase(table.name));
+/**
+ * Hands out choice alias names. Aliases are file-global (two tables can both
+ * have a "Status" select), so collisions get a numeric suffix.
+ */
+function createAliasRegistry() {
+  const used = new Set<string>();
 
-  const aliasSections: string[] = [];
-  const interfaceSections: string[] = [];
-  const recordMapEntries: string[] = [];
+  return function registerAlias(tableKey: string, fieldName: string): string {
+    const baseName = `${tableKey}${pascalCase(fieldName)}Choice`;
+    let candidate = baseName;
+    let suffix = 2;
 
-  const usedAliasNames = new Set<string>();
-
-  for (const table of base.tables) {
-    const tableKey = tableNames.get(table)!;
-    const interfaceName = `${tableKey}Record`;
-
-    const fieldLines: string[] = [];
-    // camelCase is lossy ("Soluções" and "Solucoes" both → solucoes), so dedup
-    // per table; '' falls back to the raw name, which quoteKey will quote.
-    const fieldKeys = uniqueNames(table.fields, field => camelCase(field.name) || field.name);
-
-    for (const field of table.fields) {
-      const fieldKey = fieldKeys.get(field)!;
-      // Register a named alias for select fields with known choices.
-      let selectAlias: string | null = null;
-      const isSelect = field.type === 'singleSelect' || field.type === 'multipleSelects';
-      const choices = isSelect ? selectChoices(field.options) : null;
-      if (choices) {
-        let candidate = `${tableKey}${pascalCase(field.name)}Choice`;
-        let suffix = 2;
-        while (usedAliasNames.has(candidate)) {
-          candidate = `${tableKey}${pascalCase(field.name)}Choice${suffix}`;
-          suffix++;
-        }
-        usedAliasNames.add(candidate);
-        selectAlias = candidate;
-        aliasSections.push(`/** choices of ${JSON.stringify(field.name)} in table ${JSON.stringify(table.name)} */\nexport type ${candidate} = ${choiceUnion(choices)};`);
-      }
-
-      const resolved = resolveFieldType(field.type, field.options ?? null, selectAlias, 0);
-      const docParts: string[] = [];
-      if (fieldKey !== field.name) docParts.push(`Airtable field ${JSON.stringify(field.name)}`);
-      if (field.description) docParts.push(field.description.trim());
-      if (resolved.comment) docParts.push(resolved.comment);
-      if (docParts.length > 0) {
-        fieldLines.push(`  /** ${docParts.join(' — ').replace(/\*\//g, '*\\/')} */`);
-      }
-      fieldLines.push(`  ${quoteKey(fieldKey)}?: ${resolved.ts};`);
+    while (used.has(candidate)) {
+      candidate = `${baseName}${suffix}`;
+      suffix++;
     }
 
-    interfaceSections.push(
-      `/** table ${JSON.stringify(table.name)} (${table.id}) */\nexport interface ${interfaceName} {\n${fieldLines.join('\n')}\n}`,
-    );
-    recordMapEntries.push(`  ${quoteKey(tableKey)}: ${interfaceName};`);
+    used.add(candidate);
+    return candidate;
+  };
+}
+
+/**
+ * NOTE: `schema-diff.js` reads this doc comment back to detect alias renames.
+ * Keep the `choices of <field> in table <table>` wording in step with the
+ * regex there.
+ */
+function aliasDeclaration(alias: string, table: TableLike, field: FieldLike, choices: ChoiceOption[]): string {
+  return `/** choices of ${JSON.stringify(field.name)} in table ${JSON.stringify(table.name)} */\nexport type ${alias} = ${choiceUnion(choices)};`;
+}
+
+/** The `/** … *​/` line above a property, or null when there's nothing to say. */
+function fieldDocLine(fieldKey: string, field: FieldLike, resolved: ResolvedType): string | null {
+  const parts: string[] = [];
+
+  if (fieldKey !== field.name) parts.push(`Airtable field ${JSON.stringify(field.name)}`);
+  if (field.description) parts.push(field.description.trim());
+  if (resolved.comment) parts.push(resolved.comment);
+
+  if (parts.length === 0) return null;
+  return `  /** ${parts.join(' — ').replace(/\*\//g, '*\\/')} */`;
+}
+
+interface TableEmission {
+  /** Alias declarations this table contributed, in field order. */
+  aliases: string[];
+  recordInterface: string;
+  recordMapEntry: string;
+}
+
+function emitTable(plan: TablePlan, registerAlias: ReturnType<typeof createAliasRegistry>): TableEmission {
+  const {table, key: tableKey, interfaceName, fields} = plan;
+  const aliases: string[] = [];
+  const lines: string[] = [];
+
+  for (const {field, key: fieldKey} of fields) {
+    // Selects with known choices get a named alias so consumers can refer to
+    // the union by name instead of restating it.
+    const isSelect = field.type === 'singleSelect' || field.type === 'multipleSelects';
+    const choices = isSelect ? selectChoices(field.options) : null;
+    let selectAlias: string | null = null;
+
+    if (choices) {
+      selectAlias = registerAlias(tableKey, field.name);
+      aliases.push(aliasDeclaration(selectAlias, table, field, choices));
+    }
+
+    const resolved = resolveFieldType(field.type, field.options ?? null, selectAlias, 0);
+    const doc = fieldDocLine(fieldKey, field, resolved);
+
+    if (doc !== null) lines.push(doc);
+    lines.push(`  ${quoteKey(fieldKey)}?: ${resolved.ts};`);
   }
 
+  return {
+    aliases,
+    recordInterface: `/** table ${JSON.stringify(table.name)} (${table.id}) */\nexport interface ${interfaceName} {\n${lines.join('\n')}\n}`,
+    recordMapEntry: `  ${quoteKey(tableKey)}: ${interfaceName};`,
+  };
+}
+
+function fileHeader(base: BaseLike, signature: string): string {
+  const name = base.name ? ` (${base.name})` : '';
+  return `${GENERATED_HEADER}\n// Base: ${base.id}${name}\n// Signature: ${signature}\n/* eslint-disable */`;
+}
+
+export function generateTypeScriptFromBase(base: BaseLike, options: GeneratorOptions = {}): string {
+  const hooksModule = options.hooksModule ?? 'airgen';
+  const plan = planTables(base);
+  const meta = buildMetaFromPlan(base, plan);
+
+  const registerAlias = createAliasRegistry();
+  const emissions = plan.map(tablePlan => emitTable(tablePlan, registerAlias));
+
   const sections = [
-    `${GENERATED_HEADER}\n// Base: ${base.id}${base.name ? ` (${base.name})` : ''}\n// Signature: ${signature}\n/* eslint-disable */`,
+    fileHeader(base, meta.signature),
     `import {createTypedHooks} from '${hooksModule.replace(/'/g, "\\'")}';`,
     SHARED_TYPES,
-    ...aliasSections,
-    ...interfaceSections,
+    ...emissions.flatMap(emission => emission.aliases),
+    ...emissions.map(emission => emission.recordInterface),
     `export const airgenMeta = ${JSON.stringify(meta, null, 2)} as const;`,
-    `export interface TableRecordMap {\n${recordMapEntries.join('\n')}\n}\n\nexport type TableKey = keyof TableRecordMap;`,
+    `export interface TableRecordMap {\n${emissions.map(emission => emission.recordMapEntry).join('\n')}\n}\n\nexport type TableKey = keyof TableRecordMap;`,
     `export const {useRecords, useTable, useSchemaDrift} = createTypedHooks<TableRecordMap>(airgenMeta);`,
   ];
 

@@ -21,14 +21,17 @@
 
 import type {BlocksSdkAdapter, SdkBase, SdkRecord, SdkTable} from './sdk.js';
 import {checkSchemaDrift} from './schema-drift.js';
-import type {DriftMetaLike, DriftReport} from './schema-drift.js';
+import type {DriftChoicesLike, DriftMetaLike, DriftReport, DriftResultMetaLike} from './schema-drift.js';
 
 export interface AirgenFieldMeta {
   readonly id: string;
   /** Raw Airtable field name (the map key is the sanitized property name). Optional: older generated files lack it. */
   readonly name?: string;
   readonly type: string;
-  readonly choices?: {readonly [choiceName: string]: string};
+  /** Nothing reads this at runtime — it exists so drift detection can compare choices by id. */
+  readonly choices?: DriftChoicesLike;
+  /** Computed-field (`options.result`) projection. Optional: older generated files lack it. */
+  readonly result?: DriftResultMetaLike;
 }
 
 export interface AirgenTableMeta {

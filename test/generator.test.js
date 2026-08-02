@@ -6,7 +6,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
 
-import {generateTypeScriptFromBase, GENERATED_HEADER} from '../dist/client/generator.js';
+import {buildAirgenMeta, generateTypeScriptFromBase, GENERATED_HEADER} from '../dist/client/generator.js';
 import {computeSchemaSignature} from '../dist/client/schema-signature.js';
 import {mockBase} from './fixtures/mock-base.js';
 import {linkIntoNodeModules} from './helpers.js';
@@ -76,9 +76,43 @@ test('embeds airgenMeta with ids, choices, and the schema signature', () => {
   assert.match(code, /"id": "tblProjects000001"/);
   assert.match(code, /"id": "fldStatus00000001"/);
   assert.match(code, /"name": "Days Left"/); // raw field name survives under the sanitized key
-  assert.match(code, /"Todo": "selTodo000000001"/);
+  // Choices are a list of {id, name}: the id is the durable handle, and the
+  // list form survives duplicate choice names.
+  assert.match(code, /"choices": \[\s*\{\s*"id": "selTodo000000001",\s*"name": "Todo"\s*\}/);
   assert.ok(code.includes(`"signature": "${computeSchemaSignature(mockBase)}"`));
   assert.match(code, /as const;/);
+});
+
+test('airgenMeta records the computed result type drift needs to compare', () => {
+  const meta = buildAirgenMeta(mockBase);
+  const fields = meta.tables.Projects.fields;
+  // Everything resolveFieldType() reads must be recorded, or a change to it
+  // regenerates the file while checkSchemaDrift stays blind to it.
+  assert.deepEqual(fields.daysLeft.result, {type: 'number'});
+  assert.deepEqual(fields.taskNames.result, {type: 'singleLineText'});
+  assert.equal(fields.brokenFormula.result, undefined); // formula with no result
+  assert.deepEqual(fields.status.choices, [
+    {id: 'selTodo000000001', name: 'Todo'},
+    {id: 'selProg000000001', name: 'In "Progress"'},
+    {id: 'selDone000000001', name: 'Done'},
+  ]);
+  assert.equal(fields.name.choices, undefined);
+  // Cosmetic option: colors never reach the emitted type, so they stay out.
+  assert.ok(!JSON.stringify(fields.status.choices).includes('redBright'));
+});
+
+test('nested result projections follow options.result recursively', () => {
+  const base = structuredClone(mockBase);
+  // A lookup of a select: the looked-up choices decide the emitted type.
+  base.tables[0].fields.find(field => field.id === 'fldLookup00000001').options.result = {
+    type: 'singleSelect',
+    options: {choices: [{id: 'selLk0000000001', name: 'Alpha'}]},
+  };
+  const fields = buildAirgenMeta(base).tables.Projects.fields;
+  assert.deepEqual(fields.taskNames.result, {
+    type: 'singleSelect',
+    choices: [{id: 'selLk0000000001', name: 'Alpha'}],
+  });
 });
 
 test('emits TableRecordMap keyed by sanitized table names', () => {
