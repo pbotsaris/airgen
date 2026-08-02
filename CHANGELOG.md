@@ -5,6 +5,41 @@ All notable changes to airgen are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.4]
+
+### Added
+
+- **Typechecking and assisted fixes now work in plain-JavaScript extensions.**
+  Both features locate the consumer project by walking up from the output file;
+  that walk accepted only `tsconfig.json`, which a JS extension doesn't have. It
+  now accepts `jsconfig.json` too (same format, `allowJs` implied by
+  TypeScript), preferring `tsconfig.json` when a directory has both. `.js` and
+  `.jsx` are analysed and rewritten exactly as `.ts` is.
+- `jsconfig.json` implies `allowJs` but **not** `checkJs`, so a JS project that
+  wants the typecheck panel to report on its own files has to set
+  `"checkJs": true`. Fixes are unaffected by that setting. Documented in the
+  README.
+
+### Fixed
+
+- The codemod worker forced `allowJs` *after* parsing the project config, but
+  `parseJsonConfigFileContent` resolves the file list from the options it is
+  given — so the program contained no `.js` files at all unless the config
+  itself enabled `allowJs`, and renames silently missed them. It is now passed
+  as `existingOptions`, along with the config path so jsconfig's implied
+  defaults apply.
+
+### Internal
+
+- `findTsconfig` → `findProjectConfig`, with `PROJECT_CONFIG_NAMES` /
+  `PROJECT_CONFIG_LABEL` (`typecheck.js`); the codemod job field `tsconfigPath`
+  → `configPath`. Diagnostics that have no file position are now attributed to
+  the config file that actually drove the check, not a hardcoded
+  `tsconfig.json`.
+- New tests: a plain-JS consumer project driven by `jsconfig.json` gets its
+  renames applied (`codemod.test.js`), and a `jsconfig.json` project is
+  typechecked (`diagnostics.test.js`). Suite is 89 tests.
+
 ## [0.2.3]
 
 Three layers of "the schema changed, now what?": detect the drift, typecheck the
