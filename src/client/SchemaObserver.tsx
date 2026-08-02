@@ -38,13 +38,6 @@ export interface SchemaObserverConfig {
 
 type DaemonStatus = 'unknown' | 'connected' | 'disconnected'
 
-type SignatureState = {
-   last: React.MutableRefObject<string | null>
-   enabled: boolean
-   current: string | null
-   shouldSend: () => boolean
-}
-
 const panelStyle: React.CSSProperties = {
    display: 'flex',
    alignItems: 'center',
@@ -85,24 +78,12 @@ export function createSchemaObserver(
       const [status, setStatus] = useState<DaemonStatus>('unknown')
       const [lastSyncedAt, setLastSyncedAt] = useState<string | null>(null)
       const [copied, setCopied] = useState(false)
+      const lastSentSignature = useRef<string | null>(null)
       const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-      //     const lastSentSignature = useRef<string | null>(null)
-      //   const signature = enabled ? computeSchemaSignature(base) : null
-
-      const signature: SignatureState = {
-         last: useRef<string | null>(null),
-         enabled,
-         current: enabled ? computeSchemaSignature(base) : null,
-
-         shouldSend() {
-            return (
-               this.enabled &&
-               this.current !== null &&
-               this.current !== this.last.current
-            )
-         },
-      }
+      // A plain string, so it's stable across renders that don't change the
+      // schema — the debounce effect below depends on it by value.
+      const signature = enabled ? computeSchemaSignature(base) : null
 
       useEffect(() => {
          if (!enabled) return
@@ -122,6 +103,16 @@ export function createSchemaObserver(
       }, [daemonUrl, enabled])
 
       useEffect(() => {
+         // Nothing to do when disabled, and unchanged schemas never reach the
+         // daemon — a no-op render must not cost a generation or a file write.
+         if (
+            !enabled ||
+            signature === null ||
+            signature === lastSentSignature.current
+         ) {
+            return
+         }
+
          if (debounceTimer.current !== null) clearTimeout(debounceTimer.current)
 
          debounceTimer.current = setTimeout(async () => {
@@ -129,7 +120,6 @@ export function createSchemaObserver(
 
             // Generate inside the debounced callback: N rapid edits, 1 generation.
             const code = generateTypeScriptFromBase(base, generatorOptions)
-            const sig = signature.current
 
             try {
                const res = await fetch(`${daemonUrl}/save-schema`, {
@@ -137,14 +127,17 @@ export function createSchemaObserver(
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
                      code,
-                     sig,
+                     signature,
                      tableCount: base.tables.length,
                   }),
                })
 
-               if (!res.ok) return setStatus('disconnected')
+               if (!res.ok) {
+                  setStatus('disconnected')
+                  return
+               }
 
-               signature.last = signature
+               lastSentSignature.current = signature
                setLastSyncedAt(new Date().toLocaleTimeString())
                setStatus('connected')
             } catch {
