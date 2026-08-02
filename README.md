@@ -6,7 +6,7 @@ A `<SchemaObserver />` component inside your extension watches the base schema v
 
 This library does code generation on top of the [official Airtable Blocks SDK](https://github.com/Airtable/blocks), so no API tokens and no manual regeneration are needed.
 
-![diagram](./docs/dia.jpeg)
+![diagram](https://raw.githubusercontent.com/pbotsaris/airgen/main/docs/dia.jpeg)
 
 Because the schema comes from the live `Base` model, generation reacts to *every* schema mutation — renaming a field, changing a field type, adding a select choice — within ~1 second, while `block run` hot-reloads your extension with the fresh types.
 
