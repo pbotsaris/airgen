@@ -62,7 +62,32 @@ interface DiagnosticsPayload {
    reason?: string
 }
 
-/** Delays between /diagnostics polls while the daemon reports 'checking'. */
+interface FixUsage {
+   file: string
+   line: number
+}
+
+interface PendingFix {
+   id: string
+   kind: string
+   severity: 'breaking' | 'warning' | 'info'
+   fixable: boolean
+   description: string
+   from: string
+   to: string | null
+   files: string[]
+   editCount: number
+   usages: FixUsage[]
+}
+
+/** Payload of GET /fixes (404s unless the daemon was started with --fix). */
+interface FixesPayload {
+   status: 'idle' | 'analyzing' | 'ready' | 'unavailable'
+   reason: string | null
+   fixes: PendingFix[]
+}
+
+/** Delays between polls while the daemon reports work in flight. */
 const DIAGNOSTICS_POLL_DELAYS_MS = [
    0, 500, 1000, 2000, 3000, 3000, 3000, 3000, 3000, 3000,
 ]
@@ -111,12 +136,17 @@ export function createSchemaObserver(
       const [diagnostics, setDiagnostics] = useState<DiagnosticsPayload | null>(
          null,
       )
+      const [fixes, setFixes] = useState<FixesPayload | null>(null)
+      const [applying, setApplying] = useState(false)
       const lastSentSignature = useRef<string | null>(null)
       const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
       // A 404 means an older daemon without /diagnostics — stop asking.
       const diagnosticsSupported = useRef(true)
+      // A 404 here means --fix is off, which is the default. Stop asking.
+      const fixesSupported = useRef(true)
       // Bumped on every new poll and on unmount so stale poll loops cancel.
       const pollGeneration = useRef(0)
+      const fixPollGeneration = useRef(0)
 
       // A plain string, so it's stable across renders that don't change the
       // schema — the debounce effect below depends on it by value.
@@ -162,6 +192,55 @@ export function createSchemaObserver(
          }
       }, [daemonUrl])
 
+      // Same shape as the diagnostics poll: settle once the daemon stops
+      // reporting work in flight, and let a newer poll cancel an older one.
+      const pollFixes = useCallback(async () => {
+         if (!fixesSupported.current) return
+         const generation = ++fixPollGeneration.current
+
+         for (const delay of DIAGNOSTICS_POLL_DELAYS_MS) {
+            if (delay > 0) {
+               await new Promise((resolve) => setTimeout(resolve, delay))
+            }
+            if (generation !== fixPollGeneration.current) return
+
+            try {
+               const res = await fetch(`${daemonUrl}/fixes`)
+               if (res.status === 404) {
+                  fixesSupported.current = false
+                  return
+               }
+               if (!res.ok) return
+               const payload = (await res.json()) as FixesPayload
+               if (generation !== fixPollGeneration.current) return
+               setFixes(payload)
+               if (payload.status !== 'analyzing') return
+            } catch {
+               return
+            }
+         }
+      }, [daemonUrl])
+
+      const applyFix = useCallback(
+         async (body: { id: string } | { all: true }) => {
+            setApplying(true)
+            try {
+               await fetch(`${daemonUrl}/apply-fix`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(body),
+               })
+            } catch {
+               // The refreshed lists below tell the story either way.
+            } finally {
+               setApplying(false)
+            }
+            pollFixes()
+            pollDiagnostics()
+         },
+         [daemonUrl, pollFixes, pollDiagnostics],
+      )
+
       useEffect(() => {
          if (!enabled) return
 
@@ -175,11 +254,13 @@ export function createSchemaObserver(
                if (!cancelled) setStatus('disconnected')
             })
          pollDiagnostics()
+         pollFixes()
          return () => {
             cancelled = true
             pollGeneration.current++
+            fixPollGeneration.current++
          }
-      }, [daemonUrl, enabled, pollDiagnostics])
+      }, [daemonUrl, enabled, pollDiagnostics, pollFixes])
 
       useEffect(() => {
          // Nothing to do when disabled, and unchanged schemas never reach the
@@ -220,6 +301,7 @@ export function createSchemaObserver(
                setLastSyncedAt(new Date().toLocaleTimeString())
                setStatus('connected')
                pollDiagnostics()
+               pollFixes()
             } catch {
                setStatus('disconnected')
             }
@@ -232,7 +314,7 @@ export function createSchemaObserver(
                debounceTimer.current = null
             }
          }
-      }, [signature, enabled, daemonUrl, debounceMs, base, pollDiagnostics])
+      }, [signature, enabled, daemonUrl, debounceMs, base, pollDiagnostics, pollFixes])
 
       const copyToClipboard = useCallback(async () => {
          try {
@@ -267,6 +349,7 @@ export function createSchemaObserver(
             </span>
             {drift && !drift.ok && <DriftDetails drift={drift} />}
             <DiagnosticsDetails diagnostics={diagnostics} />
+            <FixesDetails fixes={fixes} applying={applying} onApply={applyFix} />
             <button type='button' style={buttonStyle} onClick={copyToClipboard}>
                {copied ? 'Copied!' : 'Copy schema'}
             </button>
@@ -318,6 +401,81 @@ function DiagnosticsDetails({
 
 function truncate(text: string, max: number): string {
    return text.length > max ? `${text.slice(0, max)}…` : text
+}
+
+const MAX_USAGE_LINES = 4
+
+/**
+ * Pending schema fixes. Renders nothing unless the daemon was started with
+ * --fix (it 404s otherwise) and something in the code is actually affected.
+ */
+function FixesDetails({
+   fixes,
+   applying,
+   onApply,
+}: {
+   fixes: FixesPayload | null
+   applying: boolean
+   onApply: (body: { id: string } | { all: true }) => void
+}): React.ReactElement | null {
+   if (!fixes || fixes.fixes.length === 0) return null
+
+   const fixable = fixes.fixes.filter((fix) => fix.fixable)
+   const summary =
+      fixable.length > 0
+         ? `${fixes.fixes.length} schema change${fixes.fixes.length === 1 ? '' : 's'} affect your code · ${fixable.length} fixable`
+         : `${fixes.fixes.length} schema change${fixes.fixes.length === 1 ? '' : 's'} affect your code`
+
+   return (
+      <details style={textStyle}>
+         <summary
+            style={{ color: '#8250df', fontWeight: 600, cursor: 'pointer' }}
+         >
+            {summary}
+         </summary>
+         <div style={{ paddingTop: 4, color: '#333333' }}>
+            {fixable.length > 1 && (
+               <button
+                  type='button'
+                  style={{ ...buttonStyle, marginBottom: 4 }}
+                  disabled={applying}
+                  onClick={() => onApply({ all: true })}
+               >
+                  Fix all {fixable.length}
+               </button>
+            )}
+            {fixes.fixes.map((fix) => (
+               <div key={fix.id} style={{ paddingBottom: 4 }}>
+                  <span>{fix.description}</span>
+                  {fix.fixable
+                     ? (
+                        <button
+                           type='button'
+                           style={{ ...buttonStyle, marginLeft: 6 }}
+                           disabled={applying}
+                           onClick={() => onApply({ id: fix.id })}
+                        >
+                           Apply ({fix.editCount} in {fix.files.length} file
+                           {fix.files.length === 1 ? '' : 's'})
+                        </button>
+                     )
+                     : (
+                        <div style={{ color: '#666666', paddingLeft: 8 }}>
+                           {fix.usages.slice(0, MAX_USAGE_LINES).map((usage, index) => (
+                              <div key={index}>
+                                 {usage.file}:{usage.line}
+                              </div>
+                           ))}
+                           {fix.usages.length > MAX_USAGE_LINES && (
+                              <div>+{fix.usages.length - MAX_USAGE_LINES} more</div>
+                           )}
+                        </div>
+                     )}
+               </div>
+            ))}
+         </div>
+      </details>
+   )
 }
 
 /** One collapsed line in the strip; <details> expands without any state. */
