@@ -14,10 +14,12 @@
  * Everything resolves by ID (table id, field id) so renames in Airtable never
  * break a running extension — re-running the generator only refreshes the
  * display names baked into the types.
+ *
+ * SDK hooks arrive via `BlocksSdkAdapter` from the entry point rather than an
+ * import, so this module compiles against every SDK flavor (see sdk.ts).
  */
 
-import {useBase, useRecords as useAirtableRecords} from '@airtable/blocks/ui';
-import type {Base, Table, Record as AirtableRecord} from '@airtable/blocks/models';
+import type {BlocksSdkAdapter, SdkBase, SdkRecord, SdkTable} from './sdk.js';
 
 export interface AirgenFieldMeta {
   readonly id: string;
@@ -41,51 +43,54 @@ export interface AirgenMeta<M> {
 export interface Record<M, K extends keyof M> {
   id: string;
   fields: Partial<M[K]>;
-  /** Escape hatch to the native SDK record. */
-  raw: AirtableRecord;
+  /** Escape hatch to the native SDK record (cast to your SDK's Record type). */
+  raw: SdkRecord;
 }
 
-function resolveTable(base: Base, tableMeta: AirgenTableMeta | undefined): Table | null {
+function resolveTable(base: SdkBase, tableMeta: AirgenTableMeta | undefined): SdkTable | null {
   if (!tableMeta) return null;
   return base.getTableByIdIfExists(tableMeta.id) ?? base.getTableByNameIfExists(tableMeta.name);
 }
 
-export function createTypedHooks<M extends object>(meta: AirgenMeta<M>) {
-  /** Resolves the SDK Table for a generated table key (by ID, name fallback). */
-  function useTable<K extends keyof M & string>(tableKey: K): Table | null {
-    const base = useBase();
-    return resolveTable(base, meta.tables[tableKey]);
-  }
+/** Binds an SDK flavor's hooks; each entry point exports the result as `createTypedHooks`. */
+export function makeCreateTypedHooks(sdk: BlocksSdkAdapter) {
+  return function createTypedHooks<M extends object>(meta: AirgenMeta<M>) {
+    /** Resolves the SDK Table for a generated table key (by ID, name fallback). */
+    function useTable<K extends keyof M & string>(tableKey: K): SdkTable | null {
+      const base = sdk.useBase();
+      return resolveTable(base, meta.tables[tableKey]);
+    }
 
-  function useRecords<K extends keyof M & string>(tableKey: K): Array<Record<M, K>> {
-    const base = useBase();
-    const tableMeta = meta.tables[tableKey];
-    const table = resolveTable(base, tableMeta);
-    // useAirtableRecords accepts null (and returns null), but its overloads don't
-    // admit `Table | null` directly.
-    const records = useAirtableRecords(table as Table) as AirtableRecord[] | null;
+    function useRecords<K extends keyof M & string>(tableKey: K): Array<Record<M, K>> {
+      const base = sdk.useBase();
+      const tableMeta = meta.tables[tableKey];
+      const table = resolveTable(base, tableMeta);
+      // The SDK's useRecords accepts null (and returns null), but its
+      // overloads don't admit `SdkTable | null` directly.
+      const records = sdk.useRecords(table as SdkTable);
 
-    if (!table || !records) return [];
+      if (!table || !records) return [];
 
-    return records.map(record => {
-      const fields: {[fieldName: string]: unknown} = {};
+      return records.map(record => {
+        const fields: {[fieldName: string]: unknown} = {};
 
-      for (const [fieldName, fieldMeta] of Object.entries(tableMeta.fields)) {
-        const field = table.getFieldByIdIfExists(fieldMeta.id);
+        for (const [fieldName, fieldMeta] of Object.entries(tableMeta.fields)) {
+          const field = table.getFieldByIdIfExists(fieldMeta.id);
 
-        if (!field) continue; // deleted (or hidden from this extension) since generation
+          if (!field) continue; // deleted (or hidden from this extension) since generation
 
-        const value = record.getCellValue(field);
+          const value = record.getCellValue(field);
 
-        if (value !== null && value !== undefined) {
-          fields[fieldName] = value;
+          if (value !== null && value !== undefined) {
+            fields[fieldName] = value;
+          }
+
         }
 
-      }
-      
-      return {id: record.id, fields: fields as Partial<M[K]>, raw: record};
-    });
-  }
+        return {id: record.id, fields: fields as Partial<M[K]>, raw: record};
+      });
+    }
 
-  return {useTable, useRecords};
+    return {useTable, useRecords};
+  };
 }

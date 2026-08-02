@@ -14,7 +14,7 @@ Because the schema comes from the live `Base` model, generation reacts to *every
 
 airgen is **not** a standalone Airtable client — it only works inside a custom extension built with the Airtable Blocks SDK, and it's meant to be used alongside it while you build custom interfaces on top of your base.
 
-- [`@airtable/blocks`](https://github.com/Airtable/blocks) `>= 1.10.0` — required peer dependency. airgen reads the schema through the SDK's live `Base` model and its hooks are thin wrappers over SDK records.
+- [`@airtable/blocks`](https://github.com/Airtable/blocks) `>= 1.10.0`, or an experimental `interface-alpha` build — required peer dependency. airgen reads the schema through the SDK's live `Base` model and its hooks are thin wrappers over SDK records.
 - `react >= 16.14` — required peer dependency (the observer and the generated hooks are React).
 - Node `>= 18` for the CLI/daemon.
 - An extension scaffolded with the [Airtable CLI](https://airtable.com/developers/extensions) (`block init`), run locally with `block run`.
@@ -53,8 +53,16 @@ the daemon.
 
 **2. Render the observer in your extension (dev only):**
 
+Import from the entry point that matches your SDK flavor — the three are identical except for which of the SDK's ui modules they bind:
+
+| Your extension | SDK ui module | Import airgen from |
+|---|---|---|
+| Interface extension (`@airtable/blocks@interface-alpha`) | `@airtable/blocks/interface/ui` | `airgen/interface` |
+| Custom extension, stable SDK (`@airtable/blocks@1.x`) | `@airtable/blocks/ui` | `airgen` |
+| Custom extension, experimental SDK | `@airtable/blocks/base/ui` | `airgen/base` |
+
 ```tsx
-import {SchemaObserver} from 'airgen';
+import {SchemaObserver} from 'airgen/interface'; // or 'airgen' on the stable SDK
 
 function App() {
   return (
@@ -126,6 +134,8 @@ Any webpage you visit can fire blind cross-origin POSTs at localhost, so the dae
 Remove `<SchemaObserver />` (or pass `enabled={false}`) before releasing. If it ships anyway, a released extension runs from a non-localhost origin, so browsers block the localhost request and the panel just shows "Disconnected" — nothing breaks and nothing is sent anywhere.
 
 ## API
+
+All of these are exported identically from `airgen`, `airgen/interface`, and `airgen/base` — the entries differ only in which SDK ui module supplies the hooks and which specifier the generated file imports.
 
 | Export | Description |
 |---|---|

@@ -129,7 +129,7 @@ export function startDaemon({
     server.listen(port, host, () => {
       const address = server.address();
       log(`[${timestamp()}] airgen daemon listening on http://${host}:${address.port}`);
-      log(`[${timestamp()}] Writing schema to ${resolvedOut}`);
+      log(`[${timestamp()}] Will write schema to ${resolvedOut} (waiting for <SchemaObserver /> to connect)`);
       resolve(server);
     });
   });

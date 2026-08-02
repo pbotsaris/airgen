@@ -2,8 +2,8 @@
  * Dev-only panel that keeps ./airtable-schema.ts in sync with the live base.
  *
  * Efficiency gates, in order:
- *   1. `useWatchable(base, ['schema'])` — this component re-renders only on
- *      schema mutations (never on record/cell data changes). Keep it a leaf.
+ *   1. `sdk.useWatchable(base, ['schema'])` — this component re-renders only
+ *      on schema mutations (never on record/cell data changes). Keep it a leaf.
  *   2. Schema signature comparison — no-op renders (or schema events that
  *      don't affect generated types) skip regeneration entirely.
  *   3. Debounce — rapid-fire schema edits cost one generation + POST, not N.
@@ -11,12 +11,16 @@
  * In a released extension (non-localhost origin) the browser blocks requests
  * to localhost, so the panel just shows "disconnected" — but you should
  * remove it (or set enabled={false}) before releasing anyway.
+ *
+ * Built via `createSchemaObserver(sdk)` so each entry point can bind its SDK
+ * flavor's hooks (see sdk.ts). Rendered with plain DOM elements, not the
+ * Blocks component library — the interface SDK doesn't ship one.
  */
 
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {useBase, useWatchable, Box, Button, Text} from '@airtable/blocks/ui';
 import {generateTypeScriptFromBase} from './generator.js';
 import {computeSchemaSignature} from './schema-signature.js';
+import type {BlocksSdkAdapter} from './sdk.js';
 
 export interface SchemaObserverProps {
   /** Where the airgen daemon is listening. */
@@ -27,107 +31,136 @@ export interface SchemaObserverProps {
   enabled?: boolean;
 }
 
+export interface SchemaObserverConfig {
+  /** Module the generated file imports `createTypedHooks` from (default 'airgen'). */
+  hooksModule?: string;
+}
+
 type DaemonStatus = 'unknown' | 'connected' | 'disconnected';
 
-export function SchemaObserver({
-  daemonUrl = 'http://localhost:3001',
-  debounceMs = 500,
-  enabled = true,
-}: SchemaObserverProps): React.ReactElement | null {
-  const base = useBase();
-  useWatchable(base, ['schema']);
+const panelStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 12,
+  flexWrap: 'wrap',
+  padding: 8,
+  borderBottom: '2px solid #e0e0e0',
+  fontFamily: 'inherit',
+};
 
-  const [status, setStatus] = useState<DaemonStatus>('unknown');
-  const [lastSyncedAt, setLastSyncedAt] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
-  const lastSentSignature = useRef<string | null>(null);
-  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+const textStyle: React.CSSProperties = {fontSize: 11, lineHeight: '14px'};
 
-  const signature = enabled ? computeSchemaSignature(base) : null;
+const buttonStyle: React.CSSProperties = {
+  ...textStyle,
+  fontWeight: 500,
+  padding: '4px 8px',
+  border: 'none',
+  borderRadius: 3,
+  background: 'rgba(0, 0, 0, 0.05)',
+  color: '#333333',
+  cursor: 'pointer',
+};
 
-  useEffect(() => {
-    if (!enabled) return;
-    let cancelled = false;
-    fetch(`${daemonUrl}/health`)
-      .then(response => {
-        if (!cancelled) setStatus(response.ok ? 'connected' : 'disconnected');
-      })
-      .catch(() => {
-        if (!cancelled) setStatus('disconnected');
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [daemonUrl, enabled]);
+export function createSchemaObserver(
+  sdk: BlocksSdkAdapter,
+  config: SchemaObserverConfig = {},
+): (props: SchemaObserverProps) => React.ReactElement | null {
+  const generatorOptions = {hooksModule: config.hooksModule};
 
-  useEffect(() => {
-    if (!enabled || signature === null || signature === lastSentSignature.current) {
-      return;
-    }
-    if (debounceTimer.current !== null) clearTimeout(debounceTimer.current);
-    debounceTimer.current = setTimeout(async () => {
-      debounceTimer.current = null;
-      // Generate inside the debounced callback: N rapid edits, 1 generation.
-      const code = generateTypeScriptFromBase(base);
-      try {
-        const response = await fetch(`${daemonUrl}/save-schema`, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({code, signature, tableCount: base.tables.length}),
+  function SchemaObserver({
+    daemonUrl = 'http://localhost:3001',
+    debounceMs = 500,
+    enabled = true,
+  }: SchemaObserverProps): React.ReactElement | null {
+    const base = sdk.useBase();
+    sdk.useWatchable(base, ['schema']);
+
+    const [status, setStatus] = useState<DaemonStatus>('unknown');
+    const [lastSyncedAt, setLastSyncedAt] = useState<string | null>(null);
+    const [copied, setCopied] = useState(false);
+    const lastSentSignature = useRef<string | null>(null);
+    const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    const signature = enabled ? computeSchemaSignature(base) : null;
+
+    useEffect(() => {
+      if (!enabled) return;
+      let cancelled = false;
+      fetch(`${daemonUrl}/health`)
+        .then(response => {
+          if (!cancelled) setStatus(response.ok ? 'connected' : 'disconnected');
+        })
+        .catch(() => {
+          if (!cancelled) setStatus('disconnected');
         });
-        if (response.ok) {
-          lastSentSignature.current = signature;
-          setLastSyncedAt(new Date().toLocaleTimeString());
-          setStatus('connected');
-        } else {
+      return () => {
+        cancelled = true;
+      };
+    }, [daemonUrl, enabled]);
+
+    useEffect(() => {
+      if (!enabled || signature === null || signature === lastSentSignature.current) {
+        return;
+      }
+      if (debounceTimer.current !== null) clearTimeout(debounceTimer.current);
+      debounceTimer.current = setTimeout(async () => {
+        debounceTimer.current = null;
+        // Generate inside the debounced callback: N rapid edits, 1 generation.
+        const code = generateTypeScriptFromBase(base, generatorOptions);
+        try {
+          const response = await fetch(`${daemonUrl}/save-schema`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({code, signature, tableCount: base.tables.length}),
+          });
+          if (response.ok) {
+            lastSentSignature.current = signature;
+            setLastSyncedAt(new Date().toLocaleTimeString());
+            setStatus('connected');
+          } else {
+            setStatus('disconnected');
+          }
+        } catch {
           setStatus('disconnected');
         }
+      }, debounceMs);
+      return () => {
+        if (debounceTimer.current !== null) {
+          clearTimeout(debounceTimer.current);
+          debounceTimer.current = null;
+        }
+      };
+    }, [signature, enabled, daemonUrl, debounceMs, base]);
+
+    const copyToClipboard = useCallback(async () => {
+      try {
+        await navigator.clipboard.writeText(generateTypeScriptFromBase(base, generatorOptions));
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
       } catch {
-        setStatus('disconnected');
+        // clipboard unavailable in this context; nothing to do
       }
-    }, debounceMs);
-    return () => {
-      if (debounceTimer.current !== null) {
-        clearTimeout(debounceTimer.current);
-        debounceTimer.current = null;
-      }
-    };
-  }, [signature, enabled, daemonUrl, debounceMs, base]);
+    }, [base]);
 
-  const copyToClipboard = useCallback(async () => {
-    try {
-      await navigator.clipboard.writeText(generateTypeScriptFromBase(base));
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // clipboard unavailable in this context; nothing to do
-    }
-  }, [base]);
+    if (!enabled) return null;
 
-  if (!enabled) return null;
+    const statusLabel =
+      status === 'connected' ? '● Connected' : status === 'disconnected' ? '○ Disconnected' : '◌ Connecting…';
+    const statusColor = status === 'connected' ? '#048a0e' : status === 'disconnected' ? '#d33030' : '#666666';
 
-  const statusLabel =
-    status === 'connected' ? '● Connected' : status === 'disconnected' ? '○ Disconnected' : '◌ Connecting…';
-  const statusColor = status === 'connected' ? '#048a0e' : status === 'disconnected' ? '#d33030' : '#666666';
+    return (
+      <div style={panelStyle}>
+        <span style={{...textStyle, color: statusColor, fontWeight: 600}}>airgen {statusLabel}</span>
+        <span style={{...textStyle, color: '#666666'}}>
+          {base.tables.length} table{base.tables.length === 1 ? '' : 's'}
+          {lastSyncedAt ? ` · synced ${lastSyncedAt}` : status === 'disconnected' ? ' · run `npx airgen`' : ''}
+        </span>
+        <button type="button" style={buttonStyle} onClick={copyToClipboard}>
+          {copied ? 'Copied!' : 'Copy schema'}
+        </button>
+      </div>
+    );
+  }
 
-  return (
-    <Box
-      display="flex"
-      alignItems="center"
-      padding={2}
-      borderBottom="thick"
-      style={{gap: 12, flexWrap: 'wrap'}}
-    >
-      <Text size="small" style={{color: statusColor, fontWeight: 600}}>
-        airgen {statusLabel}
-      </Text>
-      <Text size="small" textColor="light">
-        {base.tables.length} table{base.tables.length === 1 ? '' : 's'}
-        {lastSyncedAt ? ` · synced ${lastSyncedAt}` : status === 'disconnected' ? ' · run `npx airgen`' : ''}
-      </Text>
-      <Button size="small" variant="secondary" onClick={copyToClipboard}>
-        {copied ? 'Copied!' : 'Copy schema'}
-      </Button>
-    </Box>
-  );
+  return SchemaObserver;
 }
