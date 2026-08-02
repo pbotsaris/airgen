@@ -45,6 +45,28 @@ export interface SchemaObserverConfig {
 
 type DaemonStatus = 'unknown' | 'connected' | 'disconnected'
 
+interface DiagnosticsError {
+   file: string
+   line: number
+   col: number
+   code: string
+   message: string
+}
+
+/** Payload of the daemon's GET /diagnostics (absent on older daemons). */
+interface DiagnosticsPayload {
+   status: 'ok' | 'errors' | 'checking' | 'unavailable'
+   errors: DiagnosticsError[]
+   total: number
+   checkedAt: string | null
+   reason?: string
+}
+
+/** Delays between /diagnostics polls while the daemon reports 'checking'. */
+const DIAGNOSTICS_POLL_DELAYS_MS = [
+   0, 500, 1000, 2000, 3000, 3000, 3000, 3000, 3000, 3000,
+]
+
 const panelStyle: React.CSSProperties = {
    display: 'flex',
    alignItems: 'center',
@@ -86,8 +108,15 @@ export function createSchemaObserver(
       const [status, setStatus] = useState<DaemonStatus>('unknown')
       const [lastSyncedAt, setLastSyncedAt] = useState<string | null>(null)
       const [copied, setCopied] = useState(false)
+      const [diagnostics, setDiagnostics] = useState<DiagnosticsPayload | null>(
+         null,
+      )
       const lastSentSignature = useRef<string | null>(null)
       const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+      // A 404 means an older daemon without /diagnostics — stop asking.
+      const diagnosticsSupported = useRef(true)
+      // Bumped on every new poll and on unmount so stale poll loops cancel.
+      const pollGeneration = useRef(0)
 
       // A plain string, so it's stable across renders that don't change the
       // schema — the debounce effect below depends on it by value.
@@ -104,6 +133,35 @@ export function createSchemaObserver(
          [signature, meta, enabled, base],
       )
 
+      // Re-fetches /diagnostics until the daemon settles out of 'checking'.
+      // Each call claims a new generation; older loops see the bump and stop.
+      const pollDiagnostics = useCallback(async () => {
+         if (!diagnosticsSupported.current) return
+         const generation = ++pollGeneration.current
+
+         for (const delay of DIAGNOSTICS_POLL_DELAYS_MS) {
+            if (delay > 0) {
+               await new Promise((resolve) => setTimeout(resolve, delay))
+            }
+            if (generation !== pollGeneration.current) return
+
+            try {
+               const res = await fetch(`${daemonUrl}/diagnostics`)
+               if (res.status === 404) {
+                  diagnosticsSupported.current = false
+                  return
+               }
+               if (!res.ok) return
+               const payload = (await res.json()) as DiagnosticsPayload
+               if (generation !== pollGeneration.current) return
+               setDiagnostics(payload)
+               if (payload.status !== 'checking') return
+            } catch {
+               return
+            }
+         }
+      }, [daemonUrl])
+
       useEffect(() => {
          if (!enabled) return
 
@@ -116,10 +174,12 @@ export function createSchemaObserver(
             .catch(() => {
                if (!cancelled) setStatus('disconnected')
             })
+         pollDiagnostics()
          return () => {
             cancelled = true
+            pollGeneration.current++
          }
-      }, [daemonUrl, enabled])
+      }, [daemonUrl, enabled, pollDiagnostics])
 
       useEffect(() => {
          // Nothing to do when disabled, and unchanged schemas never reach the
@@ -159,6 +219,7 @@ export function createSchemaObserver(
                lastSentSignature.current = signature
                setLastSyncedAt(new Date().toLocaleTimeString())
                setStatus('connected')
+               pollDiagnostics()
             } catch {
                setStatus('disconnected')
             }
@@ -171,7 +232,7 @@ export function createSchemaObserver(
                debounceTimer.current = null
             }
          }
-      }, [signature, enabled, daemonUrl, debounceMs, base])
+      }, [signature, enabled, daemonUrl, debounceMs, base, pollDiagnostics])
 
       const copyToClipboard = useCallback(async () => {
          try {
@@ -205,6 +266,7 @@ export function createSchemaObserver(
                      : ''}
             </span>
             {drift && !drift.ok && <DriftDetails drift={drift} />}
+            <DiagnosticsDetails diagnostics={diagnostics} />
             <button type='button' style={buttonStyle} onClick={copyToClipboard}>
                {copied ? 'Copied!' : 'Copy schema'}
             </button>
@@ -216,6 +278,47 @@ export function createSchemaObserver(
 }
 
 const MAX_DRIFT_LINES = 5
+const MAX_DIAGNOSTIC_LINES = 3
+
+function DiagnosticsDetails({
+   diagnostics,
+}: {
+   diagnostics: DiagnosticsPayload | null
+}): React.ReactElement | null {
+   // null (no data yet / old daemon) and 'unavailable' both render nothing —
+   // typechecking is an optional extra, not a required part of the strip.
+   if (!diagnostics) return null
+
+   if (diagnostics.status === 'checking') {
+      return <span style={{ ...textStyle, color: '#666666' }}>… typechecking</span>
+   }
+   if (diagnostics.status === 'ok') {
+      return <span style={{ ...textStyle, color: '#048a0e' }}>✓ types ok</span>
+   }
+   if (diagnostics.status !== 'errors') return null
+
+   return (
+      <details style={textStyle}>
+         <summary style={{ color: '#d33030', fontWeight: 600, cursor: 'pointer' }}>
+            ✗ {diagnostics.total} type error{diagnostics.total === 1 ? '' : 's'}
+         </summary>
+         <div style={{ paddingTop: 4, color: '#333333' }}>
+            {diagnostics.errors.slice(0, MAX_DIAGNOSTIC_LINES).map((error, index) => (
+               <div key={index}>
+                  {error.file}:{error.line} — {truncate(error.message, 120)}
+               </div>
+            ))}
+            {diagnostics.total > MAX_DIAGNOSTIC_LINES && (
+               <div>+{diagnostics.total - MAX_DIAGNOSTIC_LINES} more</div>
+            )}
+         </div>
+      </details>
+   )
+}
+
+function truncate(text: string, max: number): string {
+   return text.length > max ? `${text.slice(0, max)}…` : text
+}
 
 /** One collapsed line in the strip; <details> expands without any state. */
 function DriftDetails({ drift }: { drift: DriftReport }): React.ReactElement {

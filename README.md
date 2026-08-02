@@ -88,7 +88,10 @@ function App() {
 }
 ```
 
-The panel shows daemon connection status, table count, last sync time, and a "Copy schema" clipboard fallback for when the daemon isn't running. Pass the `meta` prop and it also surfaces **schema drift**: live schema vs the `airgenMeta` baked into your generated file, compared by ID — deleted tables/fields and type changes are breaking, removed select choices are warnings, renames are informational.
+The panel shows daemon connection status, table count, last sync time, and a "Copy schema" clipboard fallback for when the daemon isn't running. Two more indicators light up when available:
+
+- **Typecheck status** (`✓ types ok` / `✗ 3 type errors`): after every schema write the daemon typechecks your project and the panel shows the result — so a field rename that breaks `record.fields.contactEmail` in your code is visible immediately, even though `block run` itself never typechecks. Expand the entry to see the first few errors with file and line.
+- **Schema drift** (needs the `meta` prop): live schema vs the `airgenMeta` baked into your generated file, compared by ID — deleted tables/fields and type changes are breaking, removed select choices are warnings, renames are informational.
 
 **3. Import the hooks straight from the generated file:**
 
@@ -135,6 +138,23 @@ Three gates keep this cheap:
 2. A canonical schema signature (FNV-1a) is compared before doing anything — no-op events skip generation entirely.
 3. Generation runs inside a 500 ms debounce, so a burst of edits costs one generation + one POST. The daemon also skips disk writes when content is unchanged.
 
+## Typechecking
+
+`block run` transpiles with Babel and never typechecks — a schema change that breaks your code would otherwise fail silently at runtime. So after every schema write (and once at startup) the daemon typechecks your whole project using **your project's own `typescript`** (nothing is bundled; if it isn't installed, the feature quietly reports "unavailable"). It finds the nearest `tsconfig.json` at or above the output file and runs `tsc --noEmit` in a child process, so the daemon never blocks.
+
+Results are served at `GET /diagnostics`:
+
+```json
+{
+  "status": "ok | errors | checking | unavailable",
+  "errors": [{"file": "frontend/index.tsx", "line": 12, "col": 5, "code": "TS2322", "message": "…"}],
+  "total": 1,
+  "checkedAt": "2026-08-02T18:03:11.412Z"
+}
+```
+
+The observer polls this after each sync and shows the result in the panel. Paths are project-relative (never absolute).
+
 ## Daemon security
 
 Any webpage you visit can fire blind cross-origin POSTs at localhost, so the daemon is deliberately locked down:
@@ -142,6 +162,7 @@ Any webpage you visit can fire blind cross-origin POSTs at localhost, so the dae
 - binds `127.0.0.1` only
 - the output path is fixed at startup (`--out` or `airgen-config.json`); client-supplied paths in the payload are **ignored**
 - payloads must be bounded (< 2 MB) strings starting with the airgen header, or they're rejected without writing
+- `GET /diagnostics` is a pure state read (it never triggers a check) and reports cwd-relative paths only
 
 ## Production
 
@@ -182,4 +203,4 @@ All of these are exported identically from `airgen`, `airgen/interface`, and `ai
 | `checkSchemaDrift(base, airgenMeta)` | Pure drift check behind `useSchemaDrift` — returns a `DriftReport` (`{ok, findings, counts}`). |
 | `generateTypeScriptFromBase(base, {hooksModule?})` | The pure generator, if you want to build your own sync flow. `hooksModule` overrides the import specifier baked into the generated file (default `'airgen'`). |
 | `computeSchemaSignature(base)` | Canonical schema hash used for change detection. |
-| `airgen` (bin) | `npx airgen [--port <n>] [--out <path>] [--daemon-only] [-- <block run args>]` — wraps `block run`, daemon exits with it. Output defaults to `./frontend/airtable-schema.ts`; an optional `airgen-config.json` (`{"out", "port"}`) in the cwd overrides defaults, CLI flags override both. Health check at `GET /health`. |
+| `airgen` (bin) | `npx airgen [--port <n>] [--out <path>] [--daemon-only] [-- <block run args>]` — wraps `block run`, daemon exits with it. Output defaults to `./frontend/airtable-schema.ts`; an optional `airgen-config.json` (`{"out", "port"}`) in the cwd overrides defaults, CLI flags override both. Health check at `GET /health`, typecheck results at `GET /diagnostics`. |
