@@ -18,6 +18,15 @@ module.exports = {
   },
   theme: {
     extend: {
+      // Single stacking scale for every floating surface. Popovers/Select
+      // menus sit ABOVE the modal layer so a Select inside a Dialog clears
+      // the overlay; toasts outlive modals; tooltips beat everything.
+      zIndex: {
+        overlay: "50", // Dialog/Sheet overlay + content
+        popover: "60", // Select menu, Popover content
+        toast: "70",
+        tooltip: "80",
+      },
       spacing: {
         "control-x-xs": "0.375rem", // 6px
         "control-x-sm": "0.5rem", // 8px

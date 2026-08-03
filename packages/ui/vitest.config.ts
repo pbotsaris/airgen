@@ -5,6 +5,7 @@ export default defineConfig({
     environment: 'jsdom',
     // globals gives React Testing Library its automatic per-test cleanup.
     globals: true,
+    setupFiles: ['test/setup.ts'],
     include: ['test/**/*.test.{ts,tsx}'],
   },
 });
