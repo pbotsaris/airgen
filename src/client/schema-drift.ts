@@ -29,7 +29,7 @@ import type {BaseLike, ChoiceMeta, FieldLike, FieldTypeMeta, TableLike} from './
  * `normalizeChoices` folds into the same list.
  */
 export type DriftChoicesLike =
-  | ReadonlyArray<{readonly id: string; readonly name: string}>
+  | ReadonlyArray<{readonly id: string; readonly name: string; readonly color?: string}>
   | {readonly [choiceName: string]: string};
 
 export interface DriftResultMetaLike {

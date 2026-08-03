@@ -309,6 +309,7 @@ function resolveResultType(options: FieldLike['options'], depth: number): Resolv
 export interface ChoiceMeta {
   id: string;
   name: string;
+  color?: string;
 }
 
 /** Recursive mirror of `options.result` — same shape as FieldTypeMeta plus its type. */
@@ -317,9 +318,11 @@ export interface ResultMeta extends FieldTypeMeta {
 }
 
 /**
- * The part of a field's `options` that changes the *generated type*: exactly
- * what `resolveFieldType` reads, and nothing cosmetic. Choice `color` is
- * excluded on purpose — `choiceUnion` emits `color?: string`, not a literal.
+ * The part of a field's `options` that changes the *generated type* — exactly
+ * what `resolveFieldType` reads — plus choice `color`, carried for UI
+ * consumers of the meta. Color never changes the emitted type (`choiceUnion`
+ * emits `color?: string`, not a literal) and stays invisible to drift and the
+ * codemod diff, which compare choices by id/name only.
  */
 export interface FieldTypeMeta {
   choices?: ChoiceMeta[];
@@ -348,7 +351,15 @@ export function buildFieldTypeMeta(
 
   if (type === 'singleSelect' || type === 'multipleSelects') {
     const choices = selectChoices(options);
-    if (choices) meta.choices = choices.map(choice => ({id: choice.id, name: choice.name}));
+    // Spread color conditionally: a colorless choice must not carry an own
+    // `color: undefined` key, so the in-memory shape matches the emitted JSON.
+    if (choices) {
+      meta.choices = choices.map(choice => ({
+        id: choice.id,
+        name: choice.name,
+        ...(choice.color !== undefined && {color: choice.color}),
+      }));
+    }
   }
 
   if (COMPUTED_TYPES.has(type) && depth <= MAX_RESULT_DEPTH) {
@@ -368,6 +379,8 @@ export interface TableMeta {
 }
 
 export interface GeneratedMeta {
+  /** Meta format version; bump when the shape changes incompatibly. */
+  version: number;
   baseId: string;
   signature: string;
   tables: {[tableKey: string]: TableMeta};
@@ -434,6 +447,7 @@ function buildMetaFromPlan(base: BaseLike, plan: ReadonlyArray<TablePlan>): Gene
   // byte-identical output, or the daemon's content dedup can't break the
   // write → hot-reload → remount → regenerate cycle.
   return {
+    version: 1,
     baseId: base.id,
     signature: computeSchemaSignature(base),
     tables,
