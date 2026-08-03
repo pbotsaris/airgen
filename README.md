@@ -243,3 +243,28 @@ All of these are exported identically from `airgen`, `airgen/interface`, and `ai
 | `generateTypeScriptFromBase(base, {hooksModule?})` | The pure generator, if you want to build your own sync flow. `hooksModule` overrides the import specifier baked into the generated file (default `'airgen'`). |
 | `computeSchemaSignature(base)` | Canonical schema hash used for change detection. |
 | `airgen` (bin) | `npx airgen [--port <n>] [--out <path>] [--daemon-only] [--fix] [-- <block run args>]` — wraps `block run`, daemon exits with it. Output defaults to `./frontend/airtable-schema.ts`; an optional `airgen-config.json` (`{"out", "port", "fix"}`) in the cwd overrides defaults, CLI flags override both. Health check at `GET /health`, typecheck results at `GET /diagnostics`, pending code fixes at `GET /fixes` + `POST /apply-fix` (only with `--fix`). |
+
+## Releasing (maintainers)
+
+This repo is an npm workspace holding two independently versioned packages:
+`airgen` (this package, at the repo root) and
+[`@airgen/ui`](packages/ui/README.md) (Airtable-native React components,
+currently private/pre-release). Each keeps its own `CHANGELOG.md`, and
+releases are tagged per package: `airgen@0.4.0`, `@airgen/ui@0.1.0`
+(the Changesets/Lerna convention — plain `v*` tags before `airgen@0.4.0`
+are historical airgen releases).
+
+Cut a release with the helper script:
+
+```sh
+scripts/release.sh airgen patch     # or minor / major / an exact x.y.z
+scripts/release.sh ui 0.1.0
+```
+
+It refuses a dirty tree or a non-`main` branch, bumps the right
+`package.json` (syncing the lockfile), **requires a `## [x.y.z]` section in
+that package's changelog** (rolling the bump back otherwise), runs the
+package's checks (airgen: build + node tests; ui: build, Vitest suite, and
+the React 17 typecheck leg), then commits `Release <pkg>@x.y.z` and creates
+the tag. Pushing and publishing stay manual — the script prints the exact
+`git push` / `npm publish` commands to finish with.
