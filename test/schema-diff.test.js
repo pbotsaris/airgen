@@ -241,3 +241,18 @@ test('old metas with object-form choices still diff by id', () => {
   assert.equal(renames.length, 1);
   assert.deepEqual([renames[0].from, renames[0].to], ['Todo', 'Backlog']);
 });
+
+test('upgrading to a color-carrying meta produces no changes and no codemod work', () => {
+  // Simulate the first save after upgrading airgen: the old file's choices
+  // have no colors (and no version), the new file's do. Choices diff by
+  // id/name only, so the rewrite must be silent.
+  const legacy = source
+    .replace(/,\s*"color": "[^"]*"/g, '')
+    .replace(/\s*"version": 1,/, '');
+  assert.notEqual(legacy, source);
+  assert.equal(extractAirgenMeta(legacy).tables.Projects.fields.status.choices[0].color, undefined);
+
+  const {ok, changes} = diffGeneratedFiles(legacy, source);
+  assert.equal(ok, true);
+  assert.deepEqual(changes, []);
+});

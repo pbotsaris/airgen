@@ -99,6 +99,33 @@ test('choice renamed in place (id kept) warns — the old name is dead in code',
   assert.equal(finding.fieldKey, 'status');
 });
 
+test('choice recolor is never drift — colors are meta-only, compared by nobody', () => {
+  // The meta carries colors (for UI consumers) but drift compares choices by
+  // id/name only: a recolor regenerates the file via the signature, silently.
+  const base = structuredClone(mockBase);
+  const status = base.tables[0].fields.find(field => field.id === 'fldStatus00000001');
+  status.options.choices.find(choice => choice.id === 'selTodo000000001').color = 'purpleBright';
+  status.options.choices.find(choice => choice.id === 'selDone000000001').color = undefined;
+
+  const report = checkSchemaDrift(base, meta);
+  assert.equal(report.ok, true);
+  assert.deepEqual(report.findings, []);
+});
+
+test('meta from before 0.3.0 (choices without colors) drifts nothing against a colored base', () => {
+  const legacyMeta = structuredClone(meta);
+  delete legacyMeta.version;
+  for (const table of Object.values(legacyMeta.tables)) {
+    for (const field of Object.values(table.fields)) {
+      if (field.choices) field.choices = field.choices.map(({id, name}) => ({id, name}));
+    }
+  }
+
+  const report = checkSchemaDrift(mockBase, legacyMeta);
+  assert.equal(report.ok, true);
+  assert.deepEqual(report.findings, []);
+});
+
 test('changed formula result type is breaking even though field.type is unchanged', () => {
   const base = structuredClone(mockBase);
   base.tables[0].fields.find(field => field.id === 'fldFormula0000001').options.result = {

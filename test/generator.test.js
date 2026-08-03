@@ -76,9 +76,11 @@ test('embeds airgenMeta with ids, choices, and the schema signature', () => {
   assert.match(code, /"id": "tblProjects000001"/);
   assert.match(code, /"id": "fldStatus00000001"/);
   assert.match(code, /"name": "Days Left"/); // raw field name survives under the sanitized key
-  // Choices are a list of {id, name}: the id is the durable handle, and the
-  // list form survives duplicate choice names.
-  assert.match(code, /"choices": \[\s*\{\s*"id": "selTodo000000001",\s*"name": "Todo"\s*\}/);
+  // Choices are a list of {id, name, color?}: the id is the durable handle,
+  // the list form survives duplicate choice names, and color rides along for
+  // UI consumers of the meta.
+  assert.match(code, /"choices": \[\s*\{\s*"id": "selTodo000000001",\s*"name": "Todo",\s*"color": "redBright"\s*\}/);
+  assert.match(code, /"version": 1/);
   assert.ok(code.includes(`"signature": "${computeSchemaSignature(mockBase)}"`));
   assert.match(code, /as const;/);
 });
@@ -92,13 +94,23 @@ test('airgenMeta records the computed result type drift needs to compare', () =>
   assert.deepEqual(fields.taskNames.result, {type: 'singleLineText'});
   assert.equal(fields.brokenFormula.result, undefined); // formula with no result
   assert.deepEqual(fields.status.choices, [
-    {id: 'selTodo000000001', name: 'Todo'},
-    {id: 'selProg000000001', name: 'In "Progress"'},
-    {id: 'selDone000000001', name: 'Done'},
+    {id: 'selTodo000000001', name: 'Todo', color: 'redBright'},
+    {id: 'selProg000000001', name: 'In "Progress"', color: 'yellowBright'},
+    {id: 'selDone000000001', name: 'Done', color: 'greenBright'},
   ]);
   assert.equal(fields.name.choices, undefined);
-  // Cosmetic option: colors never reach the emitted type, so they stay out.
-  assert.ok(!JSON.stringify(fields.status.choices).includes('redBright'));
+});
+
+test('airgenMeta carries choice colors for UI consumers, omitting the key when absent', () => {
+  const meta = buildAirgenMeta(mockBase);
+  assert.equal(meta.version, 1);
+  // Mixed field: a colorless choice must not carry an own `color: undefined`
+  // key — the in-memory meta and the JSON.stringify'd file must be the same
+  // shape (deepEqual distinguishes {color: undefined}; the JSON would hide it).
+  assert.deepEqual(meta.tables.Projects.fields.tags.choices, [
+    {id: 'selDesign0000001', name: 'Design'},
+    {id: 'selDev0000000001', name: 'Dev', color: 'blueBright'},
+  ]);
 });
 
 test('nested result projections follow options.result recursively', () => {
@@ -106,12 +118,21 @@ test('nested result projections follow options.result recursively', () => {
   // A lookup of a select: the looked-up choices decide the emitted type.
   base.tables[0].fields.find(field => field.id === 'fldLookup00000001').options.result = {
     type: 'singleSelect',
-    options: {choices: [{id: 'selLk0000000001', name: 'Alpha'}]},
+    options: {
+      choices: [
+        {id: 'selLk0000000001', name: 'Alpha'},
+        {id: 'selLk0000000002', name: 'Beta', color: 'tealBright'},
+      ],
+    },
   };
   const fields = buildAirgenMeta(base).tables.Projects.fields;
+  // Colorless nested choices stay key-free; colored ones keep their color.
   assert.deepEqual(fields.taskNames.result, {
     type: 'singleSelect',
-    choices: [{id: 'selLk0000000001', name: 'Alpha'}],
+    choices: [
+      {id: 'selLk0000000001', name: 'Alpha'},
+      {id: 'selLk0000000002', name: 'Beta', color: 'tealBright'},
+    ],
   });
 });
 
@@ -158,6 +179,14 @@ test('signature is stable, order-insensitive, and change-sensitive', () => {
     .find(field => field.id === 'fldStatus00000001')
     .options.choices.push({id: 'selNew0000000001', name: 'Blocked'});
   assert.notEqual(computeSchemaSignature(newChoice), original);
+
+  // Choice color is part of the meta now, so a recolor must regenerate the
+  // file — even though it never changes the emitted type.
+  const recolored = structuredClone(mockBase);
+  recolored.tables[0].fields
+    .find(field => field.id === 'fldStatus00000001')
+    .options.choices[0].color = 'purpleBright';
+  assert.notEqual(computeSchemaSignature(recolored), original);
 });
 
 test('generated output compiles under tsc --strict, resolving airgen like a consumer', () => {
