@@ -14,7 +14,7 @@
   },
   "type": "module",
   "bin": {
-    "airgen": "./bin/airgen.js"
+    "airgen": "bin/airgen.js"
   },
   "main": "./dist/client/index.js",
   "types": "./dist/client/index.d.ts",
