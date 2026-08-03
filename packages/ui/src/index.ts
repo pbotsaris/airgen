@@ -18,6 +18,57 @@ export {Spinner, LoadingOverlay, type SpinnerProps, type LoadingOverlayProps} fr
 export {Text, type TextProps, type TextVariant} from './components/Text.js';
 export {Toggle, type ToggleProps, type ToggleSize} from './components/Toggle.js';
 
+export {PillOption, type PillOptionProps} from './components/PillOption.js';
+export {
+  Select,
+  type SelectProps,
+  type SingleSelectProps,
+  type MultiSelectProps,
+  type SelectOptionState,
+  type SelectTriggerArgs,
+} from './components/Select.js';
+export {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverClose,
+  type PopoverProps,
+  type PopoverTriggerProps,
+  type PopoverContentProps,
+  type PopoverCloseProps,
+} from './components/Popover.js';
+export {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  type TooltipProps,
+  type TooltipTriggerProps,
+  type TooltipContentProps,
+} from './components/Tooltip.js';
+export {
+  Dialog,
+  Sheet,
+  type SheetSide,
+  type SheetContentProps,
+  type DialogRootProps,
+  type DialogTriggerProps,
+  type DialogContentProps,
+  type DialogCloseProps,
+} from './components/DialogSheet.js';
+export type {ToastType, ToastItem, ToastPosition} from './components/Toast.js';
+
+export {ToastProvider, useToast, type ToastAPI, type ToastOptions, type ToastProviderProps} from './providers/ToastProvider.js';
+export {
+  SheetProvider,
+  useSheet,
+  type SheetAPI,
+  type SheetRequest,
+  type SheetRenderCtx,
+  type SheetProviderProps,
+} from './providers/SheetProvider.js';
+
 export {airtableColorToHex, shouldUseLightText, isHexColor} from './colors.js';
+export {pillSizeClasses} from './sizes.js';
 export type {ComponentSize, IconSize} from './sizes.js';
 export type {SelectOption, SelectGroup} from './types.js';
+export type {Side, Align} from './positioning.js';

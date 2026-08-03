@@ -40,3 +40,22 @@ export function multilineSizeClasses(size: ComponentSize = 'base'): string {
   const s = SIZE_SCALE[size] || SIZE_SCALE.base;
   return `${s.px} ${s.py} ${s.text}`;
 }
+
+/**
+ * Pill metrics per control size. A pill nests inside a same-size control, so
+ * its text sits one step below the control's text and its height stays under
+ * the control height.
+ */
+export const PILL_SIZE: Record<ComponentSize, {pad: string; text: string; avatar: string; gap: string}> = {
+  xs: {pad: 'px-1.5 py-px', text: 'text-[10px]', avatar: 'h-3 w-3', gap: 'gap-1'},
+  sm: {pad: 'px-2 py-0.5', text: 'text-xs', avatar: 'h-4 w-4', gap: 'gap-1.5'},
+  base: {pad: 'px-2.5 py-0.5', text: 'text-sm', avatar: 'h-5 w-5', gap: 'gap-2'},
+  lg: {pad: 'px-3 py-1', text: 'text-base', avatar: 'h-6 w-6', gap: 'gap-2'},
+  xl: {pad: 'px-3.5 py-1', text: 'text-lg', avatar: 'h-7 w-7', gap: 'gap-2'},
+};
+
+/** Classes for a pill nested inside a control of the given size. */
+export function pillSizeClasses(size: ComponentSize = 'base'): string {
+  const s = PILL_SIZE[size] || PILL_SIZE.base;
+  return `${s.gap} ${s.pad} ${s.text}`;
+}
