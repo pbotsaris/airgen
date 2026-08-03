@@ -16,7 +16,9 @@ export interface PortalProps {
  */
 export function Portal({children, container}: PortalProps) {
   const [mounted, setMounted] = React.useState(false);
+
   React.useLayoutEffect(() => setMounted(true), []);
   const target = container ?? (mounted ? document.body : null);
+
   return target ? createPortal(children, target) : null;
 }
