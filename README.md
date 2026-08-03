@@ -118,7 +118,7 @@ Commit `airtable-schema.ts` — it's the source of truth when no dev session is 
   - selects → literal unions of `{ id: "sel…"; name: "…"; color?: string }`, with a named alias per field (e.g. `ProjectsStatusChoice`)
   - record links → `Array<{ id, name }>`, collaborators → `{ id, email?, name?, profilePicUrl? }`, attachments with thumbnails
   - formulas/rollups/lookups resolve to their computed result type
-- `airgenMeta` — a `const` map of every table/field/choice **ID**.
+- `airgenMeta` — a `const` map of every table/field/choice **ID** (choices keep their Airtable display order and `color`), plus a `version` field for the meta format.
 - `TableRecordMap` + `TableKey` for hook inference.
 - `useRecords` / `useTable` / `useSchemaDrift` — hooks already bound to the schema, imported directly from the generated file.
 
