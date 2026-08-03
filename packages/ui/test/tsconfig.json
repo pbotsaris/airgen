@@ -1,0 +1,16 @@
+{
+  // Typechecking context for the Vitest suites (never built — the build
+  // tsconfig includes src/ only). Gives test files the jest-dom matcher
+  // augmentation and Vitest globals.
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "..",
+    "noEmit": true,
+    // Tests execute through Vitest (bundler resolution), not native Node —
+    // extensionless imports are fine here, unlike in src/.
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "types": ["node", "vitest/globals", "@testing-library/jest-dom/vitest"]
+  },
+  "include": ["../src", "."]
+}
