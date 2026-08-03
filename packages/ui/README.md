@@ -3,9 +3,9 @@
 Airtable-native React components for Airtable extensions, built to pair with
 [airgen](../../README.md)'s generated schema metadata.
 
-> **Status: pre-release.** The package is private and unpublished while the
-> SDK-bound half (flavor entries, `RecordSelect`, typed field controls) is
-> still being built. Try it today via `npm pack` — see below.
+> **Status: pre-release (0.x).** The SDK-bound half (flavor entries,
+> `RecordSelect`, typed field controls) is still being built, and the API may
+> change between minor versions until 1.0.
 
 Components speak Airtable's language directly: select options carry Airtable
 color names (resolved through a vendored palette — **no `@airtable/blocks`

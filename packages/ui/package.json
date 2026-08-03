@@ -4,7 +4,18 @@
   "description": "Airtable-native React components for Airtable extensions, powered by airgen metadata.",
   "license": "MIT",
   "author": "Pedro Botsaris <pedro@antfood.com>",
-  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pbotsaris/airgen.git",
+    "directory": "packages/ui"
+  },
+  "homepage": "https://github.com/pbotsaris/airgen/tree/main/packages/ui#readme",
+  "bugs": {
+    "url": "https://github.com/pbotsaris/airgen/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "exports": {
     ".": {
@@ -21,7 +32,9 @@
     "build": "tsc -p tsconfig.json && tailwindcss -c tailwind.config.cjs -i src/styles.css -o dist/styles.css --minify",
     "test": "vitest run",
     "check:react17": "tsc -p tsconfig.react17.json",
-    "gen:colors": "node scripts/gen-colors.mjs"
+    "gen:colors": "node scripts/gen-colors.mjs",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm test && npm run check:react17"
   },
   "peerDependencies": {
     "react": ">=17",
