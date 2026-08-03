@@ -1,6 +1,6 @@
 {
   "name": "@airgen/ui",
-  "version": "0.1.0-dev.0",
+  "version": "0.1.0-dev.1",
   "description": "Airtable-native React components for Airtable extensions, powered by airgen metadata.",
   "license": "MIT",
   "author": "Pedro Botsaris <pedro@antfood.com>",
