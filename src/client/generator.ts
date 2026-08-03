@@ -370,7 +370,6 @@ export interface TableMeta {
 export interface GeneratedMeta {
   baseId: string;
   signature: string;
-  generatedAt: string;
   tables: {[tableKey: string]: TableMeta};
 }
 
@@ -431,10 +430,12 @@ function buildMetaFromPlan(base: BaseLike, plan: ReadonlyArray<TablePlan>): Gene
     tables[key] = {id: table.id, name: table.name, fields: fieldMetas};
   }
 
+  // No timestamp or other nondeterminism: the same schema must generate
+  // byte-identical output, or the daemon's content dedup can't break the
+  // write → hot-reload → remount → regenerate cycle.
   return {
     baseId: base.id,
     signature: computeSchemaSignature(base),
-    generatedAt: new Date().toISOString(),
     tables,
   };
 }

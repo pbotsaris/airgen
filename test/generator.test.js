@@ -132,6 +132,16 @@ test('hooksModule option overrides the runtime import specifier', () => {
   assert.match(custom, /^import \{createTypedHooks\} from '@acme\/airgen';$/m);
 });
 
+test('output is deterministic: the same schema generates byte-identical code', async () => {
+  // The daemon skips the write (and so the block-run reload) only when the
+  // payload matches the file byte-for-byte. Any nondeterminism here — a
+  // timestamp was the past offender — turns the first save into an endless
+  // write → hot-reload → regenerate loop. Wait out a clock tick so a
+  // same-millisecond fluke can't mask a reintroduced timestamp.
+  await new Promise(resolve => setTimeout(resolve, 5));
+  assert.equal(generateTypeScriptFromBase(mockBase), code);
+});
+
 test('signature is stable, order-insensitive, and change-sensitive', () => {
   const original = computeSchemaSignature(mockBase);
   assert.equal(computeSchemaSignature(mockBase), original);
