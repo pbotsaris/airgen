@@ -1,0 +1,5 @@
+/* Compiled to dist/styles.css by the package build (tailwind.config.cjs).
+   Preflight is disabled — this file must never restyle the host extension. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

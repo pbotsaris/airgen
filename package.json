@@ -13,6 +13,9 @@
     "url": "https://github.com/pbotsaris/airgen/issues"
   },
   "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
   "bin": {
     "airgen": "bin/airgen.js"
   },
@@ -46,6 +49,8 @@
   "scripts": {
     "build": "tsc",
     "test": "npm run build && node --test test/*.test.js",
+    "test:ui": "npm test --workspace @airgen/ui",
+    "test:all": "npm test && npm run test:ui",
     "prepublishOnly": "npm test"
   },
   "keywords": [
@@ -65,7 +70,8 @@
   "devDependencies": {
     "@airtable/blocks": "^1.19.0",
     "@types/react": "^17.0.0",
-    "react": "^17.0.2",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "typescript": "^5.5.0"
   }
 }

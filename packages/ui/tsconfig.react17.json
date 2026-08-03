@@ -1,0 +1,23 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "declaration": false,
+    // This leg checks React 17 API compatibility (no useId, no ref-as-prop),
+    // not resolution style — @types/react@17 predates exports maps, so the
+    // paths remap below needs bundler resolution. The build config stays
+    // NodeNext, which is what enforces .js import extensions.
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "paths": {
+      "react": ["./node_modules/types-react-17", "../../node_modules/types-react-17"],
+      "react/jsx-runtime": [
+        "./node_modules/types-react-17/jsx-runtime",
+        "../../node_modules/types-react-17/jsx-runtime"
+      ],
+      "react-dom": ["./node_modules/types-react-dom-17", "../../node_modules/types-react-dom-17"]
+    }
+  },
+  "include": ["src"]
+}
