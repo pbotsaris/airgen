@@ -31,9 +31,11 @@ function relevantOptions(field: SignatureFieldLike): unknown {
   if (!options) return null;
   const out: {[key: string]: unknown} = {};
   if (Array.isArray(options.choices)) {
-    out.choices = (options.choices as Array<{id?: unknown; name?: unknown; color?: unknown}>).map(
-      choice => [choice.id, choice.name, choice.color],
-    );
+    out.choices = (options.choices as Array<{id?: unknown; name?: unknown; color?: unknown}>).map(choice => [
+      choice.id,
+      choice.name,
+      choice.color,
+    ]);
   }
   if (options.result && typeof options.result === 'object') {
     const result = options.result as {type?: unknown; options?: unknown};

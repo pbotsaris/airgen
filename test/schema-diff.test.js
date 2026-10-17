@@ -6,12 +6,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import {
-  aliasKey,
-  diffGeneratedFiles,
-  extractAirgenMeta,
-  extractChoiceAliases,
-} from '../src/daemon/schema-diff.js';
+import {aliasKey, diffGeneratedFiles, extractAirgenMeta, extractChoiceAliases} from '../src/daemon/schema-diff.js';
 import {generateTypeScriptFromBase} from '../dist/client/generator.js';
 import {mockBase} from './fixtures/mock-base.js';
 
@@ -117,9 +112,8 @@ test('a renamed table yields both the key rename and the interface rename', () =
 
 test('a renamed choice is fixable and carries the alias that gates the rewrite', () => {
   const changes = diff(base => {
-    projectsField(base, 'fldStatus00000001').options.choices.find(
-      choice => choice.id === 'selTodo000000001',
-    ).name = 'Backlog';
+    projectsField(base, 'fldStatus00000001').options.choices.find(choice => choice.id === 'selTodo000000001').name =
+      'Backlog';
   });
 
   assert.equal(changes.length, 1);
@@ -230,9 +224,7 @@ test('old metas with object-form choices still diff by id', () => {
   assert.notEqual(legacy, source);
 
   const next = regenerate(base => {
-    projectsField(base, 'fldStatus00000001').options.choices.find(
-      c => c.id === 'selTodo000000001',
-    ).name = 'Backlog';
+    projectsField(base, 'fldStatus00000001').options.choices.find(c => c.id === 'selTodo000000001').name = 'Backlog';
   });
 
   const {ok, changes} = diffGeneratedFiles(legacy, next);
@@ -246,9 +238,7 @@ test('upgrading to a color-carrying meta produces no changes and no codemod work
   // Simulate the first save after upgrading airgen: the old file's choices
   // have no colors (and no version), the new file's do. Choices diff by
   // id/name only, so the rewrite must be silent.
-  const legacy = source
-    .replace(/,\s*"color": "[^"]*"/g, '')
-    .replace(/\s*"version": 1,/, '');
+  const legacy = source.replace(/,\s*"color": "[^"]*"/g, '').replace(/\s*"version": 1,/, '');
   assert.notEqual(legacy, source);
   assert.equal(extractAirgenMeta(legacy).tables.Projects.fields.status.choices[0].color, undefined);
 

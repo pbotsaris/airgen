@@ -206,25 +206,22 @@ export function emails() {
 }
 `;
 
-  await withProject(
-    {config: JSCONFIG, configName: 'jsconfig.json', app, appName: 'app.js'},
-    async ({url, read}) => {
-      await postSchema(url, regenerate(renameContactEmail));
-      const payload = await waitForFixes(url);
+  await withProject({config: JSCONFIG, configName: 'jsconfig.json', app, appName: 'app.js'}, async ({url, read}) => {
+    await postSchema(url, regenerate(renameContactEmail));
+    const payload = await waitForFixes(url);
 
-      assert.equal(payload.status, 'ready', payload.reason);
-      const [fix] = payload.fixes;
-      assert.equal(fix.kind, 'field-key-renamed');
-      assert.equal(fix.fixable, true);
-      // Both .js files are in the program even though nothing set allowJs —
-      // that only holds if the file list was resolved as a JS project.
-      assert.deepEqual(fix.files, [path.join('src', 'app.js'), path.join('src', 'legacy.js')]);
+    assert.equal(payload.status, 'ready', payload.reason);
+    const [fix] = payload.fixes;
+    assert.equal(fix.kind, 'field-key-renamed');
+    assert.equal(fix.fixable, true);
+    // Both .js files are in the program even though nothing set allowJs —
+    // that only holds if the file list was resolved as a JS project.
+    assert.deepEqual(fix.files, [path.join('src', 'app.js'), path.join('src', 'legacy.js')]);
 
-      assert.equal((await applyFix(url, fix.id)).status, 200);
-      assert.match(read('app.js'), /project\.fields\.customerEmail/);
-      assert.match(read('legacy.js'), /rows\[0\]\.fields\.customerEmail/);
-    },
-  );
+    assert.equal((await applyFix(url, fix.id)).status, 200);
+    assert.match(read('app.js'), /project\.fields\.customerEmail/);
+    assert.match(read('legacy.js'), /rows\[0\]\.fields\.customerEmail/);
+  });
 });
 
 test('a renamed table rewrites the key literal and the record interface', async () => {
@@ -243,9 +240,12 @@ export const note = 'Projects';
 `;
 
   await withProject({app, legacy: '// no hooks here\nexport const nothing = 1;\n'}, async ({url, read}) => {
-    await postSchema(url, regenerate(base => {
-      base.tables[0].name = 'Projekte';
-    }));
+    await postSchema(
+      url,
+      regenerate(base => {
+        base.tables[0].name = 'Projekte';
+      }),
+    );
     const payload = await waitForFixes(url);
     assert.equal(payload.status, 'ready', payload.reason);
     // A table rename fans out into several symbols over the same file, so the
@@ -267,11 +267,14 @@ export const note = 'Projects';
 
 test('a renamed choice rewrites only literals compared against that field', async () => {
   await withProject({}, async ({url, read}) => {
-    await postSchema(url, regenerate(base => {
-      base.tables[0].fields
-        .find(field => field.id === 'fldStatus00000001')
-        .options.choices.find(choice => choice.id === 'selTodo000000001').name = 'Backlog';
-    }));
+    await postSchema(
+      url,
+      regenerate(base => {
+        base.tables[0].fields
+          .find(field => field.id === 'fldStatus00000001')
+          .options.choices.find(choice => choice.id === 'selTodo000000001').name = 'Backlog';
+      }),
+    );
     const payload = await waitForFixes(url);
     assert.equal(payload.status, 'ready', payload.reason);
 
@@ -290,9 +293,12 @@ test('a renamed choice rewrites only literals compared against that field', asyn
 
 test('deletions are listed with their usages but offer no fix', async () => {
   await withProject({}, async ({url}) => {
-    await postSchema(url, regenerate(base => {
-      base.tables[0].fields = base.tables[0].fields.filter(field => field.id !== 'fldEmail000000001');
-    }));
+    await postSchema(
+      url,
+      regenerate(base => {
+        base.tables[0].fields = base.tables[0].fields.filter(field => field.id !== 'fldEmail000000001');
+      }),
+    );
     const payload = await waitForFixes(url);
     assert.equal(payload.status, 'ready', payload.reason);
 
@@ -339,9 +345,12 @@ test('an edit made after the analysis blocks the apply instead of corrupting it'
 
 test('applying one fix drops siblings whose offsets it invalidated', async () => {
   await withProject({}, async ({url}) => {
-    await postSchema(url, regenerate(base => {
-      base.tables[0].name = 'Projekte';
-    }));
+    await postSchema(
+      url,
+      regenerate(base => {
+        base.tables[0].name = 'Projekte';
+      }),
+    );
     const payload = await waitForFixes(url);
     const fixable = payload.fixes.filter(fix => fix.fixable);
     assert.ok(fixable.length > 1);
@@ -372,9 +381,12 @@ test('without --fix the endpoints do not exist', async () => {
 
 test('a purely additive schema change produces no fixes', async () => {
   await withProject({}, async ({url}) => {
-    await postSchema(url, regenerate(base => {
-      base.tables[0].fields.push({id: 'fldNew0000000001', name: 'Brand New', type: 'singleLineText'});
-    }));
+    await postSchema(
+      url,
+      regenerate(base => {
+        base.tables[0].fields.push({id: 'fldNew0000000001', name: 'Brand New', type: 'singleLineText'});
+      }),
+    );
 
     const payload = await waitForFixes(url);
     assert.equal(payload.status, 'idle');
