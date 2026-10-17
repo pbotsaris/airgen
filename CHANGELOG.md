@@ -35,8 +35,41 @@ already calls changes, so regenerating is a no-op for existing code.
   as writable is computed in the live base. Only fires for v2 metas.
 - The generated file now binds `createTypedHooks<TableRecordMap, TableWriteMap>`;
   the second generic is accepted and unused until the mutation hooks land.
+- **SDK-free runtime core** (`src/client/runtime/`, Phase 2; not yet exported
+  from the entry points — the hooks in Phase 3 bind it):
+  - `createMutations<Write>(table, tableMeta)`: `create`, `createMany`,
+    `update`, `updateFields`, `updateMany`, `remove`, `removeMany`, `clone`,
+    `inspect`, `can.create/update/delete`. Keys resolve by meta ID, values go
+    through `convertTo`, and every write validates, then permission-checks
+    every batch of 50, before the first SDK call. Results are
+    `{ok: true, ids, issues}` or `{ok: false, error, ids, failedBatch, issues}`,
+    where a failure's `ids` are the records already committed. Never throws;
+    a missing table or field fails the write, never the render.
+  - `FieldInspector` / `inspectField`: live-or-meta type, choices (lookups and
+    formulas unwrap `options.result`), `isWritable`, and an idempotent
+    `convertTo` from read shapes to cell write formats.
+  - `ValidationResult`: blocking errors (unknown, hidden, retyped, or computed
+    field; missing table) vs warnings (field type airgen doesn't know).
+  - `cloneValues`: a record's writable, non-empty cells in write shapes.
+  - `query` / `groupRecords` over `useRecords` rows: `is`/`not`/`anyOf`/
+    `noneOf`/`empty`/`notEmpty` filters (selects, links, and collaborators
+    match by id, name, or email), all/any matching, search with an injectable
+    `SearchMatcher` (default: accent- and case-insensitive token match — no
+    fuse.js dependency), and multi-field grouping.
+  - `lookupValues`, `firstLookupValue`, `cellIds`, `cellNames`,
+    `firstLinkedRecord` read helpers.
 
 ### Internal
+
+- `field-types.ts` holds the per-type write kinds that both the generator's
+  `resolveWriteType` and the runtime's `convertTo` switch on, so the emitted
+  write type and the converted value come from one table. Generated output is
+  unchanged (the snapshot is byte-identical). `deaccent` moved to its own
+  module, shared by the generator and the default search matcher.
+- `sdk.ts`: `SdkField` gains optional `name`/`type`/`options`/`isComputed`,
+  `SdkRecord` gains `getCellValueAsString`, and `SdkTable` gains the batch write
+  and `checkPermissionsFor*` methods. The stable SDK's classes still satisfy
+  them.
 
 - Root toolchain: ESLint 10 (flat, `typescript-eslint`, `react-hooks`) and
   Prettier 3 (2-space, single quotes, no bracket spacing, width 120); the whole
@@ -49,7 +82,10 @@ already calls changes, so regenerating is a no-op for existing code.
   consumer-style `@ts-expect-error` fixtures (`test/fixtures/consumers/`)
   compiled by the `tsc --strict` test for both the stable and interface
   flavors. `mock-base.js` derives `isComputed`/`primaryField` the way the SDK
-  reports them. Suite is 102 tests.
+  reports them. Runtime tests (`test/runtime-*.test.js`) run against
+  structural fakes (`test/fixtures/fake-sdk.js`), and `entries.test.js` pins
+  that nothing under `runtime/` imports a non-relative module. Suite is 146
+  tests.
 
 ## [0.3.0]
 

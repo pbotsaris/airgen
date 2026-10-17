@@ -206,15 +206,15 @@ Test tooling does not change: root stays on `node --test` + `node:assert/strict`
 
 ### Phase 2 — Runtime core (SDK-free)
 
-- [ ] `runtime/validation.ts` from `ValidationResult.js`.
-- [ ] `runtime/fields.ts` (`FieldInspector`, `convertTo`) from `fields.js` + `airtableTypes.js`; one shared per-type table with the generator.
-- [ ] `runtime/normalize.ts` from `normalize.js`, trimmed to what adds value over `useRecords`.
-- [ ] `runtime/mutations.ts` from `mutations.js`: generic over the write map, resolves fields by meta ID, converts through `FieldInspector`, checks permissions, batches by 50, returns `[ok, error]`, reports partial batch failures explicitly.
-- [ ] `runtime/clone.ts` from `cloneRecord.js`, using `isComputed`.
-- [ ] `runtime/queries.ts` from `queries.js` + `airtableUtils.js`. Decide on `fuse.js` (dependency vs optional injection).
-- [ ] `node --test` unit tests (`test/runtime-*.test.js`, importing from `dist/` like the rest) with structural fakes (`SdkTable`, `SdkRecord`) for every module; no SDK import anywhere under `runtime/`; an `entries`-style test pins that.
+- [x] `runtime/validation.ts` from `ValidationResult.js`. *Issues are `{kind, level, message, fieldKey?}`; `valid()` = no errors. The reference's `errorType`/`items()`/string `toJSON` were resolver-specific and dropped; Phase 3's resolver adds its own kinds.*
+- [x] `runtime/fields.ts` (`FieldInspector`, `convertTo`) from `fields.js` + `airtableTypes.js`; one shared per-type table with the generator. *The table is `src/client/field-types.ts` (`writeKind(type)`), outside `runtime/` because the generator's `resolveWriteType` now switches on it too; output is byte-identical. `convertTo` follows §4 (read → write shape) and is idempotent; the reference's percent ×100 convention, `selectComponent` target and `colorUtils` colors were app/UI concerns and are not ported. `airtableTypes.js` typedefs are already the generated shared types.*
+- [x] `runtime/normalize.ts` from `normalize.js`, trimmed to what adds value over `useRecords`. *`lookupValues`, `firstLookupValue`, `cellIds`, `cellNames`, `firstLinkedRecord`; total, never throw. The shape-validating getters are redundant with typed reads.*
+- [x] `runtime/mutations.ts` from `mutations.js`: generic over the write map, resolves fields by meta ID, converts through `FieldInspector`, checks permissions, batches by 50, ~~returns `[ok, error]`~~ returns `{ok, ids, issues}` / `{ok: false, error, ids, failedBatch, issues}` (§8.3), reports partial batch failures explicitly. *Validation and every batch's permission check run before the first write, so only an SDK rejection can leave a partial write; it stops at that batch and reports the committed ids. `undefined` values are omitted, `null` clears. Methods are closures, so destructuring works. `SdkTable`/`SdkField`/`SdkRecord` in `sdk.ts` grew to §3.2 now (the stable SDK still satisfies them); the adapter and entry binding stay in Phase 3.*
+- [x] `runtime/clone.ts` from `cloneRecord.js`, using `isComputed`. *Also skips hidden, retyped, unknown-type and attachment fields (attachments as in the reference); unwritable override keys are dropped.*
+- [x] `runtime/queries.ts` from `queries.js` + `airtableUtils.js`. Decide on `fuse.js` (dependency vs optional injection). *Injection (§8.1). Spec-based over `useRecords` rows instead of a builder over SDK fields: `query(records, {where, match, search})` and `groupRecords(records, {fields, by})`. Selects/links/collaborators match by id, name or email.*
+- [x] `node --test` unit tests (`test/runtime-*.test.js`, importing from `dist/` like the rest) with structural fakes (`SdkTable`, `SdkRecord`) for every module; no SDK import anywhere under `runtime/`; an `entries`-style test pins that. *Fakes in `test/fixtures/fake-sdk.js`; the entries test scans every `runtime/` module for non-relative imports (so fuse.js can't creep in either).*
 
-**Milestone:** `createMutations(fakeTable, tableMeta).update(...)` works end to end in Node.
+**Milestone:** `createMutations(fakeTable, tableMeta).update(...)` works end to end in Node. ✅ 2026-10-17 — `npm run check` green, 146 tests.
 
 ### Phase 3 — Hooks and runtime overrides
 
@@ -252,11 +252,12 @@ Test tooling does not change: root stays on `node --test` + `node:assert/strict`
 
 ## 8. Open decisions
 
-1. **`fuse.js` in the core package** or injected by the consumer (it is already a dependency of `@airgen/ui`).
+1. ~~**`fuse.js` in the core package** or injected by the consumer~~ **Decided 2026-10-17: injected.** airgen keeps zero runtime dependencies; `query()` takes `search.matcher: SearchMatcher` (`(texts, query) => indices`, best first), defaulting to an accent/case-insensitive token match. `@airgen/ui` (which already depends on fuse.js) should export a `fuseMatcher` with the reference's settings (`threshold: 0.4, ignoreLocation: true`).
 2. **Overrides table support** (the reference's 2/3-column config table): keep as optional resolver input, or drop in favor of custom properties only.
-3. **Mutation result shape:** keep the reference `[ok, error]` tuple or move to `{ok, error, ids}`. Tuple is familiar to the existing app; object is easier to extend with created IDs and per-batch failures.
-4. **`useRecords` field shape:** today `fields` omits null cells. Mutations and `clone` need "explicitly empty" vs "not visible"; decide whether `useRecords` gains an option to include nulls.
+3. ~~**Mutation result shape**~~ **Decided 2026-10-17: object.** `{ok: true, ids, issues} | {ok: false, error, ids, failedBatch, issues}`.
+4. ~~**`useRecords` field shape**~~ **Decided 2026-10-17: unchanged.** `clone` and `convertTo` read through the SDK record and the meta-resolved field, which already tells empty from not visible. Revisit only if a Phase 3 hook needs it.
 5. **Peer range for the alpha SDK:** keep `>=0.0.0-0`.
+6. **Lookup read type (found 2026-10-17, not yet fixed).** `resolveFieldType` emits `multipleLookupValues` as `Array<Result>`, but both SDK builds document the cell read format as `Array<{linkedRecordId: RecordId; value: Result}>` (the reference's `listLookupValues` unwraps exactly that). The fix is one line plus a snapshot refresh, but it changes an emitted type consumers may already use. `runtime/normalize.ts` `lookupValues` accepts both shapes, so the runtime is unaffected either way.
 
 ## 9. Environment notes
 

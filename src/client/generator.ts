@@ -11,6 +11,8 @@
  * REST API shapes.
  */
 
+import {deaccent} from './deaccent.js';
+import {writeKind} from './field-types.js';
 import {computeSchemaSignature} from './schema-signature.js';
 
 export interface FieldLike {
@@ -94,33 +96,6 @@ const IDENTIFIER_RE = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
 
 function quoteKey(name: string): string {
   return IDENTIFIER_RE.test(name) ? name : JSON.stringify(name);
-}
-
-const NON_DECOMPOSABLE: {[ch: string]: string} = {
-  ß: 'ss',
-  ẞ: 'SS',
-  æ: 'ae',
-  Æ: 'AE',
-  œ: 'oe',
-  Œ: 'OE',
-  ø: 'o',
-  Ø: 'O',
-  đ: 'd',
-  Đ: 'D',
-  ð: 'd',
-  Ð: 'D',
-  þ: 'th',
-  Þ: 'Th',
-  ł: 'l',
-  Ł: 'L',
-};
-
-/** Latin transliteration: replace non-decomposable chars, then strip combining marks (ç→c, á→a, ê→e). */
-function deaccent(name: string): string {
-  return name
-    .replace(/[ßẞæÆœŒøØđĐðÐþÞłŁ]/g, ch => NON_DECOMPOSABLE[ch])
-    .normalize('NFD')
-    .replace(/\p{M}/gu, '');
 }
 
 function splitWords(name: string): string[] {
@@ -345,16 +320,11 @@ function resolveResultType(options: FieldLike['options'], depth: number): Resolv
 export type SdkFlavor = 'stable' | 'interface' | 'base';
 
 /**
- * Field types the SDK documents with no cell write format at all
- * (`field_core.d.ts`: "Cell write format: n/a") even though `Field.isComputed`
- * is false for them. They are left out of `<Table>Write` like computed fields.
- */
-const NON_WRITABLE_TYPES = new Set(['barcode']);
-
-/**
  * Maps a field type to the TS type `createRecordsAsync` / `updateRecordsAsync`
  * accept for a cell, per the **Cell write format** docs in the SDK's
- * `field_core.d.ts`. Returns null for computed fields (no write format).
+ * `field_core.d.ts`. Returns null for types with no write format (computed
+ * fields, and barcode — see field-types.ts). The kind comes from the table the
+ * runtime converts values with.
  *
  * Reads only `choices` from `options` — the same thing `resolveFieldType`
  * reads — so the three-way coupling with `relevantOptions` and
@@ -368,70 +338,48 @@ function resolveWriteType(
   selectAlias: string | null,
   flavor: SdkFlavor,
 ): ResolvedType | null {
-  switch (type) {
-    case 'singleLineText':
-    case 'multilineText':
-    case 'richText':
-    case 'email':
-    case 'url':
-    case 'phoneNumber':
+  switch (writeKind(type)) {
+    case 'text':
       return {ts: 'string | null'};
 
     case 'number':
-    case 'percent':
-    case 'currency':
-    case 'rating':
-    case 'duration':
       return {ts: 'number | null'};
 
-    case 'checkbox':
+    case 'boolean':
       return {ts: 'boolean | null'};
 
     case 'date':
-    case 'dateTime':
       return {ts: 'string | Date | null'};
 
-    case 'singleSelect': {
+    case 'singleChoice': {
       const choices = selectChoices(options);
       return {ts: `${choiceWriteUnion(selectAlias, choices)} | null`};
     }
-    case 'multipleSelects': {
+    case 'multiChoice': {
       const choices = selectChoices(options);
       return {ts: `Array<${choiceWriteUnion(selectAlias, choices)}> | null`};
     }
 
-    case 'singleCollaborator':
+    case 'collaborator':
       return {ts: '{ id: string } | null'};
 
-    case 'multipleCollaborators':
+    case 'collaborators':
       return {ts: 'Array<{ id: string }> | null'};
 
-    case 'multipleRecordLinks':
+    case 'links':
       // The interface SDK also creates-and-links a record from a bare {name}.
       return flavor === 'interface'
         ? {ts: 'Array<{ id: string; name?: string } | { name: string }> | null'}
         : {ts: 'Array<{ id: string; name?: string }> | null'};
 
-    case 'multipleAttachments':
+    case 'attachments':
       // New attachments by URL; pre-existing ones are passed back as read.
       return {ts: 'Array<{ url: string; filename?: string } | Attachment> | null'};
 
-    case 'button':
-    case 'formula':
-    case 'rollup':
-    case 'count':
-    case 'multipleLookupValues':
-    case 'autoNumber':
-    case 'createdTime':
-    case 'lastModifiedTime':
-    case 'createdBy':
-    case 'lastModifiedBy':
-    case 'externalSyncSource':
-    case 'aiText':
+    case null:
       return null;
 
     default:
-      if (NON_WRITABLE_TYPES.has(type)) return null;
       return {ts: 'unknown', comment: `unmapped: ${type}`};
   }
 }
