@@ -19,6 +19,12 @@ export interface FieldLike {
   type: string;
   description?: string | null;
   options?: {[key: string]: unknown} | null;
+  /**
+   * The SDK's `Field.isComputed`: true when the value is derived, not set by
+   * user input. Optional so plain fixtures and older callers still work; when
+   * absent, writability is decided from the field type alone.
+   */
+  isComputed?: boolean;
 }
 
 export interface TableLike {
@@ -26,6 +32,8 @@ export interface TableLike {
   name: string;
   description?: string | null;
   fields: ReadonlyArray<FieldLike>;
+  /** The SDK's `Table.primaryField`, read structurally (only its id is used). */
+  primaryField?: {id: string} | null;
 }
 
 export interface BaseLike {
@@ -72,6 +80,14 @@ export interface SelectChoice {
   id: string;
   name: string;
   color?: string;
+}
+
+export interface AiText {
+  state: 'empty' | 'loading' | 'generated' | 'error';
+  value: string;
+  isStale: boolean;
+  /** Only populated when state is 'error'. */
+  errorType?: string;
 }`;
 
 const IDENTIFIER_RE = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
@@ -81,9 +97,22 @@ function quoteKey(name: string): string {
 }
 
 const NON_DECOMPOSABLE: {[ch: string]: string} = {
-  'ß': 'ss', 'ẞ': 'SS', 'æ': 'ae', 'Æ': 'AE', 'œ': 'oe', 'Œ': 'OE',
-  'ø': 'o', 'Ø': 'O', 'đ': 'd', 'Đ': 'D', 'ð': 'd', 'Ð': 'D',
-  'þ': 'th', 'Þ': 'Th', 'ł': 'l', 'Ł': 'L',
+  ß: 'ss',
+  ẞ: 'SS',
+  æ: 'ae',
+  Æ: 'AE',
+  œ: 'oe',
+  Œ: 'OE',
+  ø: 'o',
+  Ø: 'O',
+  đ: 'd',
+  Đ: 'D',
+  ð: 'd',
+  Ð: 'D',
+  þ: 'th',
+  Þ: 'Th',
+  ł: 'l',
+  Ł: 'L',
 };
 
 /** Latin transliteration: replace non-decomposable chars, then strip combining marks (ç→c, á→a, ê→e). */
@@ -262,6 +291,12 @@ function resolveFieldType(
     case 'button':
       return {ts: '{ label: string; url: string | null }'};
 
+    case 'externalSyncSource':
+      return {ts: 'SelectChoice'};
+
+    case 'aiText':
+      return {ts: 'AiText'};
+
     case 'formula':
     case 'rollup': {
       const result = resolveResultType(options, depth);
@@ -306,6 +341,122 @@ function resolveResultType(options: FieldLike['options'], depth: number): Resolv
   return resolveFieldType(result.type, result.options, null, depth + 1);
 }
 
+/** Which Blocks SDK the consumer runs on; only the interface SDK differs for writes. */
+export type SdkFlavor = 'stable' | 'interface' | 'base';
+
+/**
+ * Field types the SDK documents with no cell write format at all
+ * (`field_core.d.ts`: "Cell write format: n/a") even though `Field.isComputed`
+ * is false for them. They are left out of `<Table>Write` like computed fields.
+ */
+const NON_WRITABLE_TYPES = new Set(['barcode']);
+
+/**
+ * Maps a field type to the TS type `createRecordsAsync` / `updateRecordsAsync`
+ * accept for a cell, per the **Cell write format** docs in the SDK's
+ * `field_core.d.ts`. Returns null for computed fields (no write format).
+ *
+ * Reads only `choices` from `options` — the same thing `resolveFieldType`
+ * reads — so the three-way coupling with `relevantOptions` and
+ * `buildFieldTypeMeta` (CLAUDE.md) gains nothing new here. `selectAlias` is the
+ * read union's alias; write shapes index into it so a choice rename flows to
+ * both from one declaration.
+ */
+function resolveWriteType(
+  type: string,
+  options: FieldLike['options'],
+  selectAlias: string | null,
+  flavor: SdkFlavor,
+): ResolvedType | null {
+  switch (type) {
+    case 'singleLineText':
+    case 'multilineText':
+    case 'richText':
+    case 'email':
+    case 'url':
+    case 'phoneNumber':
+      return {ts: 'string | null'};
+
+    case 'number':
+    case 'percent':
+    case 'currency':
+    case 'rating':
+    case 'duration':
+      return {ts: 'number | null'};
+
+    case 'checkbox':
+      return {ts: 'boolean | null'};
+
+    case 'date':
+    case 'dateTime':
+      return {ts: 'string | Date | null'};
+
+    case 'singleSelect': {
+      const choices = selectChoices(options);
+      return {ts: `${choiceWriteUnion(selectAlias, choices)} | null`};
+    }
+    case 'multipleSelects': {
+      const choices = selectChoices(options);
+      return {ts: `Array<${choiceWriteUnion(selectAlias, choices)}> | null`};
+    }
+
+    case 'singleCollaborator':
+      return {ts: '{ id: string } | null'};
+
+    case 'multipleCollaborators':
+      return {ts: 'Array<{ id: string }> | null'};
+
+    case 'multipleRecordLinks':
+      // The interface SDK also creates-and-links a record from a bare {name}.
+      return flavor === 'interface'
+        ? {ts: 'Array<{ id: string; name?: string } | { name: string }> | null'}
+        : {ts: 'Array<{ id: string; name?: string }> | null'};
+
+    case 'multipleAttachments':
+      // New attachments by URL; pre-existing ones are passed back as read.
+      return {ts: 'Array<{ url: string; filename?: string } | Attachment> | null'};
+
+    case 'button':
+    case 'formula':
+    case 'rollup':
+    case 'count':
+    case 'multipleLookupValues':
+    case 'autoNumber':
+    case 'createdTime':
+    case 'lastModifiedTime':
+    case 'createdBy':
+    case 'lastModifiedBy':
+    case 'externalSyncSource':
+    case 'aiText':
+      return null;
+
+    default:
+      if (NON_WRITABLE_TYPES.has(type)) return null;
+      return {ts: 'unknown', comment: `unmapped: ${type}`};
+  }
+}
+
+/**
+ * `{ id } | { name }` for a select, with literal unions when the choices are
+ * known. Indexing the read alias (`Alias['id']`) instead of restating the
+ * literals keeps one declaration per select.
+ */
+function choiceWriteUnion(selectAlias: string | null, choices: ChoiceOption[] | null): string {
+  if (selectAlias && choices) return `{ id: ${selectAlias}['id'] } | { name: ${selectAlias}['name'] }`;
+  if (choices) {
+    const ids = choices.map(choice => JSON.stringify(choice.id)).join(' | ');
+    const names = choices.map(choice => JSON.stringify(choice.name)).join(' | ');
+    return `{ id: ${ids} } | { name: ${names} }`;
+  }
+  return '{ id: string } | { name: string }';
+}
+
+/** Whether a field gets a `<Table>Write` property: the SDK's verdict first, then the type's. */
+function isWritable(field: FieldLike): boolean {
+  if (field.isComputed === true) return false;
+  return resolveWriteType(field.type, field.options ?? null, null, 'stable') !== null;
+}
+
 export interface ChoiceMeta {
   id: string;
   name: string;
@@ -333,6 +484,8 @@ export interface FieldMeta extends FieldTypeMeta {
   id: string;
   name: string;
   type: string;
+  /** The SDK's `Field.isComputed`; absent when the schema source didn't supply it. */
+  isComputed?: boolean;
 }
 
 /**
@@ -342,11 +495,7 @@ export interface FieldMeta extends FieldTypeMeta {
  * `buildAirgenMeta` bakes in a stale picture and `checkSchemaDrift` goes blind
  * to that class of change.
  */
-export function buildFieldTypeMeta(
-  type: string,
-  options: FieldLike['options'],
-  depth = 0,
-): FieldTypeMeta {
+export function buildFieldTypeMeta(type: string, options: FieldLike['options'], depth = 0): FieldTypeMeta {
   const meta: FieldTypeMeta = {};
 
   if (type === 'singleSelect' || type === 'multipleSelects') {
@@ -375,11 +524,21 @@ export function buildFieldTypeMeta(
 export interface TableMeta {
   id: string;
   name: string;
+  /** Absent when the schema source didn't supply `primaryField`. */
+  primaryFieldId?: string;
   fields: {[fieldKey: string]: FieldMeta};
 }
 
+/**
+ * Meta format version. 1: ids, names, types, choices (with color), result.
+ * 2: adds `isComputed` per field and `primaryFieldId` per table — the
+ * writability picture the runtime's mutations need; files at version 1 carry
+ * no writability information at all.
+ */
+export const META_VERSION = 2;
+
 export interface GeneratedMeta {
-  /** Meta format version; bump when the shape changes incompatibly. */
+  /** Meta format version (`META_VERSION`). */
   version: number;
   baseId: string;
   signature: string;
@@ -397,6 +556,7 @@ interface TablePlan {
   /** Sanitized table key, deduped across the base. */
   key: string;
   interfaceName: string;
+  writeInterfaceName: string;
   fields: FieldPlan[];
 }
 
@@ -420,6 +580,7 @@ function planTables(base: BaseLike): TablePlan[] {
       table,
       key,
       interfaceName: `${key}Record`,
+      writeInterfaceName: `${key}Write`,
       fields: table.fields.map(field => ({field, key: fieldKeys.get(field)!})),
     };
   });
@@ -436,18 +597,27 @@ function buildMetaFromPlan(base: BaseLike, plan: ReadonlyArray<TablePlan>): Gene
         id: field.id,
         name: field.name,
         type: field.type,
+        // Spread conditionally (like choice color) so a source without the
+        // flag yields no key, keeping the in-memory meta and the JSON identical.
+        ...(typeof field.isComputed === 'boolean' && {isComputed: field.isComputed}),
         ...buildFieldTypeMeta(field.type, field.options ?? null),
       };
     }
 
-    tables[key] = {id: table.id, name: table.name, fields: fieldMetas};
+    const primaryFieldId = table.primaryField?.id;
+    tables[key] = {
+      id: table.id,
+      name: table.name,
+      ...(typeof primaryFieldId === 'string' && {primaryFieldId}),
+      fields: fieldMetas,
+    };
   }
 
   // No timestamp or other nondeterminism: the same schema must generate
   // byte-identical output, or the daemon's content dedup can't break the
   // write → hot-reload → remount → regenerate cycle.
   return {
-    version: 1,
+    version: META_VERSION,
     baseId: base.id,
     signature: computeSchemaSignature(base),
     tables,
@@ -470,6 +640,19 @@ export interface GeneratorOptions {
    * alias, vendored copy).
    */
   hooksModule?: string;
+  /**
+   * Which SDK the consumer runs on. Only write types differ: the interface SDK
+   * accepts a bare `{name}` in `multipleRecordLinks` to create-and-link.
+   * Defaults to 'interface' when `hooksModule` is 'airgen/interface', else
+   * 'stable'.
+   */
+  sdkFlavor?: SdkFlavor;
+}
+
+function defaultSdkFlavor(hooksModule: string): SdkFlavor {
+  if (hooksModule === 'airgen/interface') return 'interface';
+  if (hooksModule === 'airgen/base') return 'base';
+  return 'stable';
 }
 
 /**
@@ -503,7 +686,7 @@ function aliasDeclaration(alias: string, table: TableLike, field: FieldLike, cho
   return `/** choices of ${JSON.stringify(field.name)} in table ${JSON.stringify(table.name)} */\nexport type ${alias} = ${choiceUnion(choices)};`;
 }
 
-/** The `/** … *​/` line above a property, or null when there's nothing to say. */
+/** The JSDoc line above a property, or null when there's nothing to say. */
 function fieldDocLine(fieldKey: string, field: FieldLike, resolved: ResolvedType): string | null {
   const parts: string[] = [];
 
@@ -519,13 +702,20 @@ interface TableEmission {
   /** Alias declarations this table contributed, in field order. */
   aliases: string[];
   recordInterface: string;
+  writeInterface: string;
   recordMapEntry: string;
+  writeMapEntry: string;
 }
 
-function emitTable(plan: TablePlan, registerAlias: ReturnType<typeof createAliasRegistry>): TableEmission {
-  const {table, key: tableKey, interfaceName, fields} = plan;
+function emitTable(
+  plan: TablePlan,
+  registerAlias: ReturnType<typeof createAliasRegistry>,
+  flavor: SdkFlavor,
+): TableEmission {
+  const {table, key: tableKey, interfaceName, writeInterfaceName, fields} = plan;
   const aliases: string[] = [];
   const lines: string[] = [];
+  const writeLines: string[] = [];
 
   for (const {field, key: fieldKey} of fields) {
     // Selects with known choices get a named alias so consumers can refer to
@@ -544,12 +734,27 @@ function emitTable(plan: TablePlan, registerAlias: ReturnType<typeof createAlias
 
     if (doc !== null) lines.push(doc);
     lines.push(`  ${quoteKey(fieldKey)}?: ${resolved.ts};`);
+
+    if (!isWritable(field)) continue;
+
+    const write = resolveWriteType(field.type, field.options ?? null, selectAlias, flavor);
+    if (!write) continue;
+    const writeDoc = fieldDocLine(fieldKey, field, write);
+
+    if (writeDoc !== null) writeLines.push(writeDoc);
+    writeLines.push(`  ${quoteKey(fieldKey)}?: ${write.ts};`);
   }
+
+  const tableLabel = `${JSON.stringify(table.name)} (${table.id})`;
 
   return {
     aliases,
-    recordInterface: `/** table ${JSON.stringify(table.name)} (${table.id}) */\nexport interface ${interfaceName} {\n${lines.join('\n')}\n}`,
+    recordInterface: `/** table ${tableLabel} */\nexport interface ${interfaceName} {\n${lines.join('\n')}\n}`,
+    // Every property optional: creates need no particular field and updates
+    // are partial by nature, so the same interface serves both.
+    writeInterface: `/** writable fields of table ${tableLabel} — cell write formats for createRecordsAsync/updateRecordsAsync; computed fields omitted */\nexport interface ${writeInterfaceName} {\n${writeLines.join('\n')}\n}`,
     recordMapEntry: `  ${quoteKey(tableKey)}: ${interfaceName};`,
+    writeMapEntry: `  ${quoteKey(tableKey)}: ${writeInterfaceName};`,
   };
 }
 
@@ -560,11 +765,12 @@ function fileHeader(base: BaseLike, signature: string): string {
 
 export function generateTypeScriptFromBase(base: BaseLike, options: GeneratorOptions = {}): string {
   const hooksModule = options.hooksModule ?? 'airgen';
+  const flavor = options.sdkFlavor ?? defaultSdkFlavor(hooksModule);
   const plan = planTables(base);
   const meta = buildMetaFromPlan(base, plan);
 
   const registerAlias = createAliasRegistry();
-  const emissions = plan.map(tablePlan => emitTable(tablePlan, registerAlias));
+  const emissions = plan.map(tablePlan => emitTable(tablePlan, registerAlias, flavor));
 
   const sections = [
     fileHeader(base, meta.signature),
@@ -572,9 +778,11 @@ export function generateTypeScriptFromBase(base: BaseLike, options: GeneratorOpt
     SHARED_TYPES,
     ...emissions.flatMap(emission => emission.aliases),
     ...emissions.map(emission => emission.recordInterface),
+    ...emissions.map(emission => emission.writeInterface),
     `export const airgenMeta = ${JSON.stringify(meta, null, 2)} as const;`,
     `export interface TableRecordMap {\n${emissions.map(emission => emission.recordMapEntry).join('\n')}\n}\n\nexport type TableKey = keyof TableRecordMap;`,
-    `export const {useRecords, useTable, useSchemaDrift} = createTypedHooks<TableRecordMap>(airgenMeta);`,
+    `export interface TableWriteMap {\n${emissions.map(emission => emission.writeMapEntry).join('\n')}\n}`,
+    `export const {useRecords, useTable, useSchemaDrift} = createTypedHooks<TableRecordMap, TableWriteMap>(airgenMeta);`,
   ];
 
   return sections.join('\n\n') + '\n';

@@ -5,6 +5,52 @@ All notable changes to airgen are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+Generator half of the runtime expansion (`v0.3.0/docs/PLAN.md`, Phases 0–1).
+The generated file gains write types and a richer meta; nothing a consumer
+already calls changes, so regenerating is a no-op for existing code.
+
+### Added
+
+- **`<Table>Write` interfaces and `TableWriteMap`.** One write interface per
+  table, holding only writable fields, each typed with the SDK's documented
+  **cell write format** (`field_core.d.ts`): scalars admit `null` to clear,
+  dates take `string | Date`, selects take `{id} | {name}` with literal unions
+  indexed off the read alias (`{ id: ProjectsStatusChoice['id'] }`),
+  collaborators `{id}`, links `{id; name?}`, attachments `{url; filename?}` or
+  the read shape. Computed fields are omitted (not `never`), so the interface
+  doubles as the partial update payload. On `airgen/interface` links also admit
+  a bare `{name}` (create-and-link); `GeneratorOptions.sdkFlavor` controls
+  this and defaults from `hooksModule`. Barcode has no SDK write format and is
+  omitted too.
+- **Meta v2.** `airgenMeta.version` is `2`; each field records `isComputed`
+  (the SDK's `Field.isComputed`) and each table `primaryFieldId`. Both keys are
+  spread conditionally, so a schema source without them yields no key, and the
+  runtime types keep them optional so version-1 files still typecheck. Neither
+  is a signature input.
+- **`aiText` and `externalSyncSource` read types** (`AiText`, `SelectChoice`)
+  instead of `unknown`.
+- **Drift: `field-became-computed`** (breaking) when a field the meta recorded
+  as writable is computed in the live base. Only fires for v2 metas.
+- The generated file now binds `createTypedHooks<TableRecordMap, TableWriteMap>`;
+  the second generic is accepted and unused until the mutation hooks land.
+
+### Internal
+
+- Root toolchain: ESLint 10 (flat, `typescript-eslint`, `react-hooks`) and
+  Prettier 3 (2-space, single quotes, no bracket spacing, width 120); the whole
+  tree is formatted. `npm run check` = typecheck + lint (`--max-warnings 0`) +
+  `format:check` + tests, and is what `prepublishOnly` runs. `@types/react` is
+  `^19` to match `react`. `v0.3.0/` (plan + reference code being ported) and
+  `packages/` are excluded from root lint/format.
+- Tests: a golden snapshot of the fixture's generated file
+  (`test/fixtures/snapshots/`, refresh with `UPDATE_SNAPSHOTS=1`), and
+  consumer-style `@ts-expect-error` fixtures (`test/fixtures/consumers/`)
+  compiled by the `tsc --strict` test for both the stable and interface
+  flavors. `mock-base.js` derives `isComputed`/`primaryField` the way the SDK
+  reports them. Suite is 102 tests.
+
 ## [0.3.0]
 
 ### Added

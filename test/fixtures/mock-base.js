@@ -4,7 +4,9 @@
  * field-key collisions after transliteration, select choices with quotes in
  * names, table-name collisions after sanitization, names starting with
  * digits, emoji-only names (fall back to the quoted raw name),
- * formula/rollup result resolution, and an unknown future field type.
+ * formula/rollup result resolution, computed vs writable fields (`isComputed`,
+ * `primaryField` — derived at the bottom the way the SDK reports them), and an
+ * unknown future field type.
  */
 export const mockBase = {
   id: 'appMockBase000001',
@@ -56,7 +58,12 @@ export const mockBase = {
           },
         },
         {id: 'fldEmptySel000001', name: 'Empty Select', type: 'singleSelect', options: {choices: []}},
-        {id: 'fldLinks000000001', name: 'Tasks', type: 'multipleRecordLinks', options: {linkedTableId: 'tblTasks0000000001'}},
+        {
+          id: 'fldLinks000000001',
+          name: 'Tasks',
+          type: 'multipleRecordLinks',
+          options: {linkedTableId: 'tblTasks0000000001'},
+        },
         {id: 'fldAttach00000001', name: 'Files', type: 'multipleAttachments'},
         {id: 'fldOwner000000001', name: 'Owner', type: 'singleCollaborator'},
         {id: 'fldTeam0000000001', name: 'Team', type: 'multipleCollaborators'},
@@ -90,6 +97,12 @@ export const mockBase = {
           options: {isValid: true, result: {type: 'singleLineText'}},
         },
         {id: 'fldAi000000000001', name: 'Summary', type: 'aiText'},
+        {
+          id: 'fldSync0000000001',
+          name: 'Sync Source',
+          type: 'externalSyncSource',
+          options: {choices: [{id: 'selSrc0000000001', name: 'Jira', color: 'blueBright'}]},
+        },
         {id: 'fldFuture00000001', name: 'Weird Field', type: 'someFutureType'},
       ],
     },
@@ -130,3 +143,31 @@ export const mockBase = {
     },
   ],
 };
+
+/**
+ * Field types the SDK reports as `isComputed: true` (value derived, never set
+ * by user input). Mirrors `Field.isComputed` so the fixture carries the same
+ * flag a live base would.
+ */
+export const COMPUTED_FIELD_TYPES = new Set([
+  'formula',
+  'rollup',
+  'count',
+  'multipleLookupValues',
+  'autoNumber',
+  'createdTime',
+  'lastModifiedTime',
+  'createdBy',
+  'lastModifiedBy',
+  'button',
+  'aiText',
+  'externalSyncSource',
+]);
+
+for (const table of mockBase.tables) {
+  // Like the SDK: the primary field is the first field.
+  table.primaryField = {id: table.fields[0].id};
+  for (const field of table.fields) {
+    field.isComputed = COMPUTED_FIELD_TYPES.has(field.type);
+  }
+}

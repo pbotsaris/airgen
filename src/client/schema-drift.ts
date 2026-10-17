@@ -6,7 +6,9 @@
  *
  * Classification mirrors what actually breaks at runtime:
  *   - breaking: table/field deleted, or field type changed — `useRecords`
- *     silently yields []/undefined or a value the generated type lies about.
+ *     silently yields []/undefined or a value the generated type lies about;
+ *     a writable field that became computed — the `<Table>Write` property
+ *     still exists but every write to it now fails.
  *   - warning: select choice removed — code matching on that choice is dead.
  *   - info: rename (id kept) — harmless at runtime, but the generated file is
  *     stale relative to the live schema.
@@ -47,11 +49,15 @@ export interface DriftFieldMetaLike {
   readonly choices?: DriftChoicesLike;
   /** Computed-field result projection. Optional: older generated files lack it. */
   readonly result?: DriftResultMetaLike;
+  /** The SDK's `Field.isComputed` at generation time. Optional: meta version 1 lacks it. */
+  readonly isComputed?: boolean;
 }
 
 export interface DriftTableMetaLike {
   readonly id: string;
   readonly name: string;
+  /** Optional: meta version 1 lacks it. */
+  readonly primaryFieldId?: string;
   readonly fields: {readonly [fieldKey: string]: DriftFieldMetaLike};
 }
 
@@ -66,6 +72,7 @@ export type DriftKind =
   | 'table-missing'
   | 'field-missing'
   | 'field-type-changed'
+  | 'field-became-computed'
   | 'result-type-changed'
   | 'choice-removed'
   | 'choice-renamed'
@@ -265,6 +272,22 @@ export function checkSchemaDrift(base: BaseLike, meta: DriftMetaLike): DriftRepo
           message: `field ${JSON.stringify(fieldName)} (${tableName}) changed type: ${fieldMeta.type} → ${liveField.type}`,
         });
         continue;
+      }
+
+      // Only when the meta recorded writability (version 2+) and the live SDK
+      // supplied the flag — a plain fixture without `isComputed` is not drift.
+      if (fieldMeta.isComputed === false && liveField.isComputed === true) {
+        findings.push({
+          severity: 'breaking',
+          kind: 'field-became-computed',
+          tableKey,
+          tableName,
+          fieldKey,
+          fieldName,
+          expected: 'writable',
+          actual: 'computed',
+          message: `field ${JSON.stringify(fieldName)} (${tableName}) became computed — writes to it now fail`,
+        });
       }
 
       if (fieldMeta.name !== undefined && liveField.name !== fieldMeta.name) {

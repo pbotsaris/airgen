@@ -56,6 +56,42 @@ test('changed field type is breaking and reports old → new', () => {
   assert.equal(report.findings.length, 1);
 });
 
+test('a writable field that became computed is breaking even with its type unchanged', () => {
+  const base = structuredClone(mockBase);
+  base.tables[0].fields.find(field => field.id === 'fldEmail000000001').isComputed = true;
+
+  const report = checkSchemaDrift(base, meta);
+  assert.equal(report.counts.breaking, 1);
+  const [finding] = report.findings;
+  assert.equal(finding.kind, 'field-became-computed');
+  assert.equal(finding.fieldKey, 'contactEmail');
+  assert.equal(finding.expected, 'writable');
+  assert.equal(finding.actual, 'computed');
+  assert.match(finding.message, /writes/);
+});
+
+test('computed → writable is an addition, not drift; metas without isComputed never report it', () => {
+  const base = structuredClone(mockBase);
+  base.tables[0].fields.find(field => field.id === 'fldFormula0000001').isComputed = false;
+  assert.equal(checkSchemaDrift(base, meta).ok, true);
+
+  // Meta version 1 recorded no writability, so a live flag alone proves nothing.
+  const v1Meta = structuredClone(meta);
+  v1Meta.version = 1;
+  for (const table of Object.values(v1Meta.tables)) {
+    delete table.primaryFieldId;
+    for (const field of Object.values(table.fields)) delete field.isComputed;
+  }
+  const flipped = structuredClone(mockBase);
+  flipped.tables[0].fields.find(field => field.id === 'fldEmail000000001').isComputed = true;
+  assert.equal(checkSchemaDrift(flipped, v1Meta).ok, true);
+
+  // And a plain fixture that never had the flag is not drift against a v2 meta.
+  const bare = structuredClone(mockBase);
+  for (const table of bare.tables) for (const field of table.fields) delete field.isComputed;
+  assert.equal(checkSchemaDrift(bare, meta).ok, true);
+});
+
 test('renames (id kept) are info, not breaking', () => {
   const base = structuredClone(mockBase);
   base.tables[0].name = 'Projekte';
