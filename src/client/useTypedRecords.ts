@@ -32,11 +32,15 @@ export interface AirgenFieldMeta {
   readonly choices?: DriftChoicesLike;
   /** Computed-field (`options.result`) projection. Optional: older generated files lack it. */
   readonly result?: DriftResultMetaLike;
+  /** The SDK's `Field.isComputed` at generation time. Optional: meta version 1 lacks it. */
+  readonly isComputed?: boolean;
 }
 
 export interface AirgenTableMeta {
   readonly id: string;
   readonly name: string;
+  /** Optional: meta version 1 lacks it. */
+  readonly primaryFieldId?: string;
   readonly fields: {readonly [fieldName: string]: AirgenFieldMeta};
 }
 
@@ -62,9 +66,17 @@ function resolveTable(base: SdkBase, tableMeta: AirgenTableMeta | undefined): Sd
   return base.getTableByIdIfExists(tableMeta.id) ?? base.getTableByNameIfExists(tableMeta.name);
 }
 
-/** Binds an SDK flavor's hooks; each entry point exports the result as `createTypedHooks`. */
+/**
+ * Binds an SDK flavor's hooks; each entry point exports the result as `createTypedHooks`.
+ *
+ * `M` is the generated `TableRecordMap` (read shapes), `W` the generated
+ * `TableWriteMap` (cell write formats). `W` is bound by the generated file
+ * today so the mutation hooks can land without another generator change;
+ * nothing here reads it yet.
+ */
 export function makeCreateTypedHooks(sdk: BlocksSdkAdapter) {
-  return function createTypedHooks<M extends object>(meta: AirgenMeta<M>) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  return function createTypedHooks<M extends object, W extends {[K in keyof M]?: object} = M>(meta: AirgenMeta<M>) {
     /** Resolves the SDK Table for a generated table key (by ID, name fallback). */
     function useTable<K extends keyof M & string>(tableKey: K): SdkTable | null {
       const base = sdk.useBase();
@@ -94,7 +106,6 @@ export function makeCreateTypedHooks(sdk: BlocksSdkAdapter) {
           if (value !== null && value !== undefined) {
             fields[fieldName] = value;
           }
-
         }
 
         return {id: record.id, fields: fields as Partial<M[K]>, raw: record};

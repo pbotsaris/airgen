@@ -155,7 +155,7 @@ Read types are what the generator emits today (they mirror `record.getCellValue`
 | `multipleCollaborators` | `Collaborator[]` | `Array<{id: string}> \| null` |
 | `multipleRecordLinks` | `LinkedRecord[]` | base SDK: `Array<{id; name?}>`; **interface SDK: `Array<{id; name?} \| {name: string}>`** (creates/links by name). Emit the interface variant only from `airgen/interface`. |
 | `multipleAttachments` | `Attachment[]` | `Array<{url: string; filename?: string} \| Attachment> \| null` (new by URL, existing by read shape) |
-| `barcode` | `{text; type?}` | `{text: string; type?: string} \| null` |
+| `barcode` | `{text; type?}` | — (the SDK documents **no** cell write format for barcode in both the stable and `interface-alpha` builds; `isComputed` is false, so the meta says writable but `<Table>Write` omits it) |
 | `button` | `{label; url}` | — |
 | `formula`, `rollup`, `count`, `multipleLookupValues`, `autoNumber`, `createdTime`, `lastModifiedTime`, `createdBy`, `lastModifiedBy` | existing (via `options.result` where applicable) | — |
 | `externalSyncSource` | currently `unknown` → add `{id; name; color?}` | — |
@@ -184,25 +184,25 @@ Test tooling does not change: root stays on `node --test` + `node:assert/strict`
 
 ### Phase 0 — Bring-in and tooling
 
-- [ ] Copy `reference/` and `docs/` from the airkit staging folder into the airgen repo. Add `reference/` to `.gitignore`-style exclusions in `tsconfig`, ESLint, and `files` (it is already outside `src/client`).
-- [ ] `@types/react ^19`; ESLint + Prettier configs; `npm run check` green on the current code with the existing 94 tests untouched.
-- [ ] Extend `blocks-experimental.d.ts` with `createRecordsAsync`, `updateRecordsAsync`, `deleteRecordsAsync`, `checkPermissionsFor*`, `Field.isComputed`, `useCustomProperties`.
-- [ ] Update `CLAUDE.md`: new folders, new scripts, `reference/` policy.
+- [x] Copy `reference/` and `docs/` from the airkit staging folder into the airgen repo. Add `reference/` to `.gitignore`-style exclusions in `tsconfig`, ESLint, and `files` (it is already outside `src/client`). *Landed as `v0.3.0/docs` and `v0.3.0/reference`; `v0.3.0/` is ignored by ESLint and Prettier, outside `tsconfig.include` and `files`.*
+- [x] `@types/react ^19`; ESLint + Prettier configs; `npm run check` green on the current code with the existing 94 tests untouched. *`check` also runs `format:check`; the tree was formatted once (SchemaObserver.tsx and bin/airgen.js were the only files on a different style). Six pre-existing lint findings fixed (dead `previousSource`, a zero-width char in a doc comment, `process.exit` fallthrough, three react-hooks rules in the observer's poll effect, disabled inline with reasons).*
+- [x] Extend `blocks-experimental.d.ts` with `createRecordsAsync`, `updateRecordsAsync`, `deleteRecordsAsync`, `checkPermissionsFor*`, `Field.isComputed`, `useCustomProperties`. *Only `useCustomProperties` needed a declaration; the model surface rides on `useBase(): any` and is narrowed by `sdk.ts`, which the file now says.*
+- [x] Update `CLAUDE.md`: new folders, new scripts, `reference/` policy.
 
-**Milestone:** unchanged behavior, new toolchain, reference code in place.
+**Milestone:** unchanged behavior, new toolchain, reference code in place. ✅ 2026-10-17
 
 ### Phase 1 — Generator: write types and meta v2
 
-- [ ] `FieldLike` gains optional `isComputed`; `TableLike` gains optional `primaryFieldId`. `SchemaObserver` passes them from the live SDK; `mock-base.js` sets them.
-- [ ] `resolveWriteType(type, options, selectAlias)` beside `resolveFieldType`; `<Table>Write` emission; `TableWriteMap`; interface-only linked-record variant keyed off `hooksModule`.
-- [ ] Map `externalSyncSource` and `aiText` read types.
-- [ ] Meta v2 (`version: 2`, `primaryFieldId`, `isComputed`); keep runtime `AirgenMeta` keys optional.
-- [ ] Three-way coupling: nothing new is read from `options` for write types, so `relevantOptions` is unchanged. Add a test that pins this.
-- [ ] Drift: flag writable→computed as breaking.
-- [ ] Snapshot + `tsc --strict` compile tests for the new output; type tests with `// @ts-expect-error` on wrong write values.
-- [ ] CHANGELOG entry.
+- [x] `FieldLike` gains optional `isComputed`; `TableLike` gains optional `primaryFieldId`. `SchemaObserver` passes them from the live SDK; `mock-base.js` sets them. *`TableLike` got `primaryField?: {id}` instead, so the live SDK `Base` still passes through the observer untouched (the SDK has no `primaryFieldId`); the meta key is `primaryFieldId`. The fixture derives both the way the SDK reports them.*
+- [x] `resolveWriteType(type, options, selectAlias)` beside `resolveFieldType`; `<Table>Write` emission; `TableWriteMap`; interface-only linked-record variant keyed off `hooksModule`. *Keyed off a new `GeneratorOptions.sdkFlavor` ('stable' | 'interface' | 'base') that defaults from `hooksModule`, so a monorepo alias can still pick the interface shapes. The generated file already binds `createTypedHooks<TableRecordMap, TableWriteMap>` (second generic accepted, unused until Phase 3). Barcode omitted — see §4.*
+- [x] Map `externalSyncSource` and `aiText` read types.
+- [x] Meta v2 (`version: 2`, `primaryFieldId`, `isComputed`); keep runtime `AirgenMeta` keys optional. *`META_VERSION` exported from the generator and the entry points.*
+- [x] Three-way coupling: nothing new is read from `options` for write types, so `relevantOptions` is unchanged. Add a test that pins this. *Stripping every option but `choices`/`result` leaves the signature and the Write interfaces byte-identical.*
+- [x] Drift: flag writable→computed as breaking. *`field-became-computed`, only when the meta recorded `isComputed: false` and the live field says `true`. The daemon's codemod diff was left alone: a type change always precedes it and is already reported.*
+- [x] Snapshot + `tsc --strict` compile tests for the new output; type tests with `// @ts-expect-error` on wrong write values. *`test/fixtures/snapshots/` (refresh with `UPDATE_SNAPSHOTS=1`) and `test/fixtures/consumers/` for both flavors.*
+- [x] CHANGELOG entry. *Under `[Unreleased]`.*
 
-**Milestone:** generated file carries correct write types; `afsp_finance` regenerates with zero consumer changes.
+**Milestone:** generated file carries correct write types; `afsp_finance` regenerates with zero consumer changes. ✅ code side 2026-10-17 — the `afsp_finance` regeneration is still to be run under `block run`.
 
 ### Phase 2 — Runtime core (SDK-free)
 
