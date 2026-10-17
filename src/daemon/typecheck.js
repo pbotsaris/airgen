@@ -85,7 +85,11 @@ export function createTypechecker({cwd, startDir, log}) {
   let disposed = false;
 
   function scrub(text) {
-    return text.split(cwd + path.sep).join('').split(cwd).join('.');
+    return text
+      .split(cwd + path.sep)
+      .join('')
+      .split(cwd)
+      .join('.');
   }
 
   function relativize(file, baseDir) {
@@ -170,17 +174,41 @@ export function createTypechecker({cwd, startDir, log}) {
       };
 
       child.on('error', error => {
-        finish(settled([{file: configName, line: 1, col: 1, code: 'AIRGEN', message: `failed to run tsc: ${scrub(error.message)}`}]));
+        finish(
+          settled([
+            {file: configName, line: 1, col: 1, code: 'AIRGEN', message: `failed to run tsc: ${scrub(error.message)}`},
+          ]),
+        );
       });
       child.on('close', exitCode => {
         if (timedOut) {
-          finish(settled([{file: configName, line: 1, col: 1, code: 'AIRGEN', message: `typecheck timed out after ${CHECK_TIMEOUT_MS / 1000}s`}]));
+          finish(
+            settled([
+              {
+                file: configName,
+                line: 1,
+                col: 1,
+                code: 'AIRGEN',
+                message: `typecheck timed out after ${CHECK_TIMEOUT_MS / 1000}s`,
+              },
+            ]),
+          );
           return;
         }
         const errors = parseOutput(stdout, configDir, configName);
         if (errors.length === 0 && exitCode !== 0 && exitCode !== null) {
           // Never report a failed check as clean.
-          finish(settled([{file: configName, line: 1, col: 1, code: 'AIRGEN', message: `tsc exited with code ${exitCode} and no parseable errors`}]));
+          finish(
+            settled([
+              {
+                file: configName,
+                line: 1,
+                col: 1,
+                code: 'AIRGEN',
+                message: `tsc exited with code ${exitCode} and no parseable errors`,
+              },
+            ]),
+          );
           return;
         }
         finish(settled(errors));

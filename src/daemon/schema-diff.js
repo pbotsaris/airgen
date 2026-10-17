@@ -14,8 +14,7 @@
  */
 
 /** Choice alias declarations carry their table/field in the doc comment above them. */
-const ALIAS_RE =
-  /\/\*\* choices of ("(?:[^"\\]|\\.)*") in table ("(?:[^"\\]|\\.)*") \*\/\s*export type (\w+) =/g;
+const ALIAS_RE = /\/\*\* choices of ("(?:[^"\\]|\\.)*") in table ("(?:[^"\\]|\\.)*") \*\/\s*export type (\w+) =/g;
 
 const META_MARKER = 'export const airgenMeta = ';
 

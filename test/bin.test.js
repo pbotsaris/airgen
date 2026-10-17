@@ -34,7 +34,10 @@ function launch(args, env, cwd) {
   child.stderr.on('data', chunk => (stderr += chunk));
   const exited = new Promise(resolve => child.on('exit', code => resolve(code)));
   const daemonPort = new Promise((resolve, reject) => {
-    const timer = setTimeout(() => reject(new Error(`daemon never started; stdout: ${stdout} stderr: ${stderr}`)), 5000);
+    const timer = setTimeout(
+      () => reject(new Error(`daemon never started; stdout: ${stdout} stderr: ${stderr}`)),
+      5000,
+    );
     child.stdout.on('data', () => {
       const match = stdout.match(/listening on http:\/\/127\.0\.0\.1:(\d+)/);
       if (match) {
@@ -67,7 +70,7 @@ function launch(args, env, cwd) {
   return {child, exited, daemonPort, waitFor, stdout: () => stdout, stderr: () => stderr};
 }
 
-test('exits with `block run`\'s exit code when it finishes', async () => {
+test("exits with `block run`'s exit code when it finishes", async () => {
   const dir = makeTempDir();
   const PATH = fakeBlockPath(dir, 'exit 7');
   const {exited} = launch(['-p', '0', '-o', path.join(dir, 'out.ts')], {PATH});
@@ -98,10 +101,9 @@ test('fails fast with a hint when the block CLI is missing', async () => {
 
 test('--daemon-only runs the daemon without spawning block', async () => {
   const dir = makeTempDir();
-  const {child, exited, daemonPort} = launch(
-    ['--daemon-only', '-p', '0', '-o', path.join(dir, 'out.ts')],
-    {PATH: '/usr/bin:/bin'}
-  );
+  const {child, exited, daemonPort} = launch(['--daemon-only', '-p', '0', '-o', path.join(dir, 'out.ts')], {
+    PATH: '/usr/bin:/bin',
+  });
   const port = await daemonPort;
 
   const response = await fetch(`http://127.0.0.1:${port}/health`);
@@ -142,7 +144,11 @@ test('airgen-config.json supplies out and port', async () => {
 test('CLI flags override airgen-config.json', async () => {
   const dir = makeTempDir();
   fs.writeFileSync(path.join(dir, 'airgen-config.json'), JSON.stringify({out: 'config-out.ts'}));
-  const {child, exited, waitFor, stdout} = launch(['--daemon-only', '-p', '0', '-o', 'cli-out.ts'], {PATH: '/usr/bin:/bin'}, dir);
+  const {child, exited, waitFor, stdout} = launch(
+    ['--daemon-only', '-p', '0', '-o', 'cli-out.ts'],
+    {PATH: '/usr/bin:/bin'},
+    dir,
+  );
   try {
     await waitFor(/Will write schema to .*cli-out\.ts/);
     assert.doesNotMatch(stdout(), /config-out\.ts/);
@@ -183,10 +189,9 @@ test('unknown airgen-config.json keys fail fast', async () => {
 
 test('assisted fixes are off unless --fix is passed', async () => {
   const dir = makeTempDir();
-  const {child, exited, daemonPort} = launch(
-    ['--daemon-only', '-p', '0', '-o', path.join(dir, 'out.ts')],
-    {PATH: '/usr/bin:/bin'}
-  );
+  const {child, exited, daemonPort} = launch(['--daemon-only', '-p', '0', '-o', path.join(dir, 'out.ts')], {
+    PATH: '/usr/bin:/bin',
+  });
   try {
     const response = await fetch(`http://127.0.0.1:${await daemonPort}/fixes`);
     assert.equal(response.status, 404);
@@ -198,10 +203,9 @@ test('assisted fixes are off unless --fix is passed', async () => {
 
 test('--fix turns the fix endpoints on', async () => {
   const dir = makeTempDir();
-  const {child, exited, daemonPort} = launch(
-    ['--daemon-only', '--fix', '-p', '0', '-o', path.join(dir, 'out.ts')],
-    {PATH: '/usr/bin:/bin'}
-  );
+  const {child, exited, daemonPort} = launch(['--daemon-only', '--fix', '-p', '0', '-o', path.join(dir, 'out.ts')], {
+    PATH: '/usr/bin:/bin',
+  });
   try {
     const response = await fetch(`http://127.0.0.1:${await daemonPort}/fixes`);
     assert.equal(response.status, 200);

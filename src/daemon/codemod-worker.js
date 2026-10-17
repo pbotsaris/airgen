@@ -76,8 +76,7 @@ function createService(ts, {configPath, overlayPath, overlaySource}) {
     getCurrentDirectory: () => tsconfigDir,
     getCompilationSettings: () => options,
     getDefaultLibFileName: opts => ts.getDefaultLibFilePath(opts),
-    fileExists: fileName =>
-      path.resolve(fileName) === path.resolve(overlayPath) || ts.sys.fileExists(fileName),
+    fileExists: fileName => path.resolve(fileName) === path.resolve(overlayPath) || ts.sys.fileExists(fileName),
     readFile,
     readDirectory: ts.sys.readDirectory,
     directoryExists: ts.sys.directoryExists,
@@ -221,7 +220,7 @@ function comparisonSubject(ts, node) {
 
 /** Builds the edit/usage plan for one change. */
 function planChange(ts, service, program, checker, job, change) {
-  const {generatedFile, previousSource} = job;
+  const {generatedFile} = job;
   const generated = program.getSourceFile(generatedFile);
   if (!generated) return {changeId: change.id, edits: [], usages: [], skipped: 'generated file not in program'};
 
@@ -269,9 +268,7 @@ function planChange(ts, service, program, checker, job, change) {
           if (!contextual) return false;
           const constraint = checker.getBaseConstraintOfType?.(contextual) ?? contextual;
           const candidates = constraint.isUnion?.() ? constraint.types : [constraint];
-          return candidates.some(
-            candidate => candidate.isStringLiteral?.() && candidate.value === change.from,
-          );
+          return candidates.some(candidate => candidate.isStringLiteral?.() && candidate.value === change.from);
         },
       });
       return {changeId: change.id, edits, usages: []};
