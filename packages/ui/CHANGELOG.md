@@ -6,6 +6,15 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Pre-1.0, minor versions may contain breaking changes.
 
+## [Unreleased]
+
+### Added
+
+- **`fuseMatcher`** — a fuse.js `SearchMatcher` for airgen's `query()`
+  (`search: {query, fields, matcher: fuseMatcher}`), with the same settings as
+  `Select`'s search (`threshold: 0.4`, `ignoreLocation`). Keeps fuse.js out of
+  airgen's own dependencies.
+
 ## [0.1.0-dev.1] — 2026-08-03
 
 ### Added (Phase 2 — selection stack, overlays, providers, 2026-08-03)

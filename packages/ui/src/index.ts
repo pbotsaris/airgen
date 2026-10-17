@@ -67,6 +67,7 @@ export {
   type SheetProviderProps,
 } from './providers/SheetProvider.js';
 
+export {fuseMatcher, type SearchMatcher} from './search.js';
 export {airtableColorToHex, shouldUseLightText, isHexColor} from './colors.js';
 export {pillSizeClasses} from './sizes.js';
 export type {ComponentSize, IconSize} from './sizes.js';
