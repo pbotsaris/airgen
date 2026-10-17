@@ -4,3 +4,5 @@ dist/
 .DS_Store
 CLAUDE.md
 plan/
+.claude/*
+.serena/*
