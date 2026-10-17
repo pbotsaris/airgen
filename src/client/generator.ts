@@ -739,7 +739,7 @@ export function generateTypeScriptFromBase(base: BaseLike, options: GeneratorOpt
     `export const airgenMeta = ${JSON.stringify(meta, null, 2)} as const;`,
     `export interface TableRecordMap {\n${emissions.map(emission => emission.recordMapEntry).join('\n')}\n}\n\nexport type TableKey = keyof TableRecordMap;`,
     `export interface TableWriteMap {\n${emissions.map(emission => emission.writeMapEntry).join('\n')}\n}`,
-    `export const {useRecords, useTable, useSchemaDrift} = createTypedHooks<TableRecordMap, TableWriteMap>(airgenMeta);`,
+    `export const {useRecords, useTable, useSchemaDrift, useFields, useMutations, useQuery} = createTypedHooks<TableRecordMap, TableWriteMap>(airgenMeta);`,
   ];
 
   return sections.join('\n\n') + '\n';

@@ -640,4 +640,4 @@ export interface TableWriteMap {
   T2024Plans: T2024PlansWrite;
 }
 
-export const {useRecords, useTable, useSchemaDrift} = createTypedHooks<TableRecordMap, TableWriteMap>(airgenMeta);
+export const {useRecords, useTable, useSchemaDrift, useFields, useMutations, useQuery} = createTypedHooks<TableRecordMap, TableWriteMap>(airgenMeta);

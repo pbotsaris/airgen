@@ -6,18 +6,37 @@
  */
 
 import {useBase, useRecords, useWatchable} from '@airtable/blocks/base/ui';
+import {useMemo} from 'react';
 import {createSchemaObserver} from './SchemaObserver.js';
 import {makeCreateTypedHooks} from './useTypedRecords.js';
 import type {BlocksSdkAdapter} from './sdk.js';
 
-const sdk: BlocksSdkAdapter = {useBase, useRecords, useWatchable};
+// No useCustomProperties: custom properties are an interface-SDK feature.
+const sdk: BlocksSdkAdapter = {useBase, useRecords, useWatchable, useMemo};
 
 export const SchemaObserver = createSchemaObserver(sdk, {hooksModule: 'airgen/base', sdkFlavor: 'base'});
 export const createTypedHooks = makeCreateTypedHooks(sdk);
 
 export type {SchemaObserverProps} from './SchemaObserver.js';
-export type {AirgenMeta, AirgenTableMeta, AirgenFieldMeta, Record as TypedRecord} from './useTypedRecords.js';
-export type {SdkBase, SdkTable, SdkField, SdkRecord, BlocksSdkAdapter} from './sdk.js';
+export type {
+  AirgenMeta,
+  AirgenTableMeta,
+  AirgenFieldMeta,
+  FieldInspectors,
+  Record as TypedRecord,
+  TypedHooksOptions,
+} from './useTypedRecords.js';
+export type {
+  SdkBase,
+  SdkTable,
+  SdkField,
+  SdkRecord,
+  SdkCellValues,
+  PermissionCheck,
+  TableCustomProperty,
+  BlocksSdkAdapter,
+} from './sdk.js';
+export * from './runtime/index.js';
 export type {BaseLike, TableLike, FieldLike, GeneratorOptions, SdkFlavor} from './generator.js';
 export type {
   DriftReport,
