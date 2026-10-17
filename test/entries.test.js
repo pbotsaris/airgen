@@ -32,8 +32,25 @@ test('core modules import no SDK paths (structural-types invariant)', () => {
     'SchemaObserver.js',
     'useTypedRecords.js',
     'sdk.js',
+    'field-types.js',
+    'deaccent.js',
   ]) {
     assert.deepEqual(sdkImports(readDist(name)), [], `${name} should not import @airtable/blocks`);
+  }
+});
+
+// The runtime is written against structural types (sdk.ts) only; every module
+// under runtime/, present and future, is covered by listing the directory.
+test('runtime modules import no SDK paths and no third-party packages', () => {
+  const runtimeDir = path.join(distClient, 'runtime');
+  const modules = fs.readdirSync(runtimeDir).filter(name => name.endsWith('.js') || name.endsWith('.d.ts'));
+  assert.ok(modules.includes('mutations.js'), 'runtime/ was built');
+
+  for (const name of modules) {
+    const source = fs.readFileSync(path.join(runtimeDir, name), 'utf8');
+    const specifiers = [...source.matchAll(/(?:from|import)\s*\(?\s*['"]([^'"]+)['"]/g)].map(m => m[1]);
+    const external = specifiers.filter(specifier => !specifier.startsWith('.'));
+    assert.deepEqual(external, [], `runtime/${name} should import only relative modules`);
   }
 });
 

@@ -13,9 +13,17 @@
 
 import type {BaseLike} from './generator.js';
 
-/** The SDK Field object, as far as airgen needs it: a getCellValue handle. */
+/**
+ * The SDK Field object: a getCellValue handle plus the metadata the runtime
+ * converts values by. Everything past `id` is optional so a bare handle (an
+ * older adapter, a test fake) still works; the runtime falls back to the meta.
+ */
 export interface SdkField {
   readonly id: string;
+  readonly name?: string;
+  readonly type?: string;
+  readonly options?: {readonly [key: string]: unknown} | null;
+  readonly isComputed?: boolean;
 }
 
 export interface SdkRecord {
@@ -24,12 +32,28 @@ export interface SdkRecord {
   // `any` (not SdkField) so real SDK Record classes, whose parameter is a
   // Field class union, stay assignable under strictFunctionTypes.
   getCellValue(field: any): unknown;
+  getCellValueAsString(field: any): string;
 }
+
+/** The SDK's `PermissionCheckResult`, flattened. */
+export interface PermissionCheck {
+  readonly hasPermission: boolean;
+  readonly reasonDisplayString?: string;
+}
+
+/** A cell payload keyed by field ID, as `createRecordsAsync` / `updateRecordsAsync` take it. */
+export type SdkCellValues = {[fieldId: string]: unknown};
 
 export interface SdkTable {
   readonly id: string;
   readonly name: string;
   getFieldByIdIfExists(fieldId: string): SdkField | null;
+  createRecordsAsync(records: ReadonlyArray<{fields: SdkCellValues}>): Promise<ReadonlyArray<string>>;
+  updateRecordsAsync(records: ReadonlyArray<{id: string; fields: SdkCellValues}>): Promise<void>;
+  deleteRecordsAsync(recordIds: ReadonlyArray<string>): Promise<void>;
+  checkPermissionsForCreateRecords(records?: ReadonlyArray<{fields: SdkCellValues}>): PermissionCheck;
+  checkPermissionsForUpdateRecords(records?: ReadonlyArray<{id: string; fields: SdkCellValues}>): PermissionCheck;
+  checkPermissionsForDeleteRecords(recordIds?: ReadonlyArray<string>): PermissionCheck;
 }
 
 export interface SdkBase {
