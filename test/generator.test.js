@@ -154,7 +154,8 @@ test('resolves formula/rollup/lookup result types, with fallbacks', () => {
   assert.match(code, /^ {2}daysLeft\?: number;$/m);
   assert.match(code, /^ {2}label\?: string;$/m);
   assert.match(code, /^ {2}totalHours\?: number;$/m);
-  assert.match(code, /^ {2}taskNames\?: Array<string>;$/m);
+  assert.match(code, /^ {2}taskNames\?: Array<LookupValue<string>>;$/m);
+  assert.match(code, /^export interface LookupValue<T> \{\n {2}linkedRecordId: string;\n {2}value: T;\n\}$/m);
   assert.match(code, /^ {2}brokenFormula\?: unknown;$/m);
   assert.match(code, /unmapped: someFutureType/);
   assert.match(code, /^ {2}weirdField\?: unknown;$/m);

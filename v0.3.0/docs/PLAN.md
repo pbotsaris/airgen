@@ -252,12 +252,12 @@ Test tooling does not change: root stays on `node --test` + `node:assert/strict`
 
 ## 8. Open decisions
 
-1. ~~**`fuse.js` in the core package** or injected by the consumer~~ **Decided 2026-10-17: injected.** airgen keeps zero runtime dependencies; `query()` takes `search.matcher: SearchMatcher` (`(texts, query) => indices`, best first), defaulting to an accent/case-insensitive token match. `@airgen/ui` (which already depends on fuse.js) should export a `fuseMatcher` with the reference's settings (`threshold: 0.4, ignoreLocation: true`).
+1. ~~**`fuse.js` in the core package** or injected by the consumer~~ **Decided 2026-10-17: injected.** airgen keeps zero runtime dependencies; `query()` takes `search.matcher: SearchMatcher` (`(texts, query) => indices`, best first), defaulting to an accent/case-insensitive token match. `@airgen/ui` (which already depends on fuse.js) exports `fuseMatcher` with the reference's settings (`threshold: 0.4, ignoreLocation: true`), typed structurally since `@airgen/ui` doesn't depend on airgen.
 2. **Overrides table support** (the reference's 2/3-column config table): keep as optional resolver input, or drop in favor of custom properties only.
 3. ~~**Mutation result shape**~~ **Decided 2026-10-17: object.** `{ok: true, ids, issues} | {ok: false, error, ids, failedBatch, issues}`.
 4. ~~**`useRecords` field shape**~~ **Decided 2026-10-17: unchanged.** `clone` and `convertTo` read through the SDK record and the meta-resolved field, which already tells empty from not visible. Revisit only if a Phase 3 hook needs it.
 5. **Peer range for the alpha SDK:** keep `>=0.0.0-0`.
-6. **Lookup read type (found 2026-10-17, not yet fixed).** `resolveFieldType` emits `multipleLookupValues` as `Array<Result>`, but both SDK builds document the cell read format as `Array<{linkedRecordId: RecordId; value: Result}>` (the reference's `listLookupValues` unwraps exactly that). The fix is one line plus a snapshot refresh, but it changes an emitted type consumers may already use. `runtime/normalize.ts` `lookupValues` accepts both shapes, so the runtime is unaffected either way.
+6. ~~**Lookup read type**~~ **Fixed 2026-10-17.** `resolveFieldType` emitted lookups as `Array<Result>`, but both SDK builds read them as `Array<{linkedRecordId; value: Result}>`; the generated file now declares `LookupValue<T>` and emits `Array<LookupValue<Result>>`. A breaking type change for consumers that read lookup entries as bare values (CHANGELOG).
 
 ## 9. Environment notes
 

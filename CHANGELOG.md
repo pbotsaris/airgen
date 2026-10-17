@@ -7,9 +7,18 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
-Generator half of the runtime expansion (`v0.3.0/docs/PLAN.md`, Phases 0–1).
-The generated file gains write types and a richer meta; nothing a consumer
-already calls changes, so regenerating is a no-op for existing code.
+Runtime expansion (`v0.3.0/docs/PLAN.md`, Phases 0–2). The generated file
+gains write types and a richer meta, and an SDK-free runtime core lands behind
+it. One breaking type change on regeneration: lookup cells (see Changed).
+
+### Changed
+
+- **Lookup read types match the SDK.** `multipleLookupValues` fields are now
+  `Array<LookupValue<Result>>` (`{linkedRecordId, value}` per entry, the SDK's
+  documented cell read format) instead of `Array<Result>`, which never matched
+  what `getCellValue` returns. Code that treated lookup entries as bare values
+  now fails to compile: read `entry.value`, or use the runtime's
+  `lookupValues()`.
 
 ### Added
 
@@ -70,7 +79,6 @@ already calls changes, so regenerating is a no-op for existing code.
   `SdkRecord` gains `getCellValueAsString`, and `SdkTable` gains the batch write
   and `checkPermissionsFor*` methods. The stable SDK's classes still satisfy
   them.
-
 - Root toolchain: ESLint 10 (flat, `typescript-eslint`, `react-hooks`) and
   Prettier 3 (2-space, single quotes, no bracket spacing, width 120); the whole
   tree is formatted. `npm run check` = typecheck + lint (`--max-warnings 0`) +

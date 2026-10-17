@@ -42,6 +42,12 @@ export interface SelectChoice {
   color?: string;
 }
 
+/** One entry of a lookup cell: the looked-up value and the linked record it came from. */
+export interface LookupValue<T> {
+  linkedRecordId: string;
+  value: T;
+}
+
 export interface AiText {
   state: 'empty' | 'loading' | 'generated' | 'error';
   value: string;
@@ -126,7 +132,7 @@ export interface ProjectsRecord {
   /** Airtable field "Total Hours" */
   totalHours?: number;
   /** Airtable field "Task Names" */
-  taskNames?: Array<string>;
+  taskNames?: Array<LookupValue<string>>;
   /** Airtable field "Summary" */
   summary?: AiText;
   /** Airtable field "Sync Source" */

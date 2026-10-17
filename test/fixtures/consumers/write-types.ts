@@ -21,6 +21,14 @@ export const create: ProjectsWrite = {
   team: [{id: 'usrOwner000000001'}],
 };
 
+/** Lookups read as {linkedRecordId, value} entries, typed by the looked-up field. */
+export function lookupNames(record: TableRecordMap['Projects']): string[] {
+  return (record.taskNames ?? []).map(entry => entry.value);
+}
+
+// @ts-expect-error a lookup cell is entries, not bare values
+export const bareLookup: TableRecordMap['Projects']['taskNames'] = ['Kickoff'];
+
 /** null clears a cell for every writable type. */
 export const clear: ProjectsWrite = {name: null, budget: null, done: null, status: null, tags: null, tasks: null};
 

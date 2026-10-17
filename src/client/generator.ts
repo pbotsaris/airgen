@@ -84,6 +84,12 @@ export interface SelectChoice {
   color?: string;
 }
 
+/** One entry of a lookup cell: the looked-up value and the linked record it came from. */
+export interface LookupValue<T> {
+  linkedRecordId: string;
+  value: T;
+}
+
 export interface AiText {
   state: 'empty' | 'loading' | 'generated' | 'error';
   value: string;
@@ -280,7 +286,10 @@ function resolveFieldType(
 
     case 'multipleLookupValues': {
       const result = resolveResultType(options, depth);
-      return result ? {ts: `Array<${result.ts}>`} : {ts: 'unknown[]', comment: 'lookup without a known result type'};
+      // The SDK reads a lookup as Array<{linkedRecordId, value}>, not bare values.
+      return result
+        ? {ts: `Array<LookupValue<${result.ts}>>`}
+        : {ts: 'Array<LookupValue<unknown>>', comment: 'lookup without a known result type'};
     }
 
     default:
