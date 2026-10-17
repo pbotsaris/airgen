@@ -298,7 +298,7 @@ test('emits ready-to-use hooks bound to the schema', () => {
   assert.match(code, /^import \{createTypedHooks\} from 'airgen';$/m);
   assert.match(
     code,
-    /^export const \{useRecords, useTable, useSchemaDrift\} = createTypedHooks<TableRecordMap, TableWriteMap>\(airgenMeta\);$/m,
+    /^export const \{useRecords, useTable, useSchemaDrift, useFields, useMutations, useQuery\} = createTypedHooks<TableRecordMap, TableWriteMap>\(airgenMeta\);$/m,
   );
 });
 
@@ -351,7 +351,7 @@ test('generated output compiles under tsc --strict, resolving airgen like a cons
   fs.writeFileSync(interfaceFile, interfaceCode, 'utf8');
   // Consumer-style assertions on the write types: positive cases compile and
   // each `@ts-expect-error` is a real error (tsc fails on an unused one).
-  const consumers = ['write-types.ts', 'write-types-interface.ts'].map(name => {
+  const consumers = ['write-types.ts', 'write-types-interface.ts', 'hooks.ts'].map(name => {
     const target = path.join(dir, name);
     fs.copyFileSync(path.join(fixturesDir, 'consumers', name), target);
     return target;

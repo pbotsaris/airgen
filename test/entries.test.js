@@ -39,6 +39,17 @@ test('core modules import no SDK paths (structural-types invariant)', () => {
   }
 });
 
+// React's useMemo reaches the hooks through the adapter, which is what lets
+// hooks.test.js call them as plain functions; an import would bring back the
+// "hooks outside a render" crash.
+test('the hooks module imports neither the SDK nor React', () => {
+  const specifiers = [...readDist('useTypedRecords.js').matchAll(/from\s+['"]([^'"]+)['"]/g)].map(m => m[1]);
+  assert.deepEqual(
+    specifiers.filter(specifier => !specifier.startsWith('.')),
+    [],
+  );
+});
+
 // The runtime is written against structural types (sdk.ts) only; every module
 // under runtime/, present and future, is covered by listing the directory.
 test('runtime modules import no SDK paths and no third-party packages', () => {

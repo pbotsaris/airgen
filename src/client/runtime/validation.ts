@@ -21,7 +21,13 @@ export type ValidationKind =
   /** Computed, or a type with no cell write format. */
   | 'field-not-writable'
   /** A field type newer than this airgen release: values pass through unconverted. */
-  | 'field-type-unknown';
+  | 'field-type-unknown'
+  /** A table picked in a custom property has no field matching a generated one (resolver.ts). */
+  | 'field-unresolved'
+  /** A table picked in a custom property has the field, but with another type (resolver.ts). */
+  | 'field-incompatible'
+  /** `customProperties` was configured on an SDK flavor without custom properties. */
+  | 'custom-properties-unsupported';
 
 export interface ValidationIssue {
   readonly kind: ValidationKind;

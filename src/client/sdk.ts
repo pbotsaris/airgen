@@ -47,6 +47,8 @@ export type SdkCellValues = {[fieldId: string]: unknown};
 export interface SdkTable {
   readonly id: string;
   readonly name: string;
+  readonly primaryField: SdkField;
+  readonly fields: ReadonlyArray<SdkField>;
   getFieldByIdIfExists(fieldId: string): SdkField | null;
   createRecordsAsync(records: ReadonlyArray<{fields: SdkCellValues}>): Promise<ReadonlyArray<string>>;
   updateRecordsAsync(records: ReadonlyArray<{id: string; fields: SdkCellValues}>): Promise<void>;
@@ -62,6 +64,19 @@ export interface SdkBase {
 }
 
 /**
+ * A table-picker custom property, the one kind of custom property airgen
+ * registers. Mirrors the `type: 'table'` member of the interface SDK's
+ * `BlockPageElementCustomProperty`; the SDK hands the picked table back as
+ * the property's value (or `defaultValue` when nothing valid is picked).
+ */
+export interface TableCustomProperty {
+  key: string;
+  label: string;
+  type: 'table';
+  defaultValue?: any;
+}
+
+/**
  * The hooks an entry point must supply. Method syntax throughout: methods are
  * checked bivariantly, which is what lets the SDK's more precisely typed
  * hooks (branded ids, class parameters, overloads) satisfy these shapes.
@@ -71,4 +86,17 @@ export interface BlocksSdkAdapter {
   useBase(): BaseLike & SdkBase;
   useWatchable(model: unknown, keys: ReadonlyArray<string>): void;
   useRecords(table: SdkTable): ReadonlyArray<SdkRecord> | null;
+  /**
+   * React's `useMemo`. Optional so a test adapter of plain functions needs no
+   * React render; without it every hook result is rebuilt on each call.
+   */
+  useMemo?<T>(factory: () => T, deps: ReadonlyArray<unknown>): T;
+  /**
+   * Interface SDK only; undefined on the stable and base flavors, where
+   * `customProperties` overrides fall back to the generated tables with a
+   * warning. `getDefinitions` must keep one identity across renders.
+   */
+  useCustomProperties?(getDefinitions: (base: any) => Array<TableCustomProperty>): {
+    customPropertyValueByKey: {[key: string]: unknown};
+  };
 }

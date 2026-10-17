@@ -7,9 +7,9 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
-Runtime expansion (`v0.3.0/docs/PLAN.md`, Phases 0–2). The generated file
-gains write types and a richer meta, and an SDK-free runtime core lands behind
-it. One breaking type change on regeneration: lookup cells (see Changed).
+Runtime expansion (`v0.3.0/docs/PLAN.md`, Phases 0–3). The generated file
+gains write types and a richer meta, an SDK-free runtime core lands behind it,
+and the generated hooks bind it. One breaking type change on regeneration: lookup cells (see Changed).
 
 ### Changed
 
@@ -42,10 +42,28 @@ it. One breaking type change on regeneration: lookup cells (see Changed).
   instead of `unknown`.
 - **Drift: `field-became-computed`** (breaking) when a field the meta recorded
   as writable is computed in the live base. Only fires for v2 metas.
-- The generated file now binds `createTypedHooks<TableRecordMap, TableWriteMap>`;
-  the second generic is accepted and unused until the mutation hooks land.
-- **SDK-free runtime core** (`src/client/runtime/`, Phase 2; not yet exported
-  from the entry points — the hooks in Phase 3 bind it):
+- **Hooks: `useFields`, `useMutations`, `useQuery`.** The generated file now
+  ends with `export const {useRecords, useTable, useSchemaDrift, useFields,
+  useMutations, useQuery} = createTypedHooks<TableRecordMap, TableWriteMap>(airgenMeta)`.
+  `useMutations('Projects')` is a `MutableTable<ProjectsWrite>` (field keys and
+  write values typed, stable across renders); `useFields` an inspector per
+  field key; `useQuery(key, spec)` is `query(useRecords(key), spec)`, not
+  memoized, because the SDK keeps the records array when only cell values
+  change. Regenerating is additive: existing imports keep working.
+- **Custom properties (interface SDK).** `createTypedHooks(airgenMeta,
+  {customProperties: {Deals: 'Deals table'}})` registers a table picker per
+  listed table (defaulting to the generated table, keyed by its ID so renames
+  keep the pick). A picked table other than the generated one is matched by
+  field name, then primary field, and every hook reads and writes it by its own
+  IDs. A field with another type there blocks all writes to the table (and
+  reads as absent); a missing field is a warning. On the stable and base
+  flavors the option falls back to the generated tables with a
+  `custom-properties-unsupported` warning.
+- The runtime is exported from every entry point: `createMutations`,
+  `inspectField`/`FieldInspector`, `cloneValues`, `query`/`groupRecords`/
+  `cellText`/`containsMatcher`, the normalize helpers, `ValidationResult`,
+  `resolveTableOverride`/`findTable`, `tableCustomProperties`/`customPropertyKey`.
+- **SDK-free runtime core** (`src/client/runtime/`):
   - `createMutations<Write>(table, tableMeta)`: `create`, `createMany`,
     `update`, `updateFields`, `updateMany`, `remove`, `removeMany`, `clone`,
     `inspect`, `can.create/update/delete`. Keys resolve by meta ID, values go
@@ -76,9 +94,14 @@ it. One breaking type change on regeneration: lookup cells (see Changed).
   unchanged (the snapshot is byte-identical). `deaccent` moved to its own
   module, shared by the generator and the default search matcher.
 - `sdk.ts`: `SdkField` gains optional `name`/`type`/`options`/`isComputed`,
-  `SdkRecord` gains `getCellValueAsString`, and `SdkTable` gains the batch write
-  and `checkPermissionsFor*` methods. The stable SDK's classes still satisfy
-  them.
+  `SdkRecord` gains `getCellValueAsString`, and `SdkTable` gains `fields`,
+  `primaryField`, the batch write and `checkPermissionsFor*` methods. The
+  stable SDK's classes still satisfy them. `BlocksSdkAdapter` gains optional
+  `useMemo` (React's, bound by every entry point) and `useCustomProperties`
+  (interface only), so `useTypedRecords.ts` imports neither React nor the SDK
+  and the hooks run under a plain-function test adapter.
+- `createMutations` takes `{validation}` (table-level issues that refuse every
+  write) and exposes it as `MutableTable.validation`.
 - Root toolchain: ESLint 10 (flat, `typescript-eslint`, `react-hooks`) and
   Prettier 3 (2-space, single quotes, no bracket spacing, width 120); the whole
   tree is formatted. `npm run check` = typecheck + lint (`--max-warnings 0`) +
@@ -95,7 +118,7 @@ it. One breaking type change on regeneration: lookup cells (see Changed).
   that nothing under `runtime/` imports a non-relative module. Suite is 146
   tests.
 
-## [0.3.0]
+## [0.2.6]
 
 ### Added
 

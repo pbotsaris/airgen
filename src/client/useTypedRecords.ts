@@ -4,7 +4,8 @@
  * Consumers don't call this directly: the generated `airtable-schema.ts` ends
  * with
  *
- *   export const {useRecords, useTable, useSchemaDrift} = createTypedHooks<TableRecordMap>(airgenMeta);
+ *   export const {useRecords, useTable, useSchemaDrift, useFields, useMutations, useQuery} =
+ *     createTypedHooks<TableRecordMap, TableWriteMap>(airgenMeta);
  *
  * so the whole consumer-facing API is `import {useRecords} from
  * './airtable-schema'`. That works from plain JS too — the generic is bound
@@ -16,12 +17,24 @@
  * display names baked into the types.
  *
  * SDK hooks arrive via `BlocksSdkAdapter` from the entry point rather than an
- * import, so this module compiles against every SDK flavor (see sdk.ts).
+ * import, so this module compiles against every SDK flavor (see sdk.ts) — and
+ * runs under a test adapter of plain functions, without React.
  */
 
 import type {BlocksSdkAdapter, SdkBase, SdkRecord, SdkTable} from './sdk.js';
 import {checkSchemaDrift} from './schema-drift.js';
 import type {DriftChoicesLike, DriftMetaLike, DriftReport, DriftResultMetaLike} from './schema-drift.js';
+import {pickedTable, tableCustomProperties} from './runtime/customProperties.js';
+import type {CustomPropertiesConfig} from './runtime/customProperties.js';
+import {inspectField} from './runtime/fields.js';
+import type {FieldInspector} from './runtime/fields.js';
+import {createMutations} from './runtime/mutations.js';
+import type {MutableTable} from './runtime/mutations.js';
+import {query} from './runtime/queries.js';
+import type {QuerySpec} from './runtime/queries.js';
+import {findTable, resolveTableOverride} from './runtime/resolver.js';
+import type {ResolvedTable} from './runtime/resolver.js';
+import {ValidationResult} from './runtime/validation.js';
 
 export interface AirgenFieldMeta {
   readonly id: string;
@@ -61,32 +74,82 @@ export interface Record<M, K extends keyof M> {
   raw: SdkRecord;
 }
 
-function resolveTable(base: SdkBase, tableMeta: AirgenTableMeta | undefined): SdkTable | null {
-  if (!tableMeta) return null;
-  return base.getTableByIdIfExists(tableMeta.id) ?? base.getTableByNameIfExists(tableMeta.name);
+/** One inspector per field key of a table, hidden and deleted fields included (they report it). */
+export type FieldInspectors<M, K extends keyof M> = {readonly [F in keyof M[K] & string]: FieldInspector};
+
+export interface TypedHooksOptions<M> {
+  /**
+   * Interface SDK only: tables the Interface Designer may repoint, each with
+   * the label of its table picker. A picked table is checked against the
+   * generated schema (`resolveTableOverride`); while it's incompatible,
+   * `useMutations` refuses writes and reads skip the mismatched fields.
+   */
+  readonly customProperties?: CustomPropertiesConfig<M>;
+}
+
+/** Changes exactly when a resolution would build different mutations. */
+function resolutionKey({tableMeta, validation}: ResolvedTable): string {
+  const fieldIds = Object.values(tableMeta.fields).map(field => field.id);
+  return JSON.stringify([tableMeta.id, fieldIds, validation.reason()]);
 }
 
 /**
  * Binds an SDK flavor's hooks; each entry point exports the result as `createTypedHooks`.
  *
  * `M` is the generated `TableRecordMap` (read shapes), `W` the generated
- * `TableWriteMap` (cell write formats). `W` is bound by the generated file
- * today so the mutation hooks can land without another generator change;
- * nothing here reads it yet.
+ * `TableWriteMap` (cell write formats) that `useMutations` is typed by. Files
+ * generated before 0.3.0 bind only `M`, so `W` defaults to it; the runtime
+ * converts read shapes, so those writes still work.
  */
 export function makeCreateTypedHooks(sdk: BlocksSdkAdapter) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  return function createTypedHooks<M extends object, W extends {[K in keyof M]?: object} = M>(meta: AirgenMeta<M>) {
-    /** Resolves the SDK Table for a generated table key (by ID, name fallback). */
-    function useTable<K extends keyof M & string>(tableKey: K): SdkTable | null {
+  const memo = <T>(factory: () => T, deps: ReadonlyArray<unknown>): T =>
+    sdk.useMemo ? sdk.useMemo(factory, deps) : factory();
+
+  return function createTypedHooks<M extends object, W extends {[K in keyof M]?: object} = M>(
+    meta: AirgenMeta<M>,
+    options: TypedHooksOptions<M> = {},
+  ) {
+    // AirgenMeta<M>'s tables are a mapped type over the generic M, which has
+    // no implicit string index while M is unresolved; the shapes are
+    // structurally identical for string keys.
+    const tables = meta.tables as unknown as {readonly [tableKey: string]: AirgenTableMeta};
+    const config: {readonly [tableKey: string]: string | undefined} = options.customProperties ?? {};
+    const overridable = new Set(Object.keys(config).filter(key => config[key] !== undefined && tables[key]));
+    // useCustomProperties requires one identity across renders.
+    const getDefinitions = (base: SdkBase) => tableCustomProperties(base, tables, config);
+    const unsupported = new ValidationResult([
+      {
+        kind: 'custom-properties-unsupported',
+        level: 'warning',
+        message: 'Custom properties need the interface SDK (airgen/interface); using the generated tables.',
+      },
+    ]);
+
+    /** The table behind a key: the custom-property pick when there is one, else the generated table by ID. */
+    function useResolvedTable(tableKey: string): ResolvedTable {
       const base = sdk.useBase();
-      return resolveTable(base, meta.tables[tableKey]);
+      // A key the meta doesn't know (plain-JS callers) resolves to no table.
+      const tableMeta = tables[tableKey] ?? {id: '', name: tableKey, fields: {}};
+      const isOverridable = overridable.has(tableKey);
+
+      // Whether this hook runs depends only on the hooks' configuration and
+      // the SDK flavor, both fixed for the module's life — never on a render.
+      if (isOverridable && sdk.useCustomProperties) {
+        const {customPropertyValueByKey} = sdk.useCustomProperties(getDefinitions);
+        return resolveTableOverride(pickedTable(customPropertyValueByKey, tableMeta), tableMeta);
+      }
+
+      const table = tables[tableKey] ? findTable(base, tableMeta) : null;
+      return {table, tableMeta, validation: isOverridable ? unsupported : ValidationResult.ok};
+    }
+
+    /** Resolves the SDK Table for a generated table key (by ID, name fallback; or the custom-property pick). */
+    function useTable<K extends keyof M & string>(tableKey: K): SdkTable | null {
+      return useResolvedTable(tableKey).table;
     }
 
     function useRecords<K extends keyof M & string>(tableKey: K): Array<Record<M, K>> {
-      const base = sdk.useBase();
-      const tableMeta = meta.tables[tableKey];
-      const table = resolveTable(base, tableMeta);
+      const {table, tableMeta} = useResolvedTable(tableKey);
       // The SDK's useRecords accepts null (and returns null), but its
       // overloads don't admit `SdkTable | null` directly.
       const records = sdk.useRecords(table as SdkTable);
@@ -119,12 +182,63 @@ export function makeCreateTypedHooks(sdk: BlocksSdkAdapter) {
     function useSchemaDrift(): DriftReport {
       const base = sdk.useBase();
       sdk.useWatchable(base, ['schema']);
-      // AirgenMeta<M>'s tables are a mapped type over the generic M, which has
-      // no implicit string index while M is unresolved; the shapes are
-      // structurally identical for string keys.
+      // See `tables` above.
       return checkSchemaDrift(base, meta as unknown as DriftMetaLike);
     }
 
-    return {useTable, useRecords, useSchemaDrift};
+    /**
+     * An inspector per field: live name, type, choices, writability, and
+     * `convertTo`. Rebuilt on every render (and re-rendered on schema
+     * changes): the SDK keeps a Field's identity when its type or options
+     * change, so memoizing on it would serve stale choices.
+     */
+    function useFields<K extends keyof M & string>(tableKey: K): FieldInspectors<M, K> {
+      const base = sdk.useBase();
+      sdk.useWatchable(base, ['schema']);
+      const {table, tableMeta} = useResolvedTable(tableKey);
+      const inspectors: {[fieldKey: string]: FieldInspector} = {};
+
+      for (const [fieldKey, fieldMeta] of Object.entries(tableMeta.fields)) {
+        const field = table ? table.getFieldByIdIfExists(fieldMeta.id) : null;
+        inspectors[fieldKey] = inspectField(field, fieldMeta, fieldKey);
+      }
+
+      return inspectors as FieldInspectors<M, K>;
+    }
+
+    /**
+     * Typed writes to one table (`MutableTable`), keyed and typed by the
+     * generated `<Table>Write`. Stable across renders while the resolved
+     * table is; fields are looked up when a write runs, so a schema change
+     * never leaves it stale.
+     */
+    function useMutations<K extends keyof M & string>(tableKey: K): MutableTable<Extract<W[K], object>> {
+      const resolved = useResolvedTable(tableKey);
+      const key = resolutionKey(resolved);
+
+      return memo(
+        () =>
+          createMutations<Extract<W[K], object>>(resolved.table, resolved.tableMeta, {
+            validation: resolved.validation,
+          }),
+        [resolved.table, key],
+      );
+    }
+
+    /**
+     * `query(useRecords(tableKey), spec)`. Not memoized: the SDK hands back
+     * the same records array when only cell values change, so a memo keyed
+     * on it would serve stale results. Filtering is linear; wrap the result
+     * in your own `useMemo` only if you have a dependency that changes
+     * exactly when it should.
+     */
+    function useQuery<K extends keyof M & string>(
+      tableKey: K,
+      spec: QuerySpec<Record<M, K>> = {},
+    ): Array<Record<M, K>> {
+      return query(useRecords(tableKey), spec);
+    }
+
+    return {useTable, useRecords, useSchemaDrift, useFields, useMutations, useQuery};
   };
 }

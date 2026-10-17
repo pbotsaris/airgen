@@ -9,8 +9,9 @@
  *
  * Every operation runs the same pipeline, and none of it throws:
  *
- * 1. validate — unknown, hidden, retyped, or computed fields refuse the whole
- *    write before the SDK is touched;
+ * 1. validate — a table-level error (missing table, an incompatible
+ *    runtime-picked table) or an unknown, hidden, retyped, or computed field
+ *    refuses the whole write before the SDK is touched;
  * 2. split into batches of 50 (the SDK's per-call limit) and check
  *    permissions for every batch, again before any write;
  * 3. write batch by batch, stopping at the first failure. Airtable has no
@@ -74,7 +75,12 @@ export interface MutableTable<Wt extends object> {
   clone(record: RecordSource, options?: CloneOptions<Wt>): Promise<MutationResult>;
   /** Inspector for any field key of the table, writable or not. */
   inspect(fieldKey: string): FieldInspector;
-  /** Table-level permission checks, for disabling UI before a write is tried. */
+  /**
+   * Table-level issues: a missing table, or what `resolveTableOverride` found
+   * on a runtime-picked one. Every write is refused while it holds an error.
+   */
+  readonly validation: ValidationResult;
+  /** Table-level permission checks, for disabling UI before a write is tried. Denied while `validation` has an error. */
   readonly can: {
     create(): PermissionCheck;
     update(): PermissionCheck;
@@ -105,6 +111,11 @@ function failure(
   return {ok: false, error, ids, failedBatch, issues};
 }
 
+export interface MutationOptions {
+  /** Table-level issues to enforce, e.g. `resolveTableOverride(...).validation`. */
+  readonly validation?: ValidationResult;
+}
+
 /**
  * Write operations for one table. `table` is the live SDK table, or null when
  * it's deleted or hidden from this extension — every operation then fails
@@ -113,12 +124,18 @@ function failure(
 export function createMutations<Wt extends object>(
   table: SdkTable | null,
   tableMeta: AirgenTableMeta,
+  options: MutationOptions = {},
 ): MutableTable<Wt> {
   const tableMissing: ValidationIssue = {
     kind: 'table-missing',
     level: 'error',
     message: `Table "${tableMeta.name}" is deleted or hidden from this extension.`,
   };
+  const tableValidation = ValidationResult.merge([
+    table ? ValidationResult.ok : new ValidationResult([tableMissing]),
+    options.validation ?? ValidationResult.ok,
+  ]);
+  const tableError = (): Error => new Error(tableValidation.errors.map(i => i.message).join('\n'));
 
   function inspect(fieldKey: string): FieldInspector {
     const meta = tableMeta.fields[fieldKey];
@@ -145,9 +162,9 @@ export function createMutations<Wt extends object>(
     check: (table: SdkTable, batch: T[]) => PermissionCheck,
     write: (table: SdkTable, batch: T[]) => Promise<ReadonlyArray<string>>,
   ): Promise<MutationResult> {
-    if (!table) return failure(new Error(tableMissing.message), [tableMissing]);
+    if (!table || !tableValidation.valid()) return failure(tableError(), tableValidation.issues);
 
-    const validations: ValidationResult[] = [];
+    const validations: ValidationResult[] = [tableValidation];
     let items: T[];
     try {
       items = payload(validations);
@@ -219,7 +236,7 @@ export function createMutations<Wt extends object>(
   }
 
   function permission(check: (table: SdkTable) => PermissionCheck): PermissionCheck {
-    if (!table) return {hasPermission: false, reasonDisplayString: tableMissing.message};
+    if (!table || !tableValidation.valid()) return {hasPermission: false, reasonDisplayString: tableError().message};
     try {
       return check(table);
     } catch (error) {
@@ -237,6 +254,7 @@ export function createMutations<Wt extends object>(
     removeMany: records => removeAll(records),
     clone: (record, options) => createAll([cloneValues<Wt>(record, table, tableMeta, options)]),
     inspect,
+    validation: tableValidation,
     can: {
       create: () => permission(t => t.checkPermissionsForCreateRecords()),
       update: () => permission(t => t.checkPermissionsForUpdateRecords()),
