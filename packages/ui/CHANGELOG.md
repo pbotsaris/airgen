@@ -8,6 +8,16 @@ Pre-1.0, minor versions may contain breaking changes.
 
 ## [Unreleased]
 
+### Changed
+
+- **Utilities are prefixed `ag-`.** The precompiled stylesheet used Tailwind's
+  unprefixed names, so a consumer's own Tailwind emitting the same class
+  (`text-neutral-900`, say) won on load order and overrode the components'
+  `dark:` variants (black title text on a dark frame, a light `RecordTable`
+  header). Every utility is now `ag-` prefixed and can't share a selector with
+  the consumer's. Consumer-passed classes are unaffected; `pillSizeClasses()`
+  now returns prefixed classes, which `@airgen/ui/styles.css` defines.
+
 ### Added
 
 - **Table components** — semantic, shadcn-inspired `Table`, `TableHeader`,

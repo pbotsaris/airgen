@@ -2,7 +2,7 @@
 
 ## Project Structure & Module Organization
 
-This workspace contains the `@airgen/ui` React component package. Public components live in `src/components/`, context APIs in `src/providers/`, and shared helpers and types directly under `src/`. Export every supported public API from `src/index.ts`. Styles originate in `src/styles.css`; Tailwind configuration is in `tailwind.config.cjs`, and compiled output is written to `dist/`. Tests live in `test/` and mirror features rather than source folders (for example, `test/select.test.tsx`). Maintenance scripts belong in `scripts/`.
+This workspace contains the `@airgen/ui` React component package. Public components live in `src/components/`, context APIs in `src/providers/`, and shared helpers and types directly under `src/`. Export every supported public API from `src/index.ts`. Styles originate in `src/styles.css`; Tailwind configuration is in `tailwind.config.cjs`, and compiled output is written to `dist/`. Every utility class in `src/` is written with the `ag-` prefix the config sets (`dark:ag-text-gray-100`, `-ag-rotate-90`); an unprefixed one silently gets no CSS, and `test/prefix.test.tsx` fails on it. Tests live in `test/` and mirror features rather than source folders (for example, `test/select.test.tsx`). Maintenance scripts belong in `scripts/`.
 
 ## Build, Test, and Development Commands
 

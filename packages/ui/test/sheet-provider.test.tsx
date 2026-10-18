@@ -95,7 +95,7 @@ describe('SheetProvider', () => {
       api.current.openSheet({side: 'left', className: 'p-10', content: <p>c</p>});
     });
     const dialog = screen.getByRole('dialog');
-    expect(dialog.className).toContain('left-0');
+    expect(dialog.className).toContain('ag-left-0');
     expect(dialog.className).toContain('w-96');
     expect(dialog.className).toContain('p-10');
   });

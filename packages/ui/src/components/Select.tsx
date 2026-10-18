@@ -464,16 +464,16 @@ export function Select(props: SelectProps) {
         onClick={() => !isDisabled && commitIndex(index)}
         className={cx(
           renderOption
-            ? 'rounded mb-1 last:mb-0'
+            ? 'ag-rounded ag-mb-1 last:ag-mb-0'
             : cx(
-                'flex items-center justify-between gap-2 rounded',
+                'ag-flex ag-items-center ag-justify-between ag-gap-2 ag-rounded',
                 multilineSizeClasses(size),
-                'dark:text-neutral-100',
-                isActive && 'bg-neutral-100 dark:bg-neutral-700',
+                'dark:ag-text-neutral-100',
+                isActive && 'ag-bg-neutral-100 dark:ag-bg-neutral-700',
               ),
-          'outline-none select-none',
-          isDisabled && 'opacity-50 cursor-not-allowed',
-          !isDisabled && 'cursor-pointer',
+          'ag-outline-none ag-select-none',
+          isDisabled && 'ag-opacity-50 ag-cursor-not-allowed',
+          !isDisabled && 'ag-cursor-pointer',
           optionClassName,
         )}
       >
@@ -481,28 +481,28 @@ export function Select(props: SelectProps) {
           renderOption(opt, {selected: isSelected, active: isActive, disabled: isDisabled})
         ) : (
           <>
-            <span className="min-w-0 flex-1">
+            <span className="ag-min-w-0 ag-flex-1">
               {pill ? (
-                <PillOption opt={opt} show size={size} className="max-w-full" />
+                <PillOption opt={opt} show size={size} className="ag-max-w-full" />
               ) : (
-                <span className="flex items-center gap-2 min-w-0">
+                <span className="ag-flex ag-items-center ag-gap-2 ag-min-w-0">
                   {opt.profilePicUrl ? (
-                    <img src={opt.profilePicUrl} alt="" className="h-5 w-5 rounded-full ring-1 ring-black/10 dark:ring-white/10" />
+                    <img src={opt.profilePicUrl} alt="" className="ag-h-5 ag-w-5 ag-rounded-full ag-ring-1 ag-ring-black/10 dark:ag-ring-white/10" />
                   ) : opt.color ? (
                     <span
-                      className="h-1.5 w-1.5 rounded-full ring-1 ring-black/10 dark:ring-white/10"
+                      className="ag-h-1.5 ag-w-1.5 ag-rounded-full ag-ring-1 ag-ring-black/10 dark:ag-ring-white/10"
                       style={{
                         background: airtableColorToHex(opt.color) ?? undefined,
                       }}
                     />
                   ) : null}
 
-                  <span className="truncate">{opt.label}</span>
+                  <span className="ag-truncate">{opt.label}</span>
                 </span>
               )}
             </span>
 
-            {isSelected ? <span className="text-neutral-600 dark:text-neutral-300">✓</span> : null}
+            {isSelected ? <span className="ag-text-neutral-600 dark:ag-text-neutral-300">✓</span> : null}
           </>
         )}
       </div>
@@ -511,24 +511,24 @@ export function Select(props: SelectProps) {
 
   const optionRows =
     entries.length === 0 ? (
-      <div className="px-2 py-3 text-base text-neutral-400 dark:text-neutral-500 text-center">{emptyMessage}</div>
+      <div className="ag-px-2 ag-py-3 ag-text-base ag-text-neutral-400 dark:ag-text-neutral-500 ag-text-center">{emptyMessage}</div>
     ) : (
       entries.map((entry, idx) => {
-        if (entry.type === 'divider') return <Divide key={`div-${idx}`} className="my-1" />;
+        if (entry.type === 'divider') return <Divide key={`div-${idx}`} className="ag-my-1" />;
 
         if (entry.type === 'header') {
           return (
             <div
               key={`hdr-${idx}`}
-              className="flex items-center gap-2 px-2 py-1.5 text-sm font-semibold text-neutral-500 dark:text-neutral-400 select-none"
+              className="ag-flex ag-items-center ag-gap-2 ag-px-2 ag-py-1.5 ag-text-sm ag-font-semibold ag-text-neutral-500 dark:ag-text-neutral-400 ag-select-none"
             >
               {entry.color && (
                 <span
-                  className="h-2 w-2 rounded-full ring-1 ring-black/10 dark:ring-white/10 flex-none"
+                  className="ag-h-2 ag-w-2 ag-rounded-full ag-ring-1 ag-ring-black/10 dark:ag-ring-white/10 ag-flex-none"
                   style={{background: airtableColorToHex(entry.color) ?? undefined}}
                 />
               )}
-              <span className="truncate">{entry.label}</span>
+              <span className="ag-truncate">{entry.label}</span>
             </div>
           );
         }
@@ -538,13 +538,13 @@ export function Select(props: SelectProps) {
     );
 
   const triggerClasses = cx(
-    'w-full min-w-[10rem] inline-flex items-center justify-between gap-2',
+    'ag-w-full ag-min-w-[10rem] ag-inline-flex ag-items-center ag-justify-between ag-gap-2',
     controlSizeClasses(size),
-    'rounded-md border border-neutral-200 bg-white',
-    'dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100',
-    'hover:bg-neutral-50 dark:hover:bg-neutral-700',
-    'focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-500',
-    disabled && 'opacity-60 cursor-not-allowed',
+    'ag-rounded-md ag-border ag-border-neutral-200 ag-bg-white',
+    'dark:ag-border-neutral-600 dark:ag-bg-neutral-800 dark:ag-text-neutral-100',
+    'hover:ag-bg-neutral-50 dark:hover:ag-bg-neutral-700',
+    'focus:ag-outline-none focus:ag-ring-1 focus:ag-ring-neutral-300 dark:focus:ag-ring-neutral-500',
+    disabled && 'ag-opacity-60 ag-cursor-not-allowed',
     triggerClassName,
   );
 
@@ -566,16 +566,16 @@ export function Select(props: SelectProps) {
       aria-disabled={disabled || undefined}
       onClick={() => !disabled && toggle()}
       onKeyDown={onTriggerKeyDown}
-      className={cx(triggerClasses, 'h-auto min-h-8 flex-wrap justify-start')}
+      className={cx(triggerClasses, 'ag-h-auto ag-min-h-8 ag-flex-wrap ag-justify-start')}
     >
-      <span id={`${listboxId}-value`} className={cx('min-w-0 flex-1 flex flex-wrap items-center gap-1')}>
+      <span id={`${listboxId}-value`} className={cx('ag-min-w-0 ag-flex-1 ag-flex ag-flex-wrap ag-items-center ag-gap-1')}>
         {selectedOptions.length > 0 ? (
           (props as MultiSelectProps).renderValue ? (
             (props as MultiSelectProps).renderValue!(selectedOptions)
           ) : (
             selectedOptions.map(opt => (
-              <span key={opt.value} className="inline-flex items-center gap-0.5 min-w-0">
-                <PillOption opt={opt} size={size} className="max-w-full" />
+              <span key={opt.value} className="ag-inline-flex ag-items-center ag-gap-0.5 ag-min-w-0">
+                <PillOption opt={opt} size={size} className="ag-max-w-full" />
                 {!disabled && (
                   <button
                     type="button"
@@ -585,7 +585,7 @@ export function Select(props: SelectProps) {
                       e.stopPropagation();
                       removeValue(opt.value);
                     }}
-                    className="flex-none rounded-full px-0.5 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200"
+                    className="ag-flex-none ag-rounded-full ag-px-0.5 ag-text-neutral-400 hover:ag-text-neutral-700 dark:hover:ag-text-neutral-200"
                   >
                     ×
                   </button>
@@ -594,11 +594,11 @@ export function Select(props: SelectProps) {
             ))
           )
         ) : (
-          <span className="text-neutral-500 dark:text-neutral-400">{placeholder}</span>
+          <span className="ag-text-neutral-500 dark:ag-text-neutral-400">{placeholder}</span>
         )}
       </span>
 
-      <Caret open={open} weight={2.5} className="ml-auto flex-none" />
+      <Caret open={open} weight={2.5} className="ag-ml-auto ag-flex-none" />
     </div>
   ) : (
     <button
@@ -611,21 +611,21 @@ export function Select(props: SelectProps) {
       aria-controls={open ? listboxId : undefined}
       onClick={toggle}
       onKeyDown={onTriggerKeyDown}
-      className={cx(triggerClasses, 'disabled:opacity-60 disabled:cursor-not-allowed')}
+      className={cx(triggerClasses, 'disabled:ag-opacity-60 disabled:ag-cursor-not-allowed')}
     >
-      <span className={cx('min-w-0 flex-1', pill && 'flex justify-start')}>
+      <span className={cx('ag-min-w-0 ag-flex-1', pill && 'ag-flex ag-justify-start')}>
         {selected ? (
           (props as SingleSelectProps).renderValue ? (
             (props as SingleSelectProps).renderValue!(selected)
           ) : pill ? (
-            <div className="ml-1">
-              <PillOption opt={selected} size={size} className="max-w-full w-fit" />
+            <div className="ag-ml-1">
+              <PillOption opt={selected} size={size} className="ag-max-w-full ag-w-fit" />
             </div>
           ) : (
-            <span className="truncate">{selected.label}</span>
+            <span className="ag-truncate">{selected.label}</span>
           )
         ) : (
-          <span className="text-neutral-500 dark:text-neutral-400">{placeholder}</span>
+          <span className="ag-text-neutral-500 dark:ag-text-neutral-400">{placeholder}</span>
         )}
       </span>
 
@@ -634,7 +634,7 @@ export function Select(props: SelectProps) {
   );
 
   return (
-    <div className={cx('inline-block', className)}>
+    <div className={cx('ag-inline-block', className)}>
       {renderTrigger ? renderTrigger({ref: triggerRef, id, open, toggle, disabled, selected}) : defaultTrigger}
 
       {present && (
@@ -655,11 +655,11 @@ export function Select(props: SelectProps) {
             tabIndex={-1}
             onKeyDown={searchable ? undefined : onMenuKeyDown}
             className={cx(
-              'fixed z-popover rounded border border-neutral-200 bg-white shadow-sm',
-              'dark:border-neutral-600 dark:bg-neutral-800',
-              searchable ? 'flex flex-col max-h-72' : 'p-1 max-h-72 overflow-auto',
-              'transition-[opacity,transform] duration-100 ease-out',
-              animateIn ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 -translate-y-1 scale-[0.95] pointer-events-none',
+              'ag-fixed ag-z-popover ag-rounded ag-border ag-border-neutral-200 ag-bg-white ag-shadow-sm',
+              'dark:ag-border-neutral-600 dark:ag-bg-neutral-800',
+              searchable ? 'ag-flex ag-flex-col ag-max-h-72' : 'ag-p-1 ag-max-h-72 ag-overflow-auto',
+              'ag-transition-[opacity,transform] ag-duration-100 ag-ease-out',
+              animateIn ? 'ag-opacity-100 ag-translate-y-0 ag-scale-100' : 'ag-opacity-0 -ag-translate-y-1 ag-scale-[0.95] ag-pointer-events-none',
               menuClassName,
             )}
             style={{
@@ -670,7 +670,7 @@ export function Select(props: SelectProps) {
             {searchable ? (
               <>
                 {/* Sticky search input */}
-                <div className="flex-none border-b border-neutral-200 dark:border-neutral-600 p-1.5">
+                <div className="ag-flex-none ag-border-b ag-border-neutral-200 dark:ag-border-neutral-600 ag-p-1.5">
                   <input
                     ref={inputRef}
                     type="text"
@@ -686,9 +686,9 @@ export function Select(props: SelectProps) {
                     onKeyDown={onSearchKeyDown}
                     placeholder={searchPlaceholder}
                     className={cx(
-                      'w-full px-2 py-1.5 text-base outline-none rounded',
-                      'bg-transparent dark:text-neutral-100',
-                      'placeholder:text-neutral-400 dark:placeholder:text-neutral-500',
+                      'ag-w-full ag-px-2 ag-py-1.5 ag-text-base ag-outline-none ag-rounded',
+                      'ag-bg-transparent dark:ag-text-neutral-100',
+                      'placeholder:ag-text-neutral-400 dark:placeholder:ag-text-neutral-500',
                     )}
                     aria-activedescendant={activeOption ? `${listboxId}-opt-${activeOption.value}` : undefined}
                   />
@@ -700,7 +700,7 @@ export function Select(props: SelectProps) {
                   role="listbox"
                   aria-labelledby={triggerId}
                   aria-multiselectable={multiple || undefined}
-                  className="flex-1 overflow-auto p-1.5"
+                  className="ag-flex-1 ag-overflow-auto ag-p-1.5"
                 >
                   {optionRows}
                 </div>

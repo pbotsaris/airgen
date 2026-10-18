@@ -144,7 +144,7 @@ describe('ToastProvider', () => {
       api.current.info('placed');
     });
     expect(container.querySelector('[aria-live="polite"]')).not.toBeNull();
-    expect(container.querySelector('.bottom-4.left-4')).not.toBeNull();
+    expect(container.querySelector('.ag-bottom-4.ag-left-4')).not.toBeNull();
   });
 
   it('unmounting with pending delayed toasts does not warn or throw', () => {

@@ -5,15 +5,15 @@ import {controlSizeClasses, type ComponentSize} from '../sizes.js';
 export type InputVariant = 'default' | 'ghost';
 
 const VARIANT_BASE =
-  'rounded-md transition-[border-color,background-color,box-shadow] duration-150 dark:text-neutral-100';
+  'ag-rounded-md ag-transition-[border-color,background-color,box-shadow] ag-duration-150 dark:ag-text-neutral-100';
 
 const VARIANT: Record<InputVariant, string> = {
-  default: `${VARIANT_BASE} border border-neutral-200 bg-transparent focus:bg-neutral-100 dark:bg-neutral-800 dark:border-neutral-600 dark:focus:bg-neutral-700`,
-  ghost: `${VARIANT_BASE} border border-transparent bg-transparent hover:border-neutral-200 focus:border-neutral-200 focus:bg-neutral-100 dark:hover:border-neutral-600 dark:focus:border-neutral-600 dark:focus:bg-neutral-700`,
+  default: `${VARIANT_BASE} ag-border ag-border-neutral-200 ag-bg-transparent focus:ag-bg-neutral-100 dark:ag-bg-neutral-800 dark:ag-border-neutral-600 dark:focus:ag-bg-neutral-700`,
+  ghost: `${VARIANT_BASE} ag-border ag-border-transparent ag-bg-transparent hover:ag-border-neutral-200 focus:ag-border-neutral-200 focus:ag-bg-neutral-100 dark:hover:ag-border-neutral-600 dark:focus:ag-border-neutral-600 dark:focus:ag-bg-neutral-700`,
 };
 
 function variantClasses(variant: InputVariant, {disabled}: {disabled?: boolean} = {}) {
-  return cx(VARIANT[variant], disabled && 'opacity-60 cursor-not-allowed');
+  return cx(VARIANT[variant], disabled && 'ag-opacity-60 ag-cursor-not-allowed');
 }
 
 export interface InputProps
@@ -38,7 +38,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(function Inp
       value={state}
       onChange={e => setState(e.target.value)}
       className={cx(
-        'w-full outline-none',
+        'ag-w-full ag-outline-none',
         controlSizeClasses(size),
         variantClasses(variant, {disabled: rest.disabled}),
         className,

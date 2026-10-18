@@ -5,27 +5,27 @@ import {controlSizeClasses, type IconSize} from '../sizes.js';
 import {airtableColorToHex} from '../colors.js';
 
 const variants = {
-  default: 'bg-neutral-700 text-white hover:bg-neutral-600',
-  outline: 'border border-neutral-300 bg-white hover:bg-neutral-100',
-  destructive: 'bg-rose-600 text-white hover:bg-rose-700',
-  secondary: 'bg-neutral-200 text-neutral-900 hover:bg-neutral-300',
-  ghost: 'hover:bg-neutral-100',
-  link: 'underline underline-offset-4 decoration-neutral-300 hover:decoration-neutral-500 dark:decoration-neutral-600 dark:hover:decoration-neutral-400 transition-all text-neutral-700 dark:text-neutral-300',
+  default: 'ag-bg-neutral-700 ag-text-white hover:ag-bg-neutral-600',
+  outline: 'ag-border ag-border-neutral-300 ag-bg-white hover:ag-bg-neutral-100',
+  destructive: 'ag-bg-rose-600 ag-text-white hover:ag-bg-rose-700',
+  secondary: 'ag-bg-neutral-200 ag-text-neutral-900 hover:ag-bg-neutral-300',
+  ghost: 'hover:ag-bg-neutral-100',
+  link: 'ag-underline ag-underline-offset-4 ag-decoration-neutral-300 hover:ag-decoration-neutral-500 dark:ag-decoration-neutral-600 dark:hover:ag-decoration-neutral-400 ag-transition-all ag-text-neutral-700 dark:ag-text-neutral-300',
 };
 
 // Shared scale (see sizes.ts); min-w keeps toggle labels from causing layout jumps
 const sizes = {
   xs: controlSizeClasses('xs'),
-  sm: `${controlSizeClasses('sm')} min-w-[62px]`,
+  sm: `${controlSizeClasses('sm')} ag-min-w-[62px]`,
   base: controlSizeClasses('base'),
   default: controlSizeClasses('base'),
   lg: controlSizeClasses('lg'),
   xl: controlSizeClasses('xl'),
-  icon: 'h-8 w-8 p-0',
-  'icon-xs': 'h-5 w-5 p-0',
-  'icon-sm': 'h-6 w-6 p-0',
-  'icon-lg': 'h-9 w-9 p-0',
-  'icon-xl': 'h-10 w-10 p-0',
+  icon: 'ag-h-8 ag-w-8 ag-p-0',
+  'icon-xs': 'ag-h-5 ag-w-5 ag-p-0',
+  'icon-sm': 'ag-h-6 ag-w-6 ag-p-0',
+  'icon-lg': 'ag-h-9 ag-w-9 ag-p-0',
+  'icon-xl': 'ag-h-10 ag-w-10 ag-p-0',
 };
 
 export type ButtonVariant = keyof typeof variants;
@@ -71,7 +71,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
   ref,
 ) {
   const baseClasses =
-    'inline-flex items-center justify-center gap-2 rounded-md font-medium transition-all disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2';
+    'ag-inline-flex ag-items-center ag-justify-center ag-gap-2 ag-rounded-md ag-font-medium ag-transition-all disabled:ag-pointer-events-none disabled:ag-opacity-50 focus-visible:ag-outline-none focus-visible:ag-ring-2 focus-visible:ag-ring-offset-2';
 
   const resolvedIconSize = iconSize || iconSizeMap[size] || 'base';
 

@@ -21,19 +21,19 @@ export interface TextProps extends Omit<React.HTMLAttributes<HTMLElement>, 'colo
 }
 
 const VARIANT_COLOR: Record<TextVariant, string> = {
-  title: 'text-neutral-900 dark:text-gray-100',
-  heading: 'text-neutral-900 dark:text-gray-100',
-  large: 'text-neutral-900 dark:text-gray-100',
-  default: 'text-neutral-900 dark:text-gray-100',
-  muted: 'text-gray-500',
+  title: 'ag-text-neutral-900 dark:ag-text-gray-100',
+  heading: 'ag-text-neutral-900 dark:ag-text-gray-100',
+  large: 'ag-text-neutral-900 dark:ag-text-gray-100',
+  default: 'ag-text-neutral-900 dark:ag-text-gray-100',
+  muted: 'ag-text-gray-500',
 };
 
 const VARIANT_TEXT: Record<TextVariant, string> = {
-  title: 'text-xl',
-  heading: 'text-lg',
-  large: 'text-base',
-  default: 'text-base',
-  muted: 'text-sm',
+  title: 'ag-text-xl',
+  heading: 'ag-text-lg',
+  large: 'ag-text-base',
+  default: 'ag-text-base',
+  muted: 'ag-text-sm',
 };
 
 export const Text = React.forwardRef<HTMLElement, TextProps>(function Text(
@@ -59,14 +59,14 @@ export const Text = React.forwardRef<HTMLElement, TextProps>(function Text(
   if (padAs) {
     const s = SIZE_SCALE[padAs] || SIZE_SCALE.base;
     // Explicit variant wins over the control size's text class.
-    styleClasses.push('inline-flex items-center', s.h, s.px, variant === undefined ? s.text : variantText);
+    styleClasses.push('ag-inline-flex ag-items-center', s.h, s.px, variant === undefined ? s.text : variantText);
   } else {
     styleClasses.push(variantText);
   }
 
-  if (bold) styleClasses.push('font-bold');
-  if (italic) styleClasses.push('italic');
-  if (underline) styleClasses.push('underline');
+  if (bold) styleClasses.push('ag-font-bold');
+  if (italic) styleClasses.push('ag-italic');
+  if (underline) styleClasses.push('ag-underline');
   if (className) styleClasses.push(className);
 
   const resolvedColor = color ? airtableColorToHex(color) ?? color : undefined;

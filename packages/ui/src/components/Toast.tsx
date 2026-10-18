@@ -56,18 +56,18 @@ function ToastEntry({toast, onDismiss}: {toast: ToastItem; onDismiss: (id: strin
       // region for the rest is the persistent viewport container below.
       role={toast.type === 'error' ? 'alert' : undefined}
       className={cx(
-        'pointer-events-auto flex items-start gap-2.5 rounded-md border border-neutral-400',
-        'bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-600',
-        'shadow-md px-3.5 py-2.5 min-w-[280px] max-w-[400px]',
-        'transition-all duration-300 ease-out',
-        visible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8',
+        'ag-pointer-events-auto ag-flex ag-items-start ag-gap-2.5 ag-rounded-md ag-border ag-border-neutral-400',
+        'ag-bg-neutral-50 dark:ag-bg-neutral-800 dark:ag-border-neutral-600',
+        'ag-shadow-md ag-px-3.5 ag-py-2.5 ag-min-w-[280px] ag-max-w-[400px]',
+        'ag-transition-all ag-duration-300 ag-ease-out',
+        visible ? 'ag-opacity-100 ag-translate-x-0' : 'ag-opacity-0 ag-translate-x-8',
       )}
     >
-      <span className="flex h-5 shrink-0 items-center">
+      <span className="ag-flex ag-h-5 ag-shrink-0 ag-items-center">
         <Icon icon={ICONS[toast.type]} size="base" />
       </span>
 
-      <Text className="flex-1 min-w-0 break-words">{toast.message}</Text>
+      <Text className="ag-flex-1 ag-min-w-0 ag-break-words">{toast.message}</Text>
 
       <Button
         type="button"
@@ -75,7 +75,7 @@ function ToastEntry({toast, onDismiss}: {toast: ToastItem; onDismiss: (id: strin
         size="icon-xs"
         icon={X}
         aria-label="Dismiss"
-        className="shrink-0"
+        className="ag-shrink-0"
         onClick={handleDismiss}
       />
     </div>
@@ -83,10 +83,10 @@ function ToastEntry({toast, onDismiss}: {toast: ToastItem; onDismiss: (id: strin
 }
 
 const POSITION_CLASSES: Record<ToastPosition, string> = {
-  'top-right': 'top-4 right-4',
-  'top-left': 'top-4 left-4',
-  'bottom-right': 'bottom-4 right-4 flex-col-reverse',
-  'bottom-left': 'bottom-4 left-4 flex-col-reverse',
+  'top-right': 'ag-top-4 ag-right-4',
+  'top-left': 'ag-top-4 ag-left-4',
+  'bottom-right': 'ag-bottom-4 ag-right-4 ag-flex-col-reverse',
+  'bottom-left': 'ag-bottom-4 ag-left-4 ag-flex-col-reverse',
 };
 
 export interface ToastViewportProps {
@@ -110,7 +110,7 @@ export function ToastViewport({toasts, onDismiss, position = 'top-right', contai
       <div
         aria-live="polite"
         aria-label="Notifications"
-        className={cx('fixed z-toast flex flex-col gap-2 pointer-events-none', POSITION_CLASSES[position])}
+        className={cx('ag-fixed ag-z-toast ag-flex ag-flex-col ag-gap-2 ag-pointer-events-none', POSITION_CLASSES[position])}
       >
         {toasts.map(t => (
           <ToastEntry key={t.id} toast={t} onDismiss={onDismiss} />

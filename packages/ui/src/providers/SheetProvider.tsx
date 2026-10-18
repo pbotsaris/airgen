@@ -82,8 +82,8 @@ export function SheetProvider({children, container, className}: SheetProviderPro
   const header = req?.renderHeader ? (
     req.renderHeader(ctx)
   ) : req?.title !== undefined ? (
-    <div className="flex items-end justify-between shrink-0">
-      <Sheet.Title className="text-lg font-semibold text-neutral-500 dark:text-neutral-400">{req.title}</Sheet.Title>
+    <div className="ag-flex ag-items-end ag-justify-between ag-shrink-0">
+      <Sheet.Title className="ag-text-lg ag-font-semibold ag-text-neutral-500 dark:ag-text-neutral-400">{req.title}</Sheet.Title>
       <Sheet.Close asChild>
         <Button size="icon-sm" icon={X} variant="ghost" aria-label="Close" />
       </Sheet.Close>
@@ -99,9 +99,9 @@ export function SheetProvider({children, container, className}: SheetProviderPro
       <Sheet.Root open={open} onOpenChange={v => (v ? undefined : closeSheet())}>
         <Sheet.Portal container={container}>
           <Sheet.Overlay />
-          <Sheet.Content side={side} className={['flex flex-col p-6', className, req?.className].filter(Boolean).join(' ')}>
+          <Sheet.Content side={side} className={['ag-flex ag-flex-col ag-p-6', className, req?.className].filter(Boolean).join(' ')}>
             {header}
-            <div className={header ? 'mt-4 flex flex-col flex-1 min-h-0' : 'flex flex-col flex-1 min-h-0'}>{renderContent()}</div>
+            <div className={header ? 'ag-mt-4 ag-flex ag-flex-col ag-flex-1 ag-min-h-0' : 'ag-flex ag-flex-col ag-flex-1 ag-min-h-0'}>{renderContent()}</div>
           </Sheet.Content>
         </Sheet.Portal>
       </Sheet.Root>

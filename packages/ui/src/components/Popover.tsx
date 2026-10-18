@@ -249,11 +249,11 @@ export function PopoverContent({id, className = '', style, onEscapeKeyDown, onIn
       data-state={ctx.open ? 'open' : 'closed'}
       ref={contentRefCallback}
       className={cx(
-        'z-popover rounded-md border border-neutral-200 bg-white p-4 text-neutral-900 shadow-md outline-none',
-        'dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100',
-        'data-[state=open]:animate-in data-[state=closed]:animate-out',
-        'data-[state=open]:fade-in data-[state=closed]:fade-out',
-        'data-[state=open]:zoom-in data-[state=closed]:zoom-out',
+        'ag-z-popover ag-rounded-md ag-border ag-border-neutral-200 ag-bg-white ag-p-4 ag-text-neutral-900 ag-shadow-md ag-outline-none',
+        'dark:ag-border-neutral-600 dark:ag-bg-neutral-800 dark:ag-text-neutral-100',
+        'data-[state=open]:ag-animate-in data-[state=closed]:ag-animate-out',
+        'data-[state=open]:ag-fade-in data-[state=closed]:ag-fade-out',
+        'data-[state=open]:ag-zoom-in data-[state=closed]:ag-zoom-out',
         className,
       )}
       style={{

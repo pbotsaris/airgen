@@ -129,7 +129,7 @@ export function TooltipTrigger({children, asChild = false}: TooltipTriggerProps)
       onPointerLeave={closeNow}
       onFocus={scheduleOpen}
       onBlur={closeNow}
-      className="inline-flex"
+      className="ag-inline-flex"
     >
       {children}
     </span>
@@ -174,8 +174,8 @@ export function TooltipContent({children, side = 'top', align = 'center', sideOf
         id={contentId}
         role="tooltip"
         className={cx(
-          'fixed z-tooltip rounded-md border border-neutral-200 bg-white px-2 py-1 text-sm text-neutral-900 shadow-md',
-          'dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100',
+          'ag-fixed ag-z-tooltip ag-rounded-md ag-border ag-border-neutral-200 ag-bg-white ag-px-2 ag-py-1 ag-text-sm ag-text-neutral-900 ag-shadow-md',
+          'dark:ag-border-neutral-600 dark:ag-bg-neutral-800 dark:ag-text-neutral-100',
           className,
         )}
         style={{

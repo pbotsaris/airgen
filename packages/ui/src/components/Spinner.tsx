@@ -17,7 +17,7 @@ export interface SpinnerProps {
 export function Spinner({size = 'base', className, 'aria-label': ariaLabel = 'Loading'}: SpinnerProps) {
   const pixelSize = typeof size === 'number' ? size : ICON_SIZES[size];
 
-  return <Loader size={pixelSize} role="status" aria-label={ariaLabel} className={cx('animate-spin', className)} />;
+  return <Loader size={pixelSize} role="status" aria-label={ariaLabel} className={cx('ag-animate-spin', className)} />;
 }
 
 export interface LoadingOverlayProps {
@@ -57,13 +57,13 @@ export function LoadingOverlay({pending, size = 'lg', label, delay = 120, classN
       aria-busy="true"
       aria-live="polite"
       className={cx(
-        'absolute inset-0 z-10 flex items-center justify-center gap-2 cursor-wait',
-        'bg-white/60 dark:bg-neutral-900/60',
-        'animate-in fade-in-0 duration-200',
+        'ag-absolute ag-inset-0 ag-z-10 ag-flex ag-items-center ag-justify-center ag-gap-2 ag-cursor-wait',
+        'ag-bg-white/60 dark:ag-bg-neutral-900/60',
+        'ag-animate-in ag-fade-in-0 ag-duration-200',
         className,
       )}
     >
-      <Spinner size={size} className="text-neutral-500 dark:text-neutral-400" />
+      <Spinner size={size} className="ag-text-neutral-500 dark:ag-text-neutral-400" />
       {label && <Text variant="muted">{label}</Text>}
     </div>
   );

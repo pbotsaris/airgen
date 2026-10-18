@@ -37,9 +37,9 @@ export function PillOption({opt, size = 'base', className, bg, useLightText, sho
   // If not showing pill, render "plain"
   if (!show) {
     return (
-      <span className={cx('inline-flex items-center min-w-0', s.gap, className)}>
-        {pic ? <img src={pic} alt="" className={cx(s.avatar, 'rounded-full ring-1 ring-black/10')} /> : null}
-        <span className="truncate">{label}</span>
+      <span className={cx('ag-inline-flex ag-items-center ag-min-w-0', s.gap, className)}>
+        {pic ? <img src={pic} alt="" className={cx(s.avatar, 'ag-rounded-full ag-ring-1 ag-ring-black/10')} /> : null}
+        <span className="ag-truncate">{label}</span>
       </span>
     );
   }
@@ -47,21 +47,21 @@ export function PillOption({opt, size = 'base', className, bg, useLightText, sho
   return (
     <span
       className={cx(
-        'inline-flex items-center rounded-full',
+        'ag-inline-flex ag-items-center ag-rounded-full',
         s.gap,
         s.pad,
         s.text,
-        'leading-none',
-        'ring-1 ring-black/10',
-        'min-w-0 max-w-full', // allows inner truncate to work
+        'ag-leading-none',
+        'ag-ring-1 ag-ring-black/10',
+        'ag-min-w-0 ag-max-w-full', // allows inner truncate to work
         className,
       )}
       style={{background: derivedBg, color: fg}}
       title={typeof label === 'string' ? label : undefined}
     >
-      {pic ? <img src={pic} alt="" className={cx(s.avatar, 'rounded-full ring-1 ring-black/10')} /> : null}
+      {pic ? <img src={pic} alt="" className={cx(s.avatar, 'ag-rounded-full ag-ring-1 ag-ring-black/10')} /> : null}
 
-      <span className="truncate">{label}</span>
+      <span className="ag-truncate">{label}</span>
     </span>
   );
 }

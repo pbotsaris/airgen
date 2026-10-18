@@ -176,9 +176,9 @@ describe('Sheet', () => {
     );
     await user.click(screen.getByRole('button', {name: 'Open sheet'}));
     const sheet = screen.getByTestId('sheet');
-    expect(sheet.className).toContain('left-0');
-    expect(sheet.className).toContain('slide-in-from-left');
-    expect(sheet.className).toContain('bg-white');
+    expect(sheet.className).toContain('ag-left-0');
+    expect(sheet.className).toContain('ag-slide-in-from-left');
+    expect(sheet.className).toContain('ag-bg-white');
     expect(sheet.className).not.toContain('bg-background');
   });
 });

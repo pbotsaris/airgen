@@ -104,6 +104,13 @@ inference can only discover field keys populated in the current records. Pass
 package's own tokens; your project needs no Tailwind config (and if it has
 one, it never scans this package).
 
+Every utility in that stylesheet is prefixed `ag-` (`ag-text-neutral-900`,
+`dark:ag-text-gray-100`), so your own Tailwind can use the same palette
+without overriding the components: an unprefixed `text-neutral-900` from your
+build never matches their elements. The classes you pass (`className`,
+`optionClassName`, `rowClassName`, …) are yours and stay unprefixed; only
+`pillSizeClasses()` hands back the package's own (prefixed) classes.
+
 Until the package is published, install it from a tarball:
 
 ```sh

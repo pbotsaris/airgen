@@ -18,24 +18,24 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(function Tab
   return (
     <div
       className={cx(
-        'w-full overflow-x-auto rounded-md border border-neutral-200 dark:border-neutral-700',
+        'ag-w-full ag-overflow-x-auto ag-rounded-md ag-border ag-border-neutral-200 dark:ag-border-neutral-700',
         containerClassName,
       )}
     >
-      <table ref={ref} className={cx('w-full caption-bottom border-collapse text-base', className)} {...props} />
+      <table ref={ref} className={cx('ag-w-full ag-caption-bottom ag-border-collapse ag-text-base', className)} {...props} />
     </div>
   );
 });
 
 export const TableHeader = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
   function TableHeader({className, ...props}, ref) {
-    return <thead ref={ref} className={cx('bg-neutral-50 dark:bg-neutral-800/60', className)} {...props} />;
+    return <thead ref={ref} className={cx('ag-bg-neutral-50 dark:ag-bg-neutral-800/60', className)} {...props} />;
   },
 );
 
 export const TableBody = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
   function TableBody({className, ...props}, ref) {
-    return <tbody ref={ref} className={cx('[&_tr:last-child]:border-0', className)} {...props} />;
+    return <tbody ref={ref} className={cx('[&_tr:last-child]:ag-border-0', className)} {...props} />;
   },
 );
 
@@ -45,7 +45,7 @@ export const TableFooter = React.forwardRef<HTMLTableSectionElement, React.HTMLA
       <tfoot
         ref={ref}
         className={cx(
-          'border-t border-neutral-200 bg-neutral-50 font-medium dark:border-neutral-700 dark:bg-neutral-800/60',
+          'ag-border-t ag-border-neutral-200 ag-bg-neutral-50 ag-font-medium dark:ag-border-neutral-700 dark:ag-bg-neutral-800/60',
           className,
         )}
         {...props}
@@ -60,7 +60,7 @@ export const TableRow = React.forwardRef<HTMLTableRowElement, React.HTMLAttribut
       <tr
         ref={ref}
         className={cx(
-          'border-b border-neutral-200 transition-colors hover:bg-neutral-50 dark:border-neutral-700 dark:hover:bg-neutral-800/50',
+          'ag-border-b ag-border-neutral-200 ag-transition-colors hover:ag-bg-neutral-50 dark:ag-border-neutral-700 dark:hover:ag-bg-neutral-800/50',
           className,
         )}
         {...props}
@@ -74,7 +74,7 @@ export const TableHead = React.forwardRef<HTMLTableCellElement, React.ThHTMLAttr
     return (
       <th
         ref={ref}
-        className={cx('h-9 px-3 text-left align-middle font-medium text-neutral-500 dark:text-neutral-400', className)}
+        className={cx('ag-h-9 ag-px-3 ag-text-left ag-align-middle ag-font-medium ag-text-neutral-500 dark:ag-text-neutral-400', className)}
         {...props}
       />
     );
@@ -86,7 +86,7 @@ export const TableCell = React.forwardRef<HTMLTableCellElement, React.TdHTMLAttr
     return (
       <td
         ref={ref}
-        className={cx('px-3 py-2 align-middle text-neutral-900 dark:text-neutral-100', className)}
+        className={cx('ag-px-3 ag-py-2 ag-align-middle ag-text-neutral-900 dark:ag-text-neutral-100', className)}
         {...props}
       />
     );
@@ -96,7 +96,7 @@ export const TableCell = React.forwardRef<HTMLTableCellElement, React.TdHTMLAttr
 export const TableCaption = React.forwardRef<HTMLTableCaptionElement, React.HTMLAttributes<HTMLTableCaptionElement>>(
   function TableCaption({className, ...props}, ref) {
     return (
-      <caption ref={ref} className={cx('mt-3 text-sm text-neutral-500 dark:text-neutral-400', className)} {...props} />
+      <caption ref={ref} className={cx('ag-mt-3 ag-text-sm ag-text-neutral-500 dark:ag-text-neutral-400', className)} {...props} />
     );
   },
 );
@@ -188,7 +188,7 @@ export function RecordTable<TRecord extends {id: string; fields: object}>({
         {caption != null && <TableCaption>{caption}</TableCaption>}
         {columns.length > 0 && (
           <TableHeader>
-            <TableRow className="hover:bg-transparent dark:hover:bg-transparent">
+            <TableRow className="hover:ag-bg-transparent dark:hover:ag-bg-transparent">
               {columns.map(column => (
                 <TableHead
                   key={column.id}
@@ -204,17 +204,17 @@ export function RecordTable<TRecord extends {id: string; fields: object}>({
         )}
         <TableBody>
           {loading ? (
-            <TableRow className="hover:bg-transparent dark:hover:bg-transparent">
-              <TableCell colSpan={Math.max(columns.length, 1)} className="h-20 text-center">
-                <span className="inline-flex items-center gap-2 text-neutral-500 dark:text-neutral-400">
+            <TableRow className="hover:ag-bg-transparent dark:hover:ag-bg-transparent">
+              <TableCell colSpan={Math.max(columns.length, 1)} className="ag-h-20 ag-text-center">
+                <span className="ag-inline-flex ag-items-center ag-gap-2 ag-text-neutral-500 dark:ag-text-neutral-400">
                   <Spinner aria-label={loadingLabel} />
                   <span>{loadingLabel}</span>
                 </span>
               </TableCell>
             </TableRow>
           ) : records.length === 0 ? (
-            <TableRow className="hover:bg-transparent dark:hover:bg-transparent">
-              <TableCell colSpan={Math.max(columns.length, 1)} className="h-20 text-center">
+            <TableRow className="hover:ag-bg-transparent dark:hover:ag-bg-transparent">
+              <TableCell colSpan={Math.max(columns.length, 1)} className="ag-h-20 ag-text-center">
                 <Text as="span" variant="muted">
                   {emptyMessage}
                 </Text>
@@ -266,7 +266,7 @@ export function RecordCellValue({value, empty = '—', className}: RecordCellVal
     if (value.length === 0) return <RecordCellValue value={null} empty={empty} className={className} />;
 
     return (
-      <span className={cx('flex flex-wrap items-center gap-1.5', className)}>
+      <span className={cx('ag-flex ag-flex-wrap ag-items-center ag-gap-1.5', className)}>
         {value.map((item, index) => (
           <RecordCellValue key={cellValueKey(item, index)} value={unwrapLookup(item)} empty={empty} />
         ))}
@@ -309,8 +309,8 @@ export function RecordCellValue({value, empty = '—', className}: RecordCellVal
 }
 
 function alignmentClass(align: RecordTableColumn<{id: string; fields: object}>['align']): string | undefined {
-  if (align === 'center') return 'text-center';
-  if (align === 'right') return 'text-right';
+  if (align === 'center') return 'ag-text-center';
+  if (align === 'right') return 'ag-text-right';
   return undefined;
 }
 

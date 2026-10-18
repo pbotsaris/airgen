@@ -164,11 +164,11 @@ function DialogOverlay({className, ...props}: React.HTMLAttributes<HTMLDivElemen
   const ctx = useDialogCtx('Dialog.Overlay');
 
   const base =
-    'fixed inset-0 z-overlay bg-black/50 ' +
-    'data-[state=open]:animate-in data-[state=open]:fade-in-0 ' +
-    'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 ' +
-    'duration-200 ' +
-    'data-[state=closed]:opacity-0'; // Keep overlay invisible when closed
+    'ag-fixed ag-inset-0 ag-z-overlay ag-bg-black/50 ' +
+    'data-[state=open]:ag-animate-in data-[state=open]:ag-fade-in-0 ' +
+    'data-[state=closed]:ag-animate-out data-[state=closed]:ag-fade-out-0 ' +
+    'ag-duration-200 ' +
+    'data-[state=closed]:ag-opacity-0'; // Keep overlay invisible when closed
 
   return (
     <div
@@ -251,10 +251,10 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(funct
   }, [ctx, closeOnEscape, shouldTrapFocus, restoreFocus, lockScroll, initialFocusRef]);
 
   const base =
-    'fixed z-overlay outline-none ' +
-    'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 ' +
-    'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 ' +
-    'duration-200';
+    'ag-fixed ag-z-overlay ag-outline-none ' +
+    'data-[state=open]:ag-animate-in data-[state=open]:ag-fade-in-0 data-[state=open]:ag-zoom-in-95 ' +
+    'data-[state=closed]:ag-animate-out data-[state=closed]:ag-fade-out-0 data-[state=closed]:ag-zoom-out-95 ' +
+    'ag-duration-200';
 
   return (
     <div
@@ -388,29 +388,29 @@ const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(functio
 ) {
   const sideClasses: Record<SheetSide, string> = {
     right:
-      'inset-y-0 right-0 h-full w-80 md:w-96 border-l ' +
-      'data-[state=open]:slide-in-from-right data-[state=closed]:slide-out-to-right ' +
-      'data-[state=closed]:translate-x-full',
+      'ag-inset-y-0 ag-right-0 ag-h-full ag-w-80 md:ag-w-96 ag-border-l ' +
+      'data-[state=open]:ag-slide-in-from-right data-[state=closed]:ag-slide-out-to-right ' +
+      'data-[state=closed]:ag-translate-x-full',
     left:
-      'inset-y-0 left-0 h-full w-80 md:w-96 border-r ' +
-      'data-[state=open]:slide-in-from-left data-[state=closed]:slide-out-to-left ' +
-      'data-[state=closed]:-translate-x-full',
+      'ag-inset-y-0 ag-left-0 ag-h-full ag-w-80 md:ag-w-96 ag-border-r ' +
+      'data-[state=open]:ag-slide-in-from-left data-[state=closed]:ag-slide-out-to-left ' +
+      'data-[state=closed]:-ag-translate-x-full',
     top:
-      'inset-x-0 top-0 w-full h-1/3 md:h-1/2 border-t-0 border-b ' +
-      'data-[state=open]:slide-in-from-top data-[state=closed]:slide-out-to-top ' +
-      'data-[state=closed]:-translate-y-full',
+      'ag-inset-x-0 ag-top-0 ag-w-full ag-h-1/3 md:ag-h-1/2 ag-border-t-0 ag-border-b ' +
+      'data-[state=open]:ag-slide-in-from-top data-[state=closed]:ag-slide-out-to-top ' +
+      'data-[state=closed]:-ag-translate-y-full',
     bottom:
-      'inset-x-0 bottom-0 w-full h-1/3 md:h-1/2 border-t ' +
-      'data-[state=open]:slide-in-from-bottom data-[state=closed]:slide-out-to-bottom ' +
-      'data-[state=closed]:translate-y-full',
+      'ag-inset-x-0 ag-bottom-0 ag-w-full ag-h-1/3 md:ag-h-1/2 ag-border-t ' +
+      'data-[state=open]:ag-slide-in-from-bottom data-[state=closed]:ag-slide-out-to-bottom ' +
+      'data-[state=closed]:ag-translate-y-full',
   };
 
   const base =
     // bg must be a real color: the package's Tailwind theme has no
     // `bg-background`-style CSS-variable token.
-    'bg-white dark:bg-neutral-800 border-neutral-200 dark:border-neutral-600 shadow-lg ' +
-    'data-[state=open]:animate-in data-[state=closed]:animate-out duration-200 ' +
-    'data-[state=closed]:opacity-0'; // Keep it invisible when closed
+    'ag-bg-white dark:ag-bg-neutral-800 ag-border-neutral-200 dark:ag-border-neutral-600 ag-shadow-lg ' +
+    'data-[state=open]:ag-animate-in data-[state=closed]:ag-animate-out ag-duration-200 ' +
+    'data-[state=closed]:ag-opacity-0'; // Keep it invisible when closed
 
   return <DialogContent {...props} ref={ref} className={cx(base, sideClasses[side], className)} restoreFocus={restoreFocus} />;
 });

@@ -9,7 +9,7 @@ export interface LabelProps {
 
 export function Label({htmlFor, children, className}: LabelProps) {
   return (
-    <label htmlFor={htmlFor} className={['block ml-1 cursor-pointer', className].filter(Boolean).join(' ')}>
+    <label htmlFor={htmlFor} className={['ag-block ag-ml-1 ag-cursor-pointer', className].filter(Boolean).join(' ')}>
       <Text as="span" variant="muted" bold>
         {children}
       </Text>

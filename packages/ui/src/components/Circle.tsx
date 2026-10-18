@@ -11,5 +11,5 @@ export function Circle({color}: CircleProps) {
 
   const resolved = airtableColorToHex(color) ?? color;
 
-  return <span className="h-2 w-2 flex-none rounded-full ring-1 ring-black/10" style={{background: resolved}} />;
+  return <span className="ag-h-2 ag-w-2 ag-flex-none ag-rounded-full ag-ring-1 ag-ring-black/10" style={{background: resolved}} />;
 }

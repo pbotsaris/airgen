@@ -15,10 +15,10 @@ export function Divide({direction = 'horizontal', className, ...rest}: DividePro
       role="separator"
       aria-orientation={isVertical ? 'vertical' : 'horizontal'}
       className={cx(
-        'flex-none',
+        'ag-flex-none',
         isVertical
-          ? 'w-0 self-stretch border-l border-neutral-200'
-          : 'h-0 w-full border-t border-neutral-200',
+          ? 'ag-w-0 ag-self-stretch ag-border-l ag-border-neutral-200'
+          : 'ag-h-0 ag-w-full ag-border-t ag-border-neutral-200',
         className,
       )}
       {...rest}

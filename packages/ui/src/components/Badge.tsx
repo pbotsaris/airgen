@@ -24,11 +24,11 @@ export function Badge({opts, variant = 'sm'}: BadgeProps) {
   const bg = color ?? '#eeeeee';
   const textColor = opts.color && shouldUseLightText(opts.color) ? '#ffffff' : 'rgba(0,0,0,0.72)';
 
-  const textSize = variant === 'sm' ? 'text-sm' : 'text-base';
+  const textSize = variant === 'sm' ? 'ag-text-sm' : 'ag-text-base';
 
   return (
     <div
-      className={'inline-block px-2 py-0.5 rounded-full font-medium ' + textSize}
+      className={'ag-inline-block ag-px-2 ag-py-0.5 ag-rounded-full ag-font-medium ' + textSize}
       style={{backgroundColor: bg, color: textColor}}
     >
       {opts.name}

@@ -14,11 +14,11 @@ const caretSizeMap: Record<string, 'sm' | 'md' | 'lg'> = {
 
 /** Maps button sizes to label text classes (one visual step up from the caret) */
 const labelSizeMap: Record<string, string> = {
-  'icon-xs': 'text-xs',
-  'icon-sm': 'text-sm',
-  icon: 'text-base',
-  'icon-lg': 'text-base',
-  'icon-xl': 'text-lg',
+  'icon-xs': 'ag-text-xs',
+  'icon-sm': 'ag-text-sm',
+  icon: 'ag-text-base',
+  'icon-lg': 'ag-text-base',
+  'icon-xl': 'ag-text-lg',
 };
 
 export interface CaretButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -50,16 +50,16 @@ export const CaretButton = React.forwardRef<HTMLButtonElement, CaretButtonProps>
       size={size}
       aria-expanded={open}
       className={cx(
-        'flex-none text-neutral-500',
-        'dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700',
-        label != null && label !== '' && 'w-auto gap-[4px] pl-1.5 pr-2',
+        'ag-flex-none ag-text-neutral-500',
+        'dark:ag-border-neutral-600 dark:ag-bg-neutral-800 dark:ag-text-neutral-400 dark:hover:ag-bg-neutral-700',
+        label != null && label !== '' && 'ag-w-auto ag-gap-[4px] ag-pl-1.5 ag-pr-2',
         className,
       )}
       {...props}
     >
       <Caret size={caretSizeMap[size] || 'sm'} weight={2} direction={open ? 'down' : direction} />
       {label != null && label !== '' && (
-        <span className={cx('whitespace-nowrap font-medium', labelSizeMap[size] || 'text-sm')}>{label}</span>
+        <span className={cx('ag-whitespace-nowrap ag-font-medium', labelSizeMap[size] || 'ag-text-sm')}>{label}</span>
       )}
     </Button>
   );

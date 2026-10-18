@@ -11,6 +11,9 @@
  */
 module.exports = {
   content: ["./src/**/*.{ts,tsx}"],
+  // Every utility is ag- prefixed so a consumer's own Tailwind can never emit
+  // the same selector (and win on load order).
+  prefix: "ag-",
   darkMode: "media",
   corePlugins: {
     // Never restyle the host extension or Airtable SDK UI.

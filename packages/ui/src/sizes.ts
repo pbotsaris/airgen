@@ -11,11 +11,11 @@ export type IconSize = 'xs' | 'sm' | 'base' | 'md' | 'lg' | 'xl';
  * 2px border === h.
  */
 export const SIZE_SCALE: Record<ComponentSize, {h: string; px: string; py: string; text: string}> = {
-  xs: {h: 'h-5', px: 'px-control-x-xs', py: 'py-control-y-xs', text: 'text-xs'},
-  sm: {h: 'h-6', px: 'px-control-x-sm', py: 'py-control-y-sm', text: 'text-sm'},
-  base: {h: 'h-8', px: 'px-control-x-base', py: 'py-control-y-base', text: 'text-base'},
-  lg: {h: 'h-9', px: 'px-control-x-lg', py: 'py-control-y-lg', text: 'text-lg'},
-  xl: {h: 'h-10', px: 'px-control-x-xl', py: 'py-control-y-xl', text: 'text-xl'},
+  xs: {h: 'ag-h-5', px: 'ag-px-control-x-xs', py: 'ag-py-control-y-xs', text: 'ag-text-xs'},
+  sm: {h: 'ag-h-6', px: 'ag-px-control-x-sm', py: 'ag-py-control-y-sm', text: 'ag-text-sm'},
+  base: {h: 'ag-h-8', px: 'ag-px-control-x-base', py: 'ag-py-control-y-base', text: 'ag-text-base'},
+  lg: {h: 'ag-h-9', px: 'ag-px-control-x-lg', py: 'ag-py-control-y-lg', text: 'ag-text-lg'},
+  xl: {h: 'ag-h-10', px: 'ag-px-control-x-xl', py: 'ag-py-control-y-xl', text: 'ag-text-xl'},
 };
 
 export const ICON_SIZES: Record<IconSize, number> = {xs: 10, sm: 12, base: 14, md: 16, lg: 16, xl: 18};
@@ -47,11 +47,11 @@ export function multilineSizeClasses(size: ComponentSize = 'base'): string {
  * the control height.
  */
 export const PILL_SIZE: Record<ComponentSize, {pad: string; text: string; avatar: string; gap: string}> = {
-  xs: {pad: 'px-1.5 py-px', text: 'text-[10px]', avatar: 'h-3 w-3', gap: 'gap-1'},
-  sm: {pad: 'px-2 py-0.5', text: 'text-xs', avatar: 'h-4 w-4', gap: 'gap-1.5'},
-  base: {pad: 'px-2.5 py-0.5', text: 'text-sm', avatar: 'h-5 w-5', gap: 'gap-2'},
-  lg: {pad: 'px-3 py-1', text: 'text-base', avatar: 'h-6 w-6', gap: 'gap-2'},
-  xl: {pad: 'px-3.5 py-1', text: 'text-lg', avatar: 'h-7 w-7', gap: 'gap-2'},
+  xs: {pad: 'ag-px-1.5 ag-py-px', text: 'ag-text-[10px]', avatar: 'ag-h-3 ag-w-3', gap: 'ag-gap-1'},
+  sm: {pad: 'ag-px-2 ag-py-0.5', text: 'ag-text-xs', avatar: 'ag-h-4 ag-w-4', gap: 'ag-gap-1.5'},
+  base: {pad: 'ag-px-2.5 ag-py-0.5', text: 'ag-text-sm', avatar: 'ag-h-5 ag-w-5', gap: 'ag-gap-2'},
+  lg: {pad: 'ag-px-3 ag-py-1', text: 'ag-text-base', avatar: 'ag-h-6 ag-w-6', gap: 'ag-gap-2'},
+  xl: {pad: 'ag-px-3.5 ag-py-1', text: 'ag-text-lg', avatar: 'ag-h-7 ag-w-7', gap: 'ag-gap-2'},
 };
 
 /** Classes for a pill nested inside a control of the given size. */

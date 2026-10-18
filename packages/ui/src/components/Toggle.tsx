@@ -16,18 +16,18 @@ export interface ToggleProps {
 }
 
 const trackSizes: Record<ToggleSize, string> = {
-  sm: 'w-7 h-4',
-  base: 'w-9 h-5',
+  sm: 'ag-w-7 ag-h-4',
+  base: 'ag-w-9 ag-h-5',
 };
 
 const thumbSizes: Record<ToggleSize, string> = {
-  sm: 'h-3 w-3',
-  base: 'h-4 w-4',
+  sm: 'ag-h-3 ag-w-3',
+  base: 'ag-h-4 ag-w-4',
 };
 
 const thumbTranslate: Record<ToggleSize, string> = {
-  sm: 'translate-x-3',
-  base: 'translate-x-4',
+  sm: 'ag-translate-x-3',
+  base: 'ag-translate-x-4',
 };
 
 /** Classic sliding toggle switch with a rounded thumb. */
@@ -44,18 +44,18 @@ export function Toggle({checked, onChange, disabled = false, size = 'base', clas
       disabled={disabled}
       onClick={handleClick}
       className={cx(
-        'relative inline-flex shrink-0 cursor-pointer items-center rounded-full transition-colors duration-150',
+        'ag-relative ag-inline-flex ag-shrink-0 ag-cursor-pointer ag-items-center ag-rounded-full ag-transition-colors ag-duration-150',
         trackSizes[size],
-        checked ? 'bg-blue-600' : 'bg-neutral-300 dark:bg-neutral-600',
-        disabled && 'opacity-50 cursor-not-allowed',
+        checked ? 'ag-bg-blue-600' : 'ag-bg-neutral-300 dark:ag-bg-neutral-600',
+        disabled && 'ag-opacity-50 ag-cursor-not-allowed',
         !label && className,
       )}
     >
       <span
         className={cx(
-          'inline-block rounded-full bg-white shadow transform transition-transform duration-150',
+          'ag-inline-block ag-rounded-full ag-bg-white ag-shadow ag-transform ag-transition-transform ag-duration-150',
           thumbSizes[size],
-          checked ? thumbTranslate[size] : 'translate-x-0.5',
+          checked ? thumbTranslate[size] : 'ag-translate-x-0.5',
         )}
       />
     </button>
@@ -63,9 +63,9 @@ export function Toggle({checked, onChange, disabled = false, size = 'base', clas
 
   if (label) {
     return (
-      <label className={cx('inline-flex items-center gap-2', className)}>
+      <label className={cx('ag-inline-flex ag-items-center ag-gap-2', className)}>
         {track}
-        <span className="text-sm text-neutral-700 dark:text-neutral-300">{label}</span>
+        <span className="ag-text-sm ag-text-neutral-700 dark:ag-text-neutral-300">{label}</span>
       </label>
     );
   }
