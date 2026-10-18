@@ -3,6 +3,7 @@ dist/
 node_modules/
 # Workspaces run their own toolchain
 packages/
+sandbox/
 plan/
 # Tooling state and generated files
 .claude/

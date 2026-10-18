@@ -8,11 +8,13 @@ import globals from 'globals';
 
 export default tseslint.config(
   {
-    // packages/ui has its own toolchain (vitest + its tsconfigs) and is not linted from the root.
+    // packages/ui (vitest + its tsconfigs) and the sandbox extension run their
+    // own toolchains and are not linted from the root.
     ignores: [
       'dist/',
       'node_modules/',
       'packages/',
+      'sandbox/',
       'plan/',
       'coverage/',
       'test/fixtures/snapshots/',
