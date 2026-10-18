@@ -8,6 +8,8 @@ Pre-1.0, minor versions may contain breaking changes.
 
 ## [Unreleased]
 
+## [0.2.0] — 2026-10-18
+
 ### Added
 
 - **`NestedRecordTable`** — renders rows hydrated with `useRecords(key,
@@ -18,17 +20,32 @@ Pre-1.0, minor versions may contain breaking changes.
   group row per value and nested levels for multi-field grouping. A `summary`
   callback supplies per-column aggregations, placed in the group row or in a
   totals row via `summaryPlacement`.
-- Expandable rows on `RecordTable`: `renderExpanded`, `canExpand`,
-  `defaultExpanded`, and controlled `expanded`/`onExpandedChange`.
-- `TableHead` with `scope="rowgroup"` no longer shows a resize handle.
-- `InlineEdit` with a stable text/number input, currency display/parsing hooks,
-  custom editor composition, keyboard save/cancel, and async commit/error handling.
-- Optional `columnLines` on `Table` and `RecordTable` for vertical dividers
-  between columns, with light and dark theme colors.
-- Opt-in column resizing on `Table` and `RecordTable` with `resizable`.
+- **`InlineEdit`** — click-to-edit value that commits on Enter or blur and
+  cancels on Escape. `format`/`toInputValue`/`parse` separate display from
+  editing (e.g. currency shown with `Intl.NumberFormat`, edited as a bare
+  number); a `parse` that throws or an `onCommit` that rejects keeps the draft
+  open and shows the error. `renderEditor` swaps in any control (a `Select`,
+  say) through `InlineEditEditorContext`.
+- **Expandable rows on `RecordTable`** — `renderExpanded` adds a leading
+  toggle column and a full-width row under each expanded record; `canExpand`,
+  `defaultExpanded`, and controlled `expanded`/`onExpandedChange`
+  (`RecordTableExpandedMap`, keyed by row key) control which rows open.
+- **Column resizing** — opt-in on `Table` and `RecordTable` with `resizable`.
   Drag header handles or use arrow keys (Shift for larger steps), Home, and
   End. Columns support `minWidth`, `maxWidth`, `resizeLabel`, and individual
-  `resizable={false}` opt-outs.
+  `resizable={false}` opt-outs; a `TableHead` with `scope="rowgroup"` never
+  gets a handle. `TableHeadProps` is now exported.
+- Optional `columnLines` on `Table` and `RecordTable` for vertical dividers
+  between columns, with light and dark theme colors.
+- **Examples ship with the package** — `examples/` holds one small,
+  typechecked usage file per component (`npm run check:examples`), and every
+  public component, prop, and default now carries JSDoc with an `@example`,
+  so editors show usage on hover.
+
+### Changed
+
+- The README is rewritten around the examples: a shorter quick start plus a
+  component index pointing at each example file.
 
 ## [0.1.0] — 2026-10-18
 
