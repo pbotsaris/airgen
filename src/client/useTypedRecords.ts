@@ -81,7 +81,9 @@ export interface Record<M, K extends keyof M> {
 }
 
 /** One inspector per field key of a table, hidden and deleted fields included (they report it). */
-export type FieldInspectors<M, K extends keyof M> = {readonly [F in keyof M[K] & string]: FieldInspector};
+export type FieldInspectors<M, K extends keyof M> = {
+  readonly [F in keyof M[K] & string]: FieldInspector<NonNullable<M[K][F]>>;
+};
 
 /** Remaining depth after following one link. */
 type Prev = [never, 0, 1, 2];

@@ -30,6 +30,19 @@ export function hooks(row: TypedRecord<TableRecordMap, 'Projects'>): Array<Promi
   // @ts-expect-error not a field of Projects
   void fields.nope;
 
+  // Formatting takes the field's read type (plus numbers and Dates); parse yields it back.
+  const amount: string = fields.budget.format(1234.5, {locale: 'pt-BR'});
+  const day: string = fields.startDate.format(new Date()) + fields.kickoff.formatCell(row);
+  const parsedBudget = fields.budget.parse(amount);
+  const budgetValue: number | null = parsedBudget.ok ? parsedBudget.value : null;
+  const parsedDay = fields.startDate.parse(day);
+  const dayValue: string | null = parsedDay.ok ? parsedDay.value : null;
+  // @ts-expect-error a currency field formats numbers, not text
+  fields.budget.format('1234');
+  // @ts-expect-error parse yields a number for a numeric field
+  const wrongValue: string | null = parsedBudget.ok ? parsedBudget.value : null;
+  void [budgetValue, dayValue, wrongValue];
+
   return [
     projects.update(row, 'budget', 12),
     projects.update(done[0], 'status', {name: 'Done'}),

@@ -118,6 +118,7 @@ Cycles, non-link keys, and a third level are compile errors. Details in [docs/re
 - Live choices and colors
 - Write permissions (`isWritable`)
 - Validation rules (`validation`)
+- Formatting by the field's own settings: `format`, `formatCell`, and a strict `parse`, so `fields.budget.format(total)` renders like the column (details in [docs/formatting.md](docs/formatting.md))
 
 ##### [Writes](examples/03-writes.tsx)
 

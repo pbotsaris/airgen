@@ -7,6 +7,22 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.4.2]
+
+### Added
+
+- **Field-aware formatting.** Every `FieldInspector` gains `format(value)`,
+  `formatCell(row)` and `parse(text)`, built on `Intl` and the live field's
+  options: currency symbol and precision, percent, duration formats, date
+  formats, and dateTime time zones; formulas, rollups and lookups by their
+  result. `format` takes any value, so a total renders like its column, and
+  `{locale}` picks the separators. Date-only cells show the same day in
+  every time zone. `parse` is strict: `{ok: false, error}` with an example
+  in the field's format, never a guessed `0`. Typed per field through
+  `useFields` (`fields.budget.format('x')` is a type error, and
+  `parse` yields `number | null`). `formatValue` and `parseValue` are the
+  same functions outside React. See `docs/formatting.md`.
+
 ## [0.4.1]
 
 ### Added

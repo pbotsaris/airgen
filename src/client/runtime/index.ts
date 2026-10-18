@@ -14,7 +14,9 @@ export type {
   RecordRef,
 } from './mutations.js';
 export {FieldInspector, inspectField} from './fields.js';
-export type {Choice} from './fields.js';
+export type {Choice, ParsedValue} from './fields.js';
+export {formatValue, parseValue} from './format.js';
+export type {FormatOptions, FormatSource, ParseResult} from './format.js';
 export {cloneValues} from './clone.js';
 export type {CloneOptions, RecordSource} from './clone.js';
 export {aggregate, cellText, containsMatcher, groupRecords, query} from './queries.js';

@@ -12,6 +12,9 @@ import {writeKind} from '../field-types.js';
 import type {WriteKind} from '../field-types.js';
 import type {SdkField} from '../sdk.js';
 import type {AirgenFieldMeta} from '../useTypedRecords.js';
+import type {RecordSource} from './clone.js';
+import {RESULT_TYPES, formatValue, parseValue} from './format.js';
+import type {FormatOptions, FormatSource, ParseResult} from './format.js';
 import {ValidationResult} from './validation.js';
 import type {ValidationIssue} from './validation.js';
 
@@ -20,9 +23,6 @@ export interface Choice {
   readonly name: string;
   readonly color?: string;
 }
-
-/** Types whose value (and choices) come from `options.result`. */
-const RESULT_TYPES = new Set(['formula', 'rollup', 'multipleLookupValues']);
 
 type Options = {readonly [key: string]: unknown} | null | undefined;
 
@@ -47,7 +47,11 @@ function isObject(value: unknown): value is {readonly [key: string]: unknown} {
   return typeof value === 'object' && value !== null;
 }
 
-export class FieldInspector {
+/** What `parse` yields for a field read as `V`: numbers stay numbers, dates and text are strings, empty text is `null`. */
+export type ParsedValue<V> = ([V] extends [number] ? number : [V] extends [string] ? string : unknown) | null;
+
+/** `V` is the field's read type (`useFields` binds it from the generated record), `unknown` when inspected by hand. */
+export class FieldInspector<V = unknown> {
   /** Sanitized key from the generated meta ('' when inspected without one). */
   readonly fieldKey: string;
   /** The live field, or null when it's deleted or hidden from this extension. */
@@ -66,6 +70,8 @@ export class FieldInspector {
   readonly isWritable: boolean;
   /** Issues a write through this field raises; reads ignore it. */
   readonly validation: ValidationResult;
+  /** The live type and options to format by, else the generated result type with default options. */
+  private readonly formatSource: FormatSource;
 
   constructor(field: SdkField | null, meta: AirgenFieldMeta | null | undefined, fieldKey = '') {
     this.fieldKey = fieldKey;
@@ -96,6 +102,7 @@ export class FieldInspector {
     this.isWritable = field !== null && !isComputed && this.writeKind !== null;
 
     this.validation = new ValidationResult(this.writeIssues(live));
+    this.formatSource = live ? {type: liveType, options: field?.options} : {type: this.resultType};
   }
 
   private writeIssues(live: boolean): ValidationIssue[] {
@@ -183,6 +190,32 @@ export class FieldInspector {
       default:
         return value;
     }
+  }
+
+  /**
+   * `value` as text, the way this field displays it in Airtable: its currency
+   * symbol and precision, percent, duration and date formats, and time zone.
+   * Takes any value, not just a cell (a sum, a draft); see `formatValue`.
+   */
+  format(value: V | number | Date | null | undefined, options?: FormatOptions): string {
+    return formatValue(this.formatSource, value, options);
+  }
+
+  /** The record's cell for this field, formatted; `''` when the field is hidden or deleted. */
+  formatCell(record: RecordSource, options?: FormatOptions): string {
+    if (!this.field) return '';
+    let value: unknown;
+    try {
+      value = ('raw' in record ? record.raw : record).getCellValue(this.field);
+    } catch {
+      return '';
+    }
+    return formatValue(this.formatSource, value, options);
+  }
+
+  /** `text` parsed strictly into this field's value; see `parseValue`. */
+  parse(text: string, options?: FormatOptions): ParseResult<ParsedValue<V>> {
+    return parseValue(this.formatSource, text, options) as ParseResult<ParsedValue<V>>;
   }
 
   private toList(value: unknown, convert: (item: unknown) => unknown): unknown[] {
