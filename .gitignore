@@ -3,6 +3,8 @@ dist/
 *.tsbuildinfo
 .DS_Store
 CLAUDE.md
+AGENTS.md
+package/ui/AGENTS.md
 plan/
 .claude/*
 .serena/*
