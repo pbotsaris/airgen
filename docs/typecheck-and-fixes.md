@@ -31,8 +31,10 @@ It catches:
 |---|---|
 | `include` misses the folder with your sources and the generated file (tsc says "No inputs were found", TS18003) | appends that folder to `include` |
 | `.js`/`.jsx` sources but no `allowJs` (they're silently left out of the check) | sets `"allowJs": true` (never in a `jsconfig.json`, which implies it) |
-| `.jsx`/`.tsx` sources but no `jsx` option | sets `"jsx": "react-jsx"` |
+| `.jsx`/`.tsx` sources, or JSX in plain `.js` files as `block init` writes it, but no `jsx` option | sets `"jsx": "react-jsx"` |
 | `NodeNext`/`Node16` resolution, which requires file extensions on relative imports that the blocks bundler doesn't need | sets `"module": "ESNext"`, `"moduleResolution": "Bundler"` |
+| a `lib` that leaves out `DOM` (the extension runs in a browser) | appends `"DOM"` |
+| TypeScript 6 or newer, which checks side-effect imports by default and rejects the scaffold's `import './style.css'` (TS2882), with a stylesheet or image beside your sources | sets `"noUncheckedSideEffectImports": false` |
 
 Every other key is kept. If the file had comments, the rewrite drops them, so the original is saved next to it as `tsconfig.json.bak`. A config that extends another is read for its own keys only; a key `fix-tsconfig` adds overrides the inherited one. An `exclude` that hides your sources is reported, not rewritten. The command runs in your terminal; the daemon only reads the config, and it rechecks as soon as the file changes, so the banner clears on its own.
 
@@ -55,13 +57,31 @@ With no config at all, `npx airgen` creates this one at startup, with `include` 
 }
 ```
 
-`checkJs` with `strict` checks JSX against React's types, so a JavaScript extension needs `@types/react` installed (`npm install --save-dev @types/react`) or every element reports an implicit `any`.
+When the project's TypeScript is 6 or newer it also carries `"noUncheckedSideEffectImports": false` (see the table above); older compilers reject the option as unknown, so it is written only where it is needed.
 
 `GET /diagnostics` carries the banner's data as an optional `config` key, absent when there's nothing to fix:
 
 ```json
 {"config": {"file": "tsconfig.json", "command": "npx airgen fix-tsconfig", "issues": ["\"include\" doesn't cover frontend/"]}}
 ```
+
+## Missing dev dependencies
+
+The check runs your project's own compiler, and airgen bundles no types, so a fresh extension usually needs two installs before the panel can say anything useful: `typescript` itself, and `@types/react`, because `checkJs` with `strict` checks JSX against React's types (without them every element is an implicit `any`, TS7016/TS7026). When the typecheck can't run or its errors name a package, a second banner lists what to install and the command, with a **Copy** button:
+
+```sh
+npm i -D typescript @types/react      # spelled for your package manager: pnpm add -D, yarn add -D, bun add -d
+```
+
+The packages come from tsc's own messages, which name the `@types` package when its registry has one (the `Try \`npm i --save-dev @types/react\`` hint on TS7016, the same hint on TS2580/TS2591 for Node globals, and a `types` entry with no package behind it, TS2688), so the banner never suggests a package tsc didn't. The package manager is read from `packageManager` in `package.json`, then from the lockfile, defaulting to npm. The daemon watches `package.json`, so the install itself triggers the recheck and the banner clears; the command is printed in the daemon's terminal too.
+
+`GET /diagnostics` carries it as an optional `install` key, absent when nothing is missing:
+
+```json
+{"install": {"command": "npm i -D @types/react", "packages": ["@types/react"], "issues": ["@types/react: no type declarations for 'react', 'react/jsx-runtime'"]}}
+```
+
+Multi-line tsc messages are reported whole (the hint lines joined onto the first line), which is also what the panel's error list shows.
 
 ## Fixing your code when the schema changes
 

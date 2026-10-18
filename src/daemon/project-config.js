@@ -25,14 +25,24 @@ export const DEFAULT_OUT = 'frontend/airtable-schema.ts';
 const SOURCE_EXTENSIONS = new Set(['.ts', '.tsx', '.mts', '.cts', '.js', '.jsx', '.mjs', '.cjs']);
 const JS_EXTENSIONS = new Set(['.js', '.jsx', '.mjs', '.cjs']);
 const JSX_EXTENSIONS = new Set(['.jsx', '.tsx']);
+// What the blocks scaffold imports for its side effects (`import './style.css'`).
+const ASSET_EXTENSIONS = new Set(['.css', '.scss', '.sass', '.less', '.svg', '.png', '.jpg', '.jpeg', '.gif', '.webp']);
+// TypeScript 6 flipped `noUncheckedSideEffectImports` on by default (TS2882 on those imports).
+const CHECKS_SIDE_EFFECT_IMPORTS_FROM = 6;
 const NODE_RESOLUTION = new Set(['node16', 'nodenext']);
 const NODE_MODULE = new Set(['node16', 'node18', 'node20', 'nodenext']);
 // tsc's own default when a config has no `exclude`.
 const DEFAULT_EXCLUDE = ['node_modules', 'bower_components', 'jspm_packages'];
 const MAX_SOURCES = 5000;
 
-/** The config airgen creates, and the shape `fix-tsconfig` steers toward. */
-export function recommendedConfig(include) {
+/**
+ * The config airgen creates, and the shape `fix-tsconfig` steers toward.
+ * `typescriptMajor` is the project's compiler (null when not installed): from
+ * 6 on, side-effect imports are checked by default and the scaffold's CSS
+ * import fails, so the key that turns that off is written only where it's
+ * both needed and known (TS 5.5 and older reject the option as unknown).
+ */
+export function recommendedConfig(include, {typescriptMajor = null} = {}) {
   return {
     compilerOptions: {
       target: 'ES2022',
@@ -44,10 +54,13 @@ export function recommendedConfig(include) {
       strict: true,
       noEmit: true,
       skipLibCheck: true,
+      ...(checksSideEffectImports(typescriptMajor) ? {noUncheckedSideEffectImports: false} : {}),
     },
     include: [include],
   };
 }
+
+const checksSideEffectImports = major => major !== null && major >= CHECKS_SIDE_EFFECT_IMPORTS_FROM;
 
 /**
  * Parses tsconfig-flavored JSON: `//` and `/* *\/` comments and trailing
@@ -127,9 +140,13 @@ function isCovered(file, raw, configDir) {
   return matches(include, {directoryPrefix: false}) && !matches(exclude, {directoryPrefix: true});
 }
 
-/** Source files under dir (the generated file's directory), node_modules skipped. */
+/**
+ * Source files under dir (the generated file's directory), node_modules
+ * skipped, plus the stylesheets and images beside them (`assets`).
+ */
 function listSources(dir) {
-  const found = [];
+  const sources = [];
+  const assets = [];
   const walk = current => {
     let entries;
     try {
@@ -138,15 +155,17 @@ function listSources(dir) {
       return;
     }
     for (const entry of entries) {
-      if (found.length >= MAX_SOURCES) return;
+      if (sources.length >= MAX_SOURCES) return;
       if (entry.name.startsWith('.') || entry.name === 'node_modules') continue;
       const full = path.join(current, entry.name);
+      const extension = path.extname(entry.name);
       if (entry.isDirectory()) walk(full);
-      else if (SOURCE_EXTENSIONS.has(path.extname(entry.name))) found.push(full);
+      else if (SOURCE_EXTENSIONS.has(extension)) sources.push(full);
+      else if (ASSET_EXTENSIONS.has(extension)) assets.push(full);
     }
   };
   walk(dir);
-  return found;
+  return {sources, assets};
 }
 
 function typescriptMajor(cwd) {
@@ -186,7 +205,7 @@ export function planConfigFix({cwd, outPath}) {
         notes: ['the output file is outside this directory; run airgen from your project root'],
       };
     }
-    const next = recommendedConfig(toPosix(relative) || '.');
+    const next = recommendedConfig(toPosix(relative) || '.', {typescriptMajor: typescriptMajor(cwd)});
     return {
       action: 'create',
       configPath: path.join(cwd, 'tsconfig.json'),
@@ -209,7 +228,9 @@ export function planConfigFix({cwd, outPath}) {
   const configDir = path.dirname(configPath);
   const isJsconfig = path.basename(configPath) === 'jsconfig.json';
   const options = typeof raw.compilerOptions === 'object' && raw.compilerOptions !== null ? raw.compilerOptions : {};
-  const sources = [...new Set([outPath, ...listSources(outDir)])];
+  const listed = listSources(outDir);
+  const sources = [...new Set([outPath, ...listed.sources])];
+  const major = typescriptMajor(cwd);
   const changes = [];
   const nextOptions = {...options};
   const next = {...raw, compilerOptions: nextOptions};
@@ -227,15 +248,45 @@ export function planConfigFix({cwd, outPath}) {
     changes.push({option: 'allowJs', value: true, reason: 'JavaScript sources are skipped without "allowJs"'});
   }
 
-  if (sources.some(file => JSX_EXTENSIONS.has(path.extname(file))) && options.jsx === undefined) {
+  // `block init` writes its JSX in plain .js files, which tsc parses as JSX
+  // too, so JS sources need the option as much as .jsx/.tsx ones.
+  const hasJsx = sources.some(file => JSX_EXTENSIONS.has(path.extname(file)));
+  if ((hasJsx || hasJs) && options.jsx === undefined) {
     nextOptions.jsx = 'react-jsx';
-    changes.push({option: 'jsx', value: 'react-jsx', reason: 'JSX files need a "jsx" option'});
+    changes.push({
+      option: 'jsx',
+      value: 'react-jsx',
+      reason: hasJsx
+        ? 'JSX files need a "jsx" option'
+        : 'JSX in .js files (as the blocks scaffold writes it) needs a "jsx" option',
+    });
+  }
+
+  if (Array.isArray(options.lib) && !options.lib.some(entry => lower(entry) === 'dom')) {
+    nextOptions.lib = [...options.lib, 'DOM'];
+    changes.push({
+      option: 'lib',
+      value: nextOptions.lib,
+      reason: 'the extension runs in a browser, but "lib" leaves out "DOM"',
+    });
+  }
+
+  if (
+    listed.assets.length > 0 &&
+    options.noUncheckedSideEffectImports === undefined &&
+    checksSideEffectImports(major)
+  ) {
+    nextOptions.noUncheckedSideEffectImports = false;
+    changes.push({
+      option: 'noUncheckedSideEffectImports',
+      value: false,
+      reason: `TypeScript ${major} rejects side-effect imports like "import './style.css'" by default`,
+    });
   }
 
   const resolution = lower(options.moduleResolution);
   if (NODE_RESOLUTION.has(resolution) || (resolution === undefined && NODE_MODULE.has(lower(options.module)))) {
     // Bundler resolution arrived in TS 5.0; older compilers get classic node.
-    const major = typescriptMajor(cwd);
     const bundler = major === null || major >= 5 ? 'Bundler' : 'Node';
     nextOptions.module = 'ESNext';
     nextOptions.moduleResolution = bundler;

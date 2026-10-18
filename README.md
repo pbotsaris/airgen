@@ -1,15 +1,24 @@
 # airgen
 
-Typed [Airtable Custom Extensions](https://airtable.com/developers/extensions): a reactive TypeScript generator plus a typed runtime, built on the official [Blocks SDK](https://github.com/Airtable/blocks).
+A type-safe development experience for [Airtable Custom Extensions](https://airtable.com/developers/extensions).
 
-A `<SchemaObserver />` inside your extension watches the live base schema through the SDK and streams a generated `airtable-schema.ts` to a local daemon that writes it to disk. The file carries read and write types for every table, the IDs behind them, and hooks already bound to your schema: `useRecords`, `useMutations`, `useFields`, `useQuery`, `useSchemaDrift`. No API token and no manual regeneration: rename a field in Airtable and the types update within a second while `block run` hot-reloads your extension.
+Combines reactive TypeScript type generation with a typed runtime built on the official [Airtable Blocks SDK](https://github.com/Airtable/blocks).
 
-![diagram](https://raw.githubusercontent.com/pbotsaris/airgen/main/docs/dia.jpeg)
+A `<SchemaObserver />` component inside your extension monitors the live Airtable base schema and sends generated types to a local daemon, which writes them to `airtable-schema.ts`.
+
+The generated file includes read and write types for every table, table and field IDs, and schema-aware hooks: `useRecords`, `useMutations`, `useFields`, `useQuery`, and `useSchemaDrift`.
+
+**No API tokens or manual regeneration required.** 
+Rename a field in Airtable, and your types update automatically, while `block run` hot-reloads your extension.
+
+![Architecture diagram](https://raw.githubusercontent.com/pbotsaris/airgen/main/docs/dia.png)
 
 ## Requirements
 
-- An extension scaffolded with the [Airtable CLI](https://airtable.com/developers/extensions) (`block init`) and run with `block run`. airgen only works inside an extension; there is no REST path.
-- Peer dependencies from that scaffold: `@airtable/blocks >= 1.10.0` (or an `interface-alpha` build) and `react >= 16.14`.
+- An extension scaffolded with the [Airtable CLI](https://airtable.com/developers/extensions) (`block init`) and run with `block run`. 
+- airgen only works inside an extension; there is no REST path.
+- Peer dependencies from that scaffold: `@airtable/blocks >= 1.10.0` (or an `interface-alpha` build) 
+- React `>= 16.14`.
 - Node `>= 18` for the daemon.
 
 ## Quick start
@@ -41,7 +50,9 @@ function App() {
 }
 ```
 
-The generated file lands at `frontend/airtable-schema.ts`. Commit it: it is the source of truth when no dev session is running. Then import the hooks from it:
+The generated file lands at `frontend/airtable-schema.ts`. Commit it: it is the source of truth when no dev session is running. 
+
+Then import the hooks from it:
 
 ```tsx
 import {useRecords, useMutations} from './airtable-schema';
@@ -58,60 +69,170 @@ This works from plain `.js` files too: the generics are bound inside the generat
 
 ## What you get
 
-- **Read types that match `record.getCellValue`**: selects are `{id, name, color?}` literal unions, links `{id, name}[]`, collaborators carry `email`, lookups are `{linkedRecordId, value}[]`, formulas and rollups resolve to their result type.
-- **Write types in the SDK's cell write formats**: one `<Table>Write` per table with only the writable fields; selects take `{id}` or `{name}`, dates a `string | Date`, anything `null` to clear.
-- **`airgenMeta`**: every table, field, and choice ID, with `isComputed` and `primaryFieldId`. Everything at runtime resolves by ID, so renames in Airtable never break a running extension.
+- **Read types that match `record.getCellValue`**: 
+    - selects are `{id, name, color?}` literal unions.
+    - links `{id, name}[]` 
+    - collaborators carry `email` 
+    - lookups are `{linkedRecordId, value}[]` 
+    - formulas and rollups resolve to their result type.
+- **Write types in the SDK's cell write formats**: 
+    - one `<Table>Write` per table with only the writable fields 
+    - selects take `{id}` or `{name}`
+    - dates a `string | Date` 
+    - anything `null` to clear.
+- **`airgenMeta`**: every table, field, and choice ID, with `isComputed` and `primaryFieldId`.
+- Everything at runtime resolves by ID, so renames in Airtable never break a running extension.
 - **Pre-bound hooks** and the plain functions behind them, usable outside React.
 
-Field keys are the Airtable names, transliterated and camelCased (`Due Date` becomes `dueDate`); the raw name is kept in the meta. Details in [docs/generated-file.md](docs/generated-file.md).
+Field keys are the Airtable names, transliterated and camelCased (`Due Date` becomes `dueDate`).
 
+the raw name is kept in the meta. Details in [docs/generated-file.md](docs/generated-file.md).
 ## Runtime
 
-Every example below is a file in [`examples/`](examples/), written against a generic project-tracker base and typechecked by the test suite.
+Practical examples are available in the [`examples/`](examples/) directory.
 
-**Reading** ([01](examples/01-reading.tsx)): `useRecords(key)` rows are `{id, fields, raw}`; `useTable(key)` is the SDK table. Helpers `lookupValues`, `cellNames`, `cellIds`, `firstLinkedRecord` flatten the rich shapes.
+##### [Reading](examples/01-reading.tsx)
 
-**Fields** ([02](examples/02-fields.tsx)): `useFields(key)` gives a `FieldInspector` per field, with the live choices and colors, `isWritable`, and the `validation` a write would hit.
+- `useRecords(key)` returns typed records with `{id, fields, raw}`.
+- `useTable(key)` returns the SDK table.
+- `lookupValues`, `cellNames`, `cellIds`, and `firstLinkedRecord` simplify Airtable cell values.
 
-**Writes** ([03](examples/03-writes.tsx)): `useMutations(key)` has `create`, `createMany`, `update`, `updateFields`, `updateMany`, `remove`, `removeMany`, `clone`, and `can.create/update/delete`. Nothing throws: every write validates each field and checks permissions per batch of 50 before touching the SDK, and returns `{ok: true, ids}` or `{ok: false, error, ids, failedBatch, issues}`. Read values are accepted as write values and converted.
+##### [Fields](examples/02-fields.tsx)
+
+`useFields(key)` provides a `FieldInspector` for each field, including:
+
+- Live choices and colors
+- Write permissions (`isWritable`)
+- Validation rules (`validation`)
+
+##### [Writes](examples/03-writes.tsx)
+
+`useMutations(key)` provides typed operations:
+
+- **Create:** `create`, `createMany`
+- **Update:** `update`, `updateFields`, `updateMany`
+- **Delete:** `remove`, `removeMany`
+- **Clone:** `clone`
+- **Permissions:** `can.create`, `can.update`, `can.delete`
+
+All writes validate fields and permissions before execution. Batch operations process up to 50 records at a time.
+
+Operations return results instead of throwing exceptions. Read values are automatically converted to valid write values.
 
 ```tsx
-const result = await tasks.updateFields(task, {status: {name: 'Done'}, completed: true});
+const result = await tasks.updateFields(task, {
+  status: {name: 'Done'},
+  completed: true,
+});
+
 if (!result.ok) toast(result.error.message);
 ```
 
-**Queries** ([04](examples/04-queries.tsx)): `useQuery(key, {where, match, search})` filters by field key (`is`, `not`, `anyOf`, `noneOf`, `empty`, `notEmpty`; selects, links, and collaborators match by id, name, or email) and searches with a pluggable `SearchMatcher` (`@airgen/ui` ships a fuse.js one). `groupRecords` groups by one or more fields.
+##### [Queries](examples/04-queries.tsx)
 
-**Drift** ([05](examples/05-drift.tsx)): `useSchemaDrift()` compares the live schema with the meta in a released extension, no daemon involved. Deletions and type changes are breaking, removed choices warn, renames are info.
+`useQuery(key, {where, match, search})` provides typed filtering and searching.
 
-**Custom properties** ([06](examples/06-custom-properties.tsx), interface SDK): re-bind `createTypedHooks(airgenMeta, {customProperties: {Tasks: 'Tasks table'}})` and the Interface Designer gets a table picker per listed table. A picked look-alike table is matched by field name and validated against the generated types; a mismatch blocks writes instead of writing the wrong shape.
+- **Filters:** `is`, `not`, `anyOf`, `noneOf`, `empty`, `notEmpty`
+- **Matching:** Selects, linked records, and collaborators by ID, name, or email
+- **Search:** Pluggable `SearchMatcher`, including a Fuse.js implementation in `@airgen/ui`
+- **Grouping:** `groupRecords` groups records by one or more fields
 
-**Outside React** ([07](examples/07-outside-react.ts)): `createMutations`, `inspectField`, `cloneValues`, `query`, `groupRecords`, and `findTable` are plain functions over structural SDK types, for event handlers, scripts, and tests.
+##### [Schema Drift](examples/05-drift.tsx)
 
-## Development tooling
+`useSchemaDrift()` compares the live base schema against the generated metadata in a released extension.
 
-- **Typecheck panel.** `block run` never typechecks, so after every schema write the daemon runs your project's own `tsc` and the observer panel shows the errors a schema change caused in your code.
-- **Code fixes under `--fix`.** The daemon diffs the generated file by ID, so a rename is a fact, and offers to rewrite `record.fields.contactEmail` style usages across `.ts` and `.js` files.
-- **CLI and config.** `npx airgen [-p port] [-o path] [--daemon-only] [--fix] [-- block run args]`, or `airgen-config.json`. The daemon lives in the `block run` process and exits with it.
+- **Breaking:** Deleted fields and type changes
+- **Warning:** Removed select choices
+- **Info:** Renamed fields
 
-Guides: [typecheck and fixes](docs/typecheck-and-fixes.md), [CLI, daemon, and security](docs/cli-and-daemon.md).
+Works without the local daemon.
+
+##### [Custom Properties](examples/06-custom-properties.tsx)
+
+Bind tables to Interface Designer properties:
+
+```tsx
+createTypedHooks(airgenMeta, {
+  customProperties: {Tasks: 'Tasks table'},
+});
+```
+
+Users can select tables directly in Interface Designer. Selected tables are validated against the generated schema, preventing writes to incompatible fields.
+
+##### [Outside React](examples/07-outside-react.ts)
+
+Use standalone functions without React hooks:
+
+`createMutations`, `inspectField`, `cloneValues`, `query`, `groupRecords`, `findTable`
+
+Useful for event handlers, scripts, and tests.
+
+## Development Tooling
+
+##### Typechecking
+
+`block run` doesn't typecheck your code. Airgen runs your project's TypeScript compiler (`tsc`) after each schema update.
+
+Errors caused by schema changes appear directly in the `<SchemaObserver />` panel.
+
+##### Automatic Fixes
+
+Run with `--fix` to detect field renames and update references in `.ts` and `.js` files.
+
+Airgen tracks fields by ID, allowing it to identify renames and update references such as `record.fields.contactEmail`.
+
+##### CLI & Configuration
+
+```bash
+npx airgen [-p port] [-o path] [--daemon-only] [--fix] [-- block run args]
+```
+
+Alternatively, configure Airgen using `airgen-config.json`.
+
+The daemon runs alongside `block run` and exits when it stops.
+
+##### Documentation
+
+- [Typechecking & Fixes](docs/typecheck-and-fixes.md) 
+- [CLI & Daemon](docs/cli-and-daemon.md)
 
 ## Upgrading to 0.3.0
 
-Regenerate once under `npx airgen` and commit the file. Two things can need code changes: lookup cells are now `Array<LookupValue<T>>` instead of bare values, and the meta is version 2. See [docs/upgrading.md](docs/upgrading.md) and the [changelog](CHANGELOG.md).
+Regenerate your schema with `npx airgen` and commit the updated file.
+
+Two changes may require updates:
+
+- **Lookup fields:** Now return `Array<LookupValue<T>>` instead of raw values.
+- **Metadata:** Updated to version 2.
+
+See the [Upgrade Guide](docs/upgrading.md) and [Changelog](CHANGELOG.md).
 
 ## API
 
-Exported identically from `airgen`, `airgen/interface`, and `airgen/base`:
+All exports are available from `airgen`, `airgen/interface`, and `airgen/base`.
 
 | Export | Description |
 |---|---|
-| `SchemaObserver` | Dev panel. Props: `daemonUrl` (`http://localhost:3001`), `debounceMs` (500), `enabled` (true), `meta`. |
-| `useRecords`, `useTable`, `useFields`, `useMutations`, `useQuery`, `useSchemaDrift` | From the **generated file**, pre-bound to your schema. |
-| `createTypedHooks<M, W>(airgenMeta, options?)` | What the generated file calls; re-bind it yourself for `customProperties`. |
-| `createMutations`, `inspectField`, `cloneValues`, `query`, `groupRecords`, `cellText`, `findTable`, `resolveTableOverride` | The runtime as plain functions. |
-| `lookupValues`, `firstLookupValue`, `cellIds`, `cellNames`, `firstLinkedRecord` | Read helpers over cell shapes. |
-| `checkSchemaDrift(base, airgenMeta)` | Pure drift check behind `useSchemaDrift`. |
-| `generateTypeScriptFromBase(base, options?)`, `computeSchemaSignature(base)` | The generator, for a custom sync flow. |
+| `SchemaObserver` | Development panel with schema monitoring and typechecking. |
+| `useRecords`, `useTable`, `useFields`, `useMutations`, `useQuery`, `useSchemaDrift` | Schema-bound hooks exported from the generated file. |
+| `createTypedHooks<M, W>` | Creates typed hooks with optional custom properties. |
+| `createMutations`, `inspectField`, `cloneValues`, `query`, `groupRecords`, `cellText`, `findTable`, `resolveTableOverride` | Standalone runtime utilities. |
+| `lookupValues`, `firstLookupValue`, `cellIds`, `cellNames`, `firstLinkedRecord` | Helpers for reading Airtable cell values. |
+| `checkSchemaDrift` | Compares live schema against generated metadata. |
+| `generateTypeScriptFromBase`, `computeSchemaSignature` | Schema generation and signature utilities. |
 
-Maintainers: [docs/releasing.md](docs/releasing.md). This repo also holds [`@airgen/ui`](packages/ui/README.md), Airtable-native React components that pair with the generated meta.
+### SchemaObserver Options
+
+| Prop | Default | Description |
+|---|---|---|
+| `daemonUrl` | `http://localhost:3001` | Local daemon endpoint. |
+| `debounceMs` | `500` | Delay before processing schema changes. |
+| `enabled` | `true` | Enables schema observation. |
+| `meta` | — | Generated schema metadata. |
+| `children` | — | Content rendered below the panel, or alone when disabled. |
+
+## Additional Packages
+
+[`@airgen/ui`](packages/ui/README.md) provides Airtable-native React components that integrate with the generated schema.
+
+**Maintainers:** [Release Guide](docs/releasing.md)

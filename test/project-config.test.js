@@ -126,6 +126,67 @@ test('allowJs is added for JS sources, but never to a jsconfig.json (it implies 
   assert.equal(planConfigFix({cwd: js.dir, outPath: js.outPath}).action, 'none');
 });
 
+test('jsx is planned for JSX in plain .js files, as block init writes it', () => {
+  const {dir, outPath} = makeProject({
+    config: {compilerOptions: {allowJs: true}, include: ['frontend']},
+    files: {'frontend/index.js': 'export {};\n'},
+  });
+  const plan = planConfigFix({cwd: dir, outPath});
+  assert.deepEqual(options(plan), {jsx: 'react-jsx'});
+  assert.match(plan.changes[0].reason, /\.js files/);
+
+  // Pure TypeScript with no JSX needs nothing.
+  const ts = makeProject({config: {include: ['frontend']}, files: {'frontend/index.ts': 'export {};\n'}});
+  assert.equal(planConfigFix({cwd: ts.dir, outPath: ts.outPath}).action, 'none');
+});
+
+test('a "lib" without DOM gets it; one with it (any casing) is left alone', () => {
+  const {dir, outPath} = makeProject({
+    config: {compilerOptions: {allowJs: true, jsx: 'react-jsx', lib: ['ES2022']}, include: ['frontend']},
+  });
+  assert.deepEqual(options(planConfigFix({cwd: dir, outPath})), {lib: ['ES2022', 'DOM']});
+
+  const withDom = makeProject({
+    config: {compilerOptions: {allowJs: true, jsx: 'react-jsx', lib: ['es2022', 'dom']}, include: ['frontend']},
+  });
+  assert.equal(planConfigFix({cwd: withDom.dir, outPath: withDom.outPath}).action, 'none');
+});
+
+test('TypeScript 6+ checks side-effect imports, so a stylesheet beside the sources turns that off', () => {
+  const project = version =>
+    makeProject({
+      config: {compilerOptions: {allowJs: true, jsx: 'react-jsx'}, include: ['frontend']},
+      files: {
+        'frontend/App.jsx': 'export {};\n',
+        'frontend/style.css': 'body {}\n',
+        'node_modules/typescript/package.json': JSON.stringify({name: 'typescript', version}),
+      },
+    });
+  const ts7 = project('7.0.2');
+  const plan = planConfigFix({cwd: ts7.dir, outPath: ts7.outPath});
+  assert.deepEqual(options(plan), {noUncheckedSideEffectImports: false});
+  assert.match(plan.changes[0].reason, /TypeScript 7/);
+
+  // TS 5 doesn't check them, and 5.5 and older don't know the option at all.
+  const ts5 = project('5.9.3');
+  assert.equal(planConfigFix({cwd: ts5.dir, outPath: ts5.outPath}).action, 'none');
+
+  // No stylesheet or image to import: nothing to turn off.
+  const noAssets = makeProject({
+    config: {compilerOptions: {allowJs: true, jsx: 'react-jsx'}, include: ['frontend']},
+    files: {'node_modules/typescript/package.json': JSON.stringify({name: 'typescript', version: '7.0.2'})},
+  });
+  assert.equal(planConfigFix({cwd: noAssets.dir, outPath: noAssets.outPath}).action, 'none');
+
+  // The config airgen creates carries the key only when the compiler needs it.
+  const fresh = makeProject({files: {'node_modules/typescript/package.json': JSON.stringify({version: '7.0.2'})}});
+  const created = planConfigFix({cwd: fresh.dir, outPath: fresh.outPath});
+  assert.equal(created.action, 'create');
+  assert.equal(created.next.compilerOptions.noUncheckedSideEffectImports, false);
+  assert.deepEqual(created.next, recommendedConfig('frontend', {typescriptMajor: 7}));
+  assert.equal('noUncheckedSideEffectImports' in recommendedConfig('frontend').compilerOptions, false);
+});
+
 test('module: NodeNext alone (no moduleResolution) implies node resolution too', () => {
   const {dir, outPath} = makeProject({
     config: {compilerOptions: {module: 'nodenext', allowJs: true, jsx: 'preserve'}, include: ['frontend']},

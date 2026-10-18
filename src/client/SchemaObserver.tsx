@@ -37,6 +37,11 @@ export interface SchemaObserverProps {
    * (deleted/renamed tables and fields, type changes) in the panel.
    */
   meta?: DriftMetaLike;
+  /**
+   * Optional: wrap your app in the observer instead of rendering it as a
+   * sibling. Children render below the panel, and alone when `enabled` is false.
+   */
+  children?: React.ReactNode;
 }
 
 export interface SchemaObserverConfig {
@@ -65,12 +70,21 @@ interface DiagnosticsPayload {
   reason?: string;
   /** Present when the project config needs changes (absent on older daemons). */
   config?: ConfigNotice;
+  /** Present when the typecheck named dev dependencies to install (absent on older daemons). */
+  install?: InstallNotice;
 }
 
 /** What `npx airgen fix-tsconfig` would fix; `command` is null when it can't. */
 interface ConfigNotice {
   file: string | null;
   command: string | null;
+  issues: string[];
+}
+
+/** The install command for what tsc couldn't find (`typescript` itself, `@types/react`, …). */
+interface InstallNotice {
+  command: string;
+  packages: string[];
   issues: string[];
 }
 
@@ -103,11 +117,12 @@ interface FixesPayload {
 const DIAGNOSTICS_POLL_DELAYS_MS = [0, 500, 1000, 2000, 3000, 3000, 3000, 3000, 3000, 3000];
 
 /**
- * While a config notice is up, keep polling: the fix happens in the user's
- * terminal, and the daemon rechecks on the config edit with no schema write
- * that would otherwise make the observer ask again.
+ * While a config or install notice is up, keep polling: the fix happens in the
+ * user's terminal, and the daemon rechecks on the config edit (or the
+ * package.json rewrite an install does) with no schema write that would
+ * otherwise make the observer ask again.
  */
-const CONFIG_NOTICE_POLL_MS = 3000;
+const SETUP_NOTICE_POLL_MS = 3000;
 
 const panelStyle: React.CSSProperties = {
   display: 'flex',
@@ -143,6 +158,7 @@ export function createSchemaObserver(
     debounceMs = 500,
     enabled = true,
     meta,
+    children,
   }: SchemaObserverProps): React.ReactElement | null {
     const base = sdk.useBase();
     sdk.useWatchable(base, ['schema']);
@@ -281,12 +297,12 @@ export function createSchemaObserver(
       };
     }, [daemonUrl, enabled, pollDiagnostics, pollFixes]);
 
-    const hasConfigNotice = enabled && diagnostics?.config !== undefined;
+    const hasSetupNotice = enabled && (diagnostics?.config !== undefined || diagnostics?.install !== undefined);
     useEffect(() => {
-      if (!hasConfigNotice) return;
-      const timer = setInterval(pollDiagnostics, CONFIG_NOTICE_POLL_MS);
+      if (!hasSetupNotice) return;
+      const timer = setInterval(pollDiagnostics, SETUP_NOTICE_POLL_MS);
       return () => clearInterval(timer);
-    }, [hasConfigNotice, pollDiagnostics]);
+    }, [hasSetupNotice, pollDiagnostics]);
 
     useEffect(() => {
       // Nothing to do when disabled, and unchanged schemas never reach the
@@ -348,13 +364,30 @@ export function createSchemaObserver(
       }
     }, [base]);
 
-    if (!enabled) return null;
+    if (!enabled) return children === undefined ? null : <>{children}</>;
 
     const statusDisplay = getStatusDisplay(status);
 
     return (
       <>
-        {diagnostics?.config && <ConfigBanner notice={diagnostics.config} />}
+        {diagnostics?.config && (
+          <NoticeBanner
+            title={`${diagnostics.config.file ?? 'tsconfig.json'} needs changes for the typecheck`}
+            issues={diagnostics.config.issues}
+            command={diagnostics.config.command}
+          />
+        )}
+        {diagnostics?.install && (
+          <NoticeBanner
+            title={
+              diagnostics.install.packages.includes('typescript')
+                ? 'typescript is not installed, so the typecheck is off'
+                : 'dev dependencies missing for the typecheck'
+            }
+            issues={diagnostics.install.issues}
+            command={diagnostics.install.command}
+          />
+        )}
         <div style={panelStyle}>
           <span style={{...textStyle, color: statusDisplay.color, fontWeight: 600}}>airgen {statusDisplay.label}</span>
           <span style={{...textStyle, color: '#666666'}}>
@@ -368,6 +401,7 @@ export function createSchemaObserver(
             {copied ? 'Copied!' : 'Copy schema'}
           </button>
         </div>
+        {children}
       </>
     );
   }
@@ -376,30 +410,37 @@ export function createSchemaObserver(
 }
 
 /**
- * Above the strip: the project config hides your code from the typecheck, and
- * here is the command that fixes it. Nothing here touches files; the command
- * runs in the user's own terminal.
+ * Above the strip: something in the project keeps the typecheck from doing
+ * its job (a config that hides your code, a missing dev dependency), and here
+ * is the command that fixes it. Nothing here touches files; the command runs
+ * in the user's own terminal.
  */
-function ConfigBanner({notice}: {notice: ConfigNotice}): React.ReactElement {
+function NoticeBanner({
+  title,
+  issues,
+  command,
+}: {
+  title: string;
+  issues: string[];
+  command: string | null;
+}): React.ReactElement {
   const [copied, setCopied] = useState(false);
   const copy = useCallback(async () => {
-    if (notice.command === null) return;
+    if (command === null) return;
     try {
-      await navigator.clipboard.writeText(notice.command);
+      await navigator.clipboard.writeText(command);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
       // The command is user-select: all, so it can still be copied by hand.
     }
-  }, [notice.command]);
+  }, [command]);
 
   return (
     <div style={{...panelStyle, background: '#fff8e1', borderBottom: '2px solid #f0d58c'}}>
-      <span style={{...textStyle, color: '#8a6100', fontWeight: 600}}>
-        {notice.file ?? 'tsconfig.json'} needs changes for the typecheck
-      </span>
-      <span style={{...textStyle, color: '#333333'}}>{notice.issues.join(' · ')}</span>
-      {notice.command !== null && (
+      <span style={{...textStyle, color: '#8a6100', fontWeight: 600}}>{title}</span>
+      <span style={{...textStyle, color: '#333333'}}>{issues.join(' · ')}</span>
+      {command !== null && (
         <span style={{display: 'flex', alignItems: 'center', gap: 6}}>
           <span style={textStyle}>Run:</span>
           <code
@@ -412,7 +453,7 @@ function ConfigBanner({notice}: {notice: ConfigNotice}): React.ReactElement {
               userSelect: 'all',
             }}
           >
-            {notice.command}
+            {command}
           </code>
           <button type="button" style={buttonStyle} onClick={copy}>
             {copied ? 'Copied!' : 'Copy'}

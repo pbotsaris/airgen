@@ -54,7 +54,10 @@ async function withProject(
   fs.writeFileSync(path.join(dir, configName), config);
   fs.mkdirSync(path.join(dir, 'src'));
   fs.writeFileSync(path.join(dir, 'src', sourceName), source ?? sourceFile(valid));
-  for (const [name, text] of Object.entries(extraFiles)) fs.writeFileSync(path.join(dir, name), text);
+  for (const [name, text] of Object.entries(extraFiles)) {
+    fs.mkdirSync(path.dirname(path.join(dir, name)), {recursive: true});
+    fs.writeFileSync(path.join(dir, name), text);
+  }
   if (withTypescript) {
     linkIntoNodeModules(dir, {typescript: path.join(projectRoot, 'node_modules', 'typescript')});
   }
@@ -112,11 +115,64 @@ test('GET /diagnostics serves JSON with CORS headers', async () => {
 });
 
 test('typescript missing from the project settles as unavailable', async () => {
-  await withProject({withTypescript: false}, async ({url}) => {
+  await withProject({withTypescript: false}, async ({url, logs}) => {
     const payload = await waitForDiagnostics(url, p => p.status !== 'checking');
     assert.equal(payload.status, 'unavailable');
     assert.match(payload.reason, /typescript/i);
     assert.deepEqual(payload.errors, []);
+    // The one thing to install before the panel can do anything.
+    assert.deepEqual(payload.install.packages, ['typescript']);
+    assert.equal(payload.install.command, 'npm i -D typescript');
+    assert.ok(
+      logs.some(line => line.includes('npm i -D typescript')),
+      logs.join('\n'),
+    );
+  });
+});
+
+test('an untyped dependency comes with the install command, and installing it rechecks', async () => {
+  // A `react` with no types, as a fresh blocks scaffold has it; the lockfile
+  // picks the package manager the command is spelled for.
+  const extraFiles = {
+    'pnpm-lock.yaml': '',
+    'package.json': JSON.stringify({name: 'consumer', dependencies: {react: '*'}}),
+    'node_modules/react/package.json': JSON.stringify({name: 'react', version: '19.0.0', main: 'index.js'}),
+    'node_modules/react/index.js': "module.exports = {version: '19.0.0'};\n",
+  };
+  const source = "import React from 'react';\nexport const length: number = React.version.length;\n";
+  await withProject({source, extraFiles}, async ({url, dir, logs}) => {
+    const payload = await waitForDiagnostics(url, p => p.status !== 'checking');
+    assert.equal(payload.status, 'errors');
+    assert.equal(payload.errors[0].code, 'TS7016');
+    // tsc's hint is on a continuation line; the message carries it whole.
+    assert.match(payload.errors[0].message, /Try `npm i --save-dev @types\/react`/);
+    assert.ok(!payload.errors[0].message.includes(dir), 'no absolute paths');
+    assert.deepEqual(payload.install, {
+      command: 'pnpm add -D @types/react',
+      packages: ['@types/react'],
+      issues: ["@types/react: no type declarations for 'react'"],
+    });
+    assert.ok(
+      logs.some(line => line.includes('pnpm add -D @types/react')),
+      logs.join('\n'),
+    );
+
+    // "Installing" the types rewrites package.json, which is what the daemon watches.
+    fs.mkdirSync(path.join(dir, 'node_modules', '@types', 'react'), {recursive: true});
+    fs.writeFileSync(
+      path.join(dir, 'node_modules', '@types', 'react', 'package.json'),
+      JSON.stringify({name: '@types/react', version: '19.0.0', types: 'index.d.ts'}),
+    );
+    fs.writeFileSync(
+      path.join(dir, 'node_modules', '@types', 'react', 'index.d.ts'),
+      'declare const React: {version: string};\nexport default React;\n',
+    );
+    fs.writeFileSync(
+      path.join(dir, 'package.json'),
+      JSON.stringify({name: 'consumer', dependencies: {react: '*'}, devDependencies: {'@types/react': '*'}}),
+    );
+    const settled = await waitForDiagnostics(url, p => p.status === 'ok');
+    assert.equal(settled.install, undefined);
   });
 });
 

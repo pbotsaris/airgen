@@ -16,6 +16,7 @@ import path from 'node:path';
 import {createTypechecker} from './typecheck.js';
 import {createCodemod} from './codemod.js';
 import {fixCommand, planConfigFix} from './project-config.js';
+import {planInstall} from './setup-hints.js';
 import {isStub} from './stub.js';
 
 const MAX_BODY_BYTES = 2 * 1024 * 1024;
@@ -94,6 +95,7 @@ export function startDaemon({
     startDir: path.dirname(resolvedOut),
     log: stamped,
     inspectConfig: () => inspectProjectConfig(cwd, resolvedOut),
+    inspectInstall: ({errors, typescriptMissing}) => planInstall({cwd, errors, typescriptMissing}),
   });
 
   // Opt-in only: without --fix the endpoints below 404 and no analysis runs,

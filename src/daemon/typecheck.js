@@ -72,13 +72,18 @@ function resolveTsc(cwd) {
   return dir === null ? null : path.join(dir, 'lib', 'tsc.js');
 }
 
+const TYPESCRIPT_MISSING = 'typescript not found in project node_modules';
+
 /**
- * @param {{cwd: string, startDir: string, log: (msg: string) => void, inspectConfig?: () => object | null}} options
+ * @param {{cwd: string, startDir: string, log: (msg: string) => void,
+ *   inspectConfig?: () => object | null,
+ *   inspectInstall?: (input: {errors: object[], typescriptMissing: boolean}) => object | null}} options
  *   startDir is where the project-config walk-up begins (the output file's dir).
  *   inspectConfig reports what's wrong with the project config (or null); its
- *   result rides along on every snapshot as `config`.
+ *   result rides along on every snapshot as `config`. inspectInstall reports
+ *   the dev dependencies the errors say are missing (or null), served as `install`.
  */
-export function createTypechecker({cwd, startDir, log, inspectConfig = () => null}) {
+export function createTypechecker({cwd, startDir, log, inspectConfig = () => null, inspectInstall = () => null}) {
   /** Latest settled (or in-progress) diagnostics — what GET /diagnostics serves. */
   let diagnostics = {status: 'checking', errors: [], total: 0, checkedAt: null};
   let checking = false;
@@ -87,22 +92,34 @@ export function createTypechecker({cwd, startDir, log, inspectConfig = () => nul
   let disposed = false;
   let watchedConfig = null;
 
-  // A config edit (say, `npx airgen fix-tsconfig`) changes the result without
-  // any schema write, so the config itself triggers a recheck. Polling
-  // watchFile, unref'd, because fs.watch drops events on editors' atomic saves.
-  const onConfigChange = (current, previous) => {
+  // A config edit (say, `npx airgen fix-tsconfig`) or an install (`npm i -D
+  // @types/react` rewrites package.json) changes the result without any schema
+  // write, so those files trigger a recheck themselves. Polling watchFile,
+  // unref'd, because fs.watch drops events on editors' atomic saves.
+  const onProjectFileChange = (current, previous) => {
     if (current.mtimeMs !== previous.mtimeMs) schedule();
   };
   function watchConfig(configPath) {
     if (configPath === watchedConfig) return;
-    if (watchedConfig !== null) fs.unwatchFile(watchedConfig, onConfigChange);
+    if (watchedConfig !== null) fs.unwatchFile(watchedConfig, onProjectFileChange);
     watchedConfig = configPath;
-    if (configPath !== null) fs.watchFile(configPath, {interval: 1000}, onConfigChange).unref();
+    if (configPath !== null) fs.watchFile(configPath, {interval: 1000}, onProjectFileChange).unref();
   }
+  // Watching a file that doesn't exist yet is fine: it fires when it appears.
+  const packageJson = path.join(cwd, 'package.json');
+  fs.watchFile(packageJson, {interval: 1000}, onProjectFileChange).unref();
 
   function inspect() {
     try {
       return inspectConfig() ?? undefined;
+    } catch {
+      return undefined;
+    }
+  }
+
+  function installFor(errors, typescriptMissing) {
+    try {
+      return inspectInstall({errors, typescriptMissing}) ?? undefined;
     } catch {
       return undefined;
     }
@@ -129,6 +146,7 @@ export function createTypechecker({cwd, startDir, log, inspectConfig = () => nul
       checkedAt: new Date().toISOString(),
       reason,
       config: inspect(),
+      install: installFor([], reason === TYPESCRIPT_MISSING),
     };
   }
 
@@ -139,12 +157,19 @@ export function createTypechecker({cwd, startDir, log, inspectConfig = () => nul
       total: errors.length,
       checkedAt: new Date().toISOString(),
       config: inspect(),
+      install: installFor(errors, false),
     };
   }
 
   function parseOutput(output, baseDir, configName) {
     const errors = [];
     for (const line of output.split(/\r?\n/)) {
+      // Indented lines continue the previous message (tsc's related detail,
+      // and the `Try \`npm i --save-dev @types/x\`` hint the install notice reads).
+      if (/^\s+\S/.test(line) && errors.length > 0) {
+        errors[errors.length - 1].message += ` ${scrub(line.trim())}`;
+        continue;
+      }
       let match = FILE_ERROR_RE.exec(line);
       if (match) {
         errors.push({
@@ -174,7 +199,7 @@ export function createTypechecker({cwd, startDir, log, inspectConfig = () => nul
       }
       const tscJs = resolveTsc(cwd);
       if (!tscJs) {
-        resolve(unavailable('typescript not found in project node_modules'));
+        resolve(unavailable(TYPESCRIPT_MISSING));
         return;
       }
 
@@ -259,10 +284,13 @@ export function createTypechecker({cwd, startDir, log, inspectConfig = () => nul
     diagnostics = {...diagnostics, status: 'checking'};
     runOnce().then(result => {
       diagnostics = result;
+      // The install happens in this terminal, so the command is printed here too.
+      const install = result.install ? ` · missing dev dependencies, run: ${result.install.command}` : '';
       if (result.status === 'unavailable') {
-        log(`Typecheck unavailable (${result.reason})`);
+        log(`Typecheck unavailable (${result.reason})${install}`);
       } else {
-        log(`Typecheck: ${result.status === 'ok' ? 'ok' : `${result.total} error${result.total === 1 ? '' : 's'}`}`);
+        const summary = result.status === 'ok' ? 'ok' : `${result.total} error${result.total === 1 ? '' : 's'}`;
+        log(`Typecheck: ${summary}${install}`);
       }
       checking = false;
       if (rerunQueued && !disposed) {
@@ -283,6 +311,7 @@ export function createTypechecker({cwd, startDir, log, inspectConfig = () => nul
       disposed = true;
       rerunQueued = false;
       watchConfig(null);
+      fs.unwatchFile(packageJson, onProjectFileChange);
       if (activeChild) activeChild.kill('SIGKILL');
     },
   };

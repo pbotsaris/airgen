@@ -5,6 +5,38 @@ All notable changes to airgen are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.2]
+
+First-run polish for the typecheck panel: it now says what to install, and
+`fix-tsconfig` covers the rest of what a fresh `block init` scaffold needs.
+
+### Added
+
+- **Install banner in the observer.** When `typescript` isn't installed, or the
+  typecheck's errors name a missing `@types` package (tsc's own
+  `Try \`npm i --save-dev @types/react\`` hint on TS7016/TS2580/TS2591, and a
+  `types` entry with no package behind it, TS2688), a banner above the strip
+  lists the packages and the install command, with a Copy button. The command is
+  spelled for the project's package manager (`packageManager` field, then the
+  lockfile) and printed in the daemon's terminal too. It rides on a new optional
+  `install` key on `GET /diagnostics`. The daemon now watches `package.json`, so
+  the install itself triggers the recheck and the banner clears on its own.
+- **`fix-tsconfig` covers more.** `jsx` for JSX in plain `.js` files (how
+  `block init` writes it), a `lib` that leaves out `DOM`, and under TypeScript 6
+  or newer `"noUncheckedSideEffectImports": false`, since the compiler now
+  checks side-effect imports by default and the scaffold's `import
+  './style.css'` fails with TS2882. The recommended config airgen creates
+  carries that key when the project's TypeScript is 6+.
+- **`<SchemaObserver>` accepts children.** Wrapping the app in it instead of
+  rendering it as a sibling used to be a type error (`children` does not exist
+  on `SchemaObserverProps`). Children now render below the panel, and alone
+  when `enabled` is false.
+
+### Changed
+
+- Multi-line tsc messages (related detail, install hints) are reported and
+  shown whole; previously only the first line survived.
+
 ## [0.3.1]
 
 First-run fixes: a fresh extension now bundles before the first sync, and the
