@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-/** `system` follows the OS (`prefers-color-scheme`), as the components do with no provider. */
+/** `system` follows the frame's `prefers-color-scheme`, as the components do with no provider. */
 export type ColorScheme = 'light' | 'dark' | 'system';
 
 const ThemeContext = React.createContext<ColorScheme | null>(null);
@@ -25,9 +25,9 @@ export function ThemeScope({scheme, children}: {scheme: ColorScheme; children?: 
 
 export interface ThemeProviderProps {
   /**
-   * Airtable's theme: pass `useColorScheme().colorScheme` from your SDK's ui
-   * module. The iframe's `prefers-color-scheme` is the OS setting, which can
-   * disagree with Airtable's own.
+   * The scheme to force. The SDK's `useColorScheme` reads the same media query
+   * the components already follow, so passing it changes nothing; this is for
+   * an override such as a theme toggle.
    */
   colorScheme: ColorScheme;
   children?: React.ReactNode;

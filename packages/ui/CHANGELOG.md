@@ -10,11 +10,11 @@ Pre-1.0, minor versions may contain breaking changes.
 
 ### Added
 
-- **`ThemeProvider`** — `<ThemeProvider colorScheme={useColorScheme().colorScheme}>`
-  pins the components' dark variants to Airtable's theme rather than the
-  iframe's `prefers-color-scheme` (the OS setting), portals included. SDK-free:
-  the caller passes the scheme. `"system"`, or no provider, keeps the media
-  query.
+- **`ThemeProvider`** — `<ThemeProvider colorScheme="dark">` forces the
+  components' dark variants on or off, portals included (for a theme toggle).
+  Without it they follow the frame's `prefers-color-scheme`, which is exactly
+  what the SDK's `useColorScheme` reports, so following Airtable needs no
+  setup. `"system"`, or no provider, keeps the media query.
 
 ### Changed
 
