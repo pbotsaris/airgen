@@ -243,4 +243,6 @@ All exports are available from `airgen`, `airgen/interface`, and `airgen/base`.
 
 [`@airgen/ui`](packages/ui/README.md) provides Airtable-native React components that integrate with the generated schema.
 
-**Maintainers:** [Release Guide](docs/releasing.md)
+**Development:** 
+[Release Guide](docs/releasing.md)
+[sandbox](docs/sandbox.md)

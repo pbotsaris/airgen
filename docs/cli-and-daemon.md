@@ -2,7 +2,7 @@
 
 ## Scaffolding an extension
 
-The SDK and React come from the extension scaffold, so you never install them by hand. For an interface extension, the hello-world template is the quickest start:
+The SDK and React come from the extension scaffold, so you never install them by hand. For an interface extension:
 
 ```sh
 npm install -g @airtable/blocks-cli
@@ -11,7 +11,7 @@ cd <project-name>
 npm install --save-dev airgen
 ```
 
-`block init` takes a `<baseId>/<blockId>` identifier. Interface extensions aren't scoped to a single base, so the literal `NONE` fills that slot (the CLI accepts a base ID only if it starts with `app`, or exactly `NONE`). Get `<your-block-id>` (a `blk…` ID) from Builder Hub when you create the extension.
+`block init` takes a `<baseId>/<blockId>` identifier. 
 
 ## Running
 
@@ -23,14 +23,27 @@ npx airgen --daemon-only                     # just the daemon, run `block run` 
 npx airgen --fix                             # also offer code fixes for renames
 npx airgen fix-tsconfig                      # create or fix the tsconfig the typecheck uses
 ```
-
 ### First run
 
-Your extension imports `./airtable-schema` before that file has ever been generated, and an import that doesn't resolve fails the bundle, which would keep `<SchemaObserver />` from ever running. So when the output file doesn't exist yet, airgen writes a placeholder first: the header, an empty `airgenMeta`, and empty `TableRecordMap`/`TableWriteMap`. The extension bundles, the observer connects, and its first sync replaces the placeholder. An existing file is never overwritten. The placeholder doesn't export the hooks (`useRecords` and friends), because it can't know yet which SDK entry (`airgen` or `airgen/interface`) to bind them to; import those after the first sync.
+On the first run, airgen creates a placeholder `airtable-schema.ts` so your extension can bundle before the schema is generated.
 
-If there's no `tsconfig.json` or `jsconfig.json` at or above the output file (up to the extension's root, the directory with `block.json`; a config further up belongs to an enclosing project), airgen also creates the recommended `tsconfig.json` (see [Typechecking](typecheck-and-fixes.md#your-tsconfig)). An existing config is only changed when you run `npx airgen fix-tsconfig`.
+The placeholder contains empty metadata and table types. The first sync replaces it with the actual schema. Existing files are never overwritten.
 
-The generated file lands at `./frontend/airtable-schema.ts` by default. To change that (or the port) without flags, drop an `airgen-config.json` next to where you run airgen:
+**Note:** Hooks like `useRecords` are only available after the first sync.
+
+### TypeScript configuration
+
+If no `tsconfig.json` or `jsconfig.json` exists within your extension, airgen creates a recommended `tsconfig.json`.
+
+Existing configs are left unchanged. Run `npx airgen fix-tsconfig` to update one.
+
+See [Typechecking](typecheck-and-fixes.md#your-tsconfig).
+
+### Configuration
+
+By default, the generated schema is saved to `./frontend/airtable-schema.ts`.
+
+To customize the output path, port, or automatic fixes, create an `airgen-config.json`:
 
 ```json
 {
@@ -40,24 +53,36 @@ The generated file lands at `./frontend/airtable-schema.ts` by default. To chang
 }
 ```
 
-CLI flags and the `PORT` env var take precedence over the config file. The observer's `daemonUrl` prop must match the port (default `http://localhost:3001`).
+CLI flags and the `PORT` environment variable override these settings.
 
-The daemon is an in-process HTTP server tied to `block run`: it exits the moment `block run` exits, so stopping dev (ctrl-C) never leaves anything running.
+Make sure `<SchemaObserver />` uses the same port in its `daemonUrl` prop. The default is `http://localhost:3001`.
 
-Endpoints: `GET /health`, `POST /save-schema` (what the observer calls), `GET /diagnostics` (typecheck results), and under `--fix` only, `GET /fixes` and `POST /apply-fix`.
+### Daemon
 
-## Security
+The daemon runs alongside `block run` and stops automatically when you exit (`Ctrl+C`).
 
-Any webpage you visit can fire blind cross-origin POSTs at localhost, so the daemon is deliberately locked down:
+Available endpoints:
 
-- binds `127.0.0.1` only
-- the output path is fixed at startup (`--out` or `airgen-config.json`); client-supplied paths in the payload are ignored
-- payloads must be bounded (< 2 MB) strings starting with the airgen header, or they're rejected without writing
-- `GET /diagnostics` and `GET /fixes` are pure state reads (they never trigger work) and report cwd-relative paths only
-- `POST /apply-fix` exists only under `--fix`, takes an id and nothing else, and applies only edits the daemon computed itself; paths and edits are never accepted from the request
+- `GET /health` — Check daemon status.
+- `POST /save-schema` — Save the schema from the observer.
+- `GET /diagnostics` — Get typecheck results.
+- `GET /fixes` — List suggested fixes (`--fix` only).
+- `POST /apply-fix` — Apply a fix (`--fix` only).
 
-The permissive CORS header exists because the extension iframe's origin is `airtable.com`, and is only safe because of the points above.
+### Security
 
-## Production
+The daemon runs locally and includes safeguards to prevent unauthorized access or file changes:
 
-Remove `<SchemaObserver />` (or pass `enabled={false}`) before releasing. If it ships anyway, a released extension runs from a non-localhost origin, so browsers block the localhost request and the panel just shows "Disconnected"; nothing breaks and nothing is sent anywhere. `useSchemaDrift` (see [`examples/05-drift.tsx`](../examples/05-drift.tsx)) is the production-safe way to notice a base that changed under a released extension.
+- Binds to `127.0.0.1` only.
+- Writes only to the configured output file.
+- Validates incoming payloads and limits their size to 2 MB.
+- Applies only internally generated fixes when `--fix` is enabled.
+
+### Production
+
+Remove `<SchemaObserver />` or set `enabled={false}` before releasing.
+
+If left enabled, it simply shows "Disconnected" in production without affecting the extension.
+
+Use `useSchemaDrift` to detect schema changes in released extensions. See [`examples/05-drift.tsx`](../examples/05-drift.tsx).
+
