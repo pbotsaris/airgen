@@ -435,6 +435,8 @@ export interface ResultMeta extends FieldTypeMeta {
 export interface FieldTypeMeta {
   choices?: ChoiceMeta[];
   result?: ResultMeta;
+  /** `multipleRecordLinks` only: the table the link points at (meta version 3+). */
+  linkedTableId?: string;
 }
 
 export interface FieldMeta extends FieldTypeMeta {
@@ -468,6 +470,11 @@ export function buildFieldTypeMeta(type: string, options: FieldLike['options'], 
     }
   }
 
+  if (type === 'multipleRecordLinks') {
+    const linkedTableId = linkedTableIdOf(options);
+    if (linkedTableId !== null) meta.linkedTableId = linkedTableId;
+  }
+
   if (COMPUTED_TYPES.has(type) && depth <= MAX_RESULT_DEPTH) {
     const result = resultFieldConfig(options);
     if (result) {
@@ -476,6 +483,12 @@ export function buildFieldTypeMeta(type: string, options: FieldLike['options'], 
   }
 
   return meta;
+}
+
+/** The `linkedTableId` of a link field's options, or null when absent. */
+export function linkedTableIdOf(options: FieldLike['options']): string | null {
+  const id = options?.linkedTableId;
+  return typeof id === 'string' && id.length > 0 ? id : null;
 }
 
 export interface TableMeta {
@@ -491,8 +504,11 @@ export interface TableMeta {
  * 2: adds `isComputed` per field and `primaryFieldId` per table — the
  * writability picture the runtime's mutations need; files at version 1 carry
  * no writability information at all.
+ * 3: adds `linkedTableId` per link field — the relational picture behind
+ * `useRecords(key, {include})`; files at version 2 have no link targets, so
+ * the runtime cannot hydrate from them.
  */
-export const META_VERSION = 2;
+export const META_VERSION = 3;
 
 export interface GeneratedMeta {
   /** Meta format version (`META_VERSION`). */
@@ -662,17 +678,20 @@ interface TableEmission {
   writeInterface: string;
   recordMapEntry: string;
   writeMapEntry: string;
+  linkMapEntry: string;
 }
 
 function emitTable(
   plan: TablePlan,
   registerAlias: ReturnType<typeof createAliasRegistry>,
   flavor: SdkFlavor,
+  tableKeyById: ReadonlyMap<string, string>,
 ): TableEmission {
   const {table, key: tableKey, interfaceName, writeInterfaceName, fields} = plan;
   const aliases: string[] = [];
   const lines: string[] = [];
   const writeLines: string[] = [];
+  const linkLines: string[] = [];
 
   for (const {field, key: fieldKey} of fields) {
     // Selects with known choices get a named alias so consumers can refer to
@@ -691,6 +710,14 @@ function emitTable(
 
     if (doc !== null) lines.push(doc);
     lines.push(`  ${quoteKey(fieldKey)}?: ${resolved.ts};`);
+
+    // A link is includable only when its target is a table of this base; a
+    // link into a table the extension can't see is left out of the link map
+    // so `include` rejects it at compile time.
+    if (field.type === 'multipleRecordLinks') {
+      const targetKey = tableKeyById.get(linkedTableIdOf(field.options) ?? '');
+      if (targetKey !== undefined) linkLines.push(`${quoteKey(fieldKey)}: ${JSON.stringify(targetKey)}`);
+    }
 
     if (!isWritable(field)) continue;
 
@@ -712,6 +739,9 @@ function emitTable(
     writeInterface: `/** writable fields of table ${tableLabel} — cell write formats for createRecordsAsync/updateRecordsAsync; computed fields omitted */\nexport interface ${writeInterfaceName} {\n${writeLines.join('\n')}\n}`,
     recordMapEntry: `  ${quoteKey(tableKey)}: ${interfaceName};`,
     writeMapEntry: `  ${quoteKey(tableKey)}: ${writeInterfaceName};`,
+    // Every table gets an entry (possibly empty) so `keyof TableLinkMap`
+    // equals `keyof TableRecordMap`; the include types rely on that.
+    linkMapEntry: `  ${quoteKey(tableKey)}: {${linkLines.length > 0 ? ` ${linkLines.join('; ')} ` : ''}};`,
   };
 }
 
@@ -727,7 +757,8 @@ export function generateTypeScriptFromBase(base: BaseLike, options: GeneratorOpt
   const meta = buildMetaFromPlan(base, plan);
 
   const registerAlias = createAliasRegistry();
-  const emissions = plan.map(tablePlan => emitTable(tablePlan, registerAlias, flavor));
+  const tableKeyById = new Map(plan.map(tablePlan => [tablePlan.table.id, tablePlan.key]));
+  const emissions = plan.map(tablePlan => emitTable(tablePlan, registerAlias, flavor, tableKeyById));
 
   const sections = [
     fileHeader(base, meta.signature),
@@ -739,7 +770,8 @@ export function generateTypeScriptFromBase(base: BaseLike, options: GeneratorOpt
     `export const airgenMeta = ${JSON.stringify(meta, null, 2)} as const;`,
     `export interface TableRecordMap {\n${emissions.map(emission => emission.recordMapEntry).join('\n')}\n}\n\nexport type TableKey = keyof TableRecordMap;`,
     `export interface TableWriteMap {\n${emissions.map(emission => emission.writeMapEntry).join('\n')}\n}`,
-    `export const {useRecords, useTable, useSchemaDrift, useFields, useMutations, useQuery} = createTypedHooks<TableRecordMap, TableWriteMap>(airgenMeta);`,
+    `/** link field → the table it points at; drives \`useRecords(key, {include})\` */\nexport interface TableLinkMap {\n${emissions.map(emission => emission.linkMapEntry).join('\n')}\n}`,
+    `export const {useRecords, useTable, useSchemaDrift, useFields, useMutations, useQuery} = createTypedHooks<TableRecordMap, TableWriteMap, TableLinkMap>(airgenMeta);`,
   ];
 
   return sections.join('\n\n') + '\n';

@@ -246,3 +246,26 @@ test('upgrading to a color-carrying meta produces no changes and no codemod work
   assert.equal(ok, true);
   assert.deepEqual(changes, []);
 });
+
+test('a retargeted link is breaking and not fixable, with the record interface for usage lookup', () => {
+  const changes = diff(base => {
+    projectsField(base, 'fldRelated0000001').options.linkedTableId = 'tblMyTable00000002';
+  });
+
+  assert.equal(changes.length, 1);
+  assert.equal(changes[0].kind, 'link-target-changed');
+  assert.equal(changes[0].fixable, false);
+  assert.equal(changes[0].severity, 'breaking');
+  assert.deepEqual([changes[0].from, changes[0].to], ['tblMyTable00000001', 'tblMyTable00000002']);
+  assert.deepEqual([changes[0].fieldKey, changes[0].recordInterface], ['related', 'ProjectsRecord']);
+});
+
+test('upgrading to a link-carrying meta (version 3) produces no changes', () => {
+  const legacy = source.replace(/,\s*"linkedTableId": "[^"]*"/g, '').replace(/"version": 3/, '"version": 2');
+  assert.notEqual(legacy, source);
+  assert.equal(extractAirgenMeta(legacy).tables.Projects.fields.related.linkedTableId, undefined);
+
+  const {ok, changes} = diffGeneratedFiles(legacy, source);
+  assert.equal(ok, true);
+  assert.deepEqual(changes, []);
+});

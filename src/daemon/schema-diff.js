@@ -249,6 +249,28 @@ function diffFields(oldTable, newTable, oldTableKey, tableKey, oldAliases, newAl
       continue; // the whole projection below it is moot
     }
 
+    // Only when both files record the target (meta version 3+): the first
+    // save after upgrading adds the key and must stay silent.
+    if (
+      oldField.linkedTableId !== undefined &&
+      newField.linkedTableId !== undefined &&
+      oldField.linkedTableId !== newField.linkedTableId
+    ) {
+      changes.push({
+        kind: 'link-target-changed',
+        fixable: false,
+        severity: 'breaking',
+        tableKey,
+        oldTableKey,
+        fieldKey,
+        oldFieldKey,
+        recordInterface: `${oldTableKey}Record`,
+        from: oldField.linkedTableId,
+        to: newField.linkedTableId,
+        description: `field ${label(fieldName, newTable.name)} now links to another table: ${oldField.linkedTableId} → ${newField.linkedTableId} — \`include: {${fieldKey}}\` hydrates rows of another shape`,
+      });
+    }
+
     const oldAlias = oldAliases.get(aliasKey(oldTable.name, fieldName));
     const newAlias = newAliases.get(aliasKey(newTable.name, newField.name ?? fieldKey));
 

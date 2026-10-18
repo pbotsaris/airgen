@@ -22,7 +22,7 @@
  * signature to match (see the coupling invariant in CLAUDE.md).
  */
 
-import {buildFieldTypeMeta} from './generator.js';
+import {buildFieldTypeMeta, linkedTableIdOf} from './generator.js';
 import type {BaseLike, ChoiceMeta, FieldLike, FieldTypeMeta, TableLike} from './generator.js';
 
 /**
@@ -51,6 +51,8 @@ export interface DriftFieldMetaLike {
   readonly result?: DriftResultMetaLike;
   /** The SDK's `Field.isComputed` at generation time. Optional: meta version 1 lacks it. */
   readonly isComputed?: boolean;
+  /** Link target at generation time. Optional: meta versions before 3 lack it. */
+  readonly linkedTableId?: string;
 }
 
 export interface DriftTableMetaLike {
@@ -73,6 +75,7 @@ export type DriftKind =
   | 'field-missing'
   | 'field-type-changed'
   | 'field-became-computed'
+  | 'link-target-changed'
   | 'result-type-changed'
   | 'choice-removed'
   | 'choice-renamed'
@@ -272,6 +275,23 @@ export function checkSchemaDrift(base: BaseLike, meta: DriftMetaLike): DriftRepo
           message: `field ${JSON.stringify(fieldName)} (${tableName}) changed type: ${fieldMeta.type} → ${liveField.type}`,
         });
         continue;
+      }
+
+      // Only when the meta recorded the target (version 3+): a retargeted link
+      // holds other records, so `include` hydrates rows of another shape.
+      const liveTarget = linkedTableIdOf(liveField.options ?? null);
+      if (fieldMeta.linkedTableId !== undefined && liveTarget !== null && liveTarget !== fieldMeta.linkedTableId) {
+        findings.push({
+          severity: 'breaking',
+          kind: 'link-target-changed',
+          tableKey,
+          tableName,
+          fieldKey,
+          fieldName,
+          expected: fieldMeta.linkedTableId,
+          actual: liveTarget,
+          message: `field ${JSON.stringify(fieldName)} (${tableName}) now links to another table: ${fieldMeta.linkedTableId} → ${liveTarget}`,
+        });
       }
 
       // Only when the meta recorded writability (version 2+) and the live SDK

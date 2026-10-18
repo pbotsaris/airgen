@@ -45,11 +45,11 @@ export function fakeTable(tableFixture, {deny = {}, failWriteCall = -1} = {}) {
   };
 }
 
-/** A record whose cells are keyed by field id. */
-export function fakeRecord(id, cellsByFieldId) {
+/** A record whose cells are keyed by field id; `name` is the SDK's primary-field display string. */
+export function fakeRecord(id, cellsByFieldId, name = id) {
   return {
     id,
-    name: id,
+    name,
     getCellValue: field => cellsByFieldId[field.id] ?? null,
     getCellValueAsString: field => String(cellsByFieldId[field.id] ?? ''),
   };

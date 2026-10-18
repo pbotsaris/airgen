@@ -32,6 +32,9 @@ export type {
   AirgenFieldMeta,
   FieldInspectors,
   Record as TypedRecord,
+  IncludedRecord,
+  IncludeOptions,
+  IncludeSpec,
   TypedHooksOptions,
 } from './useTypedRecords.js';
 export type {

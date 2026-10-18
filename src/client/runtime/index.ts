@@ -34,6 +34,8 @@ export type {LookupEntry} from './normalize.js';
 export {ValidationResult} from './validation.js';
 export type {ValidationIssue, ValidationKind, ValidationLevel} from './validation.js';
 export {findTable, resolveTableOverride} from './resolver.js';
+export {MAX_INCLUDE_DEPTH, flattenInclude, hydrate, planInclude} from './include.js';
+export type {IncludeSkipReason, IncludeStep} from './include.js';
 export type {ResolvedTable} from './resolver.js';
 export {customPropertyKey, tableCustomProperties} from './customProperties.js';
 export type {CustomPropertiesConfig} from './customProperties.js';

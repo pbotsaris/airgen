@@ -66,7 +66,7 @@ export const collaboratorByEmail: ProjectsWrite = {owner: {email: 'a@b.c'}};
 export const sameKeys: keyof TableWriteMap extends keyof TableRecordMap ? true : never = true;
 
 /** Meta v2 is `as const`, so writability and the primary field are literal types. */
-export const version: 2 = airgenMeta.version;
+export const version: 3 = airgenMeta.version;
 export const primaryFieldId: 'fldName0000000001' = airgenMeta.tables.Projects.primaryFieldId;
 export const formulaIsComputed: true = airgenMeta.tables.Projects.fields.daysLeft.isComputed;
 export const textIsWritable: false = airgenMeta.tables.Projects.fields.name.isComputed;

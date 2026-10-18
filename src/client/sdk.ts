@@ -81,11 +81,37 @@ export interface TableCustomProperty {
  * checked bivariantly, which is what lets the SDK's more precisely typed
  * hooks (branded ids, class parameters, overloads) satisfy these shapes.
  */
+/**
+ * Wraps an SDK `useRecords` that can't take `null` so the adapter contract
+ * holds: for a missing table it loads any table of the base instead (the SDK
+ * pools record stores per table, so the stand-in costs nothing) and returns
+ * `null`. The SDK hook is always called, so React sees the same hooks whether
+ * or not the table exists. Only when the base exposes no table at all is the
+ * call skipped — there is nothing to render in that state anyway.
+ */
+export function nullSafeUseRecords<T extends SdkTable, R>(
+  useBase: () => {readonly tables: ReadonlyArray<unknown>},
+  useRecords: (table: T) => R,
+): (table: T | null) => R | null {
+  return table => {
+    const standIn = table ?? (useBase().tables[0] as T | undefined) ?? null;
+    const records = standIn ? useRecords(standIn) : null;
+    return table ? records : null;
+  };
+}
+
 export interface BlocksSdkAdapter {
   /** The returned base serves both schema reads (BaseLike) and table lookup. */
   useBase(): BaseLike & SdkBase;
   useWatchable(model: unknown, keys: ReadonlyArray<string>): void;
-  useRecords(table: SdkTable): ReadonlyArray<SdkRecord> | null;
+  /**
+   * Must accept `null` (a deleted or hidden table) and return `null` for it
+   * without throwing — and still call the SDK's hook, so the hook count stays
+   * fixed. The stable SDK does this itself; the interface SDK's `useRecords`
+   * reads `table.id` unguarded, so `interface.ts` wraps it with
+   * `nullSafeUseRecords`.
+   */
+  useRecords(table: SdkTable | null): ReadonlyArray<SdkRecord> | null;
   /**
    * React's `useMemo`. Optional so a test adapter of plain functions needs no
    * React render; without it every hook result is rebuilt on each call.

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 
 import {buildAirgenMeta} from '../dist/client/generator.js';
 import {makeCreateTypedHooks} from '../dist/client/useTypedRecords.js';
+import {nullSafeUseRecords} from '../dist/client/sdk.js';
 import {mockBase} from './fixtures/mock-base.js';
 import {fakeAdapter, fakeBase, fakeRecord, fakeTable, writes} from './fixtures/fake-sdk.js';
 
@@ -278,4 +279,26 @@ test('custom properties on a flavor without them: generated table, with a warnin
   assert.equal(result.ok, true);
   assert.equal(result.issues[0].kind, 'custom-properties-unsupported');
   assert.equal(writes(generated).length, 1);
+});
+
+// --- Adapter contract: useRecords(null) --------------------------------------
+
+test('nullSafeUseRecords: a missing table reads as null without reaching an SDK hook that throws on null', () => {
+  const calls = [];
+  const sdkUseRecords = table => {
+    calls.push(table.id); // the interface SDK reads `table.id` unguarded
+    return [`records of ${table.id}`];
+  };
+  const base = fakeBase([projects, mockBase.tables[1]]);
+  const useRecords = nullSafeUseRecords(() => base, sdkUseRecords);
+
+  assert.deepEqual(useRecords(base.tables[1]), ['records of tblMyTable00000001']);
+  // Null: the SDK hook still runs (same hook count), on a stand-in, and the result is hidden.
+  assert.equal(useRecords(null), null);
+  assert.deepEqual(calls, ['tblMyTable00000001', projects.id]);
+
+  // A base with no visible table has nothing to stand in; nothing throws.
+  const empty = nullSafeUseRecords(() => fakeBase([]), sdkUseRecords);
+  assert.equal(empty(null), null);
+  assert.equal(calls.length, 2);
 });

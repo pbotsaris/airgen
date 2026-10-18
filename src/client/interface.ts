@@ -10,9 +10,18 @@ import {useBase, useCustomProperties, useRecords, useWatchable} from '@airtable/
 import {useMemo} from 'react';
 import {createSchemaObserver} from './SchemaObserver.js';
 import {makeCreateTypedHooks} from './useTypedRecords.js';
+import {nullSafeUseRecords} from './sdk.js';
 import type {BlocksSdkAdapter} from './sdk.js';
 
-const sdk: BlocksSdkAdapter = {useBase, useRecords, useWatchable, useMemo, useCustomProperties};
+// This SDK's useRecords reads `table.id` unguarded; a deleted or hidden
+// generated table must read as [] (adapter contract), not throw.
+const sdk: BlocksSdkAdapter = {
+  useBase,
+  useRecords: nullSafeUseRecords(useBase, useRecords),
+  useWatchable,
+  useMemo,
+  useCustomProperties,
+};
 
 export const SchemaObserver = createSchemaObserver(sdk, {hooksModule: 'airgen/interface', sdkFlavor: 'interface'});
 export const createTypedHooks = makeCreateTypedHooks(sdk);
@@ -24,6 +33,9 @@ export type {
   AirgenFieldMeta,
   FieldInspectors,
   Record as TypedRecord,
+  IncludedRecord,
+  IncludeOptions,
+  IncludeSpec,
   TypedHooksOptions,
 } from './useTypedRecords.js';
 export type {

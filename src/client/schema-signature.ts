@@ -44,6 +44,9 @@ function relevantOptions(field: SignatureFieldLike): unknown {
       options: result.options && typeof result.options === 'object' ? result.options : null,
     };
   }
+  // A link's target table shapes TableLinkMap and the meta's `linkedTableId`,
+  // so a retargeted link must regenerate the file.
+  if (typeof options.linkedTableId === 'string') out.linkedTableId = options.linkedTableId;
   return Object.keys(out).length > 0 ? out : null;
 }
 

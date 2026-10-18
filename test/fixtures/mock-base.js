@@ -62,7 +62,14 @@ export const mockBase = {
           id: 'fldLinks000000001',
           name: 'Tasks',
           type: 'multipleRecordLinks',
+          // Dangling: no such table in this base, so the link is not includable.
           options: {linkedTableId: 'tblTasks0000000001'},
+        },
+        {
+          id: 'fldRelated0000001',
+          name: 'Related',
+          type: 'multipleRecordLinks',
+          options: {linkedTableId: 'tblMyTable00000001', inverseLinkFieldId: 'fldMt1Projects001'},
         },
         {id: 'fldAttach00000001', name: 'Files', type: 'multipleAttachments'},
         {id: 'fldOwner000000001', name: 'Owner', type: 'singleCollaborator'},
@@ -109,7 +116,21 @@ export const mockBase = {
     {
       id: 'tblMyTable00000001',
       name: 'My Table',
-      fields: [{id: 'fldMt100000000001', name: 'Name', type: 'singleLineText'}],
+      fields: [
+        {id: 'fldMt100000000001', name: 'Name', type: 'singleLineText'},
+        {
+          id: 'fldMt1Projects001',
+          name: 'Projects',
+          type: 'multipleRecordLinks',
+          options: {linkedTableId: 'tblProjects000001', inverseLinkFieldId: 'fldRelated0000001'},
+        },
+        {
+          id: 'fldMt1Plans000001',
+          name: 'Plans',
+          type: 'multipleRecordLinks',
+          options: {linkedTableId: 'tbl2024Plans000001'},
+        },
+      ],
     },
     {
       id: 'tblMyTable00000002',
@@ -133,6 +154,12 @@ export const mockBase = {
       name: '2024 Plans',
       fields: [
         {id: 'fldPlan0000000001', name: 'Plan', type: 'singleLineText'},
+        {
+          id: 'fldPlanOther00001',
+          name: 'Other',
+          type: 'multipleRecordLinks',
+          options: {linkedTableId: 'tblMyTable00000002'},
+        },
         {
           id: 'fldPlanStatus0001',
           name: 'Status',

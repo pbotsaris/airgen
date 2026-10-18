@@ -273,7 +273,7 @@ test('the first-run stub typechecks for a consumer importing airgenMeta', async 
   const source =
     "import {airgenMeta, type TableKey} from '../airtable-schema';\n" +
     'const count: number = Object.keys(airgenMeta.tables).length;\n' +
-    'const version: 2 = airgenMeta.version;\n' +
+    'const version: 3 = airgenMeta.version;\n' +
     'export type Key = TableKey;\n' +
     'export {count, version};\n';
   await withProject({config, source, extraFiles: {'airtable-schema.ts': STUB_SOURCE}}, async ({url}) => {

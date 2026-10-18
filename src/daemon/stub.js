@@ -25,7 +25,7 @@ ${STUB_MARKER}
 /* eslint-disable */
 
 export const airgenMeta = {
-  "version": 2,
+  "version": 3,
   "tables": {}
 } as const;
 
@@ -34,6 +34,8 @@ export interface TableRecordMap {}
 export type TableKey = keyof TableRecordMap;
 
 export interface TableWriteMap {}
+
+export interface TableLinkMap {}
 `;
 
 /** True for the placeholder, which carries no schema to diff against. */

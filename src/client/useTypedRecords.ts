@@ -5,7 +5,7 @@
  * with
  *
  *   export const {useRecords, useTable, useSchemaDrift, useFields, useMutations, useQuery} =
- *     createTypedHooks<TableRecordMap, TableWriteMap>(airgenMeta);
+ *     createTypedHooks<TableRecordMap, TableWriteMap, TableLinkMap>(airgenMeta);
  *
  * so the whole consumer-facing API is `import {useRecords} from
  * './airtable-schema'`. That works from plain JS too — the generic is bound
@@ -28,6 +28,8 @@ import {pickedTable, tableCustomProperties} from './runtime/customProperties.js'
 import type {CustomPropertiesConfig} from './runtime/customProperties.js';
 import {inspectField} from './runtime/fields.js';
 import type {FieldInspector} from './runtime/fields.js';
+import {buildRow, flattenInclude, hydrate, planInclude, warnSkipped} from './runtime/include.js';
+import type {IncludeStep, Row} from './runtime/include.js';
 import {createMutations} from './runtime/mutations.js';
 import type {MutableTable} from './runtime/mutations.js';
 import {query} from './runtime/queries.js';
@@ -47,6 +49,8 @@ export interface AirgenFieldMeta {
   readonly result?: DriftResultMetaLike;
   /** The SDK's `Field.isComputed` at generation time. Optional: meta version 1 lacks it. */
   readonly isComputed?: boolean;
+  /** `multipleRecordLinks` only: the table the link points at. Optional: meta versions before 3 lack it. */
+  readonly linkedTableId?: string;
 }
 
 export interface AirgenTableMeta {
@@ -69,6 +73,8 @@ export interface AirgenMeta<M> {
 
 export interface Record<M, K extends keyof M> {
   id: string;
+  /** The SDK's `record.name`: the primary field's display string. */
+  name: string;
   fields: Partial<M[K]>;
   /** Escape hatch to the native SDK record (cast to your SDK's Record type). */
   raw: SdkRecord;
@@ -76,6 +82,64 @@ export interface Record<M, K extends keyof M> {
 
 /** One inspector per field key of a table, hidden and deleted fields included (they report it). */
 export type FieldInspectors<M, K extends keyof M> = {readonly [F in keyof M[K] & string]: FieldInspector};
+
+/** Remaining depth after following one link. */
+type Prev = [never, 0, 1, 2];
+
+/**
+ * The links `useRecords(K, {include})` may follow: each key is a link field of
+ * `K` in the generated `TableLinkMap` (`L`), set to `true` or to a nested
+ * spec. Bounded to `D` links deep, and a link whose target table is already
+ * on the path (`Visited`) is not offered — Projects → tasks → project would
+ * hydrate a cycle. With no link map bound (`L = object`) nothing is includable,
+ * which is how a file generated before 0.4.0 refuses `include` at compile time.
+ */
+export type IncludeSpec<L, K, D extends number, Visited> = D extends 0
+  ? never
+  : K extends keyof L
+    ? {
+        [F in keyof L[K] as L[K][F] extends Visited ? never : F]?:
+          true | IncludeSpec<L, L[K][F], Prev[D], Visited | L[K][F]>;
+      }
+    : never;
+
+/**
+ * `I` with every key outside `Spec` mapped to `never`, recursively, so that
+ * `I & StrictInclude<I, Spec>` rejects an excess key at that key. Inference
+ * alone would let it through: the literal *becomes* `I` and is only checked
+ * against the constraint, where an extra property is structurally fine.
+ */
+export type StrictInclude<I, Spec> = {
+  [F in keyof I]: F extends keyof Spec
+    ? I[F] extends true
+      ? true
+      : StrictInclude<I[F], Exclude<NonNullable<Spec[F]>, true>>
+    : never;
+};
+
+export interface IncludeOptions<I, Spec> {
+  /**
+   * Links to hydrate. Its *shape* must be static per call site (like hook
+   * deps): each key costs one SDK `useRecords` call, and React needs that
+   * count stable across renders.
+   */
+  readonly include: I & StrictInclude<I, Spec>;
+}
+
+/** `M[K]` with each included link cell replaced by the linked table's rows. */
+export type Hydrated<M, L, K extends keyof M, I> = Partial<Omit<M[K], keyof I>> & {
+  [F in keyof I & keyof L[K & keyof L]]?: Array<
+    IncludedRecord<M, L, Extract<L[K & keyof L][F], keyof M>, I[F] extends object ? I[F] : object>
+  >;
+};
+
+/** A `Record` whose included link cells hold the linked table's rows. */
+export interface IncludedRecord<M, L, K extends keyof M, I> {
+  id: string;
+  name: string;
+  fields: Hydrated<M, L, K, I>;
+  raw: SdkRecord;
+}
 
 export interface TypedHooksOptions<M> {
   /**
@@ -99,20 +163,26 @@ function resolutionKey({tableMeta, validation}: ResolvedTable): string {
  * `M` is the generated `TableRecordMap` (read shapes), `W` the generated
  * `TableWriteMap` (cell write formats) that `useMutations` is typed by. Files
  * generated before 0.3.0 bind only `M`, so `W` defaults to it; the runtime
- * converts read shapes, so those writes still work.
+ * converts read shapes, so those writes still work. `L` is `TableLinkMap`
+ * (link field → target table key), which types `include`; files generated
+ * before 0.4.0 don't bind it, so for them no link is includable.
  */
 export function makeCreateTypedHooks(sdk: BlocksSdkAdapter) {
   const memo = <T>(factory: () => T, deps: ReadonlyArray<unknown>): T =>
     sdk.useMemo ? sdk.useMemo(factory, deps) : factory();
 
-  return function createTypedHooks<M extends object, W extends {[K in keyof M]?: object} = M>(
-    meta: AirgenMeta<M>,
-    options: TypedHooksOptions<M> = {},
-  ) {
+  return function createTypedHooks<
+    M extends object,
+    W extends {[K in keyof M]?: object} = M,
+    L extends {[K in keyof M]?: object} = object,
+  >(meta: AirgenMeta<M>, options: TypedHooksOptions<M> = {}) {
     // AirgenMeta<M>'s tables are a mapped type over the generic M, which has
     // no implicit string index while M is unresolved; the shapes are
     // structurally identical for string keys.
     const tables = meta.tables as unknown as {readonly [tableKey: string]: AirgenTableMeta};
+    const metaTablesById = new Map(Object.values(tables).map(tableMeta => [tableMeta.id, tableMeta]));
+    // Skipped include keys are reported once per hooks instance, not per render.
+    const warnedIncludes = new Set<string>();
     const config: {readonly [tableKey: string]: string | undefined} = options.customProperties ?? {};
     const overridable = new Set(Object.keys(config).filter(key => config[key] !== undefined && tables[key]));
     // useCustomProperties requires one identity across renders.
@@ -148,31 +218,42 @@ export function makeCreateTypedHooks(sdk: BlocksSdkAdapter) {
       return useResolvedTable(tableKey).table;
     }
 
-    function useRecords<K extends keyof M & string>(tableKey: K): Array<Record<M, K>> {
+    /**
+     * The rows of a table, with the links named by `include` hydrated. The
+     * include plan has one step per spec key whether or not the key resolves,
+     * so the number of SDK calls below depends only on the spec's shape.
+     */
+    function useRows(tableKey: string, include: unknown): Row[] {
+      const base = sdk.useBase();
       const {table, tableMeta} = useResolvedTable(tableKey);
-      // The SDK's useRecords accepts null (and returns null), but its
-      // overloads don't admit `SdkTable | null` directly.
-      const records = sdk.useRecords(table as SdkTable);
+      const steps = planInclude(include, table, tableMeta, {base, metaTablesById});
+      const flat = flattenInclude(steps);
+
+      // A missing table is null here; the adapter's useRecords is null-safe
+      // (sdk.ts) and still runs the SDK hook, so the hook count holds.
+      const records = sdk.useRecords(table);
+      // A step whose target didn't resolve loads the root table instead: the
+      // call count stays fixed, and the SDK pools query results per table so
+      // the duplicate costs nothing. Target tables never go through
+      // `useResolvedTable` — that would add conditional hook calls.
+      const loaded = new Map<IncludeStep, ReadonlyArray<SdkRecord>>();
+      for (const step of flat) loaded.set(step, sdk.useRecords(step.table ?? table) ?? []);
 
       if (!table || !records) return [];
+      if (flat.length > 0) warnSkipped(tableMeta, steps, warnedIncludes);
 
-      return records.map(record => {
-        const fields: {[fieldName: string]: unknown} = {};
+      const rows = records.map(record => buildRow(record, table, tableMeta));
+      hydrate(rows, steps, step => loaded.get(step) ?? []);
+      return rows;
+    }
 
-        for (const [fieldName, fieldMeta] of Object.entries(tableMeta.fields)) {
-          const field = table.getFieldByIdIfExists(fieldMeta.id);
-
-          if (!field) continue; // deleted (or hidden from this extension) since generation
-
-          const value = record.getCellValue(field);
-
-          if (value !== null && value !== undefined) {
-            fields[fieldName] = value;
-          }
-        }
-
-        return {id: record.id, fields: fields as Partial<M[K]>, raw: record};
-      });
+    function useRecords<K extends keyof M & string>(tableKey: K): Array<Record<M, K>>;
+    function useRecords<K extends keyof M & string, I extends IncludeSpec<L, K, 2, K>>(
+      tableKey: K,
+      options: IncludeOptions<I, IncludeSpec<L, K, 2, K>>,
+    ): Array<IncludedRecord<M, L, K, I>>;
+    function useRecords(tableKey: string, options?: {readonly include?: unknown}): Row[] {
+      return useRows(tableKey, options?.include);
     }
 
     /**
@@ -232,11 +313,15 @@ export function makeCreateTypedHooks(sdk: BlocksSdkAdapter) {
      * in your own `useMemo` only if you have a dependency that changes
      * exactly when it should.
      */
-    function useQuery<K extends keyof M & string>(
+    function useQuery<K extends keyof M & string>(tableKey: K, spec?: QuerySpec<Record<M, K>>): Array<Record<M, K>>;
+    function useQuery<K extends keyof M & string, I extends IncludeSpec<L, K, 2, K>>(
       tableKey: K,
-      spec: QuerySpec<Record<M, K>> = {},
-    ): Array<Record<M, K>> {
-      return query(useRecords(tableKey), spec);
+      spec: QuerySpec<Record<M, K>> & IncludeOptions<I, IncludeSpec<L, K, 2, K>>,
+    ): Array<IncludedRecord<M, L, K, I>>;
+    // `any`: the overloads' specs are keyed by each table's own field keys,
+    // which no single implementation type covers.
+    function useQuery(tableKey: string, spec: any = {}): any {
+      return query(useRows(tableKey, spec.include), spec as QuerySpec<Row>);
     }
 
     return {useTable, useRecords, useSchemaDrift, useFields, useMutations, useQuery};

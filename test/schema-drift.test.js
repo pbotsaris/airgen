@@ -292,3 +292,27 @@ test('never throws on degenerate inputs', () => {
   assert.equal(report.ok, false);
   assert.ok(report.findings.every(finding => finding.kind === 'table-missing'));
 });
+
+test('a retargeted link is breaking: include would hydrate rows of another table', () => {
+  const base = structuredClone(mockBase);
+  base.tables[0].fields.find(field => field.id === 'fldRelated0000001').options.linkedTableId = 'tblMyTable00000002';
+
+  const report = checkSchemaDrift(base, meta);
+  assert.equal(report.counts.breaking, 1);
+  const [finding] = report.findings;
+  assert.equal(finding.kind, 'link-target-changed');
+  assert.equal(finding.fieldKey, 'related');
+  assert.deepEqual([finding.expected, finding.actual], ['tblMyTable00000001', 'tblMyTable00000002']);
+});
+
+test('metas before version 3 (no linkedTableId) never report link drift', () => {
+  const v2Meta = structuredClone(meta);
+  v2Meta.version = 2;
+  for (const table of Object.values(v2Meta.tables)) {
+    for (const field of Object.values(table.fields)) delete field.linkedTableId;
+  }
+  const base = structuredClone(mockBase);
+  base.tables[0].fields.find(field => field.id === 'fldRelated0000001').options.linkedTableId = 'tblMyTable00000002';
+
+  assert.equal(checkSchemaDrift(base, v2Meta).ok, true);
+});

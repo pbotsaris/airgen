@@ -176,7 +176,7 @@ test('embeds airgenMeta with ids, choices, and the schema signature', () => {
   // the list form survives duplicate choice names, and color rides along for
   // UI consumers of the meta.
   assert.match(code, /"choices": \[\s*\{\s*"id": "selTodo000000001",\s*"name": "Todo",\s*"color": "redBright"\s*\}/);
-  assert.match(code, /"version": 2/);
+  assert.match(code, /"version": 3/);
   assert.match(code, /"primaryFieldId": "fldName0000000001"/);
   assert.match(code, /"type": "formula",\s*"isComputed": true/);
   assert.match(code, /"type": "singleLineText",\s*"isComputed": false/);
@@ -203,7 +203,7 @@ test('airgenMeta records the computed result type drift needs to compare', () =>
 test('airgenMeta carries choice colors for UI consumers, omitting the key when absent', () => {
   const meta = buildAirgenMeta(mockBase);
   assert.equal(meta.version, META_VERSION);
-  assert.equal(META_VERSION, 2);
+  assert.equal(META_VERSION, 3);
   // Mixed field: a colorless choice must not carry an own `color: undefined`
   // key — the in-memory meta and the JSON.stringify'd file must be the same
   // shape (deepEqual distinguishes {color: undefined}; the JSON would hide it).
@@ -255,7 +255,7 @@ test('airgenMeta v2 records isComputed and primaryFieldId, omitting both when th
   const bareMeta = buildAirgenMeta(bare);
   assert.equal('primaryFieldId' in bareMeta.tables.Projects, false);
   assert.equal('isComputed' in bareMeta.tables.Projects.fields.name, false);
-  assert.equal(bareMeta.version, 2);
+  assert.equal(bareMeta.version, 3);
   // Writability then falls back to the field type, so the Write interfaces are unchanged.
   assert.equal(writeSection(generateTypeScriptFromBase(bare)), writeSection(code));
 });
@@ -269,9 +269,9 @@ test('isComputed and primaryField are not signature inputs, and write types read
   assert.equal(computeSchemaSignature(flipped), original);
 
   // The three-way coupling (CLAUDE.md): relevantOptions captures exactly
-  // `choices` and `result`. Stripping every other option must leave both the
-  // signature and the emitted Write interfaces untouched — if a write type ever
-  // starts reading another option, this is the test that fails first.
+  // `choices`, `result` and `linkedTableId`. Stripping every other option must
+  // leave both the signature and the emitted Write interfaces untouched — if a
+  // write type ever starts reading another option, this is the test that fails first.
   const stripped = structuredClone(mockBase);
   for (const table of stripped.tables) {
     for (const field of table.fields) {
@@ -279,6 +279,7 @@ test('isComputed and primaryField are not signature inputs, and write types read
       const kept = {};
       if ('choices' in field.options) kept.choices = field.options.choices;
       if ('result' in field.options) kept.result = field.options.result;
+      if ('linkedTableId' in field.options) kept.linkedTableId = field.options.linkedTableId;
       field.options = kept;
     }
   }
@@ -306,11 +307,32 @@ test('emits TableRecordMap keyed by sanitized table names', () => {
   assert.match(code, /export type TableKey = keyof TableRecordMap;/);
 });
 
+test('emits TableLinkMap with one entry per table, omitting links into tables outside the base', () => {
+  assert.match(code, /export interface TableLinkMap \{/);
+  // `Related` points at My Table; `Tasks` dangles (no such table) and is left out.
+  assert.match(code, /^ {2}Projects: \{ related: "MyTable" \};$/m);
+  assert.match(code, /^ {2}MyTable: \{ projects: "Projects"; plans: "T2024Plans" \};$/m);
+  assert.match(code, /^ {2}MyTable2: \{\};$/m);
+  assert.doesNotMatch(code, /tasks: "/);
+
+  const linkSection = exampleCode.slice(exampleCode.indexOf('export interface TableLinkMap'));
+  assert.match(linkSection, /^ {2}Projects: \{ tasks: "Tasks" \};$/m);
+  assert.match(linkSection, /^ {2}Tasks: \{ project: "Projects" \};$/m);
+  assert.match(linkSection, /^ {2}People: \{ projects: "Projects" \};$/m);
+});
+
+test("airgenMeta records each link field's target table", () => {
+  const fields = buildAirgenMeta(mockBase).tables.Projects.fields;
+  assert.equal(fields.related.linkedTableId, 'tblMyTable00000001');
+  assert.equal(fields.tasks.linkedTableId, 'tblTasks0000000001'); // recorded even when dangling: drift compares it
+  assert.equal('linkedTableId' in fields.name, false);
+});
+
 test('emits ready-to-use hooks bound to the schema', () => {
   assert.match(code, /^import \{createTypedHooks\} from 'airgen';$/m);
   assert.match(
     code,
-    /^export const \{useRecords, useTable, useSchemaDrift, useFields, useMutations, useQuery\} = createTypedHooks<TableRecordMap, TableWriteMap>\(airgenMeta\);$/m,
+    /^export const \{useRecords, useTable, useSchemaDrift, useFields, useMutations, useQuery\} = createTypedHooks<TableRecordMap, TableWriteMap, TableLinkMap>\(airgenMeta\);$/m,
   );
 });
 
@@ -351,6 +373,12 @@ test('signature is stable, order-insensitive, and change-sensitive', () => {
   const recolored = structuredClone(mockBase);
   recolored.tables[0].fields.find(field => field.id === 'fldStatus00000001').options.choices[0].color = 'purpleBright';
   assert.notEqual(computeSchemaSignature(recolored), original);
+
+  // A link's target shapes TableLinkMap, so retargeting must regenerate.
+  const retargeted = structuredClone(mockBase);
+  retargeted.tables[0].fields.find(field => field.id === 'fldRelated0000001').options.linkedTableId =
+    'tblMyTable00000002';
+  assert.notEqual(computeSchemaSignature(retargeted), original);
 });
 
 test('generated output compiles under tsc --strict, resolving airgen like a consumer', () => {
@@ -363,7 +391,7 @@ test('generated output compiles under tsc --strict, resolving airgen like a cons
   fs.writeFileSync(interfaceFile, interfaceCode, 'utf8');
   // Consumer-style assertions on the write types: positive cases compile and
   // each `@ts-expect-error` is a real error (tsc fails on an unused one).
-  const consumers = ['write-types.ts', 'write-types-interface.ts', 'hooks.ts'].map(name => {
+  const consumers = ['write-types.ts', 'write-types-interface.ts', 'hooks.ts', 'include.ts'].map(name => {
     const target = path.join(dir, name);
     fs.copyFileSync(path.join(fixturesDir, 'consumers', name), target);
     return target;
