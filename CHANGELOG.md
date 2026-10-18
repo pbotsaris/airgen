@@ -5,21 +5,30 @@ All notable changes to airgen are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.3.1]
+
+First-run fixes: a fresh extension now bundles before the first sync, and the
+typecheck panel tells you when your tsconfig hides your code from it.
+
+### Fixed
+
+- **First run no longer deadlocks.** An extension that imports
+  `./airtable-schema` failed to bundle until that file existed, so
+  `<SchemaObserver />` never ran and the file was never written. When the
+  output file doesn't exist yet, `npx airgen` now writes a placeholder (header,
+  empty `airgenMeta`, empty `TableRecordMap`/`TableWriteMap`) that the
+  observer's first sync replaces. An existing file is never overwritten. The
+  placeholder doesn't export the hooks; import those after the first sync.
 
 ### Added
 
-- **First-run placeholder.** When the output file doesn't exist yet, `npx airgen`
-  writes a placeholder (header, empty `airgenMeta`, empty `TableRecordMap`/
-  `TableWriteMap`) so an extension that imports `./airtable-schema` bundles
-  before `<SchemaObserver />` has ever synced. Previously the missing import
-  failed the bundle, so the observer never ran and the file was never written.
-  An existing file is never overwritten.
 - **`npx airgen fix-tsconfig`.** Creates the recommended `tsconfig.json`, or
   fixes the one the typecheck uses: an `include` that misses the sources
   (TS18003), missing `allowJs` or `jsx`, and `NodeNext` resolution. A config
   with comments is backed up to `.bak` first. With no config at all, `npx airgen`
-  creates the recommended one at startup.
+  creates the recommended one at startup. The typecheck still uses the
+  project's own `typescript`, and a JavaScript extension under the recommended
+  `checkJs` + `strict` needs `@types/react`; airgen installs neither.
 - **tsconfig banner in the observer.** When the config needs changes, a banner
   above the strip lists them with the `fix-tsconfig` command and a Copy button.
   It comes from a new optional `config` key on `GET /diagnostics`, and the daemon
