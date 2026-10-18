@@ -3,11 +3,17 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {spawn} from 'node:child_process';
 import {startDaemon} from '../src/daemon/server.js';
+import {DEFAULT_OUT, applyConfigFix, planConfigFix} from '../src/daemon/project-config.js';
+import {writeStubIfMissing} from '../src/daemon/stub.js';
 
 const USAGE = `airgen — runs \`block run\` with the schema daemon alongside it
 
 Usage:
   npx airgen [options] [-- <args for block run>]
+  npx airgen fix-tsconfig [-o <path>]
+
+Commands:
+  fix-tsconfig       Create or fix the tsconfig.json the typecheck panel uses
 
 Options:
   -p, --port <n>     Daemon port (default: 3001, or PORT env var)
@@ -213,7 +219,40 @@ function logDaemonError(error) {
   process.stderr.write(`Failed to start \`block run\`: ${error?.message ?? error}\n`);
 }
 
-let {options, blockArgs} = parseArgs(process.argv.slice(2));
+function printConfigFix(result, cwd) {
+  const file = path.relative(cwd, result.configPath ?? '') || result.configPath;
+  if (result.plan.parseError !== undefined) {
+    process.stderr.write(`Could not parse ${file}: ${result.plan.parseError}\n`);
+    return 1;
+  }
+  if (result.action === 'created') {
+    console.log(`[airgen] Created ${file} (recommended settings for a blocks extension)`);
+    return 0;
+  }
+  if (result.action === 'updated') {
+    console.log(`[airgen] Updated ${file}:`);
+    for (const change of result.plan.changes) {
+      console.log(`  ${change.option}: ${JSON.stringify(change.value)}  (${change.reason})`);
+    }
+    if (result.backupPath) {
+      console.log(
+        `[airgen] It had comments, which are dropped; the original is at ${path.relative(cwd, result.backupPath)}`,
+      );
+    }
+  } else if (result.configPath === null) {
+    console.log(`[airgen] No tsconfig.json created: ${result.plan.notes.join('; ')}`);
+    return 1;
+  } else {
+    console.log(`[airgen] ${file} already covers the extension; nothing to change`);
+  }
+  for (const note of result.plan.notes) console.log(`[airgen] Note: ${note}`);
+  return 0;
+}
+
+const argv = process.argv.slice(2);
+const command = argv[0] === 'fix-tsconfig' ? argv.shift() : null;
+
+let {options, blockArgs} = parseArgs(argv);
 
 const daemonOnly = options.daemonOnly === true;
 delete options.daemonOnly;
@@ -231,6 +270,24 @@ if (!isPortValid(options.port)) {
 }
 
 if (options.outPath === undefined) delete options.outPath;
+
+const cwd = process.cwd();
+const outPath = path.resolve(cwd, options.outPath ?? DEFAULT_OUT);
+
+if (command === 'fix-tsconfig') {
+  fs.mkdirSync(path.dirname(outPath), {recursive: true});
+  process.exit(printConfigFix(applyConfigFix(planConfigFix({cwd, outPath})), cwd));
+}
+
+// First run: a missing config is created outright (an existing one is only
+// ever changed by `fix-tsconfig`), and a placeholder generated file lets the
+// extension bundle before <SchemaObserver /> has synced.
+fs.mkdirSync(path.dirname(outPath), {recursive: true});
+const startupPlan = planConfigFix({cwd, outPath});
+if (startupPlan.action === 'create') printConfigFix(applyConfigFix(startupPlan), cwd);
+if (writeStubIfMissing(outPath)) {
+  console.log(`[airgen] Wrote a placeholder ${path.relative(cwd, outPath)} until <SchemaObserver /> connects`);
+}
 
 try {
   await startDaemon(options);

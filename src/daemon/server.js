@@ -15,6 +15,8 @@ import path from 'node:path';
 
 import {createTypechecker} from './typecheck.js';
 import {createCodemod} from './codemod.js';
+import {fixCommand, planConfigFix} from './project-config.js';
+import {isStub} from './stub.js';
 
 const MAX_BODY_BYTES = 2 * 1024 * 1024;
 /** /apply-fix carries only an id — no reason to accept more than that. */
@@ -55,6 +57,22 @@ function readBody(req, maxBytes) {
 }
 
 /**
+ * What the panel shows about the project config: the problems `fix-tsconfig`
+ * would fix and the command itself, or undefined when there's nothing to fix.
+ * Paths are cwd-relative, like everything else /diagnostics serves.
+ */
+function inspectProjectConfig(cwd, outPath) {
+  const plan = planConfigFix({cwd, outPath});
+  const file = plan.configPath === null ? null : path.relative(cwd, plan.configPath);
+  if (plan.parseError !== undefined) {
+    // Not the parser's message: it can quote the file, and any webpage can read this.
+    return {file, command: null, issues: [`${file} isn't valid JSON, so airgen can't check it`]};
+  }
+  if (plan.action === 'none') return undefined;
+  return {file, command: fixCommand(cwd, outPath), issues: plan.changes.map(change => change.reason)};
+}
+
+/**
  * @param {{port?: number, host?: string, outPath?: string, cwd?: string, fix?: boolean, log?: (msg: string) => void}} [options]
  * @returns {Promise<import('node:http').Server>}
  */
@@ -75,6 +93,7 @@ export function startDaemon({
     cwd,
     startDir: path.dirname(resolvedOut),
     log: stamped,
+    inspectConfig: () => inspectProjectConfig(cwd, resolvedOut),
   });
 
   // Opt-in only: without --fix the endpoints below 404 and no analysis runs,
@@ -185,7 +204,8 @@ export function startDaemon({
         log(`[${timestamp()}] Updated ${path.relative(cwd, resolvedOut)}${suffix}`);
         typechecker.schedule();
         // Needs the text from *before* this write to resolve the old symbols.
-        if (codemod && existing !== null) codemod.schedule(existing, payload.code);
+        // The first-run stub has no schema, so there is nothing to diff.
+        if (codemod && existing !== null && !isStub(existing)) codemod.schedule(existing, payload.code);
         sendJson(res, 200, {ok: true, written: true});
       } catch (error) {
         const status = error?.statusCode ?? 500;

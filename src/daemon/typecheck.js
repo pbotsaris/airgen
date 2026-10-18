@@ -73,16 +73,40 @@ function resolveTsc(cwd) {
 }
 
 /**
- * @param {{cwd: string, startDir: string, log: (msg: string) => void}} options
+ * @param {{cwd: string, startDir: string, log: (msg: string) => void, inspectConfig?: () => object | null}} options
  *   startDir is where the project-config walk-up begins (the output file's dir).
+ *   inspectConfig reports what's wrong with the project config (or null); its
+ *   result rides along on every snapshot as `config`.
  */
-export function createTypechecker({cwd, startDir, log}) {
+export function createTypechecker({cwd, startDir, log, inspectConfig = () => null}) {
   /** Latest settled (or in-progress) diagnostics — what GET /diagnostics serves. */
   let diagnostics = {status: 'checking', errors: [], total: 0, checkedAt: null};
   let checking = false;
   let rerunQueued = false;
   let activeChild = null;
   let disposed = false;
+  let watchedConfig = null;
+
+  // A config edit (say, `npx airgen fix-tsconfig`) changes the result without
+  // any schema write, so the config itself triggers a recheck. Polling
+  // watchFile, unref'd, because fs.watch drops events on editors' atomic saves.
+  const onConfigChange = (current, previous) => {
+    if (current.mtimeMs !== previous.mtimeMs) schedule();
+  };
+  function watchConfig(configPath) {
+    if (configPath === watchedConfig) return;
+    if (watchedConfig !== null) fs.unwatchFile(watchedConfig, onConfigChange);
+    watchedConfig = configPath;
+    if (configPath !== null) fs.watchFile(configPath, {interval: 1000}, onConfigChange).unref();
+  }
+
+  function inspect() {
+    try {
+      return inspectConfig() ?? undefined;
+    } catch {
+      return undefined;
+    }
+  }
 
   function scrub(text) {
     return text
@@ -98,7 +122,14 @@ export function createTypechecker({cwd, startDir, log}) {
   }
 
   function unavailable(reason) {
-    return {status: 'unavailable', errors: [], total: 0, checkedAt: new Date().toISOString(), reason};
+    return {
+      status: 'unavailable',
+      errors: [],
+      total: 0,
+      checkedAt: new Date().toISOString(),
+      reason,
+      config: inspect(),
+    };
   }
 
   function settled(errors) {
@@ -107,6 +138,7 @@ export function createTypechecker({cwd, startDir, log}) {
       errors: errors.slice(0, MAX_ERRORS),
       total: errors.length,
       checkedAt: new Date().toISOString(),
+      config: inspect(),
     };
   }
 
@@ -135,6 +167,7 @@ export function createTypechecker({cwd, startDir, log}) {
   function runOnce() {
     return new Promise(resolve => {
       const configPath = findProjectConfig(startDir);
+      watchConfig(configPath);
       if (!configPath) {
         resolve(unavailable(`no ${PROJECT_CONFIG_LABEL} found at or above the output directory`));
         return;
@@ -249,6 +282,7 @@ export function createTypechecker({cwd, startDir, log}) {
     dispose() {
       disposed = true;
       rerunQueued = false;
+      watchConfig(null);
       if (activeChild) activeChild.kill('SIGKILL');
     },
   };

@@ -63,6 +63,15 @@ interface DiagnosticsPayload {
   total: number;
   checkedAt: string | null;
   reason?: string;
+  /** Present when the project config needs changes (absent on older daemons). */
+  config?: ConfigNotice;
+}
+
+/** What `npx airgen fix-tsconfig` would fix; `command` is null when it can't. */
+interface ConfigNotice {
+  file: string | null;
+  command: string | null;
+  issues: string[];
 }
 
 interface FixUsage {
@@ -92,6 +101,13 @@ interface FixesPayload {
 
 /** Delays between polls while the daemon reports work in flight. */
 const DIAGNOSTICS_POLL_DELAYS_MS = [0, 500, 1000, 2000, 3000, 3000, 3000, 3000, 3000, 3000];
+
+/**
+ * While a config notice is up, keep polling: the fix happens in the user's
+ * terminal, and the daemon rechecks on the config edit with no schema write
+ * that would otherwise make the observer ask again.
+ */
+const CONFIG_NOTICE_POLL_MS = 3000;
 
 const panelStyle: React.CSSProperties = {
   display: 'flex',
@@ -265,6 +281,13 @@ export function createSchemaObserver(
       };
     }, [daemonUrl, enabled, pollDiagnostics, pollFixes]);
 
+    const hasConfigNotice = enabled && diagnostics?.config !== undefined;
+    useEffect(() => {
+      if (!hasConfigNotice) return;
+      const timer = setInterval(pollDiagnostics, CONFIG_NOTICE_POLL_MS);
+      return () => clearInterval(timer);
+    }, [hasConfigNotice, pollDiagnostics]);
+
     useEffect(() => {
       // Nothing to do when disabled, and unchanged schemas never reach the
       // daemon — a no-op render must not cost a generation or a file write.
@@ -330,23 +353,74 @@ export function createSchemaObserver(
     const statusDisplay = getStatusDisplay(status);
 
     return (
-      <div style={panelStyle}>
-        <span style={{...textStyle, color: statusDisplay.color, fontWeight: 600}}>airgen {statusDisplay.label}</span>
-        <span style={{...textStyle, color: '#666666'}}>
-          {base.tables.length} table{base.tables.length === 1 ? '' : 's'}
-          {lastSyncedAt ? ` · synced ${lastSyncedAt}` : status === 'disconnected' ? ' · run `npx airgen`' : ''}
-        </span>
-        {drift && !drift.ok && <DriftDetails drift={drift} />}
-        <DiagnosticsDetails diagnostics={diagnostics} />
-        <FixesDetails fixes={fixes} applying={applying} onApply={applyFix} />
-        <button type="button" style={buttonStyle} onClick={copyToClipboard}>
-          {copied ? 'Copied!' : 'Copy schema'}
-        </button>
-      </div>
+      <>
+        {diagnostics?.config && <ConfigBanner notice={diagnostics.config} />}
+        <div style={panelStyle}>
+          <span style={{...textStyle, color: statusDisplay.color, fontWeight: 600}}>airgen {statusDisplay.label}</span>
+          <span style={{...textStyle, color: '#666666'}}>
+            {base.tables.length} table{base.tables.length === 1 ? '' : 's'}
+            {lastSyncedAt ? ` · synced ${lastSyncedAt}` : status === 'disconnected' ? ' · run `npx airgen`' : ''}
+          </span>
+          {drift && !drift.ok && <DriftDetails drift={drift} />}
+          <DiagnosticsDetails diagnostics={diagnostics} />
+          <FixesDetails fixes={fixes} applying={applying} onApply={applyFix} />
+          <button type="button" style={buttonStyle} onClick={copyToClipboard}>
+            {copied ? 'Copied!' : 'Copy schema'}
+          </button>
+        </div>
+      </>
     );
   }
 
   return SchemaObserver;
+}
+
+/**
+ * Above the strip: the project config hides your code from the typecheck, and
+ * here is the command that fixes it. Nothing here touches files; the command
+ * runs in the user's own terminal.
+ */
+function ConfigBanner({notice}: {notice: ConfigNotice}): React.ReactElement {
+  const [copied, setCopied] = useState(false);
+  const copy = useCallback(async () => {
+    if (notice.command === null) return;
+    try {
+      await navigator.clipboard.writeText(notice.command);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // The command is user-select: all, so it can still be copied by hand.
+    }
+  }, [notice.command]);
+
+  return (
+    <div style={{...panelStyle, background: '#fff8e1', borderBottom: '2px solid #f0d58c'}}>
+      <span style={{...textStyle, color: '#8a6100', fontWeight: 600}}>
+        {notice.file ?? 'tsconfig.json'} needs changes for the typecheck
+      </span>
+      <span style={{...textStyle, color: '#333333'}}>{notice.issues.join(' · ')}</span>
+      {notice.command !== null && (
+        <span style={{display: 'flex', alignItems: 'center', gap: 6}}>
+          <span style={textStyle}>Run:</span>
+          <code
+            style={{
+              ...textStyle,
+              fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+              padding: '2px 6px',
+              borderRadius: 3,
+              background: 'rgba(0, 0, 0, 0.06)',
+              userSelect: 'all',
+            }}
+          >
+            {notice.command}
+          </code>
+          <button type="button" style={buttonStyle} onClick={copy}>
+            {copied ? 'Copied!' : 'Copy'}
+          </button>
+        </span>
+      )}
+    </div>
+  );
 }
 
 const MAX_DRIFT_LINES = 5;

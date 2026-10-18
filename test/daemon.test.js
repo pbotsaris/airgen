@@ -7,6 +7,7 @@ import path from 'node:path';
 import {startDaemon} from '../src/daemon/server.js';
 import {generateTypeScriptFromBase} from '../dist/client/generator.js';
 import {mockBase} from './fixtures/mock-base.js';
+import {STUB_SOURCE} from '../src/daemon/stub.js';
 
 const code = generateTypeScriptFromBase(mockBase);
 
@@ -126,4 +127,27 @@ test('unknown routes 404', async () => {
     const response = await fetch(`${url}/whatever`);
     assert.equal(response.status, 404);
   });
+});
+
+test('the first sync replaces the first-run stub, with or without --fix', async () => {
+  for (const fix of [false, true]) {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'airgen-daemon-test-'));
+    const outPath = path.join(dir, 'airtable-schema.ts');
+    fs.writeFileSync(outPath, STUB_SOURCE);
+    const server = await startDaemon({port: 0, outPath, fix, log: () => {}});
+    const url = `http://127.0.0.1:${server.address().port}`;
+    try {
+      const response = await postSchema(url, {code});
+      assert.deepEqual(await response.json(), {ok: true, written: true});
+      assert.equal(fs.readFileSync(outPath, 'utf8'), code);
+      if (fix) {
+        const fixes = await (await fetch(`${url}/fixes`)).json();
+        assert.equal(fixes.status, 'idle');
+        assert.deepEqual(fixes.fixes, []);
+      }
+    } finally {
+      server.close();
+      fs.rmSync(dir, {recursive: true, force: true});
+    }
+  }
 });

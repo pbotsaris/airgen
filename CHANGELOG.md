@@ -5,6 +5,26 @@ All notable changes to airgen are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **First-run placeholder.** When the output file doesn't exist yet, `npx airgen`
+  writes a placeholder (header, empty `airgenMeta`, empty `TableRecordMap`/
+  `TableWriteMap`) so an extension that imports `./airtable-schema` bundles
+  before `<SchemaObserver />` has ever synced. Previously the missing import
+  failed the bundle, so the observer never ran and the file was never written.
+  An existing file is never overwritten.
+- **`npx airgen fix-tsconfig`.** Creates the recommended `tsconfig.json`, or
+  fixes the one the typecheck uses: an `include` that misses the sources
+  (TS18003), missing `allowJs` or `jsx`, and `NodeNext` resolution. A config
+  with comments is backed up to `.bak` first. With no config at all, `npx airgen`
+  creates the recommended one at startup.
+- **tsconfig banner in the observer.** When the config needs changes, a banner
+  above the strip lists them with the `fix-tsconfig` command and a Copy button.
+  It comes from a new optional `config` key on `GET /diagnostics`, and the daemon
+  rechecks whenever the config file changes.
+
 ## [0.3.0]
 
 Runtime expansion. The generated file gains write

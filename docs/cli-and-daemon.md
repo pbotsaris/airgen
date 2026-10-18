@@ -21,7 +21,14 @@ npx airgen -p 3005 -o src/airtable-schema.ts # port and output path
 npx airgen -- --port 9001                    # args after -- go to `block run`
 npx airgen --daemon-only                     # just the daemon, run `block run` yourself
 npx airgen --fix                             # also offer code fixes for renames
+npx airgen fix-tsconfig                      # create or fix the tsconfig the typecheck uses
 ```
+
+### First run
+
+Your extension imports `./airtable-schema` before that file has ever been generated, and an import that doesn't resolve fails the bundle, which would keep `<SchemaObserver />` from ever running. So when the output file doesn't exist yet, airgen writes a placeholder first: the header, an empty `airgenMeta`, and empty `TableRecordMap`/`TableWriteMap`. The extension bundles, the observer connects, and its first sync replaces the placeholder. An existing file is never overwritten. The placeholder doesn't export the hooks (`useRecords` and friends), because it can't know yet which SDK entry (`airgen` or `airgen/interface`) to bind them to; import those after the first sync.
+
+If there's no `tsconfig.json` or `jsconfig.json` at or above the output file, airgen also creates the recommended `tsconfig.json` (see [Typechecking](typecheck-and-fixes.md#your-tsconfig)). An existing config is only changed when you run `npx airgen fix-tsconfig`.
 
 The generated file lands at `./frontend/airtable-schema.ts` by default. To change that (or the port) without flags, drop an `airgen-config.json` next to where you run airgen:
 

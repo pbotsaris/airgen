@@ -17,6 +17,52 @@ Results are served at `GET /diagnostics` and shown in the observer panel after e
 
 Paths are project-relative, never absolute.
 
+## Your tsconfig
+
+The panel is only as good as the config `tsc` runs with. airgen checks it on every typecheck and, when it won't describe your extension, shows a yellow banner above the strip that names the problems and gives you the command to fix them, with a **Copy** button:
+
+```sh
+npx airgen fix-tsconfig          # pass the same -o as your daemon if the output isn't the default
+```
+
+It catches:
+
+| Problem | What `fix-tsconfig` does |
+|---|---|
+| `include` misses the folder with your sources and the generated file (tsc says "No inputs were found", TS18003) | appends that folder to `include` |
+| `.js`/`.jsx` sources but no `allowJs` (they're silently left out of the check) | sets `"allowJs": true` (never in a `jsconfig.json`, which implies it) |
+| `.jsx`/`.tsx` sources but no `jsx` option | sets `"jsx": "react-jsx"` |
+| `NodeNext`/`Node16` resolution, which requires file extensions on relative imports that the blocks bundler doesn't need | sets `"module": "ESNext"`, `"moduleResolution": "Bundler"` |
+
+Every other key is kept. If the file had comments, the rewrite drops them, so the original is saved next to it as `tsconfig.json.bak`. A config that extends another is read for its own keys only; a key `fix-tsconfig` adds overrides the inherited one. An `exclude` that hides your sources is reported, not rewritten. The command runs in your terminal; the daemon only reads the config, and it rechecks as soon as the file changes, so the banner clears on its own.
+
+With no config at all, `npx airgen` creates this one at startup, with `include` set to the output file's folder:
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "checkJs": true,
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true
+  },
+  "include": ["frontend"]
+}
+```
+
+`checkJs` with `strict` checks JSX against React's types, so a JavaScript extension needs `@types/react` installed (`npm install --save-dev @types/react`) or every element reports an implicit `any`.
+
+`GET /diagnostics` carries the banner's data as an optional `config` key, absent when there's nothing to fix:
+
+```json
+{"config": {"file": "tsconfig.json", "command": "npx airgen fix-tsconfig", "issues": ["\"include\" doesn't cover frontend/"]}}
+```
+
 ## Fixing your code when the schema changes
 
 Renaming a field in Airtable regenerates your types instantly, but every `record.fields.contactEmail` in your code is now stale. Start airgen with `--fix` and it offers to rewrite them:

@@ -15,6 +15,7 @@ import {startDaemon} from '../src/daemon/server.js';
 import {generateTypeScriptFromBase} from '../dist/client/generator.js';
 import {mockBase} from './fixtures/mock-base.js';
 import {linkIntoNodeModules} from './helpers.js';
+import {STUB_SOURCE} from '../src/daemon/stub.js';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const code = generateTypeScriptFromBase(mockBase);
@@ -45,6 +46,7 @@ async function withProject(
     configName = 'tsconfig.json',
     sourceName = 'index.ts',
     source = null,
+    extraFiles = {},
   } = {},
   run,
 ) {
@@ -52,6 +54,7 @@ async function withProject(
   fs.writeFileSync(path.join(dir, configName), config);
   fs.mkdirSync(path.join(dir, 'src'));
   fs.writeFileSync(path.join(dir, 'src', sourceName), source ?? sourceFile(valid));
+  for (const [name, text] of Object.entries(extraFiles)) fs.writeFileSync(path.join(dir, name), text);
   if (withTypescript) {
     linkIntoNodeModules(dir, {typescript: path.join(projectRoot, 'node_modules', 'typescript')});
   }
@@ -173,5 +176,53 @@ test('rapid successive writes coalesce and still settle', async () => {
 
     const payload = await waitForDiagnostics(url, p => p.status === 'ok');
     assert.equal(payload.status, 'ok');
+  });
+});
+
+test('a config that matches no inputs comes with the fix-tsconfig command', async () => {
+  await withProject({config: JSON.stringify({include: ['nope']}), valid: true}, async ({url, dir}) => {
+    const payload = await waitForDiagnostics(url, p => p.status !== 'checking');
+    assert.equal(payload.status, 'errors');
+    assert.equal(payload.errors[0].code, 'TS18003');
+    assert.equal(payload.config.file, 'tsconfig.json');
+    // The output isn't at the default path, so the command names it.
+    assert.equal(payload.config.command, 'npx airgen fix-tsconfig -o airtable-schema.ts');
+    assert.ok(
+      payload.config.issues.some(issue => /"include"/.test(issue)),
+      payload.config.issues.join(),
+    );
+    assert.ok(!JSON.stringify(payload.config).includes(dir), 'no absolute paths');
+
+    // Fixing the config by hand rechecks with no schema write.
+    const fixed = {compilerOptions: {strict: true, noEmit: true}, include: ['src', 'airtable-schema.ts']};
+    fs.writeFileSync(path.join(dir, 'tsconfig.json'), JSON.stringify(fixed));
+    const settled = await waitForDiagnostics(url, p => p.status === 'ok');
+    assert.equal(settled.config, undefined);
+  });
+});
+
+test('an unparseable config is reported without quoting it', async () => {
+  await withProject({config: '{"include": ["secret'}, async ({url}) => {
+    const payload = await waitForDiagnostics(url, p => p.status !== 'checking');
+    assert.equal(payload.config.command, null);
+    assert.ok(!JSON.stringify(payload.config).includes('secret'));
+  });
+});
+
+test('the first-run stub typechecks for a consumer importing airgenMeta', async () => {
+  const config = JSON.stringify({
+    compilerOptions: {strict: true, noEmit: true},
+    include: ['src', 'airtable-schema.ts'],
+  });
+  const source =
+    "import {airgenMeta, type TableKey} from '../airtable-schema';\n" +
+    'const count: number = Object.keys(airgenMeta.tables).length;\n' +
+    'const version: 2 = airgenMeta.version;\n' +
+    'export type Key = TableKey;\n' +
+    'export {count, version};\n';
+  await withProject({config, source, extraFiles: {'airtable-schema.ts': STUB_SOURCE}}, async ({url}) => {
+    const payload = await waitForDiagnostics(url, p => p.status !== 'checking');
+    assert.equal(payload.status, 'ok', JSON.stringify(payload.errors));
+    assert.equal(payload.config, undefined);
   });
 });
