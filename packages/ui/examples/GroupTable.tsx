@@ -19,7 +19,9 @@ export function GroupTableExample() {
       groupLabels={['Status', 'Owner']}
       emptyGroupLabel="Unassigned"
       defaultExpanded={1}
+      // With airgen: summary={records => aggregate(records, {hours: {field: 'hours', op: 'sum'}})}.
       summary={records => ({hours: records.reduce((sum, record) => sum + record.fields.hours, 0)})}
+      formatSummary={hours => `${hours} h`}
       summaryPlacement="footer"
     />
   );

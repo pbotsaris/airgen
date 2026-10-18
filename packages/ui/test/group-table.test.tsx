@@ -210,6 +210,23 @@ describe('GroupTable', () => {
     expect(activeCall[0].map(record => record.id)).toEqual(['p1', 'p2', 'p3']);
   });
 
+  test('formatSummary renders numeric summary values and leaves the rest alone', () => {
+    const formatSummary = vi.fn((value: number, columnId: string) => `${columnId}=${value} h`);
+    render(
+      <GroupTable
+        groups={twoLevel}
+        columns={['name', 'hours']}
+        summary={records => ({...hours(records), name: 'all', status: null})}
+        formatSummary={formatSummary}
+      />,
+    );
+
+    const activeRow = screen.getByRole('rowheader', {name: /Active/}).closest('tr')!;
+    expect(within(activeRow).getByRole('cell')).toHaveTextContent('hours=14 h');
+    expect(within(activeRow).getByRole('rowheader')).toHaveTextContent('all');
+    expect(formatSummary.mock.calls.every(([, columnId]) => columnId === 'hours')).toBe(true);
+  });
+
   test('infers columns across groups and renders loading and empty states', () => {
     const {rerender} = render(<GroupTable groups={twoLevel} />);
     expect(screen.getByRole('columnheader', {name: 'Owner'})).toBeDefined();

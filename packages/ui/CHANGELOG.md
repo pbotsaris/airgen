@@ -8,6 +8,13 @@ Pre-1.0, minor versions may contain breaking changes.
 
 ## [Unreleased]
 
+### Added
+
+- **`GroupTable` `formatSummary`** — renders numeric summary values (currency,
+  units) while `summary` returns plain numbers, which is what airgen's
+  `aggregate` produces: `summary={records => aggregate(records, {hours:
+  {field: 'hours', op: 'sum'}})}`.
+
 ## [0.2.0] — 2026-10-18
 
 ### Added

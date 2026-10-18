@@ -65,8 +65,14 @@ export interface GroupTableProps<TRecord extends Structural> extends Omit<
   renderGroupLabel?: (context: GroupContext<TRecord>) => React.ReactNode;
   /** Show the record count after the label. @defaultValue true */
   showCount?: boolean;
-  /** Per-column aggregations for a group, e.g. `{hours: total}`. Called for every level. */
+  /**
+   * Per-column aggregations for a group, e.g. `{hours: total}`. Called for
+   * every level. airgen's `aggregate` returns this shape directly when its
+   * names are column ids: `records => aggregate(records, {hours: {field: 'hours', op: 'sum'}})`.
+   */
   summary?: (records: ReadonlyArray<TRecord>, context: GroupContext<TRecord>) => GroupSummary;
+  /** Renders numeric summary values, e.g. as currency. Other values render as given. */
+  formatSummary?: (value: number, columnId: string, context: GroupContext<TRecord>) => React.ReactNode;
   /**
    * `header` puts summaries in the group row, visible while collapsed;
    * `footer` adds a totals row after the group's records. @defaultValue 'header'
@@ -151,7 +157,8 @@ const SUMMARY_ROW_CLASS =
  *   groups={groups}
  *   columns={['name', 'status', 'owner', 'hours']}
  *   groupLabels={['Status', 'Owner']}
- *   summary={records => ({hours: records.reduce((total, r) => total + (r.fields.hours ?? 0), 0)})}
+ *   summary={records => aggregate(records, {hours: {field: 'hours', op: 'sum'}})}
+ *   formatSummary={hours => `${hours} h`}
  * />;
  * ```
  */
@@ -173,6 +180,7 @@ export function GroupTable<TRecord extends Structural>({
   renderGroupLabel,
   showCount = true,
   summary,
+  formatSummary,
   summaryPlacement = 'header',
   collapsible = true,
   defaultExpanded = true,
@@ -208,7 +216,16 @@ export function GroupTable<TRecord extends Structural>({
       count: node.records.length,
       expanded: open,
     };
-    const sums = summary ? summary(node.records, context) : undefined;
+    const raw = summary ? summary(node.records, context) : undefined;
+    const sums =
+      raw && formatSummary
+        ? Object.fromEntries(
+            Object.entries(raw).map(([id, value]) => [
+              id,
+              typeof value === 'number' ? formatSummary(value, id, context) : value,
+            ]),
+          )
+        : raw;
     const hasSummary = sums !== undefined && Object.keys(sums).length > 0;
     const valueText = node.value ?? (typeof emptyGroupLabel === 'string' ? emptyGroupLabel : 'empty');
     const indent = {paddingLeft: 12 + node.depth * 16};
