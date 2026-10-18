@@ -1,6 +1,5 @@
 // ESLint 10 flat config. Lints the TypeScript client (src/client), the
 // uncompiled daemon (src/daemon), the bin, the tests, and the examples.
-// `v0.3.0/` holds the runtime-expansion plan — never lint, build, or ship it.
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import reactHooks from 'eslint-plugin-react-hooks';
@@ -14,7 +13,6 @@ export default tseslint.config(
       'dist/',
       'node_modules/',
       'packages/',
-      'v0.3.0/',
       'plan/',
       'coverage/',
       'test/fixtures/snapshots/',

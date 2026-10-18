@@ -5,9 +5,9 @@ All notable changes to airgen are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.4.0]
+## [0.3.0]
 
-Runtime expansion (`v0.3.0/docs/PLAN.md`). The generated file gains write
+Runtime expansion. The generated file gains write
 types and a richer meta, an SDK-free runtime core lands behind it, the
 generated hooks bind it, and `examples/` shows all of it. One breaking type
 change on regeneration: lookup cells (see Changed). Upgrade notes in
@@ -102,8 +102,6 @@ change on regeneration: lookup cells (see Changed). Upgrade notes in
 
 ### Internal
 
-- `v0.3.0/reference/` (the plain-JS code the runtime was ported from) is
-  removed now that the port is done; only the plan remains under `v0.3.0/`.
 - `field-types.ts` holds the per-type write kinds that both the generator's
   `resolveWriteType` and the runtime's `convertTo` switch on, so the emitted
   write type and the converted value come from one table. Generated output is
@@ -122,7 +120,7 @@ change on regeneration: lookup cells (see Changed). Upgrade notes in
   Prettier 3 (2-space, single quotes, no bracket spacing, width 120); the whole
   tree is formatted. `npm run check` = typecheck + lint (`--max-warnings 0`) +
   `format:check` + tests, and is what `prepublishOnly` runs. `@types/react` is
-  `^19` to match `react`. `v0.3.0/` (plan + reference code being ported) and
+  `^19` to match `react`. `plan/` and
   `packages/` are excluded from root lint/format.
 - Tests: a golden snapshot of the fixture's generated file
   (`test/fixtures/snapshots/`, refresh with `UPDATE_SNAPSHOTS=1`), and
