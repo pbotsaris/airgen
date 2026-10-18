@@ -8,6 +8,13 @@ Pre-1.0, minor versions may contain breaking changes.
 
 ## [Unreleased]
 
+### Changed
+
+- **Larger pills at `base` and `sm`.** A `base` pill was 15px tall with 11px
+  text inside a 32px control; it now takes the control's 13px text and is
+  19px tall. `sm` pills move from 9px to 11px text (15px in a 24px control).
+  Affects `PillOption`, `Select` with `pill`, and `pillSizeClasses`.
+
 ## [0.2.1] — 2026-10-18
 
 ### Added

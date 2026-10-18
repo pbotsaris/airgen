@@ -42,14 +42,15 @@ export function multilineSizeClasses(size: ComponentSize = 'base'): string {
 }
 
 /**
- * Pill metrics per control size. A pill nests inside a same-size control, so
- * its text sits one step below the control's text and its height stays under
- * the control height.
+ * Pill metrics per control size. A pill nests inside a same-size control and
+ * stays around 60% of its height (`ag-leading-none`: text + 2 * py). From
+ * `base` down the pill takes the control's own text size, so a selected pill
+ * reads as large as the text around it; `lg` and `xl` sit one step below.
  */
 export const PILL_SIZE: Record<ComponentSize, {pad: string; text: string; avatar: string; gap: string}> = {
   xs: {pad: 'ag-px-1.5 ag-py-px', text: 'ag-text-[10px]', avatar: 'ag-h-3 ag-w-3', gap: 'ag-gap-1'},
-  sm: {pad: 'ag-px-2 ag-py-0.5', text: 'ag-text-xs', avatar: 'ag-h-4 ag-w-4', gap: 'ag-gap-1.5'},
-  base: {pad: 'ag-px-2.5 ag-py-0.5', text: 'ag-text-sm', avatar: 'ag-h-5 ag-w-5', gap: 'ag-gap-2'},
+  sm: {pad: 'ag-px-2 ag-py-0.5', text: 'ag-text-sm', avatar: 'ag-h-4 ag-w-4', gap: 'ag-gap-1.5'},
+  base: {pad: 'ag-px-2.5 ag-py-[3px]', text: 'ag-text-base', avatar: 'ag-h-5 ag-w-5', gap: 'ag-gap-2'},
   lg: {pad: 'ag-px-3 ag-py-1', text: 'ag-text-base', avatar: 'ag-h-6 ag-w-6', gap: 'ag-gap-2'},
   xl: {pad: 'ag-px-3.5 ag-py-1', text: 'ag-text-lg', avatar: 'ag-h-7 ag-w-7', gap: 'ag-gap-2'},
 };
