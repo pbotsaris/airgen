@@ -306,3 +306,38 @@ test('fix-tsconfig rewrites the config for the output path and exits', async () 
   assert.equal(again.code, 0);
   assert.match(again.stdout, /nothing to change/);
 });
+
+test('an extension nested in another TypeScript project gets its own config', async () => {
+  const parent = makeTempDir();
+  const parentConfig = JSON.stringify({compilerOptions: {jsx: 'react'}, include: ['src']});
+  fs.writeFileSync(path.join(parent, 'tsconfig.json'), parentConfig);
+  const dir = path.join(parent, 'extension');
+  fs.mkdirSync(path.join(dir, 'frontend'), {recursive: true});
+  fs.writeFileSync(path.join(dir, 'block.json'), '{}');
+  fs.writeFileSync(path.join(dir, 'frontend', 'broken.ts'), 'export const n: number = "not a number";\n');
+  fs.mkdirSync(path.join(dir, 'node_modules'));
+  fs.symlinkSync(
+    fileURLToPath(new URL('../node_modules/typescript', import.meta.url)),
+    path.join(dir, 'node_modules', 'typescript'),
+    'dir',
+  );
+
+  const {child, exited, daemonPort, waitFor} = launch(['--daemon-only', '-p', '0'], {PATH: '/usr/bin:/bin'}, dir);
+  try {
+    await waitFor(/Created tsconfig\.json/);
+    assert.deepEqual(JSON.parse(fs.readFileSync(path.join(dir, 'tsconfig.json'), 'utf8')).include, ['frontend']);
+    assert.equal(fs.readFileSync(path.join(parent, 'tsconfig.json'), 'utf8'), parentConfig);
+
+    // The check runs the extension's config, so it sees the extension's files.
+    await waitFor(/Typecheck: /);
+    const diagnostics = await (await fetch(`http://127.0.0.1:${await daemonPort}/diagnostics`)).json();
+    assert.equal(diagnostics.status, 'errors', JSON.stringify(diagnostics));
+    assert.deepEqual(
+      diagnostics.errors.map(error => error.file),
+      [path.join('frontend', 'broken.ts')],
+    );
+  } finally {
+    child.kill('SIGTERM');
+    await exited;
+  }
+});

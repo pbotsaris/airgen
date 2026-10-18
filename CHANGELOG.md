@@ -14,6 +14,13 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   daemon now detects the compiler's major version, says at startup that `--fix`
   can't run, and reports fixes as unavailable with that reason. The typecheck
   is unaffected.
+- **Extensions nested in another TypeScript project.** The project-config
+  lookup walked up to the filesystem root, so an extension inside a monorepo
+  (or airgen's own `sandbox/`) picked up the enclosing project's `tsconfig.json`:
+  no config was created on first run, the panel checked the wrong files, and
+  esbuild compiled JSX with that config's `jsx` setting. The lookup now stops at
+  the extension's root (the directory with `block.json`, else the nearest
+  `package.json`).
 
 ## [0.4.0]
 

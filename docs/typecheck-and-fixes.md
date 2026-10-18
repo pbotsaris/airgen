@@ -2,7 +2,7 @@
 
 ## Typecheck panel
 
-`block run` transpiles with Babel and never typechecks, so a schema change that breaks your code would otherwise fail silently at runtime. After every schema write (and once at startup) the daemon typechecks your whole project using **your project's own `typescript`**. Nothing is bundled; if it isn't installed, the feature reports "unavailable". It finds the nearest `tsconfig.json` or `jsconfig.json` at or above the output file and runs `tsc --noEmit` in a child process, so the daemon never blocks.
+`block run` transpiles with Babel and never typechecks, so a schema change that breaks your code would otherwise fail silently at runtime. After every schema write (and once at startup) the daemon typechecks your whole project using **your project's own `typescript`**. Nothing is bundled; if it isn't installed, the feature reports "unavailable". It finds the nearest `tsconfig.json` or `jsconfig.json` at or above the output file, looking no higher than the extension's root (the directory with `block.json`, else the nearest `package.json`), and runs `tsc --noEmit` in a child process, so the daemon never blocks.
 
 Results are served at `GET /diagnostics` and shown in the observer panel after each sync (`✓ types ok` / `✗ 3 type errors`, expandable to the first few errors with file and line):
 
@@ -64,6 +64,10 @@ When the project's TypeScript is 6 or newer it also carries `"noUncheckedSideEff
 ```json
 {"config": {"file": "tsconfig.json", "command": "npx airgen fix-tsconfig", "issues": ["\"include\" doesn't cover frontend/"]}}
 ```
+
+### Extensions inside another TypeScript project
+
+A config above the extension's root belongs to the enclosing project (a monorepo root, say), not the extension, so airgen ignores it: the extension gets its own `tsconfig.json` on first run, and the panel checks the extension's files. That config also matters to the bundler. `block run` compiles with esbuild, which reads the nearest tsconfig, so an inherited `"jsx": "react"` compiles JSX for the classic runtime and the extension crashes at load with `React is not defined`. To share settings with the enclosing project, give the extension a `tsconfig.json` of its own that `extends` the shared one.
 
 ## Missing dev dependencies
 

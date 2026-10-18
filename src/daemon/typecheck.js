@@ -36,10 +36,34 @@ export const PROJECT_CONFIG_NAMES = ['tsconfig.json', 'jsconfig.json'];
 /** The names, as they read in a message: `tsconfig.json or jsconfig.json`. */
 export const PROJECT_CONFIG_LABEL = PROJECT_CONFIG_NAMES.join(' or ');
 
-/** Nearest project config at or above startDir, or null. A manual walk-up — no
- * point loading the multi-MB typescript module just to find a path. tsconfig
- * wins when a directory has both. */
+/** First directory at or above startDir holding `name`, or null. */
+function findUp(startDir, name) {
+  let dir = startDir;
+  for (;;) {
+    if (fs.existsSync(path.join(dir, name))) return dir;
+    const parent = path.dirname(dir);
+    if (parent === dir) return null;
+    dir = parent;
+  }
+}
+
+/**
+ * The extension's own root: the directory holding `block.json`, else the
+ * nearest `package.json`, else null. A config above it belongs to some
+ * enclosing project (a monorepo root, or airgen's own repo for `sandbox/`), and
+ * using it checks the wrong files and hands esbuild the wrong `jsx` setting.
+ */
+export function findExtensionRoot(startDir) {
+  return findUp(startDir, 'block.json') ?? findUp(startDir, 'package.json');
+}
+
+/** Nearest project config at or above startDir, never above the extension
+ * root, or null. A manual walk-up — no point loading the multi-MB typescript
+ * module just to find a path. tsconfig wins when a directory has both. An
+ * extension that extends a shared config still has its own file at its root,
+ * so stopping there doesn't lose it. */
 export function findProjectConfig(startDir) {
+  const root = findExtensionRoot(startDir);
   let dir = startDir;
   for (;;) {
     for (const name of PROJECT_CONFIG_NAMES) {
@@ -47,7 +71,7 @@ export function findProjectConfig(startDir) {
       if (fs.existsSync(candidate)) return candidate;
     }
     const parent = path.dirname(dir);
-    if (parent === dir) return null;
+    if (dir === root || parent === dir) return null;
     dir = parent;
   }
 }
@@ -206,7 +230,7 @@ export function createTypechecker({cwd, startDir, log, inspectConfig = () => nul
       const configPath = findProjectConfig(startDir);
       watchConfig(configPath);
       if (!configPath) {
-        resolve(unavailable(`no ${PROJECT_CONFIG_LABEL} found at or above the output directory`));
+        resolve(unavailable(`no ${PROJECT_CONFIG_LABEL} found for the extension`));
         return;
       }
       const tscJs = resolveTsc(cwd);
