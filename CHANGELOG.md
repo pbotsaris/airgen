@@ -5,6 +5,55 @@ All notable changes to airgen are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0]
+
+Typed relations. `useRecords(key, {include})` follows link fields into the
+linked table's typed rows, derived from the schema, and every row now carries
+the record's `name`.
+
+### Added
+
+- **`include`.** `useRecords(key, {include: {tasks: true}})` replaces the
+  `{id, name}` stubs of a link cell with the linked table's typed rows; a nested
+  object goes one link further (`{projects: {tasks: true}}`), two deep at most.
+  Relationships are read from the schema (`linkedTableId`), so there is nothing
+  to declare. A link back to a table already on the path, a key that isn't a
+  link, an excess key, and a third level are compile errors; a plain-JS caller
+  that gets one through is warned once and the cell is left as is. Links whose
+  record isn't loaded (deleted, hidden, just created) are dropped from the
+  hydrated cell. Each included key is one SDK `useRecords` on the linked table,
+  made unconditionally, so the include's shape must be static per call site,
+  like hook deps. `useQuery` takes the same option. See `docs/relations.md`
+  and `examples/08-relations.tsx`.
+- **`TableLinkMap`.** The generated file maps each table's link fields to the
+  key of the table they point at, leaving out links into tables outside the
+  base, and binds it as the third generic of `createTypedHooks`.
+- **`record.name`.** Rows from `useRecords` are `{id, name, fields, raw}`;
+  `name` is the SDK's primary-field display string. Hydrated link rows carry it
+  too, so `useQuery` filters, `cellText`, and `groupRecords` match them by name.
+- **Meta version 3.** Link fields record `linkedTableId`, which is also a
+  signature input (retargeting a link regenerates the file). Drift and the
+  daemon's diff report `link-target-changed` (breaking, not fixable; usages are
+  listed under `--fix`). Metas without the key never report it, and the first
+  save after upgrading is silent.
+
+### Changed
+
+- `createTypedHooks<M, W = M, L = object>`: a third generic, the link map. A
+  two-generic binding still compiles and offers no includable links.
+- The first-run stub exports an empty `TableLinkMap` and `"version": 3`.
+- `BlocksSdkAdapter.useRecords` takes `SdkTable | null` and must return `null`
+  for a missing table without throwing (and still call the SDK hook).
+
+### Fixed
+
+- **Interface extensions: a deleted or hidden generated table no longer
+  throws.** The interface SDK's `useRecords` reads `table.id` unguarded, and
+  `useRecords(key)` for a missing table handed it `null`. The `airgen/interface`
+  adapter now wraps it (`nullSafeUseRecords`): the SDK hook still runs, on any
+  table of the base, so the hook count is unchanged, and the result is `[]` as
+  documented. The stable and base flavors already handled `null`.
+
 ## [0.3.2]
 
 First-run polish for the typecheck panel: it now says what to install, and

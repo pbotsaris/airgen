@@ -2,12 +2,13 @@
  * Reading records.
  *
  * `useRecords(tableKey)` wraps the SDK's `useRecords` for one generated table.
- * Each row is `{id, fields, raw}`: `fields` is typed by the generated
- * `ProjectsRecord` and keyed by the sanitized field names ("Due Date" becomes
- * `dueDate`); `raw` is the native SDK record. Empty cells are absent, so every
- * field is optional. Values are the SDK's rich cell shapes: a select is
- * `{id, name, color?}`, a link is `{id, name}[]`, a collaborator has `email`,
- * a lookup is `{linkedRecordId, value}[]`.
+ * Each row is `{id, name, fields, raw}`: `name` is the primary field's display
+ * string; `fields` is typed by the generated `ProjectsRecord` and keyed by the
+ * sanitized field names ("Due Date" becomes `dueDate`); `raw` is the native
+ * SDK record. Empty cells are absent, so every field is optional. Values are
+ * the SDK's rich cell shapes: a select is `{id, name, color?}`, a link is
+ * `{id, name}[]` (see `08-relations.tsx` to get the linked rows instead), a
+ * collaborator has `email`, a lookup is `{linkedRecordId, value}[]`.
  *
  * Tables and fields resolve by ID, so renaming either in Airtable never
  * breaks a running extension. A table hidden from the extension reads as

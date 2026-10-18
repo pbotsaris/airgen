@@ -20,13 +20,15 @@
 import React from 'react';
 import {createTypedHooks} from 'airgen/interface';
 import {airgenMeta} from './airtable-schema';
-import type {TableRecordMap, TableWriteMap} from './airtable-schema';
+import type {TableLinkMap, TableRecordMap, TableWriteMap} from './airtable-schema';
 
 // Replace the generated file's binding with one that registers the pickers.
 // The generated file in an interface extension imports from 'airgen/interface' too.
-export const {useRecords, useMutations, useFields} = createTypedHooks<TableRecordMap, TableWriteMap>(airgenMeta, {
-  customProperties: {Projects: 'Projects table', Tasks: 'Tasks table'},
-});
+// Bind all three maps, as the generated file does, so `include` keeps working.
+export const {useRecords, useMutations, useFields} = createTypedHooks<TableRecordMap, TableWriteMap, TableLinkMap>(
+  airgenMeta,
+  {customProperties: {Projects: 'Projects table', Tasks: 'Tasks table'}},
+);
 
 export function TaskBoard() {
   const tasks = useRecords('Tasks'); // the picked table, or the generated one

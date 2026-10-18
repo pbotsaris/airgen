@@ -12,9 +12,9 @@
   - `aiText` is `AiText`, `externalSyncSource` is `SelectChoice`, barcode `{text; type?}`, button `{label; url}`
   - a field type airgen doesn't know is `unknown`, with the type named in the JSDoc
 - **One `<Table>Write` interface per table**: only writable fields, each in the SDK's documented cell write format. Scalars admit `null` (clear), dates take `string | Date`, selects `{id} | {name}` indexed off the read alias, collaborators `{id}`, links `{id; name?}` (the interface flavor also accepts a bare `{name}` to create and link), attachments `{url; filename?}` or an existing `Attachment`. Computed fields are omitted rather than `never`, so the interface doubles as the partial update payload. Barcode has no write format in the SDK and is omitted.
-- **`airgenMeta`** as const: `version` (2), `baseId`, `signature`, and per table `id`, `name`, `primaryFieldId`, and a field map with `id`, raw `name`, `type`, `isComputed`, select `choices` (display order, with `color`), and the computed `result` type.
-- **`TableRecordMap`, `TableKey`, `TableWriteMap`** for inference.
-- **`export const {useRecords, useTable, useSchemaDrift, useFields, useMutations, useQuery} = createTypedHooks<TableRecordMap, TableWriteMap>(airgenMeta)`**, which is what makes the hooks usable from plain JS.
+- **`airgenMeta`** as const: `version` (3), `baseId`, `signature`, and per table `id`, `name`, `primaryFieldId`, and a field map with `id`, raw `name`, `type`, `isComputed`, select `choices` (display order, with `color`), the computed `result` type, and for links the `linkedTableId`.
+- **`TableRecordMap`, `TableKey`, `TableWriteMap`** for inference, and **`TableLinkMap`**: per table, each link field key mapped to the key of the table it points at (`Projects: { tasks: "Tasks" }`), which is what types `useRecords(key, {include})` ([relations](relations.md)). A link into a table outside the base is left out, so it can't be included.
+- **`export const {useRecords, useTable, useSchemaDrift, useFields, useMutations, useQuery} = createTypedHooks<TableRecordMap, TableWriteMap, TableLinkMap>(airgenMeta)`**, which is what makes the hooks usable from plain JS.
 
 ## Names
 

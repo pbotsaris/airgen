@@ -61,6 +61,9 @@ const projects = useRecords('Projects'); // table keys autocomplete
 projects[0]?.fields.status?.name; // 'Planned' | 'Active' | 'Done'
 projects[0]?.fields.owner?.email; // string | undefined
 
+const people = useRecords('People', {include: {projects: {tasks: true}}}); // follow links, typed
+people[0]?.fields.projects?.[0].fields.tasks?.[0].fields.title; // string | undefined
+
 const tasks = useMutations('Tasks');
 await tasks.create({title: 'Kickoff', status: {name: 'Todo'}, project: [{id: projects[0].id}]});
 ```
@@ -93,9 +96,20 @@ Practical examples are available in the [`examples/`](examples/) directory.
 
 ##### [Reading](examples/01-reading.tsx)
 
-- `useRecords(key)` returns typed records with `{id, fields, raw}`.
+- `useRecords(key)` returns typed records with `{id, name, fields, raw}`.
 - `useTable(key)` returns the SDK table.
 - `lookupValues`, `cellNames`, `cellIds`, and `firstLinkedRecord` simplify Airtable cell values.
+
+##### [Relations](examples/08-relations.tsx)
+
+`useRecords(key, {include})` follows link fields into the linked table's typed rows, up to two links deep. Relationships come from the schema, so there is nothing to declare:
+
+```tsx
+const people = useRecords('People', {include: {projects: {tasks: true}}});
+people[0]?.fields.projects?.[0].fields.tasks?.[0].fields.title;
+```
+
+Cycles, non-link keys, and a third level are compile errors. Details in [docs/relations.md](docs/relations.md).
 
 ##### [Fields](examples/02-fields.tsx)
 
@@ -130,7 +144,7 @@ if (!result.ok) toast(result.error.message);
 
 ##### [Queries](examples/04-queries.tsx)
 
-`useQuery(key, {where, match, search})` provides typed filtering and searching.
+`useQuery(key, {where, match, search, include})` provides typed filtering and searching.
 
 - **Filters:** `is`, `not`, `anyOf`, `noneOf`, `empty`, `notEmpty`
 - **Matching:** Selects, linked records, and collaborators by ID, name, or email
@@ -193,19 +207,13 @@ The daemon runs alongside `block run` and exits when it stops.
 
 ##### Documentation
 
+- [Relations](docs/relations.md)
 - [Typechecking & Fixes](docs/typecheck-and-fixes.md) 
 - [CLI & Daemon](docs/cli-and-daemon.md)
 
-## Upgrading to 0.3.0
+## Upgrading
 
-Regenerate your schema with `npx airgen` and commit the updated file.
-
-Two changes may require updates:
-
-- **Lookup fields:** Now return `Array<LookupValue<T>>` instead of raw values.
-- **Metadata:** Updated to version 2.
-
-See the [Upgrade Guide](docs/upgrading.md) and [Changelog](CHANGELOG.md).
+Regenerate your schema with `npx airgen` and commit the updated file. 0.4.0 adds `TableLinkMap` and `include` with no breaking changes; 0.3.0 changed lookup read types. See the [Upgrade Guide](docs/upgrading.md) and [Changelog](CHANGELOG.md).
 
 ## API
 
@@ -215,7 +223,7 @@ All exports are available from `airgen`, `airgen/interface`, and `airgen/base`.
 |---|---|
 | `SchemaObserver` | Development panel with schema monitoring and typechecking. |
 | `useRecords`, `useTable`, `useFields`, `useMutations`, `useQuery`, `useSchemaDrift` | Schema-bound hooks exported from the generated file. |
-| `createTypedHooks<M, W>` | Creates typed hooks with optional custom properties. |
+| `createTypedHooks<M, W, L>` | Creates typed hooks with optional custom properties. |
 | `createMutations`, `inspectField`, `cloneValues`, `query`, `groupRecords`, `cellText`, `findTable`, `resolveTableOverride` | Standalone runtime utilities. |
 | `lookupValues`, `firstLookupValue`, `cellIds`, `cellNames`, `firstLinkedRecord` | Helpers for reading Airtable cell values. |
 | `checkSchemaDrift` | Compares live schema against generated metadata. |

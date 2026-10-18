@@ -1,5 +1,15 @@
 # Upgrading
 
+## 0.3.x to 0.4.0
+
+Start `npx airgen` once and commit the regenerated `airtable-schema.ts`. Nothing existing changes shape; the file gains `TableLinkMap` and binds it as a third generic, which is what enables `useRecords(key, {include})` ([relations](relations.md)).
+
+**Rows carry `name`.** `useRecords` rows are `{id, name, fields, raw}`; `name` is the SDK's `record.name`. Additive: `record.raw.name` still works.
+
+**Meta version 3.** Each link field records `linkedTableId`. The runtime keeps it optional, so a 0.3.x file still typechecks and runs; it just can't hydrate, and `include` is a type error on it until you regenerate. Drift adds `link-target-changed` (breaking) for v3 metas, and the first save after upgrading is silent in the daemon's diff (both files must carry the key before a retarget is reported).
+
+**`createTypedHooks<M, W, L>`.** If you re-bind `createTypedHooks` yourself (for `customProperties`), pass `TableLinkMap` as `L` too, as in [`examples/06-custom-properties.tsx`](../examples/06-custom-properties.tsx); a two-generic binding keeps working but offers no includable links.
+
 ## 0.2.x to 0.3.0
 
 Start `npx airgen` once and commit the regenerated `airtable-schema.ts`. Existing imports (`useRecords`, `useTable`, `useSchemaDrift`) keep working; the file gains `<Table>Write` interfaces, `TableWriteMap`, and the `useFields`, `useMutations`, and `useQuery` exports.
