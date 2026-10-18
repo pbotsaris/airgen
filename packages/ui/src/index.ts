@@ -15,6 +15,25 @@ export {Input, type InputProps, type InputVariant} from './components/Input.js';
 export {Label, type LabelProps} from './components/Label.js';
 export {Portal, type PortalProps} from './components/Portal.js';
 export {Spinner, LoadingOverlay, type SpinnerProps, type LoadingOverlayProps} from './components/Spinner.js';
+export {
+  Table,
+  TableHeader,
+  TableBody,
+  TableFooter,
+  TableRow,
+  TableHead,
+  TableCell,
+  TableCaption,
+  RecordTable,
+  RecordCellValue,
+  type TableProps,
+  type RecordTableRecord,
+  type RecordTableFieldKey,
+  type RecordTableCellContext,
+  type RecordTableColumn,
+  type RecordTableProps,
+  type RecordCellValueProps,
+} from './components/Table.js';
 export {Text, type TextProps, type TextVariant} from './components/Text.js';
 export {Toggle, type ToggleProps, type ToggleSize} from './components/Toggle.js';
 
@@ -57,7 +76,13 @@ export {
 } from './components/DialogSheet.js';
 export type {ToastType, ToastItem, ToastPosition} from './components/Toast.js';
 
-export {ToastProvider, useToast, type ToastAPI, type ToastOptions, type ToastProviderProps} from './providers/ToastProvider.js';
+export {
+  ToastProvider,
+  useToast,
+  type ToastAPI,
+  type ToastOptions,
+  type ToastProviderProps,
+} from './providers/ToastProvider.js';
 export {
   SheetProvider,
   useSheet,

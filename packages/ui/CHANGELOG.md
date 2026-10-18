@@ -10,6 +10,14 @@ Pre-1.0, minor versions may contain breaking changes.
 
 ### Added
 
+- **Table components** — semantic, shadcn-inspired `Table`, `TableHeader`,
+  `TableBody`, `TableFooter`, `TableRow`, `TableHead`, `TableCell`, and
+  `TableCaption` primitives, plus a generic `RecordTable` and
+  `RecordCellValue` for airgen `useRecords` results. The record renderer stays
+  SDK-free and handles common Airtable choices, links, lookups, arrays, empty
+  cells, loading states, custom accessors, and custom cell renderers. Its
+  optional `columns` prop accepts generated field keys as a typed shorthand;
+  when omitted, columns are inferred from populated record fields.
 - **`fuseMatcher`** — a fuse.js `SearchMatcher` for airgen's `query()`
   (`search: {query, fields, matcher: fuseMatcher}`), with the same settings as
   `Select`'s search (`threshold: 0.4`, `ignoreLocation`). Keeps fuse.js out of
