@@ -1,5 +1,13 @@
 module.exports = {
     content: ['./frontend/**/*.{js,ts,jsx,tsx}'],
+    // Same rule as @airgen/ui, so the tester's own dark: classes follow the ThemeProvider override too.
+    darkMode: [
+        'variant',
+        [
+            '@media (prefers-color-scheme: dark) { &:not(:where([data-ag-theme="light"] *)) }',
+            '&:where([data-ag-theme="dark"] *)',
+        ],
+    ],
     theme: {
         extend: {
             fontFamily: {

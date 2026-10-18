@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import {initializeBlock} from '@airtable/blocks/interface/ui';
+import {initializeBlock, useColorScheme} from '@airtable/blocks/interface/ui';
 import {SchemaObserver} from 'airgen/interface';
-import {SheetProvider, Text, ToastProvider} from '@airgen/ui';
+import {SheetProvider, Text, ThemeProvider, ToastProvider, type ColorScheme} from '@airgen/ui';
 import '@airgen/ui/styles.css';
 import './style.css';
 import {airgenMeta} from './airtable-schema';
@@ -49,15 +49,43 @@ class PanelBoundary extends React.Component<{name: string; children: React.React
   }
 }
 
-function Tester() {
+// What each source reports, to check them against Airtable's theme setting.
+function ThemeProbe({scheme, onScheme}: {scheme: ColorScheme; onScheme: (scheme: ColorScheme) => void}) {
+  const {colorScheme} = useColorScheme();
+  const query = window.matchMedia('(prefers-color-scheme: dark)');
+  const [media, setMedia] = useState(query.matches);
+  React.useEffect(() => {
+    const onChange = (event: MediaQueryListEvent) => setMedia(event.matches);
+    query.addEventListener('change', onChange);
+    return () => query.removeEventListener('change', onChange);
+  }, [query]);
+  React.useEffect(() => {
+    console.log('[theme] useColorScheme:', colorScheme, 'prefers-color-scheme dark:', media);
+  }, [colorScheme, media]);
+  return (
+    <div className="ml-auto flex items-center gap-2 text-sm text-gray-gray400">
+      <span>
+        useColorScheme: <strong>{colorScheme}</strong> · media: <strong>{media ? 'dark' : 'light'}</strong>
+      </span>
+      <select value={scheme} onChange={event => onScheme(event.target.value as ColorScheme)}>
+        <option value="system">system</option>
+        <option value="light">light</option>
+        <option value="dark">dark</option>
+      </select>
+    </div>
+  );
+}
+
+function Tester({scheme, onScheme}: {scheme: ColorScheme; onScheme: (scheme: ColorScheme) => void}) {
   const [panel, setPanel] = useState<PanelName>('Overview');
   const Panel = PANELS[panel];
   return (
-    <div className="min-h-screen p-4 text-base text-gray-gray700 dark:text-gray-gray200">
+    <div className="min-h-screen p-4 text-base bg-gray-gray50 dark:bg-gray-gray800 text-gray-gray700 dark:text-gray-gray200">
       <SchemaObserver meta={airgenMeta} />
       <header className="flex items-baseline gap-3 mt-2 mb-3">
         <Text variant="title">airgen tester</Text>
         <Text variant="muted">airgen + @airgen/ui against the live base</Text>
+        <ThemeProbe scheme={scheme} onScheme={onScheme} />
       </header>
       <nav className="flex flex-wrap gap-1 mb-4 border-b border-gray-gray200 dark:border-gray-gray600">
         {(Object.keys(PANELS) as PanelName[]).map(name => (
@@ -80,12 +108,17 @@ function Tester() {
   );
 }
 
-initializeBlock({
-  interface: () => (
-    <ToastProvider position="bottom-right">
-      <SheetProvider>
-        <Tester />
-      </SheetProvider>
-    </ToastProvider>
-  ),
-});
+function Root() {
+  const [scheme, setScheme] = useState<ColorScheme>('system');
+  return (
+    <ThemeProvider colorScheme={scheme}>
+      <ToastProvider position="bottom-right">
+        <SheetProvider>
+          <Tester scheme={scheme} onScheme={setScheme} />
+        </SheetProvider>
+      </ToastProvider>
+    </ThemeProvider>
+  );
+}
+
+initializeBlock({interface: () => <Root />});
