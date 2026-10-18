@@ -9,3 +9,4 @@ plan/
 .claude/*
 .serena/*
 packages/ui/ref/*
+sandbox/.tmp/
