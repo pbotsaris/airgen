@@ -24,6 +24,14 @@ export interface Choice {
   readonly color?: string;
 }
 
+/** A choice shaped as a select option (`@airgen/ui`'s `SelectOption`); `data` is the choice itself. */
+export interface ChoiceOption {
+  readonly value: string;
+  readonly label: string;
+  readonly color?: string;
+  readonly data: Choice;
+}
+
 type Options = {readonly [key: string]: unknown} | null | undefined;
 
 function parseChoices(raw: unknown): Choice[] {
@@ -154,6 +162,16 @@ export class FieldInspector<V = unknown> {
   getChoiceByName(name: string): Choice | null {
     const wanted = name.toLowerCase();
     return this.choices.find(choice => choice.name.toLowerCase() === wanted) ?? null;
+  }
+
+  /** `choices` as select options: `value` is the choice id (or name), `label` its name. */
+  toOptions({value = 'id'}: {value?: 'id' | 'name'} = {}): ChoiceOption[] {
+    return this.choices.map(choice => ({
+      value: choice[value],
+      label: choice.name,
+      ...(choice.color !== undefined && {color: choice.color}),
+      data: choice,
+    }));
   }
 
   /**

@@ -7,6 +7,17 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.4.3]
+
+### Added
+
+- **`FieldInspector.toOptions()`.** A field's choices as select options,
+  `{value, label, color?, data}`: `value` is the choice id (or its name with
+  `{value: 'name'}`), `label` its name, `color` its Airtable color, and `data`
+  the choice itself. The shape is `@airgen/ui`'s `SelectOption`, so
+  `<Select pill options={fields.status.toOptions()} />` needs no mapping.
+  The option type is exported as `ChoiceOption`.
+
 ## [0.4.2]
 
 ### Added

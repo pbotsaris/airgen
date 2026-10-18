@@ -26,6 +26,8 @@ export function StatusPicker({task}: {task: {id: string; fields: Partial<TasksRe
 
   // `choices` are the live ones: `[{id, name, color?}]` in Airtable's display order.
   // A lookup or formula resolving to a select has choices too (`fields.projectStatus.choices`).
+  // `toOptions()` shapes them as `{value: id, label: name, color?, data: choice}`, which is what
+  // `@airgen/ui`'s `<Select options>` takes; `toOptions({value: 'name'})` keys them by name instead.
   return (
     <label>
       {status.name /* live display name, even if the field was renamed since generation */}
@@ -35,9 +37,9 @@ export function StatusPicker({task}: {task: {id: string; fields: Partial<TasksRe
         onChange={event => pick(event.target.value)}
       >
         <option value="">—</option>
-        {status.choices.map(choice => (
-          <option key={choice.id} value={choice.id}>
-            {choice.name}
+        {status.toOptions().map(option => (
+          <option key={option.value} value={option.value}>
+            {option.label}
           </option>
         ))}
       </select>

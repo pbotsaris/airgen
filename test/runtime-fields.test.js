@@ -123,6 +123,24 @@ test('choices: colorless choices are kept (no color key)', () => {
   assert.equal(tags.getChoiceByName('nope'), null);
 });
 
+test('toOptions: choices as select options, by id or by name', () => {
+  const tags = inspect('tags');
+  const design = tags.getChoiceById('selDesign0000001');
+  const dev = tags.getChoiceById('selDev0000000001');
+  const options = tags.toOptions();
+  assert.equal(options.length, tags.choices.length);
+  assert.deepEqual(options[0], {value: 'selDesign0000001', label: 'Design', data: design});
+  assert.deepEqual(
+    options.find(option => option.label === 'Dev'),
+    {value: 'selDev0000000001', label: 'Dev', color: 'blueBright', data: dev},
+  );
+  assert.deepEqual(
+    tags.toOptions({value: 'name'}).map(option => option.value),
+    tags.choices.map(choice => choice.name),
+  );
+  assert.deepEqual(inspect('budget').toOptions(), []);
+});
+
 test('convertTo: selects map read shapes, write shapes, ids and names to {id}', () => {
   const status = inspect('status');
   const read = {id: 'selDone000000001', name: 'Done', color: 'greenBright'};
