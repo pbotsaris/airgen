@@ -52,10 +52,14 @@ BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 
 # --- bump ------------------------------------------------------------------
 
+# --allow-same-version: the manifest may already carry the target version
+# (bumped by hand ahead of the changelog); the tag check below still
+# refuses a version that was actually released.
+
 if [ "$PKG" = "airgen" ]; then
-  npm version "$BUMP" --no-git-tag-version >/dev/null
+  npm version "$BUMP" --no-git-tag-version --allow-same-version >/dev/null
 else
-  npm version "$BUMP" --workspace "$PKG_NAME" >/dev/null
+  npm version "$BUMP" --workspace "$PKG_NAME" --allow-same-version >/dev/null
 fi
 
 VERSION="$(node -p "require('./$PKG_DIR/package.json').version")"
@@ -92,7 +96,7 @@ fi
 # --- commit + tag ----------------------------------------------------------
 
 git add package.json package-lock.json "$PKG_DIR/package.json"
-git commit -m "Release $TAG"
+git commit --allow-empty -m "Release $TAG"
 git tag "$TAG"
 
 echo
