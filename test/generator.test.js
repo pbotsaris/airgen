@@ -9,12 +9,18 @@ import {spawnSync} from 'node:child_process';
 import {buildAirgenMeta, generateTypeScriptFromBase, GENERATED_HEADER, META_VERSION} from '../dist/client/generator.js';
 import {computeSchemaSignature} from '../dist/client/schema-signature.js';
 import {mockBase} from './fixtures/mock-base.js';
+import {exampleBase} from './fixtures/example-base.js';
 import {linkIntoNodeModules} from './helpers.js';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const fixturesDir = path.join(projectRoot, 'test', 'fixtures');
 const code = generateTypeScriptFromBase(mockBase);
 const interfaceCode = generateTypeScriptFromBase(mockBase, {hooksModule: 'airgen/interface'});
+// examples/ is written against the generated file of a small, generic base;
+// that file is a golden copy too, and the examples compile against it below.
+const examplesDir = path.join(projectRoot, 'examples');
+const exampleSchemaPath = path.join(examplesDir, 'airtable-schema.ts');
+const exampleCode = generateTypeScriptFromBase(exampleBase);
 /** The `<Table>Write` section of a generated file (everything between the Record interfaces and the meta). */
 const writeSection = source =>
   source.slice(source.indexOf('export interface ProjectsWrite {'), source.indexOf('export const airgenMeta'));
@@ -287,6 +293,12 @@ test('matches the golden snapshot (UPDATE_SNAPSHOTS=1 to refresh after an intend
   assert.equal(code, expected, `generated output differs from ${path.relative(projectRoot, snapshotPath)}`);
 });
 
+test('examples/airtable-schema.ts is the generated file of the example base (UPDATE_SNAPSHOTS=1 to refresh)', () => {
+  if (process.env.UPDATE_SNAPSHOTS) fs.writeFileSync(exampleSchemaPath, exampleCode, 'utf8');
+  const expected = fs.readFileSync(exampleSchemaPath, 'utf8');
+  assert.equal(exampleCode, expected, `generated output differs from ${path.relative(projectRoot, exampleSchemaPath)}`);
+});
+
 test('emits TableRecordMap keyed by sanitized table names', () => {
   assert.match(code, /export interface TableRecordMap \{/);
   assert.match(code, /^ {2}Projects: ProjectsRecord;$/m);
@@ -356,6 +368,20 @@ test('generated output compiles under tsc --strict, resolving airgen like a cons
     fs.copyFileSync(path.join(fixturesDir, 'consumers', name), target);
     return target;
   });
+  // The examples, next to their own generated schema, so `./airtable-schema`
+  // resolves to the example base's file and the examples can't rot.
+  const examplesTmp = path.join(dir, 'examples');
+  fs.mkdirSync(examplesTmp);
+  fs.writeFileSync(path.join(examplesTmp, 'airtable-schema.ts'), exampleCode, 'utf8');
+  const examples = fs
+    .readdirSync(examplesDir)
+    .filter(name => /\.tsx?$/.test(name) && name !== 'airtable-schema.ts')
+    .map(name => {
+      const target = path.join(examplesTmp, name);
+      fs.copyFileSync(path.join(examplesDir, name), target);
+      return target;
+    });
+  assert.ok(examples.length > 0, 'examples/ has example files');
 
   // Link the built package (and the deps its .d.ts needs) into the temp dir
   // so `import {createTypedHooks} from 'airgen'` typechecks against the real
@@ -387,6 +413,7 @@ test('generated output compiles under tsc --strict, resolving airgen like a cons
       file,
       interfaceFile,
       ...consumers,
+      ...examples,
     ],
     // cwd = temp dir so tsc resolves through the temp node_modules only
     {encoding: 'utf8', cwd: dir},
