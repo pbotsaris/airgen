@@ -1122,7 +1122,7 @@
           return dispatcher;
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React35 = require_react(), Internals = {
+        var React36 = require_react(), Internals = {
           d: {
             f: noop,
             r: function() {
@@ -1140,7 +1140,7 @@
           },
           p: 0,
           findDOMNode: null
-        }, REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_RECOVERABLE_TYPE = Symbol.for("react.recoverable"), REACT_OPTIMISTIC_KEY = Symbol.for("react.optimistic_key"), ReactSharedInternals = React35.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
+        }, REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_RECOVERABLE_TYPE = Symbol.for("react.recoverable"), REACT_OPTIMISTIC_KEY = Symbol.for("react.optimistic_key"), ReactSharedInternals = React36.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
         "function" === typeof Map && null != Map.prototype && "function" === typeof Map.prototype.forEach && "function" === typeof Set && null != Set.prototype && "function" === typeof Set.prototype.clear && "function" === typeof Set.prototype.forEach || console.error(
           "React depends on Map and Set built-in types. Make sure that you load a polyfill in older browsers. https://reactjs.org/link/react-polyfills"
         );
@@ -2360,7 +2360,7 @@
         }
         function flattenOptionChildren(children) {
           var content = "";
-          React35.Children.forEach(children, function(child) {
+          React36.Children.forEach(children, function(child) {
             null != child && (content += child, didWarnInvalidOptionChildren || "string" === typeof child || "number" === typeof child || "bigint" === typeof child || (didWarnInvalidOptionChildren = true, console.error(
               "Cannot infer the option value of complex children. Pass a `value` prop or use a plain string as children to <option>."
             )));
@@ -7791,7 +7791,7 @@
             );
           return result;
         }
-        var React35 = require_react(), ReactDOM2 = require_react_dom(), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_SCOPE_TYPE = Symbol.for("react.scope"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_LEGACY_HIDDEN_TYPE = Symbol.for("react.legacy_hidden"), REACT_MEMO_CACHE_SENTINEL = Symbol.for("react.memo_cache_sentinel"), REACT_VIEW_TRANSITION_TYPE = Symbol.for("react.view_transition"), REACT_RECOVERABLE_TYPE = Symbol.for("react.recoverable"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, ASYNC_ITERATOR = Symbol.asyncIterator, REACT_OPTIMISTIC_KEY = Symbol.for("react.optimistic_key"), isArrayImpl = Array.isArray, jsxPropsParents = /* @__PURE__ */ new WeakMap(), jsxChildrenParents = /* @__PURE__ */ new WeakMap(), CLIENT_REFERENCE_TAG = Symbol.for("react.client.reference"), assign = Object.assign, hasOwnProperty = Object.prototype.hasOwnProperty, VALID_ATTRIBUTE_NAME_REGEX = RegExp(
+        var React36 = require_react(), ReactDOM2 = require_react_dom(), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_SCOPE_TYPE = Symbol.for("react.scope"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_LEGACY_HIDDEN_TYPE = Symbol.for("react.legacy_hidden"), REACT_MEMO_CACHE_SENTINEL = Symbol.for("react.memo_cache_sentinel"), REACT_VIEW_TRANSITION_TYPE = Symbol.for("react.view_transition"), REACT_RECOVERABLE_TYPE = Symbol.for("react.recoverable"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, ASYNC_ITERATOR = Symbol.asyncIterator, REACT_OPTIMISTIC_KEY = Symbol.for("react.optimistic_key"), isArrayImpl = Array.isArray, jsxPropsParents = /* @__PURE__ */ new WeakMap(), jsxChildrenParents = /* @__PURE__ */ new WeakMap(), CLIENT_REFERENCE_TAG = Symbol.for("react.client.reference"), assign = Object.assign, hasOwnProperty = Object.prototype.hasOwnProperty, VALID_ATTRIBUTE_NAME_REGEX = RegExp(
           "^[:A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD][:A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD\\-.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040]*$"
         ), illegalAttributeNameCache = {}, validatedAttributeNameCache = {}, unitlessNumbers = new Set(
           "animationIterationCount aspectRatio borderImageOutset borderImageSlice borderImageWidth boxFlex boxFlexGroup boxOrdinalGroup columnCount columns flex flexGrow flexPositive flexShrink flexNegative flexOrder gridArea gridRow gridRowEnd gridRowSpan gridRowStart gridColumn gridColumnEnd gridColumnSpan gridColumnStart fontWeight lineClamp lineHeight opacity order orphans scale tabSize widows zIndex zoom fillOpacity floodOpacity stopOpacity strokeDasharray strokeDashoffset strokeMiterlimit strokeOpacity strokeWidth MozAnimationIterationCount MozBoxFlex MozBoxFlexGroup MozLineClamp msAnimationIterationCount msFlex msZoom msFlexGrow msFlexNegative msFlexOrder msFlexPositive msFlexShrink msGridColumn msGridColumnSpan msGridRow msGridRowSpan WebkitAnimationIterationCount WebkitBoxFlex WebKitBoxFlexGroup WebkitBoxOrdinalGroup WebkitColumnCount WebkitColumns WebkitFlex WebkitFlexGrow WebkitFlexPositive WebkitFlexShrink WebkitLineClamp".split(
@@ -8442,7 +8442,7 @@
           "^(aria)-[:A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD\\-.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040]*$"
         ), rARIACamel = RegExp(
           "^(aria)[A-Z][:A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD\\-.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040]*$"
-        ), badVendoredStyleNamePattern = /^(?:webkit|moz|o)[A-Z]/, msPattern$1 = /^-ms-/, hyphenPattern = /-(.)/g, badStyleValueWithSemicolonPattern = /;\s*$/, warnedStyleNames = {}, warnedStyleValues = {}, warnedForNaNValue = false, warnedForInfinityValue = false, matchHtmlRegExp = /["'&<>]/, uppercasePattern = /([A-Z])/g, msPattern = /^ms-/, isJavaScriptProtocol = /^[\u0000-\u001F ]*j[\r\n\t]*a[\r\n\t]*v[\r\n\t]*a[\r\n\t]*s[\r\n\t]*c[\r\n\t]*r[\r\n\t]*i[\r\n\t]*p[\r\n\t]*t[\r\n\t]*:/i, ReactSharedInternals = React35.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ReactDOMSharedInternals = ReactDOM2.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, NotPending = Object.freeze({
+        ), badVendoredStyleNamePattern = /^(?:webkit|moz|o)[A-Z]/, msPattern$1 = /^-ms-/, hyphenPattern = /-(.)/g, badStyleValueWithSemicolonPattern = /;\s*$/, warnedStyleNames = {}, warnedStyleValues = {}, warnedForNaNValue = false, warnedForInfinityValue = false, matchHtmlRegExp = /["'&<>]/, uppercasePattern = /([A-Z])/g, msPattern = /^ms-/, isJavaScriptProtocol = /^[\u0000-\u001F ]*j[\r\n\t]*a[\r\n\t]*v[\r\n\t]*a[\r\n\t]*s[\r\n\t]*c[\r\n\t]*r[\r\n\t]*i[\r\n\t]*p[\r\n\t]*t[\r\n\t]*:/i, ReactSharedInternals = React36.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ReactDOMSharedInternals = ReactDOM2.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, NotPending = Object.freeze({
           pending: false,
           data: null,
           method: null,
@@ -10091,7 +10091,7 @@ A.finished.finally(function(){document.__reactViewTransition===A&&(document.__re
         }
         function flattenOptionChildren(children) {
           var content = "";
-          React35.Children.forEach(children, function(child) {
+          React36.Children.forEach(children, function(child) {
             null != child && (content += child, didWarnInvalidOptionChildren || "string" === typeof child || "number" === typeof child || "bigint" === typeof child || (didWarnInvalidOptionChildren = true, console.error(
               "Cannot infer the option value of complex children. Pass a `value` prop or use a plain string as children to <option>."
             )));
@@ -15640,13 +15640,13 @@ A.finished.finally(function(){document.__reactViewTransition===A&&(document.__re
           return trackedPostpones;
         }
         function ensureCorrectIsomorphicReactVersion() {
-          var isomorphicReactPackageVersion = React35.version;
+          var isomorphicReactPackageVersion = React36.version;
           if ("19.3.1" !== isomorphicReactPackageVersion)
             throw Error(
               'Incompatible React versions: The "react" and "react-dom" packages must have the exact same version. Instead got:\n  - react:      ' + (isomorphicReactPackageVersion + "\n  - react-dom:  19.3.1\nLearn more: https://react.dev/warnings/version-mismatch")
             );
         }
-        var React35 = require_react(), ReactDOM2 = require_react_dom(), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_SCOPE_TYPE = Symbol.for("react.scope"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_LEGACY_HIDDEN_TYPE = Symbol.for("react.legacy_hidden"), REACT_MEMO_CACHE_SENTINEL = Symbol.for("react.memo_cache_sentinel"), REACT_VIEW_TRANSITION_TYPE = Symbol.for("react.view_transition"), REACT_RECOVERABLE_TYPE = Symbol.for("react.recoverable"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, ASYNC_ITERATOR = Symbol.asyncIterator, REACT_OPTIMISTIC_KEY = Symbol.for("react.optimistic_key"), isArrayImpl = Array.isArray, jsxPropsParents = /* @__PURE__ */ new WeakMap(), jsxChildrenParents = /* @__PURE__ */ new WeakMap(), CLIENT_REFERENCE_TAG = Symbol.for("react.client.reference"), hasOwnProperty = Object.prototype.hasOwnProperty, channel = new MessageChannel(), taskQueue = [];
+        var React36 = require_react(), ReactDOM2 = require_react_dom(), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_SCOPE_TYPE = Symbol.for("react.scope"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_LEGACY_HIDDEN_TYPE = Symbol.for("react.legacy_hidden"), REACT_MEMO_CACHE_SENTINEL = Symbol.for("react.memo_cache_sentinel"), REACT_VIEW_TRANSITION_TYPE = Symbol.for("react.view_transition"), REACT_RECOVERABLE_TYPE = Symbol.for("react.recoverable"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, ASYNC_ITERATOR = Symbol.asyncIterator, REACT_OPTIMISTIC_KEY = Symbol.for("react.optimistic_key"), isArrayImpl = Array.isArray, jsxPropsParents = /* @__PURE__ */ new WeakMap(), jsxChildrenParents = /* @__PURE__ */ new WeakMap(), CLIENT_REFERENCE_TAG = Symbol.for("react.client.reference"), hasOwnProperty = Object.prototype.hasOwnProperty, channel = new MessageChannel(), taskQueue = [];
         channel.port1.onmessage = function() {
           var task = taskQueue.shift();
           task && task();
@@ -16307,7 +16307,7 @@ A.finished.finally(function(){document.__reactViewTransition===A&&(document.__re
           "^(aria)-[:A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD\\-.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040]*$"
         ), rARIACamel = RegExp(
           "^(aria)[A-Z][:A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD\\-.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040]*$"
-        ), badVendoredStyleNamePattern = /^(?:webkit|moz|o)[A-Z]/, msPattern$1 = /^-ms-/, hyphenPattern = /-(.)/g, badStyleValueWithSemicolonPattern = /;\s*$/, warnedStyleNames = {}, warnedStyleValues = {}, warnedForNaNValue = false, warnedForInfinityValue = false, matchHtmlRegExp = /["'&<>]/, uppercasePattern = /([A-Z])/g, msPattern = /^ms-/, isJavaScriptProtocol = /^[\u0000-\u001F ]*j[\r\n\t]*a[\r\n\t]*v[\r\n\t]*a[\r\n\t]*s[\r\n\t]*c[\r\n\t]*r[\r\n\t]*i[\r\n\t]*p[\r\n\t]*t[\r\n\t]*:/i, ReactSharedInternals = React35.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ReactDOMSharedInternals = ReactDOM2.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, NotPending = Object.freeze({
+        ), badVendoredStyleNamePattern = /^(?:webkit|moz|o)[A-Z]/, msPattern$1 = /^-ms-/, hyphenPattern = /-(.)/g, badStyleValueWithSemicolonPattern = /;\s*$/, warnedStyleNames = {}, warnedStyleValues = {}, warnedForNaNValue = false, warnedForInfinityValue = false, matchHtmlRegExp = /["'&<>]/, uppercasePattern = /([A-Z])/g, msPattern = /^ms-/, isJavaScriptProtocol = /^[\u0000-\u001F ]*j[\r\n\t]*a[\r\n\t]*v[\r\n\t]*a[\r\n\t]*s[\r\n\t]*c[\r\n\t]*r[\r\n\t]*i[\r\n\t]*p[\r\n\t]*t[\r\n\t]*:/i, ReactSharedInternals = React36.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ReactDOMSharedInternals = ReactDOM2.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, NotPending = Object.freeze({
           pending: false,
           data: null,
           method: null,
@@ -22838,7 +22838,7 @@ A.finished.finally(function(){document.__reactViewTransition===A&&(document.__re
           node.defaultValue !== "" + value && (node.defaultValue = "" + value);
         }
         function validateOptionProps(element, props) {
-          null == props.value && ("object" === typeof props.children && null !== props.children ? React35.Children.forEach(props.children, function(child) {
+          null == props.value && ("object" === typeof props.children && null !== props.children ? React36.Children.forEach(props.children, function(child) {
             null == child || "string" === typeof child || "number" === typeof child || "bigint" === typeof child || didWarnInvalidChild || (didWarnInvalidChild = true, console.error(
               "Cannot infer the option value of complex children. Pass a `value` prop or use a plain string as children to <option>."
             ));
@@ -39986,11 +39986,11 @@ A.finished.finally(function(){document.__reactViewTransition===A&&(document.__re
           ));
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var Scheduler = require_scheduler(), React35 = require_react(), ReactDOM2 = require_react_dom(), searchTarget = null, searchBoundary = null, assign = Object.assign, REACT_LEGACY_ELEMENT_TYPE = Symbol.for("react.element"), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy");
+        var Scheduler = require_scheduler(), React36 = require_react(), ReactDOM2 = require_react_dom(), searchTarget = null, searchBoundary = null, assign = Object.assign, REACT_LEGACY_ELEMENT_TYPE = Symbol.for("react.element"), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy");
         Symbol.for("react.scope");
         var REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_LEGACY_HIDDEN_TYPE = Symbol.for("react.legacy_hidden");
         Symbol.for("react.tracing_marker");
-        var REACT_MEMO_CACHE_SENTINEL = Symbol.for("react.memo_cache_sentinel"), REACT_VIEW_TRANSITION_TYPE = Symbol.for("react.view_transition"), REACT_RECOVERABLE_TYPE = Symbol.for("react.recoverable"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), isArrayImpl = Array.isArray, ReactSharedInternals = React35.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ReactDOMSharedInternals = ReactDOM2.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, NotPending = Object.freeze({
+        var REACT_MEMO_CACHE_SENTINEL = Symbol.for("react.memo_cache_sentinel"), REACT_VIEW_TRANSITION_TYPE = Symbol.for("react.view_transition"), REACT_RECOVERABLE_TYPE = Symbol.for("react.recoverable"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), isArrayImpl = Array.isArray, ReactSharedInternals = React36.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ReactDOMSharedInternals = ReactDOM2.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, NotPending = Object.freeze({
           pending: false,
           data: null,
           method: null,
@@ -43182,7 +43182,7 @@ A.finished.finally(function(){document.__reactViewTransition===A&&(document.__re
           }
         };
         (function() {
-          var isomorphicReactPackageVersion = React35.version;
+          var isomorphicReactPackageVersion = React36.version;
           if ("19.3.1" !== isomorphicReactPackageVersion)
             throw Error(
               'Incompatible React versions: The "react" and "react-dom" packages must have the exact same version. Instead got:\n  - react:      ' + (isomorphicReactPackageVersion + "\n  - react-dom:  19.3.1\nLearn more: https://react.dev/warnings/version-mismatch")
@@ -43581,6 +43581,22 @@ A.finished.finally(function(){document.__reactViewTransition===A&&(document.__re
   });
 
   // node_modules/@airtable/blocks/dist/esm/shared/ui/use_color_scheme.js
+  function useColorScheme() {
+    const [colorScheme, setColorScheme] = (0, import_react4.useState)(window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    (0, import_react4.useEffect)(() => {
+      const darkModeQuery = window.matchMedia("(prefers-color-scheme: dark)");
+      const darkModeListener = (e) => {
+        setColorScheme(e.matches ? "dark" : "light");
+      };
+      darkModeQuery.addEventListener("change", darkModeListener);
+      return () => {
+        darkModeQuery.removeEventListener("change", darkModeListener);
+      };
+    }, []);
+    return {
+      colorScheme
+    };
+  }
   var import_react4;
   var init_use_color_scheme = __esm({
     "node_modules/@airtable/blocks/dist/esm/shared/ui/use_color_scheme.js"() {
@@ -44888,9 +44904,11 @@ export interface AiText {
   // node_modules/airgen/dist/client/SchemaObserver.js
   function createSchemaObserver(sdk4, config = {}) {
     const generatorOptions = { hooksModule: config.hooksModule, sdkFlavor: config.sdkFlavor };
+    const useColorScheme2 = sdk4.useColorScheme ?? useLightScheme;
     function SchemaObserver2({ daemonUrl = "http://localhost:3001", debounceMs = 500, enabled = true, meta: meta2, children }) {
       const base = sdk4.useBase();
       sdk4.useWatchable(base, ["schema"]);
+      const palette = PALETTES[useColorScheme2().colorScheme === "dark" ? "dark" : "light"];
       const [status, setStatus] = (0, import_react7.useState)("unknown");
       const [lastSyncedAt, setLastSyncedAt] = (0, import_react7.useState)(null);
       const [copied, setCopied] = (0, import_react7.useState)(false);
@@ -45053,15 +45071,15 @@ export interface AiText {
       }, [base]);
       if (!enabled)
         return children === void 0 ? null : import_react7.default.createElement(import_react7.default.Fragment, null, children);
-      const statusDisplay = getStatusDisplay(status);
+      const statusDisplay = getStatusDisplay(status, palette);
       return import_react7.default.createElement(
         import_react7.default.Fragment,
         null,
-        diagnostics?.config && import_react7.default.createElement(NoticeBanner, { title: `${diagnostics.config.file ?? "tsconfig.json"} needs changes for the typecheck`, issues: diagnostics.config.issues, command: diagnostics.config.command }),
-        diagnostics?.install && import_react7.default.createElement(NoticeBanner, { title: diagnostics.install.packages.includes("typescript") ? "typescript is not installed, so the typecheck is off" : "dev dependencies missing for the typecheck", issues: diagnostics.install.issues, command: diagnostics.install.command }),
+        diagnostics?.config && import_react7.default.createElement(NoticeBanner, { title: `${diagnostics.config.file ?? "tsconfig.json"} needs changes for the typecheck`, issues: diagnostics.config.issues, command: diagnostics.config.command, palette }),
+        diagnostics?.install && import_react7.default.createElement(NoticeBanner, { title: diagnostics.install.packages.includes("typescript") ? "typescript is not installed, so the typecheck is off" : "dev dependencies missing for the typecheck", issues: diagnostics.install.issues, command: diagnostics.install.command, palette }),
         import_react7.default.createElement(
           "div",
-          { style: panelStyle },
+          { style: panelStyle(palette) },
           import_react7.default.createElement(
             "span",
             { style: __spreadProps(__spreadValues({}, textStyle), { color: statusDisplay.color, fontWeight: 600 }) },
@@ -45070,23 +45088,23 @@ export interface AiText {
           ),
           import_react7.default.createElement(
             "span",
-            { style: __spreadProps(__spreadValues({}, textStyle), { color: "#666666" }) },
+            { style: __spreadProps(__spreadValues({}, textStyle), { color: palette.muted }) },
             base.tables.length,
             " table",
             base.tables.length === 1 ? "" : "s",
             lastSyncedAt ? ` \xB7 synced ${lastSyncedAt}` : status === "disconnected" ? " \xB7 run `npx airgen`" : ""
           ),
-          drift && !drift.ok && import_react7.default.createElement(DriftDetails, { drift }),
-          import_react7.default.createElement(DiagnosticsDetails, { diagnostics }),
-          import_react7.default.createElement(FixesDetails, { fixes, applying, onApply: applyFix }),
-          import_react7.default.createElement("button", { type: "button", style: buttonStyle, onClick: copyToClipboard }, copied ? "Copied!" : "Copy schema")
+          drift && !drift.ok && import_react7.default.createElement(DriftDetails, { drift, palette }),
+          import_react7.default.createElement(DiagnosticsDetails, { diagnostics, palette }),
+          import_react7.default.createElement(FixesDetails, { fixes, applying, onApply: applyFix, palette }),
+          import_react7.default.createElement("button", { type: "button", style: buttonStyle(palette), onClick: copyToClipboard }, copied ? "Copied!" : "Copy schema")
         ),
         children
       );
     }
     return SchemaObserver2;
   }
-  function NoticeBanner({ title, issues, command }) {
+  function NoticeBanner({ title, issues, command, palette }) {
     const [copied, setCopied] = (0, import_react7.useState)(false);
     const copy = (0, import_react7.useCallback)(async () => {
       if (command === null)
@@ -45100,32 +45118,36 @@ export interface AiText {
     }, [command]);
     return import_react7.default.createElement(
       "div",
-      { style: __spreadProps(__spreadValues({}, panelStyle), { background: "#fff8e1", borderBottom: "2px solid #f0d58c" }) },
-      import_react7.default.createElement("span", { style: __spreadProps(__spreadValues({}, textStyle), { color: "#8a6100", fontWeight: 600 }) }, title),
-      import_react7.default.createElement("span", { style: __spreadProps(__spreadValues({}, textStyle), { color: "#333333" }) }, issues.join(" \xB7 ")),
+      { style: __spreadProps(__spreadValues({}, panelStyle(palette)), {
+        background: palette.noticeSurface,
+        borderBottom: `2px solid ${palette.noticeBorder}`
+      }) },
+      import_react7.default.createElement("span", { style: __spreadProps(__spreadValues({}, textStyle), { color: palette.noticeTitle, fontWeight: 600 }) }, title),
+      import_react7.default.createElement("span", { style: __spreadProps(__spreadValues({}, textStyle), { color: palette.text }) }, issues.join(" \xB7 ")),
       command !== null && import_react7.default.createElement(
         "span",
         { style: { display: "flex", alignItems: "center", gap: 6 } },
-        import_react7.default.createElement("span", { style: textStyle }, "Run:"),
+        import_react7.default.createElement("span", { style: __spreadProps(__spreadValues({}, textStyle), { color: palette.text }) }, "Run:"),
         import_react7.default.createElement("code", { style: __spreadProps(__spreadValues({}, textStyle), {
           fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
           padding: "2px 6px",
           borderRadius: 3,
-          background: "rgba(0, 0, 0, 0.06)",
+          background: palette.code,
+          color: palette.text,
           userSelect: "all"
         }) }, command),
-        import_react7.default.createElement("button", { type: "button", style: buttonStyle, onClick: copy }, copied ? "Copied!" : "Copy")
+        import_react7.default.createElement("button", { type: "button", style: buttonStyle(palette), onClick: copy }, copied ? "Copied!" : "Copy")
       )
     );
   }
-  function DiagnosticsDetails({ diagnostics }) {
+  function DiagnosticsDetails({ diagnostics, palette }) {
     if (!diagnostics)
       return null;
     if (diagnostics.status === "checking") {
-      return import_react7.default.createElement("span", { style: __spreadProps(__spreadValues({}, textStyle), { color: "#666666" }) }, "\u2026 typechecking");
+      return import_react7.default.createElement("span", { style: __spreadProps(__spreadValues({}, textStyle), { color: palette.muted }) }, "\u2026 typechecking");
     }
     if (diagnostics.status === "ok") {
-      return import_react7.default.createElement("span", { style: __spreadProps(__spreadValues({}, textStyle), { color: "#048a0e" }) }, "\u2713 types ok");
+      return import_react7.default.createElement("span", { style: __spreadProps(__spreadValues({}, textStyle), { color: palette.ok }) }, "\u2713 types ok");
     }
     if (diagnostics.status !== "errors")
       return null;
@@ -45134,7 +45156,7 @@ export interface AiText {
       { style: textStyle },
       import_react7.default.createElement(
         "summary",
-        { style: { color: "#d33030", fontWeight: 600, cursor: "pointer" } },
+        { style: { color: palette.error, fontWeight: 600, cursor: "pointer" } },
         "\u2717 ",
         diagnostics.total,
         " type error",
@@ -45142,7 +45164,7 @@ export interface AiText {
       ),
       import_react7.default.createElement(
         "div",
-        { style: { paddingTop: 4, color: "#333333" } },
+        { style: { paddingTop: 4, color: palette.text } },
         diagnostics.errors.slice(0, MAX_DIAGNOSTIC_LINES).map((error, index) => import_react7.default.createElement(
           "div",
           { key: index },
@@ -45165,7 +45187,7 @@ export interface AiText {
   function truncate(text, max) {
     return text.length > max ? `${text.slice(0, max)}\u2026` : text;
   }
-  function FixesDetails({ fixes, applying, onApply }) {
+  function FixesDetails({ fixes, applying, onApply, palette }) {
     if (!fixes || fixes.fixes.length === 0)
       return null;
     const fixable = fixes.fixes.filter((fix) => fix.fixable);
@@ -45173,13 +45195,13 @@ export interface AiText {
     return import_react7.default.createElement(
       "details",
       { style: textStyle },
-      import_react7.default.createElement("summary", { style: { color: "#8250df", fontWeight: 600, cursor: "pointer" } }, summary),
+      import_react7.default.createElement("summary", { style: { color: palette.fix, fontWeight: 600, cursor: "pointer" } }, summary),
       import_react7.default.createElement(
         "div",
-        { style: { paddingTop: 4, color: "#333333" } },
+        { style: { paddingTop: 4, color: palette.text } },
         fixable.length > 1 && import_react7.default.createElement(
           "button",
-          { type: "button", style: __spreadProps(__spreadValues({}, buttonStyle), { marginBottom: 4 }), disabled: applying, onClick: () => onApply({ all: true }) },
+          { type: "button", style: __spreadProps(__spreadValues({}, buttonStyle(palette)), { marginBottom: 4 }), disabled: applying, onClick: () => onApply({ all: true }) },
           "Fix all ",
           fixable.length
         ),
@@ -45189,7 +45211,7 @@ export interface AiText {
           import_react7.default.createElement("span", null, fix.description),
           fix.fixable ? import_react7.default.createElement(
             "button",
-            { type: "button", style: __spreadProps(__spreadValues({}, buttonStyle), { marginLeft: 6 }), disabled: applying, onClick: () => onApply({ id: fix.id }) },
+            { type: "button", style: __spreadProps(__spreadValues({}, buttonStyle(palette)), { marginLeft: 6 }), disabled: applying, onClick: () => onApply({ id: fix.id }) },
             "Apply (",
             fix.editCount,
             " in ",
@@ -45199,7 +45221,7 @@ export interface AiText {
             ")"
           ) : import_react7.default.createElement(
             "div",
-            { style: { color: "#666666", paddingLeft: 8 } },
+            { style: { color: palette.muted, paddingLeft: 8 } },
             fix.usages.slice(0, MAX_USAGE_LINES).map((usage, index) => import_react7.default.createElement(
               "div",
               { key: index },
@@ -45219,7 +45241,7 @@ export interface AiText {
       )
     );
   }
-  function DriftDetails({ drift }) {
+  function DriftDetails({ drift, palette }) {
     const parts = [];
     if (drift.counts.breaking > 0)
       parts.push(`${drift.counts.breaking} breaking`);
@@ -45227,7 +45249,7 @@ export interface AiText {
       parts.push(`${drift.counts.warning} warning`);
     if (drift.counts.info > 0)
       parts.push(`${drift.counts.info} renamed`);
-    const color = drift.counts.breaking > 0 ? "#d33030" : drift.counts.warning > 0 ? "#b58a00" : "#666666";
+    const color = drift.counts.breaking > 0 ? palette.error : drift.counts.warning > 0 ? palette.warning : palette.muted;
     return import_react7.default.createElement(
       "details",
       { style: textStyle },
@@ -45239,7 +45261,7 @@ export interface AiText {
       ),
       import_react7.default.createElement(
         "div",
-        { style: { paddingTop: 4, color: "#333333" } },
+        { style: { paddingTop: 4, color: palette.text } },
         drift.findings.slice(0, MAX_DRIFT_LINES).map((finding, index) => import_react7.default.createElement("div", { key: index }, finding.message)),
         drift.findings.length > MAX_DRIFT_LINES && import_react7.default.createElement(
           "div",
@@ -45251,26 +45273,26 @@ export interface AiText {
       )
     );
   }
-  function getStatusDisplay(status) {
+  function getStatusDisplay(status, palette) {
     switch (status) {
       case "connected":
         return {
           label: "\u25CF Connected",
-          color: "#048a0e"
+          color: palette.ok
         };
       case "disconnected":
         return {
           label: "\u25CB Disconnected",
-          color: "#d33030"
+          color: palette.error
         };
       default:
         return {
           label: "\u25CC Connecting\u2026",
-          color: "#666666"
+          color: palette.muted
         };
     }
   }
-  var import_react7, DIAGNOSTICS_POLL_DELAYS_MS, SETUP_NOTICE_POLL_MS, panelStyle, textStyle, buttonStyle, MAX_DRIFT_LINES, MAX_DIAGNOSTIC_LINES, MAX_USAGE_LINES;
+  var import_react7, DIAGNOSTICS_POLL_DELAYS_MS, SETUP_NOTICE_POLL_MS, PALETTES, useLightScheme, panelStyle, textStyle, buttonStyle, MAX_DRIFT_LINES, MAX_DIAGNOSTIC_LINES, MAX_USAGE_LINES;
   var init_SchemaObserver = __esm({
     "node_modules/airgen/dist/client/SchemaObserver.js"() {
       import_react7 = __toESM(require_react(), 1);
@@ -45279,23 +45301,61 @@ export interface AiText {
       init_schema_drift();
       DIAGNOSTICS_POLL_DELAYS_MS = [0, 500, 1e3, 2e3, 3e3, 3e3, 3e3, 3e3, 3e3, 3e3];
       SETUP_NOTICE_POLL_MS = 3e3;
-      panelStyle = {
+      PALETTES = {
+        light: {
+          surface: "transparent",
+          border: "#e0e0e0",
+          text: "#333333",
+          muted: "#666666",
+          control: "rgba(0, 0, 0, 0.05)",
+          controlText: "#333333",
+          code: "rgba(0, 0, 0, 0.06)",
+          ok: "#048a0e",
+          error: "#d33030",
+          warning: "#b58a00",
+          fix: "#8250df",
+          noticeSurface: "#fff8e1",
+          noticeBorder: "#f0d58c",
+          noticeTitle: "#8a6100"
+        },
+        // Painted, not transparent: the strip stays readable even on a host that
+        // leaves the frame white while Airtable reports dark.
+        dark: {
+          surface: "#1e1e1e",
+          border: "#3a3a3a",
+          text: "#e6e6e6",
+          muted: "#a0a0a0",
+          control: "rgba(255, 255, 255, 0.12)",
+          controlText: "#f0f0f0",
+          code: "rgba(255, 255, 255, 0.1)",
+          ok: "#4cc95a",
+          error: "#ff6b6b",
+          warning: "#e0b84a",
+          fix: "#b392f0",
+          noticeSurface: "#3a3020",
+          noticeBorder: "#6b5626",
+          noticeTitle: "#f0c86a"
+        }
+      };
+      useLightScheme = () => ({ colorScheme: "light" });
+      panelStyle = (palette) => ({
         display: "flex",
         alignItems: "center",
         gap: 12,
         flexWrap: "wrap",
         padding: 8,
-        borderBottom: "2px solid #e0e0e0",
+        background: palette.surface,
+        borderBottom: `2px solid ${palette.border}`,
         fontFamily: "inherit"
-      };
+      });
       textStyle = { fontSize: 11, lineHeight: "14px" };
-      buttonStyle = __spreadProps(__spreadValues({}, textStyle), {
+      buttonStyle = (palette) => __spreadProps(__spreadValues({}, textStyle), {
         fontWeight: 500,
         padding: "4px 8px",
         border: "none",
         borderRadius: 3,
-        background: "rgba(0, 0, 0, 0.05)",
-        color: "#333333",
+        background: palette.control,
+        color: palette.controlText,
         cursor: "pointer"
       });
       MAX_DRIFT_LINES = 5;
@@ -46177,7 +46237,9 @@ export interface AiText {
         useRecords: nullSafeUseRecords(useBase2, useRecords),
         useWatchable,
         useMemo: import_react8.useMemo,
-        useCustomProperties
+        useCustomProperties,
+        // Off the namespace: early interface-alpha builds don't export it.
+        useColorScheme
       };
       SchemaObserver = createSchemaObserver(sdk3, { hooksModule: "airgen/interface", sdkFlavor: "interface" });
       createTypedHooks = makeCreateTypedHooks(sdk3);
@@ -46400,18 +46462,18 @@ export interface AiText {
         function isValidElement5(object) {
           return "object" === typeof object && null !== object && object.$$typeof === REACT_ELEMENT_TYPE;
         }
-        var React35 = require_react(), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_VIEW_TRANSITION_TYPE = Symbol.for("react.view_transition"), REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = React35.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, hasOwnProperty = Object.prototype.hasOwnProperty, isArrayImpl = Array.isArray, createTask = console.createTask ? console.createTask : function() {
+        var React36 = require_react(), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_VIEW_TRANSITION_TYPE = Symbol.for("react.view_transition"), REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = React36.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, hasOwnProperty = Object.prototype.hasOwnProperty, isArrayImpl = Array.isArray, createTask = console.createTask ? console.createTask : function() {
           return null;
         };
-        React35 = {
+        React36 = {
           react_stack_bottom_frame: function(callStackForError) {
             return callStackForError();
           }
         };
         var specialPropKeyWarningShown;
         var didWarnAboutElementRef = {};
-        var unknownOwnerDebugStack = React35.react_stack_bottom_frame.bind(
-          React35,
+        var unknownOwnerDebugStack = React36.react_stack_bottom_frame.bind(
+          React36,
           UnknownOwner
         )();
         var unknownOwnerDebugTask = createTask(getTaskName(UnknownOwner));
@@ -46557,78 +46619,12 @@ export interface AiText {
       return hexLuminance(color) < 0.55;
     return false;
   }
-  var HEX_RE;
+  var HEX_RE, NEUTRAL_PILL_CLASSES;
   var init_colors2 = __esm({
     "node_modules/@airgen/ui/dist/colors.js"() {
       init_colors_table();
       HEX_RE = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i;
-    }
-  });
-
-  // node_modules/@airgen/ui/dist/components/Badge.js
-  function Badge({ opts, variant = "sm" }) {
-    if (!opts || opts.name == null)
-      return (0, import_jsx_runtime.jsx)(InvalidBadge, { opts });
-    const color = opts.color ? airtableColorToHex(opts.color) : null;
-    const bg = color ?? "#eeeeee";
-    const textColor = opts.color && shouldUseLightText(opts.color) ? "#ffffff" : "rgba(0,0,0,0.72)";
-    const textSize = variant === "sm" ? "text-sm" : "text-base";
-    return (0, import_jsx_runtime.jsx)("div", { className: "inline-block px-2 py-0.5 rounded-full font-medium " + textSize, style: { backgroundColor: bg, color: textColor }, children: opts.name });
-  }
-  function InvalidBadge({ opts }) {
-    console.error("Badge component rendered with invalid badge options: ", opts);
-    return (0, import_jsx_runtime.jsx)("div", { children: "Invalid" });
-  }
-  var import_jsx_runtime;
-  var init_Badge = __esm({
-    "node_modules/@airgen/ui/dist/components/Badge.js"() {
-      import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
-      init_colors2();
-    }
-  });
-
-  // node_modules/@airgen/ui/dist/sizes.js
-  function controlSizeClasses(size = "base") {
-    const s = SIZE_SCALE[size] || SIZE_SCALE.base;
-    return `${s.h} ${s.px} ${s.text}`;
-  }
-  function multilineSizeClasses(size = "base") {
-    const s = SIZE_SCALE[size] || SIZE_SCALE.base;
-    return `${s.px} ${s.py} ${s.text}`;
-  }
-  var SIZE_SCALE, ICON_SIZES, PILL_SIZE;
-  var init_sizes = __esm({
-    "node_modules/@airgen/ui/dist/sizes.js"() {
-      SIZE_SCALE = {
-        xs: { h: "h-5", px: "px-control-x-xs", py: "py-control-y-xs", text: "text-xs" },
-        sm: { h: "h-6", px: "px-control-x-sm", py: "py-control-y-sm", text: "text-sm" },
-        base: { h: "h-8", px: "px-control-x-base", py: "py-control-y-base", text: "text-base" },
-        lg: { h: "h-9", px: "px-control-x-lg", py: "py-control-y-lg", text: "text-lg" },
-        xl: { h: "h-10", px: "px-control-x-xl", py: "py-control-y-xl", text: "text-xl" }
-      };
-      ICON_SIZES = { xs: 10, sm: 12, base: 14, md: 16, lg: 16, xl: 18 };
-      PILL_SIZE = {
-        xs: { pad: "px-1.5 py-px", text: "text-[10px]", avatar: "h-3 w-3", gap: "gap-1" },
-        sm: { pad: "px-2 py-0.5", text: "text-xs", avatar: "h-4 w-4", gap: "gap-1.5" },
-        base: { pad: "px-2.5 py-0.5", text: "text-sm", avatar: "h-5 w-5", gap: "gap-2" },
-        lg: { pad: "px-3 py-1", text: "text-base", avatar: "h-6 w-6", gap: "gap-2" },
-        xl: { pad: "px-3.5 py-1", text: "text-lg", avatar: "h-7 w-7", gap: "gap-2" }
-      };
-    }
-  });
-
-  // node_modules/@airgen/ui/dist/components/Icon.js
-  function Icon({ icon: LucideIcon, size = "base", className = "" }) {
-    if (!LucideIcon)
-      return null;
-    const pixelSize = typeof size === "number" ? size : ICON_SIZES[size];
-    return (0, import_jsx_runtime2.jsx)(LucideIcon, { size: pixelSize, className });
-  }
-  var import_jsx_runtime2;
-  var init_Icon = __esm({
-    "node_modules/@airgen/ui/dist/components/Icon.js"() {
-      import_jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
-      init_sizes();
+      NEUTRAL_PILL_CLASSES = "ag-bg-[#eeeeee] ag-text-black/70 dark:ag-bg-[rgba(195,212,249,0.18)] dark:ag-text-white";
     }
   });
 
@@ -46721,6 +46717,73 @@ export interface AiText {
     }
   });
 
+  // node_modules/@airgen/ui/dist/components/Badge.js
+  function Badge({ opts, variant = "sm" }) {
+    if (!opts || opts.name == null)
+      return (0, import_jsx_runtime.jsx)(InvalidBadge, { opts });
+    const color = opts.color ? airtableColorToHex(opts.color) : null;
+    const textColor = opts.color && shouldUseLightText(opts.color) ? "#ffffff" : "rgba(0,0,0,0.72)";
+    const textSize = variant === "sm" ? "ag-text-sm" : "ag-text-base";
+    return (0, import_jsx_runtime.jsx)("span", { className: cx("ag-inline-flex ag-items-center ag-max-w-full ag-min-w-0 ag-px-2 ag-py-0.5 ag-rounded-full ag-font-medium ag-whitespace-nowrap", textSize, !color && NEUTRAL_PILL_CLASSES), style: color ? { backgroundColor: color, color: textColor } : void 0, title: opts.name, children: (0, import_jsx_runtime.jsx)("span", { className: "ag-truncate", children: opts.name }) });
+  }
+  function InvalidBadge({ opts }) {
+    console.error("Badge component rendered with invalid badge options: ", opts);
+    return (0, import_jsx_runtime.jsx)("div", { children: "Invalid" });
+  }
+  var import_jsx_runtime;
+  var init_Badge = __esm({
+    "node_modules/@airgen/ui/dist/components/Badge.js"() {
+      import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
+      init_colors2();
+      init_utils();
+    }
+  });
+
+  // node_modules/@airgen/ui/dist/sizes.js
+  function controlSizeClasses(size = "base") {
+    const s = SIZE_SCALE[size] || SIZE_SCALE.base;
+    return `${s.h} ${s.px} ${s.text}`;
+  }
+  function multilineSizeClasses(size = "base") {
+    const s = SIZE_SCALE[size] || SIZE_SCALE.base;
+    return `${s.px} ${s.py} ${s.text}`;
+  }
+  var SIZE_SCALE, ICON_SIZES, PILL_SIZE;
+  var init_sizes = __esm({
+    "node_modules/@airgen/ui/dist/sizes.js"() {
+      SIZE_SCALE = {
+        xs: { h: "ag-h-5", px: "ag-px-control-x-xs", py: "ag-py-control-y-xs", text: "ag-text-xs" },
+        sm: { h: "ag-h-6", px: "ag-px-control-x-sm", py: "ag-py-control-y-sm", text: "ag-text-sm" },
+        base: { h: "ag-h-8", px: "ag-px-control-x-base", py: "ag-py-control-y-base", text: "ag-text-base" },
+        lg: { h: "ag-h-9", px: "ag-px-control-x-lg", py: "ag-py-control-y-lg", text: "ag-text-lg" },
+        xl: { h: "ag-h-10", px: "ag-px-control-x-xl", py: "ag-py-control-y-xl", text: "ag-text-xl" }
+      };
+      ICON_SIZES = { xs: 10, sm: 12, base: 14, md: 16, lg: 16, xl: 18 };
+      PILL_SIZE = {
+        xs: { pad: "ag-px-1.5 ag-py-px", text: "ag-text-[10px]", avatar: "ag-h-3 ag-w-3", gap: "ag-gap-1" },
+        sm: { pad: "ag-px-2 ag-py-0.5", text: "ag-text-xs", avatar: "ag-h-4 ag-w-4", gap: "ag-gap-1.5" },
+        base: { pad: "ag-px-2.5 ag-py-0.5", text: "ag-text-sm", avatar: "ag-h-5 ag-w-5", gap: "ag-gap-2" },
+        lg: { pad: "ag-px-3 ag-py-1", text: "ag-text-base", avatar: "ag-h-6 ag-w-6", gap: "ag-gap-2" },
+        xl: { pad: "ag-px-3.5 ag-py-1", text: "ag-text-lg", avatar: "ag-h-7 ag-w-7", gap: "ag-gap-2" }
+      };
+    }
+  });
+
+  // node_modules/@airgen/ui/dist/components/Icon.js
+  function Icon({ icon: LucideIcon, size = "base", className = "" }) {
+    if (!LucideIcon)
+      return null;
+    const pixelSize = typeof size === "number" ? size : ICON_SIZES[size];
+    return (0, import_jsx_runtime2.jsx)(LucideIcon, { size: pixelSize, className });
+  }
+  var import_jsx_runtime2;
+  var init_Icon = __esm({
+    "node_modules/@airgen/ui/dist/components/Icon.js"() {
+      import_jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
+      init_sizes();
+    }
+  });
+
   // node_modules/@airgen/ui/dist/components/Button.js
   var import_jsx_runtime3, React9, variants, sizes, iconSizeMap, Button;
   var init_Button = __esm({
@@ -46732,25 +46795,25 @@ export interface AiText {
       init_sizes();
       init_colors2();
       variants = {
-        default: "bg-neutral-700 text-white hover:bg-neutral-600",
-        outline: "border border-neutral-300 bg-white hover:bg-neutral-100",
-        destructive: "bg-rose-600 text-white hover:bg-rose-700",
-        secondary: "bg-neutral-200 text-neutral-900 hover:bg-neutral-300",
-        ghost: "hover:bg-neutral-100",
-        link: "underline underline-offset-4 decoration-neutral-300 hover:decoration-neutral-500 dark:decoration-neutral-600 dark:hover:decoration-neutral-400 transition-all text-neutral-700 dark:text-neutral-300"
+        default: "ag-bg-neutral-700 ag-text-white hover:ag-bg-neutral-600",
+        outline: "ag-border ag-border-neutral-300 ag-bg-white ag-text-neutral-900 hover:ag-bg-neutral-100 dark:ag-border-neutral-600 dark:ag-bg-neutral-800 dark:ag-text-neutral-100 dark:hover:ag-bg-neutral-700",
+        destructive: "ag-bg-rose-600 ag-text-white hover:ag-bg-rose-700",
+        secondary: "ag-bg-neutral-200 ag-text-neutral-900 hover:ag-bg-neutral-300 dark:ag-bg-neutral-700 dark:ag-text-neutral-100 dark:hover:ag-bg-neutral-600",
+        ghost: "hover:ag-bg-neutral-100 dark:hover:ag-bg-neutral-700",
+        link: "ag-underline ag-underline-offset-4 ag-decoration-neutral-300 hover:ag-decoration-neutral-500 dark:ag-decoration-neutral-600 dark:hover:ag-decoration-neutral-400 ag-transition-all ag-text-neutral-700 dark:ag-text-neutral-300"
       };
       sizes = {
         xs: controlSizeClasses("xs"),
-        sm: `${controlSizeClasses("sm")} min-w-[62px]`,
+        sm: `${controlSizeClasses("sm")} ag-min-w-[62px]`,
         base: controlSizeClasses("base"),
         default: controlSizeClasses("base"),
         lg: controlSizeClasses("lg"),
         xl: controlSizeClasses("xl"),
-        icon: "h-8 w-8 p-0",
-        "icon-xs": "h-5 w-5 p-0",
-        "icon-sm": "h-6 w-6 p-0",
-        "icon-lg": "h-9 w-9 p-0",
-        "icon-xl": "h-10 w-10 p-0"
+        icon: "ag-h-8 ag-w-8 ag-p-0",
+        "icon-xs": "ag-h-5 ag-w-5 ag-p-0",
+        "icon-sm": "ag-h-6 ag-w-6 ag-p-0",
+        "icon-lg": "ag-h-9 ag-w-9 ag-p-0",
+        "icon-xl": "ag-h-10 ag-w-10 ag-p-0"
       };
       iconSizeMap = {
         xs: "xs",
@@ -46767,7 +46830,7 @@ export interface AiText {
       };
       Button = React9.forwardRef(function Button2(_a, ref) {
         var _b = _a, { className, variant = "default", size = "default", icon, iconSize, color, style: style3, children } = _b, props = __objRest(_b, ["className", "variant", "size", "icon", "iconSize", "color", "style", "children"]);
-        const baseClasses = "inline-flex items-center justify-center gap-2 rounded-md font-medium transition-all disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2";
+        const baseClasses = "ag-inline-flex ag-items-center ag-justify-center ag-gap-2 ag-rounded-md ag-font-medium ag-transition-all disabled:ag-pointer-events-none disabled:ag-opacity-50 focus-visible:ag-outline-none focus-visible:ag-ring-2 focus-visible:ag-ring-offset-2";
         const resolvedIconSize = iconSize || iconSizeMap[size] || "base";
         const resolvedColor = color ? airtableColorToHex(color) ?? color : void 0;
         return (0, import_jsx_runtime3.jsxs)("button", __spreadProps(__spreadValues({ ref, className: cx(baseClasses, variants[variant], sizes[size], className), style: resolvedColor ? __spreadValues({ color: resolvedColor }, style3) : style3 }, props), { children: [icon && (0, import_jsx_runtime3.jsx)(Icon, { icon, size: resolvedIconSize }), children] }));
@@ -46814,14 +46877,14 @@ export interface AiText {
 
   // node_modules/@airgen/ui/dist/components/Caret.js
   function Caret({ variant = "chevron", size = "md", weight = 2.5, open = false, className, direction = "down" }) {
-    const sizeClass = size === "sm" ? "h-3.5 w-3.5" : size === "lg" ? "h-5 w-5" : "h-4 w-4";
-    const dirRot = direction === "up" ? "rotate-180" : direction === "left" ? "rotate-90" : direction === "right" ? "-rotate-90" : "rotate-0";
-    const openRot = open ? "rotate-180" : "rotate-0";
-    const rotClass = cx("transition-transform duration-150", direction === "down" ? openRot : dirRot);
+    const sizeClass = size === "sm" ? "ag-h-3.5 ag-w-3.5" : size === "lg" ? "ag-h-5 ag-w-5" : "ag-h-4 ag-w-4";
+    const dirRot = direction === "up" ? "ag-rotate-180" : direction === "left" ? "ag-rotate-90" : direction === "right" ? "-ag-rotate-90" : "ag-rotate-0";
+    const openRot = open ? "ag-rotate-180" : "ag-rotate-0";
+    const rotClass = cx("ag-transition-transform ag-duration-150", direction === "down" ? openRot : dirRot);
     if (variant === "triangle") {
-      return (0, import_jsx_runtime5.jsx)("svg", { viewBox: "0 0 24 24", "aria-hidden": "true", className: cx(sizeClass, "text-neutral-500", rotClass, className), children: (0, import_jsx_runtime5.jsx)("path", { d: "M7 10l5 6 5-6H7z", fill: "currentColor" }) });
+      return (0, import_jsx_runtime5.jsx)("svg", { viewBox: "0 0 24 24", "aria-hidden": "true", className: cx(sizeClass, "ag-text-neutral-500", rotClass, className), children: (0, import_jsx_runtime5.jsx)("path", { d: "M7 10l5 6 5-6H7z", fill: "currentColor" }) });
     }
-    return (0, import_jsx_runtime5.jsx)("svg", { viewBox: "0 0 24 24", "aria-hidden": "true", className: cx(sizeClass, "text-neutral-500", rotClass, className), fill: "none", children: (0, import_jsx_runtime5.jsx)("path", { d: "M6 9l6 6 6-6", stroke: "currentColor", strokeWidth: weight, strokeLinecap: "round", strokeLinejoin: "round" }) });
+    return (0, import_jsx_runtime5.jsx)("svg", { viewBox: "0 0 24 24", "aria-hidden": "true", className: cx(sizeClass, "ag-text-neutral-500", rotClass, className), fill: "none", children: (0, import_jsx_runtime5.jsx)("path", { d: "M6 9l6 6 6-6", stroke: "currentColor", strokeWidth: weight, strokeLinecap: "round", strokeLinejoin: "round" }) });
   }
   var import_jsx_runtime5;
   var init_Caret = __esm({
@@ -46848,15 +46911,15 @@ export interface AiText {
         "icon-xl": "lg"
       };
       labelSizeMap = {
-        "icon-xs": "text-xs",
-        "icon-sm": "text-sm",
-        icon: "text-base",
-        "icon-lg": "text-base",
-        "icon-xl": "text-lg"
+        "icon-xs": "ag-text-xs",
+        "icon-sm": "ag-text-sm",
+        icon: "ag-text-base",
+        "icon-lg": "ag-text-base",
+        "icon-xl": "ag-text-lg"
       };
       CaretButton = React10.forwardRef(function CaretButton2(_a, ref) {
         var _b = _a, { open = false, direction = "left", label, variant = "outline", size = "icon-sm", className } = _b, props = __objRest(_b, ["open", "direction", "label", "variant", "size", "className"]);
-        return (0, import_jsx_runtime6.jsxs)(Button, __spreadProps(__spreadValues({ ref, type: "button", variant, size, "aria-expanded": open, className: cx("flex-none text-neutral-500", "dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700", label != null && label !== "" && "w-auto gap-[4px] pl-1.5 pr-2", className) }, props), { children: [(0, import_jsx_runtime6.jsx)(Caret, { size: caretSizeMap[size] || "sm", weight: 2, direction: open ? "down" : direction }), label != null && label !== "" && (0, import_jsx_runtime6.jsx)("span", { className: cx("whitespace-nowrap font-medium", labelSizeMap[size] || "text-sm"), children: label })] }));
+        return (0, import_jsx_runtime6.jsxs)(Button, __spreadProps(__spreadValues({ ref, type: "button", variant, size, "aria-expanded": open, className: cx("ag-flex-none ag-text-neutral-500", "dark:ag-border-neutral-600 dark:ag-bg-neutral-800 dark:ag-text-neutral-400 dark:hover:ag-bg-neutral-700", label != null && label !== "" && "ag-w-auto ag-gap-[4px] ag-pl-1.5 ag-pr-2", className) }, props), { children: [(0, import_jsx_runtime6.jsx)(Caret, { size: caretSizeMap[size] || "sm", weight: 2, direction: open ? "down" : direction }), label != null && label !== "" && (0, import_jsx_runtime6.jsx)("span", { className: cx("ag-whitespace-nowrap ag-font-medium", labelSizeMap[size] || "ag-text-sm"), children: label })] }));
       });
     }
   });
@@ -46866,7 +46929,7 @@ export interface AiText {
     if (!color)
       return null;
     const resolved = airtableColorToHex(color) ?? color;
-    return (0, import_jsx_runtime7.jsx)("span", { className: "h-2 w-2 flex-none rounded-full ring-1 ring-black/10", style: { background: resolved } });
+    return (0, import_jsx_runtime7.jsx)("span", { className: "ag-h-2 ag-w-2 ag-flex-none ag-rounded-full ag-ring-1 ag-ring-black/10", style: { background: resolved } });
   }
   var import_jsx_runtime7;
   var init_Circle = __esm({
@@ -46880,7 +46943,7 @@ export interface AiText {
   function Divide(_a) {
     var _b = _a, { direction = "horizontal", className } = _b, rest = __objRest(_b, ["direction", "className"]);
     const isVertical = direction === "vertical";
-    return (0, import_jsx_runtime8.jsx)("div", __spreadValues({ role: "separator", "aria-orientation": isVertical ? "vertical" : "horizontal", className: cx("flex-none", isVertical ? "w-0 self-stretch border-l border-neutral-200" : "h-0 w-full border-t border-neutral-200", className) }, rest));
+    return (0, import_jsx_runtime8.jsx)("div", __spreadValues({ role: "separator", "aria-orientation": isVertical ? "vertical" : "horizontal", className: cx("ag-flex-none", isVertical ? "ag-w-0 ag-self-stretch ag-border-l ag-border-neutral-200" : "ag-h-0 ag-w-full ag-border-t ag-border-neutral-200", className) }, rest));
   }
   var import_jsx_runtime8;
   var init_Divide = __esm({
@@ -46892,7 +46955,7 @@ export interface AiText {
 
   // node_modules/@airgen/ui/dist/components/Input.js
   function variantClasses(variant, { disabled } = {}) {
-    return cx(VARIANT[variant], disabled && "opacity-60 cursor-not-allowed");
+    return cx(VARIANT[variant], disabled && "ag-opacity-60 ag-cursor-not-allowed");
   }
   var import_jsx_runtime9, React11, VARIANT_BASE, VARIANT, Input;
   var init_Input = __esm({
@@ -46901,15 +46964,15 @@ export interface AiText {
       React11 = __toESM(require_react(), 1);
       init_utils();
       init_sizes();
-      VARIANT_BASE = "rounded-md transition-[border-color,background-color,box-shadow] duration-150 dark:text-neutral-100";
+      VARIANT_BASE = "ag-rounded-md ag-transition-[border-color,background-color,box-shadow] ag-duration-150 dark:ag-text-neutral-100";
       VARIANT = {
-        default: `${VARIANT_BASE} border border-neutral-200 bg-transparent focus:bg-neutral-100 dark:bg-neutral-800 dark:border-neutral-600 dark:focus:bg-neutral-700`,
-        ghost: `${VARIANT_BASE} border border-transparent bg-transparent hover:border-neutral-200 focus:border-neutral-200 focus:bg-neutral-100 dark:hover:border-neutral-600 dark:focus:border-neutral-600 dark:focus:bg-neutral-700`
+        default: `${VARIANT_BASE} ag-border ag-border-neutral-200 ag-bg-transparent focus:ag-bg-neutral-100 dark:ag-bg-neutral-800 dark:ag-border-neutral-600 dark:focus:ag-bg-neutral-700`,
+        ghost: `${VARIANT_BASE} ag-border ag-border-transparent ag-bg-transparent hover:ag-border-neutral-200 focus:ag-border-neutral-200 focus:ag-bg-neutral-100 dark:hover:ag-border-neutral-600 dark:focus:ag-border-neutral-600 dark:focus:ag-bg-neutral-700`
       };
       Input = React11.forwardRef(function Input2(props, ref) {
         const _a = props, { variant = "default", size = "base", value, defaultValue = "", onChange, className } = _a, rest = __objRest(_a, ["variant", "size", "value", "defaultValue", "onChange", "className"]);
         const [state, setState] = useControllableState({ value, defaultValue, onChange });
-        return (0, import_jsx_runtime9.jsx)("input", __spreadValues({ ref, type: "text", value: state, onChange: (e) => setState(e.target.value), className: cx("w-full outline-none", controlSizeClasses(size), variantClasses(variant, { disabled: rest.disabled }), className) }, rest));
+        return (0, import_jsx_runtime9.jsx)("input", __spreadValues({ ref, type: "text", value: state, onChange: (e) => setState(e.target.value), className: cx("ag-w-full ag-outline-none", controlSizeClasses(size), variantClasses(variant, { disabled: rest.disabled }), className) }, rest));
       });
     }
   });
@@ -46923,18 +46986,18 @@ export interface AiText {
       init_sizes();
       init_colors2();
       VARIANT_COLOR = {
-        title: "text-neutral-900 dark:text-gray-100",
-        heading: "text-neutral-900 dark:text-gray-100",
-        large: "text-neutral-900 dark:text-gray-100",
-        default: "text-neutral-900 dark:text-gray-100",
-        muted: "text-gray-500"
+        title: "ag-text-neutral-900 dark:ag-text-gray-100",
+        heading: "ag-text-neutral-900 dark:ag-text-gray-100",
+        large: "ag-text-neutral-900 dark:ag-text-gray-100",
+        default: "ag-text-neutral-900 dark:ag-text-gray-100",
+        muted: "ag-text-gray-500"
       };
       VARIANT_TEXT = {
-        title: "text-xl",
-        heading: "text-lg",
-        large: "text-base",
-        default: "text-base",
-        muted: "text-sm"
+        title: "ag-text-xl",
+        heading: "ag-text-lg",
+        large: "ag-text-base",
+        default: "ag-text-base",
+        muted: "ag-text-sm"
       };
       Text = React12.forwardRef(function Text2(_a, ref) {
         var _b = _a, { as, variant, padAs, color, className, style: styleProp, bold = false, italic = false, underline = false, children } = _b, rest = __objRest(_b, ["as", "variant", "padAs", "color", "className", "style", "bold", "italic", "underline", "children"]);
@@ -46943,16 +47006,16 @@ export interface AiText {
         const styleClasses = [VARIANT_COLOR[variantKey] || VARIANT_COLOR.default];
         if (padAs) {
           const s = SIZE_SCALE[padAs] || SIZE_SCALE.base;
-          styleClasses.push("inline-flex items-center", s.h, s.px, variant === void 0 ? s.text : variantText);
+          styleClasses.push("ag-inline-flex ag-items-center", s.h, s.px, variant === void 0 ? s.text : variantText);
         } else {
           styleClasses.push(variantText);
         }
         if (bold)
-          styleClasses.push("font-bold");
+          styleClasses.push("ag-font-bold");
         if (italic)
-          styleClasses.push("italic");
+          styleClasses.push("ag-italic");
         if (underline)
-          styleClasses.push("underline");
+          styleClasses.push("ag-underline");
         if (className)
           styleClasses.push(className);
         const resolvedColor = color ? airtableColorToHex(color) ?? color : void 0;
@@ -46965,7 +47028,7 @@ export interface AiText {
 
   // node_modules/@airgen/ui/dist/components/Label.js
   function Label({ htmlFor, children, className }) {
-    return (0, import_jsx_runtime11.jsx)("label", { htmlFor, className: ["block ml-1 cursor-pointer", className].filter(Boolean).join(" "), children: (0, import_jsx_runtime11.jsx)(Text, { as: "span", variant: "muted", bold: true, children }) });
+    return (0, import_jsx_runtime11.jsx)("label", { htmlFor, className: ["ag-block ag-ml-1 ag-cursor-pointer", className].filter(Boolean).join(" "), children: (0, import_jsx_runtime11.jsx)(Text, { as: "span", variant: "muted", bold: true, children }) });
   }
   var import_jsx_runtime11;
   var init_Label = __esm({
@@ -46975,18 +47038,42 @@ export interface AiText {
     }
   });
 
+  // node_modules/@airgen/ui/dist/providers/ThemeProvider.js
+  function useThemeScheme() {
+    return React13.useContext(ThemeContext);
+  }
+  function ThemeScope({ scheme, children }) {
+    return (0, import_jsx_runtime12.jsx)("div", { "data-ag-theme": scheme, style: { display: "contents" }, children });
+  }
+  function ThemeProvider({ colorScheme, children }) {
+    return (0, import_jsx_runtime12.jsx)(ThemeContext.Provider, { value: colorScheme, children: (0, import_jsx_runtime12.jsx)(ThemeScope, { scheme: colorScheme, children }) });
+  }
+  var import_jsx_runtime12, React13, ThemeContext;
+  var init_ThemeProvider = __esm({
+    "node_modules/@airgen/ui/dist/providers/ThemeProvider.js"() {
+      import_jsx_runtime12 = __toESM(require_jsx_runtime(), 1);
+      React13 = __toESM(require_react(), 1);
+      ThemeContext = React13.createContext(null);
+    }
+  });
+
   // node_modules/@airgen/ui/dist/components/Portal.js
   function Portal({ children, container }) {
-    const [mounted, setMounted] = React13.useState(false);
-    React13.useLayoutEffect(() => setMounted(true), []);
+    const [mounted, setMounted] = React14.useState(false);
+    const scheme = useThemeScheme();
+    React14.useLayoutEffect(() => setMounted(true), []);
     const target = container ?? (mounted ? document.body : null);
-    return target ? (0, import_react_dom.createPortal)(children, target) : null;
+    if (!target)
+      return null;
+    return (0, import_react_dom.createPortal)(scheme === null ? children : (0, import_jsx_runtime13.jsx)(ThemeScope, { scheme, children }), target);
   }
-  var React13, import_react_dom;
+  var import_jsx_runtime13, React14, import_react_dom;
   var init_Portal = __esm({
     "node_modules/@airgen/ui/dist/components/Portal.js"() {
-      React13 = __toESM(require_react(), 1);
+      import_jsx_runtime13 = __toESM(require_jsx_runtime(), 1);
+      React14 = __toESM(require_react(), 1);
       import_react_dom = __toESM(require_react_dom(), 1);
+      init_ThemeProvider();
     }
   });
 
@@ -47530,11 +47617,11 @@ export interface AiText {
   // node_modules/@airgen/ui/dist/components/Spinner.js
   function Spinner({ size = "base", className, "aria-label": ariaLabel = "Loading" }) {
     const pixelSize = typeof size === "number" ? size : ICON_SIZES[size];
-    return (0, import_jsx_runtime12.jsx)(Loader2, { size: pixelSize, role: "status", "aria-label": ariaLabel, className: cx("animate-spin", className) });
+    return (0, import_jsx_runtime14.jsx)(Loader2, { size: pixelSize, role: "status", "aria-label": ariaLabel, className: cx("ag-animate-spin", className) });
   }
   function LoadingOverlay({ pending, size = "lg", label, delay = 120, className }) {
-    const [visible, setVisible] = React14.useState(false);
-    React14.useEffect(() => {
+    const [visible, setVisible] = React15.useState(false);
+    React15.useEffect(() => {
       if (!pending) {
         setVisible(false);
         return;
@@ -47544,13 +47631,13 @@ export interface AiText {
     }, [pending, delay]);
     if (!visible)
       return null;
-    return (0, import_jsx_runtime12.jsxs)("div", { "aria-busy": "true", "aria-live": "polite", className: cx("absolute inset-0 z-10 flex items-center justify-center gap-2 cursor-wait", "bg-white/60 dark:bg-neutral-900/60", "animate-in fade-in-0 duration-200", className), children: [(0, import_jsx_runtime12.jsx)(Spinner, { size, className: "text-neutral-500 dark:text-neutral-400" }), label && (0, import_jsx_runtime12.jsx)(Text, { variant: "muted", children: label })] });
+    return (0, import_jsx_runtime14.jsxs)("div", { "aria-busy": "true", "aria-live": "polite", className: cx("ag-absolute ag-inset-0 ag-z-10 ag-flex ag-items-center ag-justify-center ag-gap-2 ag-cursor-wait", "ag-bg-white/60 dark:ag-bg-neutral-900/60", "ag-animate-in ag-fade-in-0 ag-duration-200", className), children: [(0, import_jsx_runtime14.jsx)(Spinner, { size, className: "ag-text-neutral-500 dark:ag-text-neutral-400" }), label && (0, import_jsx_runtime14.jsx)(Text, { variant: "muted", children: label })] });
   }
-  var import_jsx_runtime12, React14;
+  var import_jsx_runtime14, React15;
   var init_Spinner = __esm({
     "node_modules/@airgen/ui/dist/components/Spinner.js"() {
-      import_jsx_runtime12 = __toESM(require_jsx_runtime(), 1);
-      React14 = __toESM(require_react(), 1);
+      import_jsx_runtime14 = __toESM(require_jsx_runtime(), 1);
+      React15 = __toESM(require_react(), 1);
       init_lucide_react();
       init_sizes();
       init_Text();
@@ -47563,28 +47650,29 @@ export interface AiText {
     const s = PILL_SIZE[size] || PILL_SIZE.base;
     const label = opt?.label ?? "";
     const pic = opt?.profilePicUrl ?? null;
-    const derivedBg = bg ?? (!pic && opt?.color ? airtableColorToHex(opt.color) : null) ?? "#eeeeee";
+    const derivedBg = bg ?? (!pic && opt?.color ? airtableColorToHex(opt.color) : null);
     const derivedUseLight = useLightText ?? (!pic && opt?.color ? shouldUseLightText(opt.color) : false);
-    const fg = derivedUseLight ? "#ffffff" : "rgba(0,0,0,0.72)";
+    const colorStyle = derivedBg ? { background: derivedBg, color: derivedUseLight ? "#ffffff" : "rgba(0,0,0,0.72)" } : useLightText != null ? { color: useLightText ? "#ffffff" : "rgba(0,0,0,0.72)" } : void 0;
     if (!show) {
-      return (0, import_jsx_runtime13.jsxs)("span", { className: cx("inline-flex items-center min-w-0", s.gap, className), children: [pic ? (0, import_jsx_runtime13.jsx)("img", { src: pic, alt: "", className: cx(s.avatar, "rounded-full ring-1 ring-black/10") }) : null, (0, import_jsx_runtime13.jsx)("span", { className: "truncate", children: label })] });
+      return (0, import_jsx_runtime15.jsxs)("span", { className: cx("ag-inline-flex ag-items-center ag-min-w-0", s.gap, className), children: [pic ? (0, import_jsx_runtime15.jsx)("img", { src: pic, alt: "", className: cx(s.avatar, "ag-rounded-full ag-ring-1 ag-ring-black/10") }) : null, (0, import_jsx_runtime15.jsx)("span", { className: "ag-truncate", children: label })] });
     }
-    return (0, import_jsx_runtime13.jsxs)("span", { className: cx(
-      "inline-flex items-center rounded-full",
+    return (0, import_jsx_runtime15.jsxs)("span", { className: cx(
+      "ag-inline-flex ag-items-center ag-rounded-full",
       s.gap,
       s.pad,
       s.text,
-      "leading-none",
-      "ring-1 ring-black/10",
-      "min-w-0 max-w-full",
+      "ag-leading-none",
+      "ag-ring-1 ag-ring-black/10",
+      "ag-min-w-0 ag-max-w-full",
       // allows inner truncate to work
+      !derivedBg && NEUTRAL_PILL_CLASSES,
       className
-    ), style: { background: derivedBg, color: fg }, title: typeof label === "string" ? label : void 0, children: [pic ? (0, import_jsx_runtime13.jsx)("img", { src: pic, alt: "", className: cx(s.avatar, "rounded-full ring-1 ring-black/10") }) : null, (0, import_jsx_runtime13.jsx)("span", { className: "truncate", children: label })] });
+    ), style: colorStyle, title: typeof label === "string" ? label : void 0, children: [pic ? (0, import_jsx_runtime15.jsx)("img", { src: pic, alt: "", className: cx(s.avatar, "ag-rounded-full ag-ring-1 ag-ring-black/10") }) : null, (0, import_jsx_runtime15.jsx)("span", { className: "ag-truncate", children: label })] });
   }
-  var import_jsx_runtime13;
+  var import_jsx_runtime15;
   var init_PillOption = __esm({
     "node_modules/@airgen/ui/dist/components/PillOption.js"() {
-      import_jsx_runtime13 = __toESM(require_jsx_runtime(), 1);
+      import_jsx_runtime15 = __toESM(require_jsx_runtime(), 1);
       init_utils();
       init_colors2();
       init_sizes();
@@ -47594,26 +47682,26 @@ export interface AiText {
   // node_modules/@airgen/ui/dist/components/Table.js
   function RecordTable({ records, columns: columnsProp, caption, emptyMessage = "No records.", loading = false, loadingLabel = "Loading records", getRowKey = (record) => record.id, rowClassName, className, tableClassName }) {
     const columns = resolveColumns(records, columnsProp);
-    return (0, import_jsx_runtime14.jsx)("div", { className, "aria-busy": loading || void 0, children: (0, import_jsx_runtime14.jsxs)(Table2, { className: tableClassName, children: [caption != null && (0, import_jsx_runtime14.jsx)(TableCaption, { children: caption }), columns.length > 0 && (0, import_jsx_runtime14.jsx)(TableHeader, { children: (0, import_jsx_runtime14.jsx)(TableRow, { className: "hover:bg-transparent dark:hover:bg-transparent", children: columns.map((column) => (0, import_jsx_runtime14.jsx)(TableHead, { scope: "col", className: cx(alignmentClass(column.align), column.headerClassName), style: { width: column.width }, children: column.header }, column.id)) }) }), (0, import_jsx_runtime14.jsx)(TableBody, { children: loading ? (0, import_jsx_runtime14.jsx)(TableRow, { className: "hover:bg-transparent dark:hover:bg-transparent", children: (0, import_jsx_runtime14.jsx)(TableCell, { colSpan: Math.max(columns.length, 1), className: "h-20 text-center", children: (0, import_jsx_runtime14.jsxs)("span", { className: "inline-flex items-center gap-2 text-neutral-500 dark:text-neutral-400", children: [(0, import_jsx_runtime14.jsx)(Spinner, { "aria-label": loadingLabel }), (0, import_jsx_runtime14.jsx)("span", { children: loadingLabel })] }) }) }) : records.length === 0 ? (0, import_jsx_runtime14.jsx)(TableRow, { className: "hover:bg-transparent dark:hover:bg-transparent", children: (0, import_jsx_runtime14.jsx)(TableCell, { colSpan: Math.max(columns.length, 1), className: "h-20 text-center", children: (0, import_jsx_runtime14.jsx)(Text, { as: "span", variant: "muted", children: emptyMessage }) }) }) : records.map((record, rowIndex) => (0, import_jsx_runtime14.jsx)(TableRow, { className: typeof rowClassName === "function" ? rowClassName(record, rowIndex) : rowClassName, children: columns.map((column) => {
+    return (0, import_jsx_runtime16.jsx)("div", { className, "aria-busy": loading || void 0, children: (0, import_jsx_runtime16.jsxs)(Table2, { className: tableClassName, children: [caption != null && (0, import_jsx_runtime16.jsx)(TableCaption, { children: caption }), columns.length > 0 && (0, import_jsx_runtime16.jsx)(TableHeader, { children: (0, import_jsx_runtime16.jsx)(TableRow, { className: "hover:ag-bg-transparent dark:hover:ag-bg-transparent", children: columns.map((column) => (0, import_jsx_runtime16.jsx)(TableHead, { scope: "col", className: cx(alignmentClass(column.align), column.headerClassName), style: { width: column.width }, children: column.header }, column.id)) }) }), (0, import_jsx_runtime16.jsx)(TableBody, { children: loading ? (0, import_jsx_runtime16.jsx)(TableRow, { className: "hover:ag-bg-transparent dark:hover:ag-bg-transparent", children: (0, import_jsx_runtime16.jsx)(TableCell, { colSpan: Math.max(columns.length, 1), className: "ag-h-20 ag-text-center", children: (0, import_jsx_runtime16.jsxs)("span", { className: "ag-inline-flex ag-items-center ag-gap-2 ag-text-neutral-500 dark:ag-text-neutral-400", children: [(0, import_jsx_runtime16.jsx)(Spinner, { "aria-label": loadingLabel }), (0, import_jsx_runtime16.jsx)("span", { children: loadingLabel })] }) }) }) : records.length === 0 ? (0, import_jsx_runtime16.jsx)(TableRow, { className: "hover:ag-bg-transparent dark:hover:ag-bg-transparent", children: (0, import_jsx_runtime16.jsx)(TableCell, { colSpan: Math.max(columns.length, 1), className: "ag-h-20 ag-text-center", children: (0, import_jsx_runtime16.jsx)(Text, { as: "span", variant: "muted", children: emptyMessage }) }) }) : records.map((record, rowIndex) => (0, import_jsx_runtime16.jsx)(TableRow, { className: typeof rowClassName === "function" ? rowClassName(record, rowIndex) : rowClassName, children: columns.map((column) => {
       const value = column.accessor ? column.accessor(record) : record.fields[column.id];
-      return (0, import_jsx_runtime14.jsx)(TableCell, { className: cx(alignmentClass(column.align), column.cellClassName), children: column.cell ? column.cell({ record, value, rowIndex }) : (0, import_jsx_runtime14.jsx)(RecordCellValue, { value }) }, column.id);
+      return (0, import_jsx_runtime16.jsx)(TableCell, { className: cx(alignmentClass(column.align), column.cellClassName), children: column.cell ? column.cell({ record, value, rowIndex }) : (0, import_jsx_runtime16.jsx)(RecordCellValue, { value }) }, column.id);
     }) }, getRowKey(record, rowIndex))) })] }) });
   }
   function RecordCellValue({ value, empty = "\u2014", className }) {
     if (value == null || value === "") {
-      return (0, import_jsx_runtime14.jsx)(Text, { as: "span", variant: "muted", className, children: empty });
+      return (0, import_jsx_runtime16.jsx)(Text, { as: "span", variant: "muted", className, children: empty });
     }
     if (Array.isArray(value)) {
       if (value.length === 0)
-        return (0, import_jsx_runtime14.jsx)(RecordCellValue, { value: null, empty, className });
-      return (0, import_jsx_runtime14.jsx)("span", { className: cx("flex flex-wrap items-center gap-1.5", className), children: value.map((item, index) => (0, import_jsx_runtime14.jsx)(RecordCellValue, { value: unwrapLookup(item), empty }, cellValueKey(item, index))) });
+        return (0, import_jsx_runtime16.jsx)(RecordCellValue, { value: null, empty, className });
+      return (0, import_jsx_runtime16.jsx)("span", { className: cx("ag-flex ag-flex-wrap ag-items-center ag-gap-1.5", className), children: value.map((item, index) => (0, import_jsx_runtime16.jsx)(RecordCellValue, { value: unwrapLookup(item), empty }, cellValueKey(item, index))) });
     }
     if (value instanceof Date)
-      return (0, import_jsx_runtime14.jsx)("span", { className, children: value.toLocaleString() });
+      return (0, import_jsx_runtime16.jsx)("span", { className, children: value.toLocaleString() });
     if (typeof value === "object") {
       const named = value;
       if (typeof named.name === "string") {
-        return (0, import_jsx_runtime14.jsx)(PillOption, { size: "sm", className, opt: {
+        return (0, import_jsx_runtime16.jsx)(PillOption, { size: "sm", className, opt: {
           value: typeof named.id === "string" ? named.id : named.name,
           label: named.name,
           color: typeof named.color === "string" ? named.color : void 0,
@@ -47622,20 +47710,20 @@ export interface AiText {
       }
       const display = value;
       if (typeof display.email === "string")
-        return (0, import_jsx_runtime14.jsx)("span", { className, children: display.email });
+        return (0, import_jsx_runtime16.jsx)("span", { className, children: display.email });
       if (typeof display.filename === "string")
-        return (0, import_jsx_runtime14.jsx)("span", { className, children: display.filename });
+        return (0, import_jsx_runtime16.jsx)("span", { className, children: display.filename });
       if ("value" in display)
-        return (0, import_jsx_runtime14.jsx)(RecordCellValue, { value: display.value, empty, className });
-      return (0, import_jsx_runtime14.jsx)(Text, { as: "span", variant: "muted", className, children: safeStringify(value) });
+        return (0, import_jsx_runtime16.jsx)(RecordCellValue, { value: display.value, empty, className });
+      return (0, import_jsx_runtime16.jsx)(Text, { as: "span", variant: "muted", className, children: safeStringify(value) });
     }
-    return (0, import_jsx_runtime14.jsx)("span", { className, children: typeof value === "boolean" ? value ? "Yes" : "No" : String(value) });
+    return (0, import_jsx_runtime16.jsx)("span", { className, children: typeof value === "boolean" ? value ? "Yes" : "No" : String(value) });
   }
   function alignmentClass(align) {
     if (align === "center")
-      return "text-center";
+      return "ag-text-center";
     if (align === "right")
-      return "text-right";
+      return "ag-text-right";
     return void 0;
   }
   function resolveColumns(records, columns) {
@@ -47680,46 +47768,46 @@ export interface AiText {
       return String(value);
     }
   }
-  var import_jsx_runtime14, React15, Table2, TableHeader, TableBody, TableFooter, TableRow, TableHead, TableCell, TableCaption;
+  var import_jsx_runtime16, React16, Table2, TableHeader, TableBody, TableFooter, TableRow, TableHead, TableCell, TableCaption;
   var init_Table = __esm({
     "node_modules/@airgen/ui/dist/components/Table.js"() {
-      import_jsx_runtime14 = __toESM(require_jsx_runtime(), 1);
-      React15 = __toESM(require_react(), 1);
+      import_jsx_runtime16 = __toESM(require_jsx_runtime(), 1);
+      React16 = __toESM(require_react(), 1);
       init_PillOption();
       init_Spinner();
       init_Text();
       init_utils();
-      Table2 = React15.forwardRef(function Table3(_a, ref) {
+      Table2 = React16.forwardRef(function Table3(_a, ref) {
         var _b = _a, { className, containerClassName } = _b, props = __objRest(_b, ["className", "containerClassName"]);
-        return (0, import_jsx_runtime14.jsx)("div", { className: cx("w-full overflow-x-auto rounded-md border border-neutral-200 dark:border-neutral-700", containerClassName), children: (0, import_jsx_runtime14.jsx)("table", __spreadValues({ ref, className: cx("w-full caption-bottom border-collapse text-base", className) }, props)) });
+        return (0, import_jsx_runtime16.jsx)("div", { className: cx("ag-w-full ag-overflow-x-auto ag-rounded-md ag-border ag-border-neutral-200 dark:ag-border-neutral-700", containerClassName), children: (0, import_jsx_runtime16.jsx)("table", __spreadValues({ ref, className: cx("ag-w-full ag-caption-bottom ag-border-collapse ag-text-base", className) }, props)) });
       });
-      TableHeader = React15.forwardRef(function TableHeader2(_a, ref) {
+      TableHeader = React16.forwardRef(function TableHeader2(_a, ref) {
         var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-        return (0, import_jsx_runtime14.jsx)("thead", __spreadValues({ ref, className: cx("bg-neutral-50 dark:bg-neutral-800/60", className) }, props));
+        return (0, import_jsx_runtime16.jsx)("thead", __spreadValues({ ref, className: cx("ag-bg-neutral-50 dark:ag-bg-neutral-800/60", className) }, props));
       });
-      TableBody = React15.forwardRef(function TableBody2(_a, ref) {
+      TableBody = React16.forwardRef(function TableBody2(_a, ref) {
         var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-        return (0, import_jsx_runtime14.jsx)("tbody", __spreadValues({ ref, className: cx("[&_tr:last-child]:border-0", className) }, props));
+        return (0, import_jsx_runtime16.jsx)("tbody", __spreadValues({ ref, className: cx("[&_tr:last-child]:ag-border-0", className) }, props));
       });
-      TableFooter = React15.forwardRef(function TableFooter2(_a, ref) {
+      TableFooter = React16.forwardRef(function TableFooter2(_a, ref) {
         var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-        return (0, import_jsx_runtime14.jsx)("tfoot", __spreadValues({ ref, className: cx("border-t border-neutral-200 bg-neutral-50 font-medium dark:border-neutral-700 dark:bg-neutral-800/60", className) }, props));
+        return (0, import_jsx_runtime16.jsx)("tfoot", __spreadValues({ ref, className: cx("ag-border-t ag-border-neutral-200 ag-bg-neutral-50 ag-font-medium dark:ag-border-neutral-700 dark:ag-bg-neutral-800/60", className) }, props));
       });
-      TableRow = React15.forwardRef(function TableRow2(_a, ref) {
+      TableRow = React16.forwardRef(function TableRow2(_a, ref) {
         var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-        return (0, import_jsx_runtime14.jsx)("tr", __spreadValues({ ref, className: cx("border-b border-neutral-200 transition-colors hover:bg-neutral-50 dark:border-neutral-700 dark:hover:bg-neutral-800/50", className) }, props));
+        return (0, import_jsx_runtime16.jsx)("tr", __spreadValues({ ref, className: cx("ag-border-b ag-border-neutral-200 ag-transition-colors hover:ag-bg-neutral-50 dark:ag-border-neutral-700 dark:hover:ag-bg-neutral-800/50", className) }, props));
       });
-      TableHead = React15.forwardRef(function TableHead2(_a, ref) {
+      TableHead = React16.forwardRef(function TableHead2(_a, ref) {
         var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-        return (0, import_jsx_runtime14.jsx)("th", __spreadValues({ ref, className: cx("h-9 px-3 text-left align-middle font-medium text-neutral-500 dark:text-neutral-400", className) }, props));
+        return (0, import_jsx_runtime16.jsx)("th", __spreadValues({ ref, className: cx("ag-h-9 ag-px-3 ag-text-left ag-align-middle ag-font-medium ag-text-neutral-500 dark:ag-text-neutral-400", className) }, props));
       });
-      TableCell = React15.forwardRef(function TableCell2(_a, ref) {
+      TableCell = React16.forwardRef(function TableCell2(_a, ref) {
         var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-        return (0, import_jsx_runtime14.jsx)("td", __spreadValues({ ref, className: cx("px-3 py-2 align-middle text-neutral-900 dark:text-neutral-100", className) }, props));
+        return (0, import_jsx_runtime16.jsx)("td", __spreadValues({ ref, className: cx("ag-px-3 ag-py-2 ag-align-middle ag-text-neutral-900 dark:ag-text-neutral-100", className) }, props));
       });
-      TableCaption = React15.forwardRef(function TableCaption2(_a, ref) {
+      TableCaption = React16.forwardRef(function TableCaption2(_a, ref) {
         var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-        return (0, import_jsx_runtime14.jsx)("caption", __spreadValues({ ref, className: cx("mt-3 text-sm text-neutral-500 dark:text-neutral-400", className) }, props));
+        return (0, import_jsx_runtime16.jsx)("caption", __spreadValues({ ref, className: cx("ag-mt-3 ag-text-sm ag-text-neutral-500 dark:ag-text-neutral-400", className) }, props));
       });
     }
   });
@@ -47730,36 +47818,36 @@ export interface AiText {
       if (!disabled)
         onChange(!checked);
     };
-    const track = (0, import_jsx_runtime15.jsx)("button", { type: "button", role: "switch", "aria-checked": checked, disabled, onClick: handleClick, className: cx("relative inline-flex shrink-0 cursor-pointer items-center rounded-full transition-colors duration-150", trackSizes[size], checked ? "bg-blue-600" : "bg-neutral-300 dark:bg-neutral-600", disabled && "opacity-50 cursor-not-allowed", !label && className), children: (0, import_jsx_runtime15.jsx)("span", { className: cx("inline-block rounded-full bg-white shadow transform transition-transform duration-150", thumbSizes[size], checked ? thumbTranslate[size] : "translate-x-0.5") }) });
+    const track = (0, import_jsx_runtime17.jsx)("button", { type: "button", role: "switch", "aria-checked": checked, disabled, onClick: handleClick, className: cx("ag-relative ag-inline-flex ag-shrink-0 ag-cursor-pointer ag-items-center ag-rounded-full ag-transition-colors ag-duration-150", trackSizes[size], checked ? "ag-bg-blue-600" : "ag-bg-neutral-300 dark:ag-bg-neutral-600", disabled && "ag-opacity-50 ag-cursor-not-allowed", !label && className), children: (0, import_jsx_runtime17.jsx)("span", { className: cx("ag-inline-block ag-rounded-full ag-bg-white ag-shadow ag-transform ag-transition-transform ag-duration-150", thumbSizes[size], checked ? thumbTranslate[size] : "ag-translate-x-0.5") }) });
     if (label) {
-      return (0, import_jsx_runtime15.jsxs)("label", { className: cx("inline-flex items-center gap-2", className), children: [track, (0, import_jsx_runtime15.jsx)("span", { className: "text-sm text-neutral-700 dark:text-neutral-300", children: label })] });
+      return (0, import_jsx_runtime17.jsxs)("label", { className: cx("ag-inline-flex ag-items-center ag-gap-2", className), children: [track, (0, import_jsx_runtime17.jsx)("span", { className: "ag-text-sm ag-text-neutral-700 dark:ag-text-neutral-300", children: label })] });
     }
     return track;
   }
-  var import_jsx_runtime15, trackSizes, thumbSizes, thumbTranslate;
+  var import_jsx_runtime17, trackSizes, thumbSizes, thumbTranslate;
   var init_Toggle = __esm({
     "node_modules/@airgen/ui/dist/components/Toggle.js"() {
-      import_jsx_runtime15 = __toESM(require_jsx_runtime(), 1);
+      import_jsx_runtime17 = __toESM(require_jsx_runtime(), 1);
       init_utils();
       trackSizes = {
-        sm: "w-7 h-4",
-        base: "w-9 h-5"
+        sm: "ag-w-7 ag-h-4",
+        base: "ag-w-9 ag-h-5"
       };
       thumbSizes = {
-        sm: "h-3 w-3",
-        base: "h-4 w-4"
+        sm: "ag-h-3 ag-w-3",
+        base: "ag-h-4 ag-w-4"
       };
       thumbTranslate = {
-        sm: "translate-x-3",
-        base: "translate-x-4"
+        sm: "ag-translate-x-3",
+        base: "ag-translate-x-4"
       };
     }
   });
 
   // node_modules/@airgen/ui/dist/dropdown.js
   function usePresence(open, durationMs = DROPDOWN_ANIMATION_MS) {
-    const [present, setPresent] = React16.useState(open);
-    React16.useEffect(() => {
+    const [present, setPresent] = React17.useState(open);
+    React17.useEffect(() => {
       if (open) {
         setPresent(true);
         return;
@@ -47770,11 +47858,11 @@ export interface AiText {
     return present;
   }
   function useOutsideDismiss({ enabled, refs, onDismiss }) {
-    const refsRef = React16.useRef(refs);
-    React16.useEffect(() => {
+    const refsRef = React17.useRef(refs);
+    React17.useEffect(() => {
       refsRef.current = refs;
     });
-    React16.useEffect(() => {
+    React17.useEffect(() => {
       if (!enabled)
         return;
       const onPointerDown = (e) => {
@@ -47791,41 +47879,41 @@ export interface AiText {
     }, [enabled, onDismiss]);
   }
   function useDropdownState({ disabled = false, defaultOpen = false, onOpenChange, onOpen, onClose }) {
-    const [open, setOpen] = React16.useState(false);
-    const onOpenRef = React16.useRef(onOpen);
-    const onCloseRef = React16.useRef(onClose);
-    const onOpenChangeRef = React16.useRef(onOpenChange);
-    React16.useLayoutEffect(() => {
+    const [open, setOpen] = React17.useState(false);
+    const onOpenRef = React17.useRef(onOpen);
+    const onCloseRef = React17.useRef(onClose);
+    const onOpenChangeRef = React17.useRef(onOpenChange);
+    React17.useLayoutEffect(() => {
       onOpenRef.current = onOpen;
       onCloseRef.current = onClose;
       onOpenChangeRef.current = onOpenChange;
     });
-    const openRef = React16.useRef(open);
-    const openMenu = React16.useCallback(() => {
+    const openRef = React17.useRef(open);
+    const openMenu = React17.useCallback(() => {
       if (disabled || openRef.current)
         return;
       onOpenRef.current?.();
       openRef.current = true;
       setOpen(true);
     }, [disabled]);
-    const close = React16.useCallback(() => {
+    const close = React17.useCallback(() => {
       if (!openRef.current)
         return;
       openRef.current = false;
       setOpen(false);
       onCloseRef.current?.();
     }, []);
-    const toggle = React16.useCallback(() => openRef.current ? close() : openMenu(), [close, openMenu]);
-    const mountedRef = React16.useRef(false);
-    React16.useEffect(() => {
+    const toggle = React17.useCallback(() => openRef.current ? close() : openMenu(), [close, openMenu]);
+    const mountedRef = React17.useRef(false);
+    React17.useEffect(() => {
       if (!mountedRef.current) {
         mountedRef.current = true;
         return;
       }
       onOpenChangeRef.current?.(open);
     }, [open]);
-    const didAutoOpen = React16.useRef(false);
-    React16.useEffect(() => {
+    const didAutoOpen = React17.useRef(false);
+    React17.useEffect(() => {
       if (defaultOpen && !didAutoOpen.current && !disabled) {
         didAutoOpen.current = true;
         const raf = requestAnimationFrame(() => openMenu());
@@ -47833,8 +47921,8 @@ export interface AiText {
       }
     }, [defaultOpen, disabled, openMenu]);
     const present = usePresence(open, DROPDOWN_ANIMATION_MS);
-    const [animateIn, setAnimateIn] = React16.useState(false);
-    React16.useLayoutEffect(() => {
+    const [animateIn, setAnimateIn] = React17.useState(false);
+    React17.useLayoutEffect(() => {
       if (!present) {
         setAnimateIn(false);
         return;
@@ -47845,10 +47933,10 @@ export interface AiText {
     }, [present]);
     return { open, openMenu, close, toggle, present, animateIn };
   }
-  var React16, DROPDOWN_ANIMATION_MS;
+  var React17, DROPDOWN_ANIMATION_MS;
   var init_dropdown = __esm({
     "node_modules/@airgen/ui/dist/dropdown.js"() {
-      React16 = __toESM(require_react(), 1);
+      React17 = __toESM(require_react(), 1);
       DROPDOWN_ANIMATION_MS = 130;
     }
   });
@@ -47865,13 +47953,13 @@ export interface AiText {
     return `${a} left`;
   }
   function useAnchoredPosition({ open, anchorRef, contentRef, side = "bottom", align = "start", offset = 6, collisionPadding = 8, avoidCollisions = true, flip = false, matchAnchorWidth = false }) {
-    const [state, setState] = React17.useState({
+    const [state, setState] = React18.useState({
       style: { position: "fixed", top: 0, left: 0 },
       ready: false,
       placedSide: side,
       anchorWidth: 0
     });
-    const update = React17.useCallback(() => {
+    const update = React18.useCallback(() => {
       const anchor = anchorRef.current;
       if (!anchor)
         return;
@@ -47938,7 +48026,7 @@ export interface AiText {
         style3.width = Math.round(rect.width);
       setState({ style: style3, ready: true, placedSide, anchorWidth: Math.round(rect.width) });
     }, [anchorRef, contentRef, side, align, offset, collisionPadding, avoidCollisions, flip, matchAnchorWidth]);
-    React17.useLayoutEffect(() => {
+    React18.useLayoutEffect(() => {
       if (!open)
         return;
       let observer;
@@ -47964,7 +48052,7 @@ export interface AiText {
         observer?.disconnect();
       };
     }, [open, update, contentRef]);
-    const contentRefCallback = React17.useCallback((node) => {
+    const contentRefCallback = React18.useCallback((node) => {
       if (contentRef)
         contentRef.current = node;
       if (node)
@@ -47972,10 +48060,10 @@ export interface AiText {
     }, [contentRef, update]);
     return { style: state.style, ready: state.ready, placedSide: state.placedSide, anchorWidth: state.anchorWidth, update, contentRefCallback };
   }
-  var React17;
+  var React18;
   var init_positioning = __esm({
     "node_modules/@airgen/ui/dist/positioning.js"() {
-      React17 = __toESM(require_react(), 1);
+      React18 = __toESM(require_react(), 1);
       init_utils();
     }
   });
@@ -49622,16 +49710,16 @@ export interface AiText {
 
   // node_modules/@airgen/ui/dist/components/Select.js
   function useTypeahead({ enabled, onMatch }) {
-    const buf = React18.useRef("");
-    const timer = React18.useRef(null);
-    const clear = React18.useCallback(() => {
+    const buf = React19.useRef("");
+    const timer = React19.useRef(null);
+    const clear = React19.useCallback(() => {
       buf.current = "";
       if (timer.current)
         window.clearTimeout(timer.current);
       timer.current = null;
     }, []);
-    React18.useEffect(() => () => clear(), [clear]);
-    const onKey = React18.useCallback((key) => {
+    React19.useEffect(() => () => clear(), [clear]);
+    const onKey = React19.useCallback((key) => {
       if (!enabled)
         return;
       buf.current = (buf.current + key).slice(0, 64);
@@ -49642,26 +49730,26 @@ export interface AiText {
       const repeated = q.length > 1 && [...q].every((c) => c === q[0]);
       onMatch(repeated ? q[0] : q);
     }, [clear, enabled, onMatch]);
-    const hasBuffer = React18.useCallback(() => buf.current.length > 0, []);
+    const hasBuffer = React19.useCallback(() => buf.current.length > 0, []);
     return { onKey, clear, hasBuffer };
   }
   function Select(props) {
     const { options, id, placeholder = "Select\u2026", size = "base", disabled = false, defaultOpen = false, onOpenChange, pill = false, renderOption, renderTrigger, matchTriggerWidth = true, minMenuWidth, align = "start", searchable = false, searchPlaceholder = "Search\u2026", maxItems, emptyMessage = "No results", groups, className, triggerClassName, menuClassName, optionClassName } = props;
     const multiple = props.multiple === true;
-    const [internalValues, setInternalValues] = React18.useState(() => {
+    const [internalValues, setInternalValues] = React19.useState(() => {
       if (props.multiple)
         return props.defaultValue ?? [];
       return props.defaultValue !== void 0 ? [props.defaultValue] : [];
     });
     const controlled = props.value !== void 0;
-    const values = React18.useMemo(() => {
+    const values = React19.useMemo(() => {
       if (!controlled)
         return internalValues;
       if (props.multiple)
         return props.value;
       return props.value !== void 0 ? [props.value] : [];
     }, [controlled, internalValues, props.multiple, props.value]);
-    const setValues = React18.useCallback((next) => {
+    const setValues = React19.useCallback((next) => {
       if (!controlled)
         setInternalValues(next);
       if (props.multiple)
@@ -49670,28 +49758,28 @@ export interface AiText {
         props.onChange?.(next[0]);
     }, [controlled, props.multiple, props.onChange]);
     const current = multiple ? void 0 : values[0];
-    const [query2, setQuery] = React18.useState("");
-    const [activeIndex, setActiveIndex] = React18.useState(() => {
+    const [query2, setQuery] = React19.useState("");
+    const [activeIndex, setActiveIndex] = React19.useState(() => {
       const sel = indexByValue(options, current);
       return sel !== -1 ? sel : nextEnabledIndex(options, 0, 1);
     });
-    const triggerRef = React18.useRef(null);
+    const triggerRef = React19.useRef(null);
     const multiTriggerRef = triggerRef;
-    const menuRef = React18.useRef(null);
-    const inputRef = React18.useRef(null);
+    const menuRef = React19.useRef(null);
+    const inputRef = React19.useRef(null);
     const listboxId = useStableId("select");
     const triggerId = id ?? `${listboxId}-trigger`;
-    const fuse = React18.useMemo(() => searchable ? createOptionFuse(options) : null, [searchable, options]);
-    const filtered = React18.useMemo(() => {
+    const fuse = React19.useMemo(() => searchable ? createOptionFuse(options) : null, [searchable, options]);
+    const filtered = React19.useMemo(() => {
       if (!searchable)
         return options;
       return truncateOptions(filterOptions(options, query2, fuse ?? void 0), query2, maxItems);
     }, [searchable, options, query2, maxItems, fuse]);
-    const entries2 = React18.useMemo(() => buildOptionEntries(filtered, groups), [filtered, groups]);
-    const navOptions = React18.useMemo(() => entryOptions(entries2), [entries2]);
-    const selected = React18.useMemo(() => options.find((o) => o.value === current), [options, current]);
-    const selectedOptions = React18.useMemo(() => values.map((v) => options.find((o) => o.value === v)).filter((o) => o !== void 0), [values, options]);
-    React18.useEffect(() => {
+    const entries2 = React19.useMemo(() => buildOptionEntries(filtered, groups), [filtered, groups]);
+    const navOptions = React19.useMemo(() => entryOptions(entries2), [entries2]);
+    const selected = React19.useMemo(() => options.find((o) => o.value === current), [options, current]);
+    const selectedOptions = React19.useMemo(() => values.map((v) => options.find((o) => o.value === v)).filter((o) => o !== void 0), [values, options]);
+    React19.useEffect(() => {
       if (searchable)
         return;
       const sel = indexByValue(navOptions, current);
@@ -49700,12 +49788,12 @@ export interface AiText {
       else
         setActiveIndex((prev) => nextEnabledIndex(navOptions, prev, 1));
     }, [searchable, navOptions, current]);
-    React18.useEffect(() => {
+    React19.useEffect(() => {
       if (!searchable)
         return;
       setActiveIndex((prev) => navOptions.length === 0 ? -1 : Math.min(prev, navOptions.length - 1));
     }, [searchable, navOptions.length]);
-    const focusActive = React18.useCallback((idx) => {
+    const focusActive = React19.useCallback((idx) => {
       const el = menuRef.current?.querySelector(`[data-idx="${idx}"]`);
       el?.focus?.({ preventScroll: true });
       el?.scrollIntoView?.({ block: "nearest" });
@@ -49744,7 +49832,7 @@ export interface AiText {
       matchAnchorWidth: matchTriggerWidth
     });
     useOutsideDismiss({ enabled: open, refs: [triggerRef, menuRef], onDismiss: close });
-    const commitIndex = React18.useCallback((idx) => {
+    const commitIndex = React19.useCallback((idx) => {
       const opt = navOptions[idx];
       if (!opt || opt.disabled)
         return;
@@ -49757,10 +49845,10 @@ export interface AiText {
       close();
       triggerRef.current?.focus({ preventScroll: true });
     }, [navOptions, multiple, values, setValues, close]);
-    const removeValue = React18.useCallback((value) => {
+    const removeValue = React19.useCallback((value) => {
       setValues(values.filter((v) => v !== value));
     }, [values, setValues]);
-    const removeLast = React18.useCallback(() => {
+    const removeLast = React19.useCallback(() => {
       if (values.length > 0)
         setValues(values.slice(0, -1));
     }, [values, setValues]);
@@ -49873,23 +49961,23 @@ export interface AiText {
       const isSelected = multiple ? values.includes(opt.value) : opt.value === current;
       const isActive = index === activeIndex;
       const isDisabled = !!opt.disabled;
-      return (0, import_jsx_runtime16.jsx)("div", { id: `${listboxId}-opt-${opt.value}`, role: "option", "aria-selected": isSelected, "aria-disabled": isDisabled || void 0, tabIndex: searchable || isDisabled ? -1 : isActive ? 0 : -1, "data-idx": index, onMouseMove: () => !isDisabled && setActiveIndex(index), onClick: () => !isDisabled && commitIndex(index), className: cx(renderOption ? "rounded mb-1 last:mb-0" : cx("flex items-center justify-between gap-2 rounded", multilineSizeClasses(size), "dark:text-neutral-100", isActive && "bg-neutral-100 dark:bg-neutral-700"), "outline-none select-none", isDisabled && "opacity-50 cursor-not-allowed", !isDisabled && "cursor-pointer", optionClassName), children: renderOption ? renderOption(opt, { selected: isSelected, active: isActive, disabled: isDisabled }) : (0, import_jsx_runtime16.jsxs)(import_jsx_runtime16.Fragment, { children: [(0, import_jsx_runtime16.jsx)("span", { className: "min-w-0 flex-1", children: pill ? (0, import_jsx_runtime16.jsx)(PillOption, { opt, show: true, size, className: "max-w-full" }) : (0, import_jsx_runtime16.jsxs)("span", { className: "flex items-center gap-2 min-w-0", children: [opt.profilePicUrl ? (0, import_jsx_runtime16.jsx)("img", { src: opt.profilePicUrl, alt: "", className: "h-5 w-5 rounded-full ring-1 ring-black/10 dark:ring-white/10" }) : opt.color ? (0, import_jsx_runtime16.jsx)("span", { className: "h-1.5 w-1.5 rounded-full ring-1 ring-black/10 dark:ring-white/10", style: {
+      return (0, import_jsx_runtime18.jsx)("div", { id: `${listboxId}-opt-${opt.value}`, role: "option", "aria-selected": isSelected, "aria-disabled": isDisabled || void 0, tabIndex: searchable || isDisabled ? -1 : isActive ? 0 : -1, "data-idx": index, onMouseMove: () => !isDisabled && setActiveIndex(index), onClick: () => !isDisabled && commitIndex(index), className: cx(renderOption ? "ag-rounded ag-mb-1 last:ag-mb-0" : cx("ag-flex ag-items-center ag-justify-between ag-gap-2 ag-rounded", multilineSizeClasses(size), "dark:ag-text-neutral-100", isActive && "ag-bg-neutral-100 dark:ag-bg-neutral-700"), "ag-outline-none ag-select-none", isDisabled && "ag-opacity-50 ag-cursor-not-allowed", !isDisabled && "ag-cursor-pointer", optionClassName), children: renderOption ? renderOption(opt, { selected: isSelected, active: isActive, disabled: isDisabled }) : (0, import_jsx_runtime18.jsxs)(import_jsx_runtime18.Fragment, { children: [(0, import_jsx_runtime18.jsx)("span", { className: "ag-min-w-0 ag-flex-1", children: pill ? (0, import_jsx_runtime18.jsx)(PillOption, { opt, show: true, size, className: "ag-max-w-full" }) : (0, import_jsx_runtime18.jsxs)("span", { className: "ag-flex ag-items-center ag-gap-2 ag-min-w-0", children: [opt.profilePicUrl ? (0, import_jsx_runtime18.jsx)("img", { src: opt.profilePicUrl, alt: "", className: "ag-h-5 ag-w-5 ag-rounded-full ag-ring-1 ag-ring-black/10 dark:ag-ring-white/10" }) : opt.color ? (0, import_jsx_runtime18.jsx)("span", { className: "ag-h-1.5 ag-w-1.5 ag-rounded-full ag-ring-1 ag-ring-black/10 dark:ag-ring-white/10", style: {
         background: airtableColorToHex(opt.color) ?? void 0
-      } }) : null, (0, import_jsx_runtime16.jsx)("span", { className: "truncate", children: opt.label })] }) }), isSelected ? (0, import_jsx_runtime16.jsx)("span", { className: "text-neutral-600 dark:text-neutral-300", children: "\u2713" }) : null] }) }, opt.value);
+      } }) : null, (0, import_jsx_runtime18.jsx)("span", { className: "ag-truncate", children: opt.label })] }) }), isSelected ? (0, import_jsx_runtime18.jsx)("span", { className: "ag-text-neutral-600 dark:ag-text-neutral-300", children: "\u2713" }) : null] }) }, opt.value);
     };
-    const optionRows = entries2.length === 0 ? (0, import_jsx_runtime16.jsx)("div", { className: "px-2 py-3 text-base text-neutral-400 dark:text-neutral-500 text-center", children: emptyMessage }) : entries2.map((entry, idx) => {
+    const optionRows = entries2.length === 0 ? (0, import_jsx_runtime18.jsx)("div", { className: "ag-px-2 ag-py-3 ag-text-base ag-text-neutral-400 dark:ag-text-neutral-500 ag-text-center", children: emptyMessage }) : entries2.map((entry, idx) => {
       if (entry.type === "divider")
-        return (0, import_jsx_runtime16.jsx)(Divide, { className: "my-1" }, `div-${idx}`);
+        return (0, import_jsx_runtime18.jsx)(Divide, { className: "ag-my-1" }, `div-${idx}`);
       if (entry.type === "header") {
-        return (0, import_jsx_runtime16.jsxs)("div", { className: "flex items-center gap-2 px-2 py-1.5 text-sm font-semibold text-neutral-500 dark:text-neutral-400 select-none", children: [entry.color && (0, import_jsx_runtime16.jsx)("span", { className: "h-2 w-2 rounded-full ring-1 ring-black/10 dark:ring-white/10 flex-none", style: { background: airtableColorToHex(entry.color) ?? void 0 } }), (0, import_jsx_runtime16.jsx)("span", { className: "truncate", children: entry.label })] }, `hdr-${idx}`);
+        return (0, import_jsx_runtime18.jsxs)("div", { className: "ag-flex ag-items-center ag-gap-2 ag-px-2 ag-py-1.5 ag-text-sm ag-font-semibold ag-text-neutral-500 dark:ag-text-neutral-400 ag-select-none", children: [entry.color && (0, import_jsx_runtime18.jsx)("span", { className: "ag-h-2 ag-w-2 ag-rounded-full ag-ring-1 ag-ring-black/10 dark:ag-ring-white/10 ag-flex-none", style: { background: airtableColorToHex(entry.color) ?? void 0 } }), (0, import_jsx_runtime18.jsx)("span", { className: "ag-truncate", children: entry.label })] }, `hdr-${idx}`);
       }
       return renderOptionRow(entry);
     });
-    const triggerClasses = cx("w-full min-w-[10rem] inline-flex items-center justify-between gap-2", controlSizeClasses(size), "rounded-md border border-neutral-200 bg-white", "dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100", "hover:bg-neutral-50 dark:hover:bg-neutral-700", "focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-500", disabled && "opacity-60 cursor-not-allowed", triggerClassName);
+    const triggerClasses = cx("ag-w-full ag-min-w-[10rem] ag-inline-flex ag-items-center ag-justify-between ag-gap-2", controlSizeClasses(size), "ag-rounded-md ag-border ag-border-neutral-200 ag-bg-white", "dark:ag-border-neutral-600 dark:ag-bg-neutral-800 dark:ag-text-neutral-100", "hover:ag-bg-neutral-50 dark:hover:ag-bg-neutral-700", "focus:ag-outline-none focus:ag-ring-1 focus:ag-ring-neutral-300 dark:focus:ag-ring-neutral-500", disabled && "ag-opacity-60 ag-cursor-not-allowed", triggerClassName);
     const defaultTrigger = multiple ? (
       // A div, not a button: the pills carry real remove buttons and nested
       // interactive controls inside a button are invalid HTML.
-      (0, import_jsx_runtime16.jsxs)("div", {
+      (0, import_jsx_runtime18.jsxs)("div", {
         id: triggerId,
         // cast: @types/react@17 wants a non-nullable RefObject in ref position
         ref: multiTriggerRef,
@@ -49902,14 +49990,14 @@ export interface AiText {
         "aria-disabled": disabled || void 0,
         onClick: () => !disabled && toggle(),
         onKeyDown: onTriggerKeyDown,
-        className: cx(triggerClasses, "h-auto min-h-8 flex-wrap justify-start"),
-        children: [(0, import_jsx_runtime16.jsx)("span", { id: `${listboxId}-value`, className: cx("min-w-0 flex-1 flex flex-wrap items-center gap-1"), children: selectedOptions.length > 0 ? props.renderValue ? props.renderValue(selectedOptions) : selectedOptions.map((opt) => (0, import_jsx_runtime16.jsxs)("span", { className: "inline-flex items-center gap-0.5 min-w-0", children: [(0, import_jsx_runtime16.jsx)(PillOption, { opt, size, className: "max-w-full" }), !disabled && (0, import_jsx_runtime16.jsx)("button", { type: "button", tabIndex: -1, "aria-label": `Remove ${normalizeOptionText(opt)}`, onClick: (e) => {
+        className: cx(triggerClasses, "ag-h-auto ag-min-h-8 ag-flex-wrap ag-justify-start"),
+        children: [(0, import_jsx_runtime18.jsx)("span", { id: `${listboxId}-value`, className: cx("ag-min-w-0 ag-flex-1 ag-flex ag-flex-wrap ag-items-center ag-gap-1"), children: selectedOptions.length > 0 ? props.renderValue ? props.renderValue(selectedOptions) : selectedOptions.map((opt) => (0, import_jsx_runtime18.jsxs)("span", { className: "ag-inline-flex ag-items-center ag-gap-0.5 ag-min-w-0", children: [(0, import_jsx_runtime18.jsx)(PillOption, { opt, size, className: "ag-max-w-full" }), !disabled && (0, import_jsx_runtime18.jsx)("button", { type: "button", tabIndex: -1, "aria-label": `Remove ${normalizeOptionText(opt)}`, onClick: (e) => {
           e.stopPropagation();
           removeValue(opt.value);
-        }, className: "flex-none rounded-full px-0.5 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200", children: "\xD7" })] }, opt.value)) : (0, import_jsx_runtime16.jsx)("span", { className: "text-neutral-500 dark:text-neutral-400", children: placeholder }) }), (0, import_jsx_runtime16.jsx)(Caret, { open, weight: 2.5, className: "ml-auto flex-none" })]
+        }, className: "ag-flex-none ag-rounded-full ag-px-0.5 ag-text-neutral-400 hover:ag-text-neutral-700 dark:hover:ag-text-neutral-200", children: "\xD7" })] }, opt.value)) : (0, import_jsx_runtime18.jsx)("span", { className: "ag-text-neutral-500 dark:ag-text-neutral-400", children: placeholder }) }), (0, import_jsx_runtime18.jsx)(Caret, { open, weight: 2.5, className: "ag-ml-auto ag-flex-none" })]
       })
-    ) : (0, import_jsx_runtime16.jsxs)("button", { id: triggerId, ref: triggerRef, type: "button", disabled, "aria-haspopup": "listbox", "aria-expanded": open, "aria-controls": open ? listboxId : void 0, onClick: toggle, onKeyDown: onTriggerKeyDown, className: cx(triggerClasses, "disabled:opacity-60 disabled:cursor-not-allowed"), children: [(0, import_jsx_runtime16.jsx)("span", { className: cx("min-w-0 flex-1", pill && "flex justify-start"), children: selected ? props.renderValue ? props.renderValue(selected) : pill ? (0, import_jsx_runtime16.jsx)("div", { className: "ml-1", children: (0, import_jsx_runtime16.jsx)(PillOption, { opt: selected, size, className: "max-w-full w-fit" }) }) : (0, import_jsx_runtime16.jsx)("span", { className: "truncate", children: selected.label }) : (0, import_jsx_runtime16.jsx)("span", { className: "text-neutral-500 dark:text-neutral-400", children: placeholder }) }), (0, import_jsx_runtime16.jsx)(Caret, { open, weight: 2.5 })] });
-    return (0, import_jsx_runtime16.jsxs)("div", { className: cx("inline-block", className), children: [renderTrigger ? renderTrigger({ ref: triggerRef, id, open, toggle, disabled, selected }) : defaultTrigger, present && (0, import_jsx_runtime16.jsx)(Portal, { children: (0, import_jsx_runtime16.jsx)("div", __spreadProps(__spreadValues({
+    ) : (0, import_jsx_runtime18.jsxs)("button", { id: triggerId, ref: triggerRef, type: "button", disabled, "aria-haspopup": "listbox", "aria-expanded": open, "aria-controls": open ? listboxId : void 0, onClick: toggle, onKeyDown: onTriggerKeyDown, className: cx(triggerClasses, "disabled:ag-opacity-60 disabled:ag-cursor-not-allowed"), children: [(0, import_jsx_runtime18.jsx)("span", { className: cx("ag-min-w-0 ag-flex-1", pill && "ag-flex ag-justify-start"), children: selected ? props.renderValue ? props.renderValue(selected) : pill ? (0, import_jsx_runtime18.jsx)("div", { className: "ag-ml-1", children: (0, import_jsx_runtime18.jsx)(PillOption, { opt: selected, size, className: "ag-max-w-full ag-w-fit" }) }) : (0, import_jsx_runtime18.jsx)("span", { className: "ag-truncate", children: selected.label }) : (0, import_jsx_runtime18.jsx)("span", { className: "ag-text-neutral-500 dark:ag-text-neutral-400", children: placeholder }) }), (0, import_jsx_runtime18.jsx)(Caret, { open, weight: 2.5 })] });
+    return (0, import_jsx_runtime18.jsxs)("div", { className: cx("ag-inline-block", className), children: [renderTrigger ? renderTrigger({ ref: triggerRef, id, open, toggle, disabled, selected }) : defaultTrigger, present && (0, import_jsx_runtime18.jsx)(Portal, { children: (0, import_jsx_runtime18.jsx)("div", __spreadProps(__spreadValues({
       // cast: @types/react@17 wants a non-nullable RefObject in ref position
       ref: menuRef
     }, searchable ? {} : {
@@ -49920,19 +50008,19 @@ export interface AiText {
     }), {
       tabIndex: -1,
       onKeyDown: searchable ? void 0 : onMenuKeyDown,
-      className: cx("fixed z-popover rounded border border-neutral-200 bg-white shadow-sm", "dark:border-neutral-600 dark:bg-neutral-800", searchable ? "flex flex-col max-h-72" : "p-1 max-h-72 overflow-auto", "transition-[opacity,transform] duration-100 ease-out", animateIn ? "opacity-100 translate-y-0 scale-100" : "opacity-0 -translate-y-1 scale-[0.95] pointer-events-none", menuClassName),
+      className: cx("ag-fixed ag-z-popover ag-rounded ag-border ag-border-neutral-200 ag-bg-white ag-shadow-sm", "dark:ag-border-neutral-600 dark:ag-bg-neutral-800", searchable ? "ag-flex ag-flex-col ag-max-h-72" : "ag-p-1 ag-max-h-72 ag-overflow-auto", "ag-transition-[opacity,transform] ag-duration-100 ag-ease-out", animateIn ? "ag-opacity-100 ag-translate-y-0 ag-scale-100" : "ag-opacity-0 -ag-translate-y-1 ag-scale-[0.95] ag-pointer-events-none", menuClassName),
       style: __spreadValues(__spreadValues({}, menuPosStyle), matchTriggerWidth ? {} : { minWidth: minMenuWidth ? Math.max(anchorWidth, minMenuWidth) : anchorWidth }),
-      children: searchable ? (0, import_jsx_runtime16.jsxs)(import_jsx_runtime16.Fragment, { children: [(0, import_jsx_runtime16.jsx)("div", { className: "flex-none border-b border-neutral-200 dark:border-neutral-600 p-1.5", children: (0, import_jsx_runtime16.jsx)("input", { ref: inputRef, type: "text", role: "combobox", "aria-expanded": open, "aria-controls": listboxId, "aria-autocomplete": "list", value: query2, onChange: (e) => {
+      children: searchable ? (0, import_jsx_runtime18.jsxs)(import_jsx_runtime18.Fragment, { children: [(0, import_jsx_runtime18.jsx)("div", { className: "ag-flex-none ag-border-b ag-border-neutral-200 dark:ag-border-neutral-600 ag-p-1.5", children: (0, import_jsx_runtime18.jsx)("input", { ref: inputRef, type: "text", role: "combobox", "aria-expanded": open, "aria-controls": listboxId, "aria-autocomplete": "list", value: query2, onChange: (e) => {
         setQuery(e.target.value);
         setActiveIndex(0);
-      }, onKeyDown: onSearchKeyDown, placeholder: searchPlaceholder, className: cx("w-full px-2 py-1.5 text-base outline-none rounded", "bg-transparent dark:text-neutral-100", "placeholder:text-neutral-400 dark:placeholder:text-neutral-500"), "aria-activedescendant": activeOption ? `${listboxId}-opt-${activeOption.value}` : void 0 }) }), (0, import_jsx_runtime16.jsx)("div", { id: listboxId, role: "listbox", "aria-labelledby": triggerId, "aria-multiselectable": multiple || void 0, className: "flex-1 overflow-auto p-1.5", children: optionRows })] }) : optionRows
+      }, onKeyDown: onSearchKeyDown, placeholder: searchPlaceholder, className: cx("ag-w-full ag-px-2 ag-py-1.5 ag-text-base ag-outline-none ag-rounded", "ag-bg-transparent dark:ag-text-neutral-100", "placeholder:ag-text-neutral-400 dark:placeholder:ag-text-neutral-500"), "aria-activedescendant": activeOption ? `${listboxId}-opt-${activeOption.value}` : void 0 }) }), (0, import_jsx_runtime18.jsx)("div", { id: listboxId, role: "listbox", "aria-labelledby": triggerId, "aria-multiselectable": multiple || void 0, className: "ag-flex-1 ag-overflow-auto ag-p-1.5", children: optionRows })] }) : optionRows
     })) })] });
   }
-  var import_jsx_runtime16, React18;
+  var import_jsx_runtime18, React19;
   var init_Select = __esm({
     "node_modules/@airgen/ui/dist/components/Select.js"() {
-      import_jsx_runtime16 = __toESM(require_jsx_runtime(), 1);
-      React18 = __toESM(require_react(), 1);
+      import_jsx_runtime18 = __toESM(require_jsx_runtime(), 1);
+      React19 = __toESM(require_react(), 1);
       init_Caret();
       init_Divide();
       init_PillOption();
@@ -49960,26 +50048,26 @@ export interface AiText {
 
   // node_modules/@airgen/ui/dist/components/Popover.js
   function usePopoverCtx(name) {
-    const ctx = React19.useContext(PopoverCtx);
+    const ctx = React20.useContext(PopoverCtx);
     if (!ctx)
       throw new Error(`${name} must be used within <Popover>`);
     return ctx;
   }
   function Popover({ children, open: openProp, defaultOpen = false, onOpenChange, side = "bottom", align = "center", offset = 8, portal = true, trapFocus = false, avoidCollisions = true, collisionPadding = 8, flip = false }) {
-    const [uncontrolledOpen, setUncontrolledOpen] = React19.useState(defaultOpen);
+    const [uncontrolledOpen, setUncontrolledOpen] = React20.useState(defaultOpen);
     const controlled = openProp !== void 0;
     const open = controlled ? !!openProp : uncontrolledOpen;
-    const setOpen = React19.useCallback((next) => {
+    const setOpen = React20.useCallback((next) => {
       if (!controlled)
         setUncontrolledOpen(next);
       onOpenChange?.(next);
     }, [controlled, onOpenChange]);
-    const toggle = React19.useCallback(() => setOpen(!open), [open, setOpen]);
-    const triggerRef = React19.useRef(null);
-    const contentRef = React19.useRef(null);
+    const toggle = React20.useCallback(() => setOpen(!open), [open, setOpen]);
+    const triggerRef = React20.useRef(null);
+    const contentRef = React20.useRef(null);
     const defaultContentId = useStableId("popover");
-    const [contentId, setContentId] = React19.useState(defaultContentId);
-    const ctxValue = React19.useMemo(() => ({
+    const [contentId, setContentId] = React20.useState(defaultContentId);
+    const ctxValue = React20.useMemo(() => ({
       open,
       setOpen,
       toggle,
@@ -49996,18 +50084,18 @@ export interface AiText {
       collisionPadding,
       flip
     }), [open, setOpen, toggle, contentId, side, align, offset, portal, trapFocus, avoidCollisions, collisionPadding, flip]);
-    return (0, import_jsx_runtime17.jsx)(PopoverCtx.Provider, { value: ctxValue, children });
+    return (0, import_jsx_runtime19.jsx)(PopoverCtx.Provider, { value: ctxValue, children });
   }
   function PopoverTrigger(_a) {
     var _b = _a, { children } = _b, rest = __objRest(_b, ["children"]);
     const ctx = usePopoverCtx("Popover.Trigger");
-    if (!React19.isValidElement(children)) {
+    if (!React20.isValidElement(children)) {
       throw new Error("Popover.Trigger expects a single React element child.");
     }
     const childProps = children.props ?? {};
     const onClickChild = childProps.onClick;
     const onClickUser = rest.onClick;
-    return React19.cloneElement(children, __spreadProps(__spreadValues({}, rest), {
+    return React20.cloneElement(children, __spreadProps(__spreadValues({}, rest), {
       "aria-haspopup": "dialog",
       "aria-expanded": ctx.open,
       "aria-controls": ctx.open ? ctx.contentId : void 0,
@@ -50026,7 +50114,7 @@ export interface AiText {
     var _b = _a, { id, className = "", style: style3, onEscapeKeyDown, onInteractOutside } = _b, rest = __objRest(_b, ["id", "className", "style", "onEscapeKeyDown", "onInteractOutside"]);
     const ctx = usePopoverCtx("Popover.Content");
     const present = usePresence(ctx.open, EXIT_MS);
-    React19.useEffect(() => {
+    React20.useEffect(() => {
       if (id && id !== ctx.contentId)
         ctx.setContentId(id);
     }, [id, ctx]);
@@ -50042,7 +50130,7 @@ export interface AiText {
       avoidCollisions: ctx.avoidCollisions,
       flip: ctx.flip
     });
-    React19.useEffect(() => {
+    React20.useEffect(() => {
       if (!ctx.open)
         return;
       const onKeyDown = (ev) => {
@@ -50073,8 +50161,8 @@ export interface AiText {
         document.removeEventListener("pointerdown", onPointerDown, true);
       };
     }, [ctx, onEscapeKeyDown, onInteractOutside]);
-    const wasOpen = React19.useRef(false);
-    React19.useEffect(() => {
+    const wasOpen = React20.useRef(false);
+    React20.useEffect(() => {
       if (ctx.open && !wasOpen.current) {
         queueMicrotask(() => {
           const el = ctx.contentRef.current;
@@ -50088,7 +50176,7 @@ export interface AiText {
       }
       wasOpen.current = ctx.open;
     }, [ctx.open, ctx.contentRef, ctx.triggerRef]);
-    React19.useEffect(() => {
+    React20.useEffect(() => {
       if (!ctx.open || !ctx.trapFocus)
         return;
       const onKeyDown = (ev) => {
@@ -50101,21 +50189,21 @@ export interface AiText {
     }, [ctx.open, ctx.trapFocus, ctx.contentRef]);
     if (!present)
       return null;
-    const node = (0, import_jsx_runtime17.jsx)("div", __spreadProps(__spreadValues({}, rest), { id: contentId, role: "dialog", tabIndex: -1, "data-state": ctx.open ? "open" : "closed", ref: contentRefCallback, className: cx("z-popover rounded-md border border-neutral-200 bg-white p-4 text-neutral-900 shadow-md outline-none", "dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100", "data-[state=open]:animate-in data-[state=closed]:animate-out", "data-[state=open]:fade-in data-[state=closed]:fade-out", "data-[state=open]:zoom-in data-[state=closed]:zoom-out", className), style: __spreadValues(__spreadProps(__spreadValues({}, posStyle), {
+    const node = (0, import_jsx_runtime19.jsx)("div", __spreadProps(__spreadValues({}, rest), { id: contentId, role: "dialog", tabIndex: -1, "data-state": ctx.open ? "open" : "closed", ref: contentRefCallback, className: cx("ag-z-popover ag-rounded-md ag-border ag-border-neutral-200 ag-bg-white ag-p-4 ag-text-neutral-900 ag-shadow-md ag-outline-none", "dark:ag-border-neutral-600 dark:ag-bg-neutral-800 dark:ag-text-neutral-100", "data-[state=open]:ag-animate-in data-[state=closed]:ag-animate-out", "data-[state=open]:ag-fade-in data-[state=closed]:ag-fade-out", "data-[state=open]:ag-zoom-in data-[state=closed]:ag-zoom-out", className), style: __spreadValues(__spreadProps(__spreadValues({}, posStyle), {
       visibility: ready ? void 0 : "hidden"
     }), style3) }));
-    return ctx.portal ? (0, import_jsx_runtime17.jsx)(Portal, { children: node }) : node;
+    return ctx.portal ? (0, import_jsx_runtime19.jsx)(Portal, { children: node }) : node;
   }
   function PopoverClose(_a) {
     var _b = _a, { children } = _b, rest = __objRest(_b, ["children"]);
     const ctx = usePopoverCtx("Popover.Close");
-    if (!React19.isValidElement(children)) {
+    if (!React20.isValidElement(children)) {
       throw new Error("Popover.Close expects a single React element child.");
     }
     const childProps = children.props ?? {};
     const onClickChild = childProps.onClick;
     const onClickUser = rest.onClick;
-    return React19.cloneElement(children, __spreadProps(__spreadValues({}, rest), {
+    return React20.cloneElement(children, __spreadProps(__spreadValues({}, rest), {
       onClick: (e) => {
         onClickChild?.(e);
         onClickUser?.(e);
@@ -50125,18 +50213,18 @@ export interface AiText {
       }
     }));
   }
-  var import_jsx_runtime17, React19, EXIT_MS, PopoverCtx;
+  var import_jsx_runtime19, React20, EXIT_MS, PopoverCtx;
   var init_Popover = __esm({
     "node_modules/@airgen/ui/dist/components/Popover.js"() {
-      import_jsx_runtime17 = __toESM(require_jsx_runtime(), 1);
-      React19 = __toESM(require_react(), 1);
+      import_jsx_runtime19 = __toESM(require_jsx_runtime(), 1);
+      React20 = __toESM(require_react(), 1);
       init_Portal();
       init_utils();
       init_dropdown();
       init_positioning();
       init_slot();
       EXIT_MS = 150;
-      PopoverCtx = React19.createContext(null);
+      PopoverCtx = React20.createContext(null);
       Popover.Trigger = PopoverTrigger;
       Popover.Content = PopoverContent;
       Popover.Close = PopoverClose;
@@ -50145,44 +50233,44 @@ export interface AiText {
 
   // node_modules/@airgen/ui/dist/components/Tooltip.js
   function useTooltipCtx(name) {
-    const ctx = React20.useContext(TooltipContext);
+    const ctx = React21.useContext(TooltipContext);
     if (!ctx)
       throw new Error(`${name} must be used within <Tooltip>`);
     return ctx;
   }
   function Tooltip({ children, delay = 250, disableHoverableContent = true, open: openProp, defaultOpen = false, onOpenChange }) {
-    const [uncontrolledOpen, setUncontrolledOpen] = React20.useState(defaultOpen);
+    const [uncontrolledOpen, setUncontrolledOpen] = React21.useState(defaultOpen);
     const controlled = openProp !== void 0;
     const open = controlled ? !!openProp : uncontrolledOpen;
-    const setOpen = React20.useCallback((next) => {
+    const setOpen = React21.useCallback((next) => {
       if (!controlled)
         setUncontrolledOpen(next);
       onOpenChange?.(next);
     }, [controlled, onOpenChange]);
-    const triggerRef = React20.useRef(null);
-    const contentRef = React20.useRef(null);
-    const openTimerRef = React20.useRef(0);
+    const triggerRef = React21.useRef(null);
+    const contentRef = React21.useRef(null);
+    const openTimerRef = React21.useRef(0);
     const contentId = useStableId("tooltip");
-    const scheduleOpen = React20.useCallback(() => {
+    const scheduleOpen = React21.useCallback(() => {
       window.clearTimeout(openTimerRef.current);
       openTimerRef.current = window.setTimeout(() => setOpen(true), delay);
     }, [delay, setOpen]);
-    const closeNow = React20.useCallback(() => {
+    const closeNow = React21.useCallback(() => {
       window.clearTimeout(openTimerRef.current);
       openTimerRef.current = 0;
       setOpen(false);
     }, [setOpen]);
-    React20.useEffect(() => () => window.clearTimeout(openTimerRef.current), []);
-    const value = React20.useMemo(() => ({ open, scheduleOpen, closeNow, triggerRef, contentRef, contentId, disableHoverableContent }), [open, scheduleOpen, closeNow, contentId, disableHoverableContent]);
-    return (0, import_jsx_runtime18.jsx)(TooltipContext.Provider, { value, children });
+    React21.useEffect(() => () => window.clearTimeout(openTimerRef.current), []);
+    const value = React21.useMemo(() => ({ open, scheduleOpen, closeNow, triggerRef, contentRef, contentId, disableHoverableContent }), [open, scheduleOpen, closeNow, contentId, disableHoverableContent]);
+    return (0, import_jsx_runtime20.jsx)(TooltipContext.Provider, { value, children });
   }
   function TooltipTrigger({ children, asChild = false }) {
     const ctx = useTooltipCtx("TooltipTrigger");
     const { triggerRef, scheduleOpen, closeNow, open, contentId } = ctx;
     const describedBy = open ? contentId : void 0;
-    if (asChild && React20.isValidElement(children)) {
+    if (asChild && React21.isValidElement(children)) {
       const childProps = children.props ?? {};
-      return React20.cloneElement(children, {
+      return React21.cloneElement(children, {
         "aria-describedby": describedBy,
         ref: mergeRefs(getElementRef(children), triggerRef),
         onPointerEnter: (e) => {
@@ -50203,7 +50291,7 @@ export interface AiText {
         }
       });
     }
-    return (0, import_jsx_runtime18.jsx)("span", {
+    return (0, import_jsx_runtime20.jsx)("span", {
       // cast: @types/react@17 wants a non-nullable RefObject in ref position
       ref: triggerRef,
       "aria-describedby": describedBy,
@@ -50211,7 +50299,7 @@ export interface AiText {
       onPointerLeave: closeNow,
       onFocus: scheduleOpen,
       onBlur: closeNow,
-      className: "inline-flex",
+      className: "ag-inline-flex",
       children
     });
   }
@@ -50227,7 +50315,7 @@ export interface AiText {
       offset: sideOffset,
       collisionPadding: 8
     });
-    React20.useEffect(() => {
+    React21.useEffect(() => {
       if (!open)
         return;
       const onKeyDown = (e) => e.key === "Escape" && closeNow();
@@ -50236,21 +50324,21 @@ export interface AiText {
     }, [open, closeNow]);
     if (!open)
       return null;
-    return (0, import_jsx_runtime18.jsx)(Portal, { children: (0, import_jsx_runtime18.jsx)("div", { ref: contentRefCallback, id: contentId, role: "tooltip", className: cx("fixed z-tooltip rounded-md border border-neutral-200 bg-white px-2 py-1 text-sm text-neutral-900 shadow-md", "dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100", className), style: __spreadProps(__spreadValues({}, style3), {
+    return (0, import_jsx_runtime20.jsx)(Portal, { children: (0, import_jsx_runtime20.jsx)("div", { ref: contentRefCallback, id: contentId, role: "tooltip", className: cx("ag-fixed ag-z-tooltip ag-rounded-md ag-border ag-border-neutral-200 ag-bg-white ag-px-2 ag-py-1 ag-text-sm ag-text-neutral-900 ag-shadow-md", "dark:ag-border-neutral-600 dark:ag-bg-neutral-800 dark:ag-text-neutral-100", className), style: __spreadProps(__spreadValues({}, style3), {
       opacity: ready ? 1 : 0,
       pointerEvents: disableHoverableContent ? "none" : "auto"
     }), children }) });
   }
-  var import_jsx_runtime18, React20, TooltipContext;
+  var import_jsx_runtime20, React21, TooltipContext;
   var init_Tooltip = __esm({
     "node_modules/@airgen/ui/dist/components/Tooltip.js"() {
-      import_jsx_runtime18 = __toESM(require_jsx_runtime(), 1);
-      React20 = __toESM(require_react(), 1);
+      import_jsx_runtime20 = __toESM(require_jsx_runtime(), 1);
+      React21 = __toESM(require_react(), 1);
       init_Portal();
       init_utils();
       init_positioning();
       init_slot();
-      TooltipContext = React20.createContext(null);
+      TooltipContext = React21.createContext(null);
       Tooltip.Trigger = TooltipTrigger;
       Tooltip.Content = TooltipContent;
     }
@@ -50258,7 +50346,7 @@ export interface AiText {
 
   // node_modules/@airgen/ui/dist/components/DialogSheet.js
   function useDialogCtx(name) {
-    const ctx = React21.useContext(DialogContext);
+    const ctx = React22.useContext(DialogContext);
     if (!ctx)
       throw new Error(`${name} must be used inside <Dialog.Root>`);
     return ctx;
@@ -50272,10 +50360,10 @@ export interface AiText {
     const contentId = useStableId("dialog-content");
     const titleId = useStableId("dialog-title");
     const descriptionId = useStableId("dialog-desc");
-    const triggerRef = React21.useRef(null);
-    const [hasTitle, setHasTitle] = React21.useState(false);
-    const [hasDescription, setHasDescription] = React21.useState(false);
-    const ctx = React21.useMemo(() => ({
+    const triggerRef = React22.useRef(null);
+    const [hasTitle, setHasTitle] = React22.useState(false);
+    const [hasDescription, setHasDescription] = React22.useState(false);
+    const ctx = React22.useMemo(() => ({
       open: isOpen,
       setOpen: (v) => setIsOpen(v),
       contentId,
@@ -50288,36 +50376,36 @@ export interface AiText {
       triggerRef,
       durationMs
     }), [isOpen, setIsOpen, contentId, titleId, descriptionId, hasTitle, hasDescription, durationMs]);
-    return (0, import_jsx_runtime19.jsx)(DialogContext.Provider, { value: ctx, children });
+    return (0, import_jsx_runtime21.jsx)(DialogContext.Provider, { value: ctx, children });
   }
   function DialogPortal({ children, container }) {
     const ctx = useDialogCtx("Dialog.Portal");
     const present = usePresence(ctx.open, ctx.durationMs);
     if (!present)
       return null;
-    return (0, import_jsx_runtime19.jsx)(Portal, { container, children });
+    return (0, import_jsx_runtime21.jsx)(Portal, { container, children });
   }
   function DialogOverlay(_a) {
     var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
     const ctx = useDialogCtx("Dialog.Overlay");
-    const base = "fixed inset-0 z-overlay bg-black/50 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 duration-200 data-[state=closed]:opacity-0";
-    return (0, import_jsx_runtime19.jsx)("div", __spreadProps(__spreadValues({}, props), { "data-state": ctx.open ? "open" : "closed", className: cx(base, className), onClick: (e) => {
+    const base = "ag-fixed ag-inset-0 ag-z-overlay ag-bg-black/50 data-[state=open]:ag-animate-in data-[state=open]:ag-fade-in-0 data-[state=closed]:ag-animate-out data-[state=closed]:ag-fade-out-0 ag-duration-200 data-[state=closed]:ag-opacity-0";
+    return (0, import_jsx_runtime21.jsx)("div", __spreadProps(__spreadValues({}, props), { "data-state": ctx.open ? "open" : "closed", className: cx(base, className), onClick: (e) => {
       props.onClick?.(e);
       if (!e.defaultPrevented && e.target === e.currentTarget)
         ctx.setOpen(false);
     } }));
   }
-  var import_jsx_runtime19, React21, DialogContext, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogClose, Dialog, SheetContent, Sheet;
+  var import_jsx_runtime21, React22, DialogContext, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogClose, Dialog, SheetContent, Sheet;
   var init_DialogSheet = __esm({
     "node_modules/@airgen/ui/dist/components/DialogSheet.js"() {
-      import_jsx_runtime19 = __toESM(require_jsx_runtime(), 1);
-      React21 = __toESM(require_react(), 1);
+      import_jsx_runtime21 = __toESM(require_jsx_runtime(), 1);
+      React22 = __toESM(require_react(), 1);
       init_Portal();
       init_utils();
       init_dropdown();
       init_slot();
-      DialogContext = React21.createContext(null);
-      DialogTrigger = React21.forwardRef(function DialogTrigger2(_a, ref) {
+      DialogContext = React22.createContext(null);
+      DialogTrigger = React22.forwardRef(function DialogTrigger2(_a, ref) {
         var _b = _a, { asChild = false, children } = _b, props = __objRest(_b, ["asChild", "children"]);
         const ctx = useDialogCtx("Dialog.Trigger");
         const setTriggerRef = (node) => {
@@ -50339,13 +50427,13 @@ export interface AiText {
           }
         });
         if (!asChild) {
-          return (0, import_jsx_runtime19.jsx)("button", __spreadProps(__spreadValues({}, injected), { ref: setTriggerRef, children }));
+          return (0, import_jsx_runtime21.jsx)("button", __spreadProps(__spreadValues({}, injected), { ref: setTriggerRef, children }));
         }
         let el = null;
-        React21.Children.forEach(children, (c) => {
+        React22.Children.forEach(children, (c) => {
           if (el)
             return;
-          if (React21.isValidElement(c))
+          if (React22.isValidElement(c))
             el = c;
         });
         if (!el) {
@@ -50365,7 +50453,7 @@ export interface AiText {
             childRef.current = node;
           setTriggerRef(node);
         };
-        return React21.cloneElement(element, __spreadProps(__spreadValues(__spreadValues({}, injected), elementProps), {
+        return React22.cloneElement(element, __spreadProps(__spreadValues(__spreadValues({}, injected), elementProps), {
           // ensure ARIA wins
           "aria-haspopup": "dialog",
           "aria-expanded": ctx.open,
@@ -50375,10 +50463,10 @@ export interface AiText {
           ref: mergedRef
         }));
       });
-      DialogContent = React21.forwardRef(function DialogContent2(_a, ref) {
+      DialogContent = React22.forwardRef(function DialogContent2(_a, ref) {
         var _b = _a, { className, initialFocusRef, closeOnEscape = true, trapFocus: shouldTrapFocus = true, restoreFocus = true, lockScroll = true } = _b, props = __objRest(_b, ["className", "initialFocusRef", "closeOnEscape", "trapFocus", "restoreFocus", "lockScroll"]);
         const ctx = useDialogCtx("Dialog.Content");
-        const localRef = React21.useRef(null);
+        const localRef = React22.useRef(null);
         const setRef = (node) => {
           localRef.current = node;
           if (typeof ref === "function")
@@ -50386,7 +50474,7 @@ export interface AiText {
           else if (ref)
             ref.current = node;
         };
-        React21.useEffect(() => {
+        React22.useEffect(() => {
           if (!ctx.open)
             return;
           const restoreScroll = lockScroll ? lockBodyScroll(true) : () => {
@@ -50429,28 +50517,28 @@ export interface AiText {
             }
           };
         }, [ctx, closeOnEscape, shouldTrapFocus, restoreFocus, lockScroll, initialFocusRef]);
-        const base = "fixed z-overlay outline-none data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 duration-200";
-        return (0, import_jsx_runtime19.jsx)("div", __spreadProps(__spreadValues({}, props), { ref: setRef, role: "dialog", "aria-modal": "true", id: ctx.contentId, "aria-labelledby": ctx.hasTitle ? ctx.titleId : void 0, "aria-describedby": ctx.hasDescription ? ctx.descriptionId : void 0, tabIndex: -1, "data-state": ctx.open ? "open" : "closed", className: cx(base, className) }));
+        const base = "ag-fixed ag-z-overlay ag-outline-none data-[state=open]:ag-animate-in data-[state=open]:ag-fade-in-0 data-[state=open]:ag-zoom-in-95 data-[state=closed]:ag-animate-out data-[state=closed]:ag-fade-out-0 data-[state=closed]:ag-zoom-out-95 ag-duration-200";
+        return (0, import_jsx_runtime21.jsx)("div", __spreadProps(__spreadValues({}, props), { ref: setRef, role: "dialog", "aria-modal": "true", id: ctx.contentId, "aria-labelledby": ctx.hasTitle ? ctx.titleId : void 0, "aria-describedby": ctx.hasDescription ? ctx.descriptionId : void 0, tabIndex: -1, "data-state": ctx.open ? "open" : "closed", className: cx(base, className) }));
       });
-      DialogTitle = React21.forwardRef(function DialogTitle2(_a, ref) {
+      DialogTitle = React22.forwardRef(function DialogTitle2(_a, ref) {
         var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
         const ctx = useDialogCtx("Dialog.Title");
-        React21.useEffect(() => {
+        React22.useEffect(() => {
           ctx.setHasTitle(true);
           return () => ctx.setHasTitle(false);
         }, [ctx]);
-        return (0, import_jsx_runtime19.jsx)("h2", __spreadProps(__spreadValues({}, props), { ref, id: ctx.titleId, className }));
+        return (0, import_jsx_runtime21.jsx)("h2", __spreadProps(__spreadValues({}, props), { ref, id: ctx.titleId, className }));
       });
-      DialogDescription = React21.forwardRef(function DialogDescription2(_a, ref) {
+      DialogDescription = React22.forwardRef(function DialogDescription2(_a, ref) {
         var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
         const ctx = useDialogCtx("Dialog.Description");
-        React21.useEffect(() => {
+        React22.useEffect(() => {
           ctx.setHasDescription(true);
           return () => ctx.setHasDescription(false);
         }, [ctx]);
-        return (0, import_jsx_runtime19.jsx)("p", __spreadProps(__spreadValues({}, props), { ref, id: ctx.descriptionId, className }));
+        return (0, import_jsx_runtime21.jsx)("p", __spreadProps(__spreadValues({}, props), { ref, id: ctx.descriptionId, className }));
       });
-      DialogClose = React21.forwardRef(function DialogClose2(_a, ref) {
+      DialogClose = React22.forwardRef(function DialogClose2(_a, ref) {
         var _b = _a, { asChild = false, children } = _b, props = __objRest(_b, ["asChild", "children"]);
         const ctx = useDialogCtx("Dialog.Close");
         const setCloseRef = (node) => {
@@ -50468,13 +50556,13 @@ export interface AiText {
           }
         });
         if (!asChild) {
-          return (0, import_jsx_runtime19.jsx)("button", __spreadProps(__spreadValues({}, injected), { ref: setCloseRef, children }));
+          return (0, import_jsx_runtime21.jsx)("button", __spreadProps(__spreadValues({}, injected), { ref: setCloseRef, children }));
         }
         let el = null;
-        React21.Children.forEach(children, (c) => {
+        React22.Children.forEach(children, (c) => {
           if (el)
             return;
-          if (React21.isValidElement(c))
+          if (React22.isValidElement(c))
             el = c;
         });
         if (!el) {
@@ -50494,7 +50582,7 @@ export interface AiText {
             childRef.current = node;
           setCloseRef(node);
         };
-        return React21.cloneElement(element, __spreadProps(__spreadValues(__spreadValues({}, injected), elementProps), {
+        return React22.cloneElement(element, __spreadProps(__spreadValues(__spreadValues({}, injected), elementProps), {
           type: elementProps.type ?? injected.type,
           onClick: mergedOnClick,
           ref: mergedRef
@@ -50510,20 +50598,20 @@ export interface AiText {
         Description: DialogDescription,
         Close: DialogClose
       };
-      SheetContent = React21.forwardRef(function SheetContent2(_a, ref) {
+      SheetContent = React22.forwardRef(function SheetContent2(_a, ref) {
         var _b = _a, { side = "right", restoreFocus = true, className } = _b, props = __objRest(_b, ["side", "restoreFocus", "className"]);
         const sideClasses = {
-          right: "inset-y-0 right-0 h-full w-80 md:w-96 border-l data-[state=open]:slide-in-from-right data-[state=closed]:slide-out-to-right data-[state=closed]:translate-x-full",
-          left: "inset-y-0 left-0 h-full w-80 md:w-96 border-r data-[state=open]:slide-in-from-left data-[state=closed]:slide-out-to-left data-[state=closed]:-translate-x-full",
-          top: "inset-x-0 top-0 w-full h-1/3 md:h-1/2 border-t-0 border-b data-[state=open]:slide-in-from-top data-[state=closed]:slide-out-to-top data-[state=closed]:-translate-y-full",
-          bottom: "inset-x-0 bottom-0 w-full h-1/3 md:h-1/2 border-t data-[state=open]:slide-in-from-bottom data-[state=closed]:slide-out-to-bottom data-[state=closed]:translate-y-full"
+          right: "ag-inset-y-0 ag-right-0 ag-h-full ag-w-80 md:ag-w-96 ag-border-l data-[state=open]:ag-slide-in-from-right data-[state=closed]:ag-slide-out-to-right data-[state=closed]:ag-translate-x-full",
+          left: "ag-inset-y-0 ag-left-0 ag-h-full ag-w-80 md:ag-w-96 ag-border-r data-[state=open]:ag-slide-in-from-left data-[state=closed]:ag-slide-out-to-left data-[state=closed]:-ag-translate-x-full",
+          top: "ag-inset-x-0 ag-top-0 ag-w-full ag-h-1/3 md:ag-h-1/2 ag-border-t-0 ag-border-b data-[state=open]:ag-slide-in-from-top data-[state=closed]:ag-slide-out-to-top data-[state=closed]:-ag-translate-y-full",
+          bottom: "ag-inset-x-0 ag-bottom-0 ag-w-full ag-h-1/3 md:ag-h-1/2 ag-border-t data-[state=open]:ag-slide-in-from-bottom data-[state=closed]:ag-slide-out-to-bottom data-[state=closed]:ag-translate-y-full"
         };
         const base = (
           // bg must be a real color: the package's Tailwind theme has no
           // `bg-background`-style CSS-variable token.
-          "bg-white dark:bg-neutral-800 border-neutral-200 dark:border-neutral-600 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out duration-200 data-[state=closed]:opacity-0"
+          "ag-bg-white dark:ag-bg-neutral-800 ag-border-neutral-200 dark:ag-border-neutral-600 ag-shadow-lg data-[state=open]:ag-animate-in data-[state=closed]:ag-animate-out ag-duration-200 data-[state=closed]:ag-opacity-0"
         );
-        return (0, import_jsx_runtime19.jsx)(DialogContent, __spreadProps(__spreadValues({}, props), { ref, className: cx(base, sideClasses[side], className), restoreFocus }));
+        return (0, import_jsx_runtime21.jsx)(DialogContent, __spreadProps(__spreadValues({}, props), { ref, className: cx(base, sideClasses[side], className), restoreFocus }));
       });
       Sheet = {
         Root: DialogRoot,
@@ -50540,40 +50628,40 @@ export interface AiText {
 
   // node_modules/@airgen/ui/dist/components/Toast.js
   function ToastEntry({ toast, onDismiss }) {
-    const [visible, setVisible] = React22.useState(false);
-    const exitTimer = React22.useRef(0);
-    React22.useEffect(() => {
+    const [visible, setVisible] = React23.useState(false);
+    const exitTimer = React23.useRef(0);
+    React23.useEffect(() => {
       const raf = requestAnimationFrame(() => setVisible(true));
       return () => cancelAnimationFrame(raf);
     }, []);
-    React22.useEffect(() => {
+    React23.useEffect(() => {
       if (toast.duration <= 0)
         return;
       const t = window.setTimeout(() => onDismiss(toast.id), toast.duration);
       return () => window.clearTimeout(t);
     }, [toast.id, toast.duration, onDismiss]);
-    React22.useEffect(() => () => window.clearTimeout(exitTimer.current), []);
+    React23.useEffect(() => () => window.clearTimeout(exitTimer.current), []);
     const handleDismiss = () => {
       setVisible(false);
       window.clearTimeout(exitTimer.current);
       exitTimer.current = window.setTimeout(() => onDismiss(toast.id), EXIT_MS2);
     };
-    return (0, import_jsx_runtime20.jsxs)("div", {
+    return (0, import_jsx_runtime22.jsxs)("div", {
       // Errors interrupt (alert announces on insertion); the polite live
       // region for the rest is the persistent viewport container below.
       role: toast.type === "error" ? "alert" : void 0,
-      className: cx("pointer-events-auto flex items-start gap-2.5 rounded-md border border-neutral-400", "bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-600", "shadow-md px-3.5 py-2.5 min-w-[280px] max-w-[400px]", "transition-all duration-300 ease-out", visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"),
-      children: [(0, import_jsx_runtime20.jsx)("span", { className: "flex h-5 shrink-0 items-center", children: (0, import_jsx_runtime20.jsx)(Icon, { icon: ICONS[toast.type], size: "base" }) }), (0, import_jsx_runtime20.jsx)(Text, { className: "flex-1 min-w-0 break-words", children: toast.message }), (0, import_jsx_runtime20.jsx)(Button, { type: "button", variant: "outline", size: "icon-xs", icon: X, "aria-label": "Dismiss", className: "shrink-0", onClick: handleDismiss })]
+      className: cx("ag-pointer-events-auto ag-flex ag-items-start ag-gap-2.5 ag-rounded-md ag-border ag-border-neutral-400", "ag-bg-neutral-50 dark:ag-bg-neutral-800 dark:ag-border-neutral-600", "ag-shadow-md ag-px-3.5 ag-py-2.5 ag-min-w-[280px] ag-max-w-[400px]", "ag-transition-all ag-duration-300 ag-ease-out", visible ? "ag-opacity-100 ag-translate-x-0" : "ag-opacity-0 ag-translate-x-8"),
+      children: [(0, import_jsx_runtime22.jsx)("span", { className: "ag-flex ag-h-5 ag-shrink-0 ag-items-center", children: (0, import_jsx_runtime22.jsx)(Icon, { icon: ICONS[toast.type], size: "base" }) }), (0, import_jsx_runtime22.jsx)(Text, { className: "ag-flex-1 ag-min-w-0 ag-break-words", children: toast.message }), (0, import_jsx_runtime22.jsx)(Button, { type: "button", variant: "outline", size: "icon-xs", icon: X, "aria-label": "Dismiss", className: "ag-shrink-0", onClick: handleDismiss })]
     });
   }
   function ToastViewport({ toasts, onDismiss, position = "top-right", container }) {
-    return (0, import_jsx_runtime20.jsx)(Portal, { container, children: (0, import_jsx_runtime20.jsx)("div", { "aria-live": "polite", "aria-label": "Notifications", className: cx("fixed z-toast flex flex-col gap-2 pointer-events-none", POSITION_CLASSES[position]), children: toasts.map((t) => (0, import_jsx_runtime20.jsx)(ToastEntry, { toast: t, onDismiss }, t.id)) }) });
+    return (0, import_jsx_runtime22.jsx)(Portal, { container, children: (0, import_jsx_runtime22.jsx)("div", { "aria-live": "polite", "aria-label": "Notifications", className: cx("ag-fixed ag-z-toast ag-flex ag-flex-col ag-gap-2 ag-pointer-events-none", POSITION_CLASSES[position]), children: toasts.map((t) => (0, import_jsx_runtime22.jsx)(ToastEntry, { toast: t, onDismiss }, t.id)) }) });
   }
-  var import_jsx_runtime20, React22, ICONS, EXIT_MS2, POSITION_CLASSES;
+  var import_jsx_runtime22, React23, ICONS, EXIT_MS2, POSITION_CLASSES;
   var init_Toast = __esm({
     "node_modules/@airgen/ui/dist/components/Toast.js"() {
-      import_jsx_runtime20 = __toESM(require_jsx_runtime(), 1);
-      React22 = __toESM(require_react(), 1);
+      import_jsx_runtime22 = __toESM(require_jsx_runtime(), 1);
+      React23 = __toESM(require_react(), 1);
       init_lucide_react();
       init_utils();
       init_Icon();
@@ -50587,37 +50675,37 @@ export interface AiText {
       };
       EXIT_MS2 = 300;
       POSITION_CLASSES = {
-        "top-right": "top-4 right-4",
-        "top-left": "top-4 left-4",
-        "bottom-right": "bottom-4 right-4 flex-col-reverse",
-        "bottom-left": "bottom-4 left-4 flex-col-reverse"
+        "top-right": "ag-top-4 ag-right-4",
+        "top-left": "ag-top-4 ag-left-4",
+        "bottom-right": "ag-bottom-4 ag-right-4 ag-flex-col-reverse",
+        "bottom-left": "ag-bottom-4 ag-left-4 ag-flex-col-reverse"
       };
     }
   });
 
   // node_modules/@airgen/ui/dist/providers/ToastProvider.js
   function useToast() {
-    const ctx = React23.useContext(ToastContext);
+    const ctx = React24.useContext(ToastContext);
     if (!ctx)
       throw new Error("useToast must be used within <ToastProvider>");
     return ctx;
   }
   function ToastProvider({ children, position = "top-right", container, maxToasts = 5 }) {
-    const [toasts, setToasts] = React23.useState([]);
-    const nextIdRef = React23.useRef(0);
-    const delayTimers = React23.useRef(/* @__PURE__ */ new Map());
-    React23.useEffect(() => () => {
+    const [toasts, setToasts] = React24.useState([]);
+    const nextIdRef = React24.useRef(0);
+    const delayTimers = React24.useRef(/* @__PURE__ */ new Map());
+    React24.useEffect(() => () => {
       for (const timer of delayTimers.current.values())
         window.clearTimeout(timer);
       delayTimers.current.clear();
     }, []);
-    const dismiss = React23.useCallback((id) => {
+    const dismiss = React24.useCallback((id) => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
     }, []);
-    const clear = React23.useCallback(() => {
+    const clear = React24.useCallback(() => {
       setToasts([]);
     }, []);
-    const addToast = React23.useCallback((message, options = {}) => {
+    const addToast = React24.useCallback((message, options = {}) => {
       const { type = "info", duration = 5e3, delay = 0, key } = options;
       const id = `toast-${++nextIdRef.current}`;
       const show = () => {
@@ -50637,7 +50725,7 @@ export interface AiText {
       }
       return id;
     }, [maxToasts]);
-    const api = React23.useMemo(() => ({
+    const api = React24.useMemo(() => ({
       toast: addToast,
       error: (msg) => addToast(msg, { type: "error", duration: 8e3 }),
       warning: (msg) => addToast(msg, { type: "warning", duration: 6e3 }),
@@ -50645,37 +50733,37 @@ export interface AiText {
       dismiss,
       clear
     }), [addToast, dismiss, clear]);
-    return (0, import_jsx_runtime21.jsxs)(ToastContext.Provider, { value: api, children: [children, (0, import_jsx_runtime21.jsx)(ToastViewport, { toasts, onDismiss: dismiss, position, container })] });
+    return (0, import_jsx_runtime23.jsxs)(ToastContext.Provider, { value: api, children: [children, (0, import_jsx_runtime23.jsx)(ToastViewport, { toasts, onDismiss: dismiss, position, container })] });
   }
-  var import_jsx_runtime21, React23, ToastContext;
+  var import_jsx_runtime23, React24, ToastContext;
   var init_ToastProvider = __esm({
     "node_modules/@airgen/ui/dist/providers/ToastProvider.js"() {
-      import_jsx_runtime21 = __toESM(require_jsx_runtime(), 1);
-      React23 = __toESM(require_react(), 1);
+      import_jsx_runtime23 = __toESM(require_jsx_runtime(), 1);
+      React24 = __toESM(require_react(), 1);
       init_Toast();
-      ToastContext = React23.createContext(null);
+      ToastContext = React24.createContext(null);
     }
   });
 
   // node_modules/@airgen/ui/dist/providers/SheetProvider.js
   function useSheet() {
-    const ctx = React24.useContext(SheetContext);
+    const ctx = React25.useContext(SheetContext);
     if (!ctx)
       throw new Error("useSheet must be used within <SheetProvider>");
     return ctx;
   }
   function SheetProvider({ children, container, className }) {
-    const [state, setState] = React24.useState({ open: false, req: null });
-    const closeSheet = React24.useCallback(() => {
+    const [state, setState] = React25.useState({ open: false, req: null });
+    const closeSheet = React25.useCallback(() => {
       setState((prev) => __spreadProps(__spreadValues({}, prev), { open: false }));
     }, []);
-    const openSheet = React24.useCallback((r) => {
+    const openSheet = React25.useCallback((r) => {
       setState({ open: true, req: r });
     }, []);
-    const api = React24.useMemo(() => ({ openSheet, closeSheet }), [openSheet, closeSheet]);
+    const api = React25.useMemo(() => ({ openSheet, closeSheet }), [openSheet, closeSheet]);
     const { open, req } = state;
     const present = usePresence(open, SHEET_EXIT_MS);
-    React24.useEffect(() => {
+    React25.useEffect(() => {
       if (!present)
         setState((prev) => prev.req ? __spreadProps(__spreadValues({}, prev), { req: null }) : prev);
     }, [present]);
@@ -50689,20 +50777,20 @@ export interface AiText {
         return content(ctx);
       return content;
     };
-    const header = req?.renderHeader ? req.renderHeader(ctx) : req?.title !== void 0 ? (0, import_jsx_runtime22.jsxs)("div", { className: "flex items-end justify-between shrink-0", children: [(0, import_jsx_runtime22.jsx)(Sheet.Title, { className: "text-lg font-semibold text-neutral-500 dark:text-neutral-400", children: req.title }), (0, import_jsx_runtime22.jsx)(Sheet.Close, { asChild: true, children: (0, import_jsx_runtime22.jsx)(Button, { size: "icon-sm", icon: X, variant: "ghost", "aria-label": "Close" }) })] }) : null;
-    return (0, import_jsx_runtime22.jsxs)(SheetContext.Provider, { value: api, children: [children, (0, import_jsx_runtime22.jsx)(Sheet.Root, { open, onOpenChange: (v) => v ? void 0 : closeSheet(), children: (0, import_jsx_runtime22.jsxs)(Sheet.Portal, { container, children: [(0, import_jsx_runtime22.jsx)(Sheet.Overlay, {}), (0, import_jsx_runtime22.jsxs)(Sheet.Content, { side, className: ["flex flex-col p-6", className, req?.className].filter(Boolean).join(" "), children: [header, (0, import_jsx_runtime22.jsx)("div", { className: header ? "mt-4 flex flex-col flex-1 min-h-0" : "flex flex-col flex-1 min-h-0", children: renderContent() })] })] }) })] });
+    const header = req?.renderHeader ? req.renderHeader(ctx) : req?.title !== void 0 ? (0, import_jsx_runtime24.jsxs)("div", { className: "ag-flex ag-items-end ag-justify-between ag-shrink-0", children: [(0, import_jsx_runtime24.jsx)(Sheet.Title, { className: "ag-text-lg ag-font-semibold ag-text-neutral-500 dark:ag-text-neutral-400", children: req.title }), (0, import_jsx_runtime24.jsx)(Sheet.Close, { asChild: true, children: (0, import_jsx_runtime24.jsx)(Button, { size: "icon-sm", icon: X, variant: "ghost", "aria-label": "Close" }) })] }) : null;
+    return (0, import_jsx_runtime24.jsxs)(SheetContext.Provider, { value: api, children: [children, (0, import_jsx_runtime24.jsx)(Sheet.Root, { open, onOpenChange: (v) => v ? void 0 : closeSheet(), children: (0, import_jsx_runtime24.jsxs)(Sheet.Portal, { container, children: [(0, import_jsx_runtime24.jsx)(Sheet.Overlay, {}), (0, import_jsx_runtime24.jsxs)(Sheet.Content, { side, className: ["ag-flex ag-flex-col ag-p-6", className, req?.className].filter(Boolean).join(" "), children: [header, (0, import_jsx_runtime24.jsx)("div", { className: header ? "ag-mt-4 ag-flex ag-flex-col ag-flex-1 ag-min-h-0" : "ag-flex ag-flex-col ag-flex-1 ag-min-h-0", children: renderContent() })] })] }) })] });
   }
-  var import_jsx_runtime22, React24, SHEET_EXIT_MS, SheetContext;
+  var import_jsx_runtime24, React25, SHEET_EXIT_MS, SheetContext;
   var init_SheetProvider = __esm({
     "node_modules/@airgen/ui/dist/providers/SheetProvider.js"() {
-      import_jsx_runtime22 = __toESM(require_jsx_runtime(), 1);
-      React24 = __toESM(require_react(), 1);
+      import_jsx_runtime24 = __toESM(require_jsx_runtime(), 1);
+      React25 = __toESM(require_react(), 1);
       init_lucide_react();
       init_DialogSheet();
       init_Button();
       init_dropdown();
       SHEET_EXIT_MS = 200;
-      SheetContext = React24.createContext(null);
+      SheetContext = React25.createContext(null);
     }
   });
 
@@ -50729,6 +50817,7 @@ export interface AiText {
       init_Input();
       init_Label();
       init_Portal();
+      init_ThemeProvider();
       init_Spinner();
       init_Table();
       init_Text();
@@ -50751,7 +50840,7 @@ export interface AiText {
   var init_styles = __esm({
     "node_modules/@airgen/ui/dist/styles.css"() {
       style = document.createElement("style");
-      style.textContent = "*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }.\\!container{width:100%!important}.container{width:100%}@media (min-width:640px){.\\!container{max-width:640px!important}.container{max-width:640px}}@media (min-width:768px){.\\!container{max-width:768px!important}.container{max-width:768px}}@media (min-width:1024px){.\\!container{max-width:1024px!important}.container{max-width:1024px}}@media (min-width:1280px){.\\!container{max-width:1280px!important}.container{max-width:1280px}}@media (min-width:1536px){.\\!container{max-width:1536px!important}.container{max-width:1536px}}.pointer-events-none{pointer-events:none}.pointer-events-auto{pointer-events:auto}.\\!visible{visibility:visible!important}.visible{visibility:visible}.invisible{visibility:hidden}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0}.inset-x-0{left:0;right:0}.inset-y-0{top:0}.bottom-0,.inset-y-0{bottom:0}.bottom-4{bottom:1rem}.left-0{left:0}.left-4{left:1rem}.right-0{right:0}.right-4{right:1rem}.top-0{top:0}.top-4{top:1rem}.z-10{z-index:10}.z-overlay{z-index:50}.z-popover{z-index:60}.z-toast{z-index:70}.z-tooltip{z-index:80}.my-1{margin-top:.25rem}.mb-1,.my-1{margin-bottom:.25rem}.ml-1{margin-left:.25rem}.ml-auto{margin-left:auto}.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}.block{display:block}.inline-block{display:inline-block}.inline{display:inline}.flex{display:flex}.inline-flex{display:inline-flex}.table{display:table}.hidden{display:none}.h-0{height:0}.h-1\\.5{height:.375rem}.h-1\\/3{height:33.333333%}.h-10{height:2.5rem}.h-2{height:.5rem}.h-20{height:5rem}.h-3{height:.75rem}.h-3\\.5{height:.875rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.h-7{height:1.75rem}.h-8{height:2rem}.h-9{height:2.25rem}.h-auto{height:auto}.h-full{height:100%}.max-h-72{max-height:18rem}.min-h-0{min-height:0}.min-h-8{min-height:2rem}.w-0{width:0}.w-1\\.5{width:.375rem}.w-10{width:2.5rem}.w-2{width:.5rem}.w-3{width:.75rem}.w-3\\.5{width:.875rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-7{width:1.75rem}.w-8{width:2rem}.w-80{width:20rem}.w-9{width:2.25rem}.w-\\[800px\\]{width:800px}.w-auto{width:auto}.w-fit{width:-moz-fit-content;width:fit-content}.w-full{width:100%}.min-w-0{min-width:0}.min-w-\\[10rem\\]{min-width:10rem}.min-w-\\[280px\\]{min-width:280px}.min-w-\\[62px\\]{min-width:62px}.max-w-\\[400px\\]{max-width:400px}.max-w-full{max-width:100%}.flex-1{flex:1 1 0%}.flex-none{flex:none}.shrink-0{flex-shrink:0}.caption-bottom{caption-side:bottom}.border-collapse{border-collapse:collapse}.-translate-y-1{--tw-translate-y:-0.25rem}.-translate-y-1,.translate-x-0{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.translate-x-0{--tw-translate-x:0px}.translate-x-0\\.5{--tw-translate-x:0.125rem}.translate-x-0\\.5,.translate-x-3{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.translate-x-3{--tw-translate-x:0.75rem}.translate-x-4{--tw-translate-x:1rem}.translate-x-4,.translate-x-8{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.translate-x-8{--tw-translate-x:2rem}.translate-y-0{--tw-translate-y:0px}.-rotate-90,.translate-y-0{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-rotate-90{--tw-rotate:-90deg}.rotate-0{--tw-rotate:0deg}.rotate-0,.rotate-180{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.rotate-180{--tw-rotate:180deg}.rotate-90{--tw-rotate:90deg}.rotate-90,.scale-100{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.scale-100{--tw-scale-x:1;--tw-scale-y:1}.scale-\\[0\\.95\\]{--tw-scale-x:0.95;--tw-scale-y:0.95}.scale-\\[0\\.95\\],.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes spin{to{transform:rotate(1turn)}}.animate-spin{animation:spin 1s linear infinite}.cursor-not-allowed{cursor:not-allowed}.cursor-pointer{cursor:pointer}.cursor-wait{cursor:wait}.select-none{-webkit-user-select:none;-moz-user-select:none;user-select:none}.resize{resize:both}.flex-col{flex-direction:column}.flex-col-reverse{flex-direction:column-reverse}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.items-center{align-items:center}.justify-start{justify-content:flex-start}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-0\\.5{gap:.125rem}.gap-1{gap:.25rem}.gap-1\\.5{gap:.375rem}.gap-2{gap:.5rem}.gap-2\\.5{gap:.625rem}.gap-\\[4px\\]{gap:4px}.self-stretch{align-self:stretch}.overflow-auto{overflow:auto}.overflow-x-auto{overflow-x:auto}.truncate{overflow:hidden;text-overflow:ellipsis}.truncate,.whitespace-nowrap{white-space:nowrap}.break-words{overflow-wrap:break-word}.rounded{border-radius:.25rem}.rounded-full{border-radius:9999px}.rounded-md{border-radius:.375rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-l{border-left-width:1px}.border-r{border-right-width:1px}.border-t{border-top-width:1px}.border-t-0{border-top-width:0}.border-neutral-200{--tw-border-opacity:1;border-color:rgb(229 229 229/var(--tw-border-opacity,1))}.border-neutral-300{--tw-border-opacity:1;border-color:rgb(212 212 212/var(--tw-border-opacity,1))}.border-neutral-400{--tw-border-opacity:1;border-color:rgb(163 163 163/var(--tw-border-opacity,1))}.border-transparent{border-color:transparent}.bg-black\\/50{background-color:rgba(0,0,0,.5)}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235/var(--tw-bg-opacity,1))}.bg-neutral-100{--tw-bg-opacity:1;background-color:rgb(245 245 245/var(--tw-bg-opacity,1))}.bg-neutral-200{--tw-bg-opacity:1;background-color:rgb(229 229 229/var(--tw-bg-opacity,1))}.bg-neutral-300{--tw-bg-opacity:1;background-color:rgb(212 212 212/var(--tw-bg-opacity,1))}.bg-neutral-50{--tw-bg-opacity:1;background-color:rgb(250 250 250/var(--tw-bg-opacity,1))}.bg-neutral-700{--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.bg-rose-600{--tw-bg-opacity:1;background-color:rgb(225 29 72/var(--tw-bg-opacity,1))}.bg-transparent{background-color:transparent}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1))}.bg-white\\/60{background-color:hsla(0,0%,100%,.6)}.p-0{padding:0}.p-1{padding:.25rem}.p-1\\.5{padding:.375rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-0\\.5{padding-left:.125rem;padding-right:.125rem}.px-1\\.5{padding-left:.375rem;padding-right:.375rem}.px-2{padding-left:.5rem;padding-right:.5rem}.px-2\\.5{padding-left:.625rem;padding-right:.625rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-3\\.5{padding-left:.875rem;padding-right:.875rem}.px-control-x-base{padding-left:.75rem;padding-right:.75rem}.px-control-x-lg{padding-left:1rem;padding-right:1rem}.px-control-x-sm{padding-left:.5rem;padding-right:.5rem}.px-control-x-xl{padding-left:1.25rem;padding-right:1.25rem}.px-control-x-xs{padding-left:.375rem;padding-right:.375rem}.py-0\\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-1\\.5{padding-top:.375rem;padding-bottom:.375rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-2\\.5{padding-top:.625rem;padding-bottom:.625rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-control-y-base{padding-top:.3125rem;padding-bottom:.3125rem}.py-control-y-lg{padding-top:.375rem;padding-bottom:.375rem}.py-control-y-sm{padding-top:.1875rem;padding-bottom:.1875rem}.py-control-y-xl{padding-top:.4375rem;padding-bottom:.4375rem}.py-control-y-xs{padding-top:.125rem;padding-bottom:.125rem}.py-px{padding-top:1px;padding-bottom:1px}.pl-1\\.5{padding-left:.375rem}.pr-2{padding-right:.5rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.align-middle{vertical-align:middle}.text-\\[10px\\]{font-size:10px}.text-base{font-size:.8125rem;line-height:1.25rem}.text-lg{font-size:.9375rem;line-height:1.375rem}.text-sm{font-size:.6875rem;line-height:1rem}.text-xl{font-size:1.0625rem;line-height:1.5rem}.text-xs{font-size:.5625rem;line-height:.875rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.italic{font-style:italic}.leading-none{line-height:1}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128/var(--tw-text-opacity,1))}.text-neutral-400{--tw-text-opacity:1;color:rgb(163 163 163/var(--tw-text-opacity,1))}.text-neutral-500{--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.text-neutral-600{--tw-text-opacity:1;color:rgb(82 82 82/var(--tw-text-opacity,1))}.text-neutral-700{--tw-text-opacity:1;color:rgb(64 64 64/var(--tw-text-opacity,1))}.text-neutral-900{--tw-text-opacity:1;color:rgb(23 23 23/var(--tw-text-opacity,1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.underline{text-decoration-line:underline}.decoration-neutral-300{text-decoration-color:#d4d4d4}.underline-offset-4{text-underline-offset:4px}.opacity-0{opacity:0}.opacity-100{opacity:1}.opacity-50{opacity:.5}.opacity-60{opacity:.6}.shadow{--tw-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px -1px rgba(0,0,0,.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color),0 1px 2px -1px var(--tw-shadow-color)}.shadow,.shadow-lg{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-lg{--tw-shadow:0px 0px 1px 0px rgba(0,0,0,.48),0px 0px 2px 0px rgba(0,0,0,.08),0px 2px 4px 0px rgba(0,0,0,.12),0px 2px 8px 0px rgba(0,0,0,.08);--tw-shadow-colored:0px 0px 1px 0px var(--tw-shadow-color),0px 0px 2px 0px var(--tw-shadow-color),0px 2px 4px 0px var(--tw-shadow-color),0px 2px 8px 0px var(--tw-shadow-color)}.shadow-md{--tw-shadow:0px 0px 1px 0px rgba(0,0,0,.24),0px 0px 2px 0px rgba(0,0,0,.08),0px 2px 4px 0px rgba(0,0,0,.08);--tw-shadow-colored:0px 0px 1px 0px var(--tw-shadow-color),0px 0px 2px 0px var(--tw-shadow-color),0px 2px 4px 0px var(--tw-shadow-color)}.shadow-md,.shadow-sm{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-sm{--tw-shadow:0px 0px 1px rgba(0,0,0,.32),0px 0px 3px rgba(0,0,0,.11),0px 1px 4px rgba(0,0,0,.12);--tw-shadow-colored:0px 0px 1px var(--tw-shadow-color),0px 0px 3px var(--tw-shadow-color),0px 1px 4px var(--tw-shadow-color)}.outline-none{outline:2px solid transparent;outline-offset:2px}.outline{outline-style:solid}.ring-1{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.ring-black\\/10{--tw-ring-color:rgba(0,0,0,.1)}.blur{--tw-blur:blur(8px)}.blur,.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.transition{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-\\[border-color\\2c background-color\\2c box-shadow\\]{transition-property:border-color,background-color,box-shadow;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-\\[opacity\\2c transform\\]{transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-colors{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.duration-100{transition-duration:.1s}.duration-150{transition-duration:.15s}.duration-200{transition-duration:.2s}.duration-300{transition-duration:.3s}.ease-out{transition-timing-function:cubic-bezier(0,0,.2,1)}@keyframes enter{0%{opacity:var(--tw-enter-opacity,1);transform:translate3d(var(--tw-enter-translate-x,0),var(--tw-enter-translate-y,0),0) scale3d(var(--tw-enter-scale,1),var(--tw-enter-scale,1),var(--tw-enter-scale,1)) rotate(var(--tw-enter-rotate,0))}}@keyframes exit{to{opacity:var(--tw-exit-opacity,1);transform:translate3d(var(--tw-exit-translate-x,0),var(--tw-exit-translate-y,0),0) scale3d(var(--tw-exit-scale,1),var(--tw-exit-scale,1),var(--tw-exit-scale,1)) rotate(var(--tw-exit-rotate,0))}}.animate-in{animation-name:enter;--tw-enter-opacity:initial;--tw-enter-scale:initial;--tw-enter-rotate:initial;--tw-enter-translate-x:initial;--tw-enter-translate-y:initial}.animate-in,.animate-out{animation-duration:.15s}.animate-out{animation-name:exit;--tw-exit-opacity:initial;--tw-exit-scale:initial;--tw-exit-rotate:initial;--tw-exit-translate-x:initial;--tw-exit-translate-y:initial}.fade-in-0{--tw-enter-opacity:0}.duration-100{animation-duration:.1s}.duration-150{animation-duration:.15s}.duration-200{animation-duration:.2s}.duration-300{animation-duration:.3s}.ease-out{animation-timing-function:cubic-bezier(0,0,.2,1)}.placeholder\\:text-neutral-400::-moz-placeholder{--tw-text-opacity:1;color:rgb(163 163 163/var(--tw-text-opacity,1))}.placeholder\\:text-neutral-400::placeholder{--tw-text-opacity:1;color:rgb(163 163 163/var(--tw-text-opacity,1))}.last\\:mb-0:last-child{margin-bottom:0}.hover\\:border-neutral-200:hover{--tw-border-opacity:1;border-color:rgb(229 229 229/var(--tw-border-opacity,1))}.hover\\:bg-neutral-100:hover{--tw-bg-opacity:1;background-color:rgb(245 245 245/var(--tw-bg-opacity,1))}.hover\\:bg-neutral-300:hover{--tw-bg-opacity:1;background-color:rgb(212 212 212/var(--tw-bg-opacity,1))}.hover\\:bg-neutral-50:hover{--tw-bg-opacity:1;background-color:rgb(250 250 250/var(--tw-bg-opacity,1))}.hover\\:bg-neutral-600:hover{--tw-bg-opacity:1;background-color:rgb(82 82 82/var(--tw-bg-opacity,1))}.hover\\:bg-rose-700:hover{--tw-bg-opacity:1;background-color:rgb(190 18 60/var(--tw-bg-opacity,1))}.hover\\:bg-transparent:hover{background-color:transparent}.hover\\:text-neutral-700:hover{--tw-text-opacity:1;color:rgb(64 64 64/var(--tw-text-opacity,1))}.hover\\:decoration-neutral-500:hover{text-decoration-color:#737373}.focus\\:border-neutral-200:focus{--tw-border-opacity:1;border-color:rgb(229 229 229/var(--tw-border-opacity,1))}.focus\\:bg-neutral-100:focus{--tw-bg-opacity:1;background-color:rgb(245 245 245/var(--tw-bg-opacity,1))}.focus\\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\\:ring-1:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus\\:ring-neutral-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(212 212 212/var(--tw-ring-opacity,1))}.focus-visible\\:outline-none:focus-visible{outline:2px solid transparent;outline-offset:2px}.focus-visible\\:ring-2:focus-visible{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus-visible\\:ring-offset-2:focus-visible{--tw-ring-offset-width:2px}.disabled\\:pointer-events-none:disabled{pointer-events:none}.disabled\\:cursor-not-allowed:disabled{cursor:not-allowed}.disabled\\:opacity-50:disabled{opacity:.5}.disabled\\:opacity-60:disabled{opacity:.6}.data-\\[state\\=closed\\]\\:-translate-x-full[data-state=closed]{--tw-translate-x:-100%}.data-\\[state\\=closed\\]\\:-translate-x-full[data-state=closed],.data-\\[state\\=closed\\]\\:-translate-y-full[data-state=closed]{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.data-\\[state\\=closed\\]\\:-translate-y-full[data-state=closed]{--tw-translate-y:-100%}.data-\\[state\\=closed\\]\\:translate-x-full[data-state=closed]{--tw-translate-x:100%}.data-\\[state\\=closed\\]\\:translate-x-full[data-state=closed],.data-\\[state\\=closed\\]\\:translate-y-full[data-state=closed]{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.data-\\[state\\=closed\\]\\:translate-y-full[data-state=closed]{--tw-translate-y:100%}.data-\\[state\\=closed\\]\\:opacity-0[data-state=closed]{opacity:0}.data-\\[state\\=open\\]\\:animate-in[data-state=open]{animation-name:enter;animation-duration:.15s;--tw-enter-opacity:initial;--tw-enter-scale:initial;--tw-enter-rotate:initial;--tw-enter-translate-x:initial;--tw-enter-translate-y:initial}.data-\\[state\\=closed\\]\\:animate-out[data-state=closed]{animation-name:exit;animation-duration:.15s;--tw-exit-opacity:initial;--tw-exit-scale:initial;--tw-exit-rotate:initial;--tw-exit-translate-x:initial;--tw-exit-translate-y:initial}.data-\\[state\\=closed\\]\\:fade-out-0[data-state=closed],.data-\\[state\\=closed\\]\\:fade-out[data-state=closed]{--tw-exit-opacity:0}.data-\\[state\\=open\\]\\:fade-in-0[data-state=open],.data-\\[state\\=open\\]\\:fade-in[data-state=open]{--tw-enter-opacity:0}.data-\\[state\\=closed\\]\\:zoom-out[data-state=closed]{--tw-exit-scale:0}.data-\\[state\\=closed\\]\\:zoom-out-95[data-state=closed]{--tw-exit-scale:.95}.data-\\[state\\=open\\]\\:zoom-in[data-state=open]{--tw-enter-scale:0}.data-\\[state\\=open\\]\\:zoom-in-95[data-state=open]{--tw-enter-scale:.95}.data-\\[state\\=closed\\]\\:slide-out-to-bottom[data-state=closed]{--tw-exit-translate-y:100%}.data-\\[state\\=closed\\]\\:slide-out-to-left[data-state=closed]{--tw-exit-translate-x:-100%}.data-\\[state\\=closed\\]\\:slide-out-to-right[data-state=closed]{--tw-exit-translate-x:100%}.data-\\[state\\=closed\\]\\:slide-out-to-top[data-state=closed]{--tw-exit-translate-y:-100%}.data-\\[state\\=open\\]\\:slide-in-from-bottom[data-state=open]{--tw-enter-translate-y:100%}.data-\\[state\\=open\\]\\:slide-in-from-left[data-state=open]{--tw-enter-translate-x:-100%}.data-\\[state\\=open\\]\\:slide-in-from-right[data-state=open]{--tw-enter-translate-x:100%}.data-\\[state\\=open\\]\\:slide-in-from-top[data-state=open]{--tw-enter-translate-y:-100%}@media (min-width:768px){.md\\:h-1\\/2{height:50%}.md\\:w-96{width:24rem}}@media (prefers-color-scheme:dark){.dark\\:border-neutral-600{--tw-border-opacity:1;border-color:rgb(82 82 82/var(--tw-border-opacity,1))}.dark\\:border-neutral-700{--tw-border-opacity:1;border-color:rgb(64 64 64/var(--tw-border-opacity,1))}.dark\\:bg-neutral-600{--tw-bg-opacity:1;background-color:rgb(82 82 82/var(--tw-bg-opacity,1))}.dark\\:bg-neutral-700{--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.dark\\:bg-neutral-800{--tw-bg-opacity:1;background-color:rgb(38 38 38/var(--tw-bg-opacity,1))}.dark\\:bg-neutral-800\\/60{background-color:rgba(38,38,38,.6)}.dark\\:bg-neutral-900\\/60{background-color:hsla(0,0%,9%,.6)}.dark\\:text-gray-100{--tw-text-opacity:1;color:rgb(243 244 246/var(--tw-text-opacity,1))}.dark\\:text-neutral-100{--tw-text-opacity:1;color:rgb(245 245 245/var(--tw-text-opacity,1))}.dark\\:text-neutral-300{--tw-text-opacity:1;color:rgb(212 212 212/var(--tw-text-opacity,1))}.dark\\:text-neutral-400{--tw-text-opacity:1;color:rgb(163 163 163/var(--tw-text-opacity,1))}.dark\\:text-neutral-500{--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.dark\\:decoration-neutral-600{text-decoration-color:#525252}.dark\\:ring-white\\/10{--tw-ring-color:hsla(0,0%,100%,.1)}.dark\\:placeholder\\:text-neutral-500::-moz-placeholder{--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.dark\\:placeholder\\:text-neutral-500::placeholder{--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.dark\\:hover\\:border-neutral-600:hover{--tw-border-opacity:1;border-color:rgb(82 82 82/var(--tw-border-opacity,1))}.dark\\:hover\\:bg-neutral-700:hover{--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.dark\\:hover\\:bg-neutral-800\\/50:hover{background-color:rgba(38,38,38,.5)}.dark\\:hover\\:bg-transparent:hover{background-color:transparent}.dark\\:hover\\:text-neutral-200:hover{--tw-text-opacity:1;color:rgb(229 229 229/var(--tw-text-opacity,1))}.dark\\:hover\\:decoration-neutral-400:hover{text-decoration-color:#a3a3a3}.dark\\:focus\\:border-neutral-600:focus{--tw-border-opacity:1;border-color:rgb(82 82 82/var(--tw-border-opacity,1))}.dark\\:focus\\:bg-neutral-700:focus{--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.dark\\:focus\\:ring-neutral-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(115 115 115/var(--tw-ring-opacity,1))}}.\\[\\&_tr\\:last-child\\]\\:border-0 tr:last-child{border-width:0}";
+      style.textContent = "*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }.ag-pointer-events-none{pointer-events:none}.ag-pointer-events-auto{pointer-events:auto}.ag-fixed{position:fixed}.ag-absolute{position:absolute}.ag-relative{position:relative}.ag-inset-0{inset:0}.ag-inset-x-0{left:0;right:0}.ag-inset-y-0{top:0;bottom:0}.ag-bottom-0{bottom:0}.ag-bottom-4{bottom:1rem}.ag-left-0{left:0}.ag-left-4{left:1rem}.ag-right-0{right:0}.ag-right-4{right:1rem}.ag-top-0{top:0}.ag-top-4{top:1rem}.ag-z-10{z-index:10}.ag-z-overlay{z-index:50}.ag-z-popover{z-index:60}.ag-z-toast{z-index:70}.ag-z-tooltip{z-index:80}.ag-my-1{margin-top:.25rem}.ag-mb-1,.ag-my-1{margin-bottom:.25rem}.ag-ml-1{margin-left:.25rem}.ag-ml-auto{margin-left:auto}.ag-mt-3{margin-top:.75rem}.ag-mt-4{margin-top:1rem}.ag-block{display:block}.ag-inline-block{display:inline-block}.ag-flex{display:flex}.ag-inline-flex{display:inline-flex}.ag-h-0{height:0}.ag-h-1\\.5{height:.375rem}.ag-h-1\\/3{height:33.333333%}.ag-h-10{height:2.5rem}.ag-h-2{height:.5rem}.ag-h-20{height:5rem}.ag-h-3{height:.75rem}.ag-h-3\\.5{height:.875rem}.ag-h-4{height:1rem}.ag-h-5{height:1.25rem}.ag-h-6{height:1.5rem}.ag-h-7{height:1.75rem}.ag-h-8{height:2rem}.ag-h-9{height:2.25rem}.ag-h-auto{height:auto}.ag-h-full{height:100%}.ag-max-h-72{max-height:18rem}.ag-min-h-0{min-height:0}.ag-min-h-8{min-height:2rem}.ag-w-0{width:0}.ag-w-1\\.5{width:.375rem}.ag-w-10{width:2.5rem}.ag-w-2{width:.5rem}.ag-w-3{width:.75rem}.ag-w-3\\.5{width:.875rem}.ag-w-4{width:1rem}.ag-w-5{width:1.25rem}.ag-w-6{width:1.5rem}.ag-w-7{width:1.75rem}.ag-w-8{width:2rem}.ag-w-80{width:20rem}.ag-w-9{width:2.25rem}.ag-w-auto{width:auto}.ag-w-fit{width:-moz-fit-content;width:fit-content}.ag-w-full{width:100%}.ag-min-w-0{min-width:0}.ag-min-w-\\[10rem\\]{min-width:10rem}.ag-min-w-\\[280px\\]{min-width:280px}.ag-min-w-\\[62px\\]{min-width:62px}.ag-max-w-\\[400px\\]{max-width:400px}.ag-max-w-full{max-width:100%}.ag-flex-1{flex:1 1 0%}.ag-flex-none{flex:none}.ag-shrink-0{flex-shrink:0}.ag-caption-bottom{caption-side:bottom}.ag-border-collapse{border-collapse:collapse}.-ag-translate-y-1{--tw-translate-y:-0.25rem}.-ag-translate-y-1,.ag-translate-x-0{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.ag-translate-x-0{--tw-translate-x:0px}.ag-translate-x-0\\.5{--tw-translate-x:0.125rem}.ag-translate-x-0\\.5,.ag-translate-x-3{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.ag-translate-x-3{--tw-translate-x:0.75rem}.ag-translate-x-4{--tw-translate-x:1rem}.ag-translate-x-4,.ag-translate-x-8{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.ag-translate-x-8{--tw-translate-x:2rem}.ag-translate-y-0{--tw-translate-y:0px}.-ag-rotate-90,.ag-translate-y-0{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-ag-rotate-90{--tw-rotate:-90deg}.ag-rotate-0{--tw-rotate:0deg}.ag-rotate-0,.ag-rotate-180{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.ag-rotate-180{--tw-rotate:180deg}.ag-rotate-90{--tw-rotate:90deg}.ag-rotate-90,.ag-scale-100{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.ag-scale-100{--tw-scale-x:1;--tw-scale-y:1}.ag-scale-\\[0\\.95\\]{--tw-scale-x:0.95;--tw-scale-y:0.95}.ag-scale-\\[0\\.95\\],.ag-transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes ag-spin{to{transform:rotate(1turn)}}.ag-animate-spin{animation:ag-spin 1s linear infinite}.ag-cursor-not-allowed{cursor:not-allowed}.ag-cursor-pointer{cursor:pointer}.ag-cursor-wait{cursor:wait}.ag-select-none{-webkit-user-select:none;-moz-user-select:none;user-select:none}.ag-flex-col{flex-direction:column}.ag-flex-col-reverse{flex-direction:column-reverse}.ag-flex-wrap{flex-wrap:wrap}.ag-items-start{align-items:flex-start}.ag-items-end{align-items:flex-end}.ag-items-center{align-items:center}.ag-justify-start{justify-content:flex-start}.ag-justify-center{justify-content:center}.ag-justify-between{justify-content:space-between}.ag-gap-0\\.5{gap:.125rem}.ag-gap-1{gap:.25rem}.ag-gap-1\\.5{gap:.375rem}.ag-gap-2{gap:.5rem}.ag-gap-2\\.5{gap:.625rem}.ag-gap-\\[4px\\]{gap:4px}.ag-self-stretch{align-self:stretch}.ag-overflow-auto{overflow:auto}.ag-overflow-x-auto{overflow-x:auto}.ag-truncate{overflow:hidden;text-overflow:ellipsis}.ag-truncate,.ag-whitespace-nowrap{white-space:nowrap}.ag-break-words{overflow-wrap:break-word}.ag-rounded{border-radius:.25rem}.ag-rounded-full{border-radius:9999px}.ag-rounded-md{border-radius:.375rem}.ag-border{border-width:1px}.ag-border-b{border-bottom-width:1px}.ag-border-l{border-left-width:1px}.ag-border-r{border-right-width:1px}.ag-border-t{border-top-width:1px}.ag-border-t-0{border-top-width:0}.ag-border-neutral-200{--tw-border-opacity:1;border-color:rgb(229 229 229/var(--tw-border-opacity,1))}.ag-border-neutral-300{--tw-border-opacity:1;border-color:rgb(212 212 212/var(--tw-border-opacity,1))}.ag-border-neutral-400{--tw-border-opacity:1;border-color:rgb(163 163 163/var(--tw-border-opacity,1))}.ag-border-transparent{border-color:transparent}.ag-bg-\\[\\#eeeeee\\]{--tw-bg-opacity:1;background-color:rgb(238 238 238/var(--tw-bg-opacity,1))}.ag-bg-black\\/50{background-color:rgba(0,0,0,.5)}.ag-bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235/var(--tw-bg-opacity,1))}.ag-bg-neutral-100{--tw-bg-opacity:1;background-color:rgb(245 245 245/var(--tw-bg-opacity,1))}.ag-bg-neutral-200{--tw-bg-opacity:1;background-color:rgb(229 229 229/var(--tw-bg-opacity,1))}.ag-bg-neutral-300{--tw-bg-opacity:1;background-color:rgb(212 212 212/var(--tw-bg-opacity,1))}.ag-bg-neutral-50{--tw-bg-opacity:1;background-color:rgb(250 250 250/var(--tw-bg-opacity,1))}.ag-bg-neutral-700{--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.ag-bg-rose-600{--tw-bg-opacity:1;background-color:rgb(225 29 72/var(--tw-bg-opacity,1))}.ag-bg-transparent{background-color:transparent}.ag-bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1))}.ag-bg-white\\/60{background-color:hsla(0,0%,100%,.6)}.ag-p-0{padding:0}.ag-p-1{padding:.25rem}.ag-p-1\\.5{padding:.375rem}.ag-p-4{padding:1rem}.ag-p-6{padding:1.5rem}.ag-px-0\\.5{padding-left:.125rem;padding-right:.125rem}.ag-px-1\\.5{padding-left:.375rem;padding-right:.375rem}.ag-px-2{padding-left:.5rem;padding-right:.5rem}.ag-px-2\\.5{padding-left:.625rem;padding-right:.625rem}.ag-px-3{padding-left:.75rem;padding-right:.75rem}.ag-px-3\\.5{padding-left:.875rem;padding-right:.875rem}.ag-px-control-x-base{padding-left:.75rem;padding-right:.75rem}.ag-px-control-x-lg{padding-left:1rem;padding-right:1rem}.ag-px-control-x-sm{padding-left:.5rem;padding-right:.5rem}.ag-px-control-x-xl{padding-left:1.25rem;padding-right:1.25rem}.ag-px-control-x-xs{padding-left:.375rem;padding-right:.375rem}.ag-py-0\\.5{padding-top:.125rem;padding-bottom:.125rem}.ag-py-1{padding-top:.25rem;padding-bottom:.25rem}.ag-py-1\\.5{padding-top:.375rem;padding-bottom:.375rem}.ag-py-2{padding-top:.5rem;padding-bottom:.5rem}.ag-py-2\\.5{padding-top:.625rem;padding-bottom:.625rem}.ag-py-3{padding-top:.75rem;padding-bottom:.75rem}.ag-py-control-y-base{padding-top:.3125rem;padding-bottom:.3125rem}.ag-py-control-y-lg{padding-top:.375rem;padding-bottom:.375rem}.ag-py-control-y-sm{padding-top:.1875rem;padding-bottom:.1875rem}.ag-py-control-y-xl{padding-top:.4375rem;padding-bottom:.4375rem}.ag-py-control-y-xs{padding-top:.125rem;padding-bottom:.125rem}.ag-py-px{padding-top:1px;padding-bottom:1px}.ag-pl-1\\.5{padding-left:.375rem}.ag-pr-2{padding-right:.5rem}.ag-text-left{text-align:left}.ag-text-center{text-align:center}.ag-text-right{text-align:right}.ag-align-middle{vertical-align:middle}.ag-text-\\[10px\\]{font-size:10px}.ag-text-base{font-size:.8125rem;line-height:1.25rem}.ag-text-lg{font-size:.9375rem;line-height:1.375rem}.ag-text-sm{font-size:.6875rem;line-height:1rem}.ag-text-xl{font-size:1.0625rem;line-height:1.5rem}.ag-text-xs{font-size:.5625rem;line-height:.875rem}.ag-font-bold{font-weight:700}.ag-font-medium{font-weight:500}.ag-font-semibold{font-weight:600}.ag-italic{font-style:italic}.ag-leading-none{line-height:1}.ag-text-black\\/70{color:rgba(0,0,0,.7)}.ag-text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128/var(--tw-text-opacity,1))}.ag-text-neutral-400{--tw-text-opacity:1;color:rgb(163 163 163/var(--tw-text-opacity,1))}.ag-text-neutral-500{--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.ag-text-neutral-600{--tw-text-opacity:1;color:rgb(82 82 82/var(--tw-text-opacity,1))}.ag-text-neutral-700{--tw-text-opacity:1;color:rgb(64 64 64/var(--tw-text-opacity,1))}.ag-text-neutral-900{--tw-text-opacity:1;color:rgb(23 23 23/var(--tw-text-opacity,1))}.ag-text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.ag-underline{text-decoration-line:underline}.ag-decoration-neutral-300{text-decoration-color:#d4d4d4}.ag-underline-offset-4{text-underline-offset:4px}.ag-opacity-0{opacity:0}.ag-opacity-100{opacity:1}.ag-opacity-50{opacity:.5}.ag-opacity-60{opacity:.6}.ag-shadow{--tw-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px -1px rgba(0,0,0,.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color),0 1px 2px -1px var(--tw-shadow-color)}.ag-shadow,.ag-shadow-lg{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.ag-shadow-lg{--tw-shadow:0px 0px 1px 0px rgba(0,0,0,.48),0px 0px 2px 0px rgba(0,0,0,.08),0px 2px 4px 0px rgba(0,0,0,.12),0px 2px 8px 0px rgba(0,0,0,.08);--tw-shadow-colored:0px 0px 1px 0px var(--tw-shadow-color),0px 0px 2px 0px var(--tw-shadow-color),0px 2px 4px 0px var(--tw-shadow-color),0px 2px 8px 0px var(--tw-shadow-color)}.ag-shadow-md{--tw-shadow:0px 0px 1px 0px rgba(0,0,0,.24),0px 0px 2px 0px rgba(0,0,0,.08),0px 2px 4px 0px rgba(0,0,0,.08);--tw-shadow-colored:0px 0px 1px 0px var(--tw-shadow-color),0px 0px 2px 0px var(--tw-shadow-color),0px 2px 4px 0px var(--tw-shadow-color)}.ag-shadow-md,.ag-shadow-sm{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.ag-shadow-sm{--tw-shadow:0px 0px 1px rgba(0,0,0,.32),0px 0px 3px rgba(0,0,0,.11),0px 1px 4px rgba(0,0,0,.12);--tw-shadow-colored:0px 0px 1px var(--tw-shadow-color),0px 0px 3px var(--tw-shadow-color),0px 1px 4px var(--tw-shadow-color)}.ag-outline-none{outline:2px solid transparent;outline-offset:2px}.ag-ring-1{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.ag-ring-black\\/10{--tw-ring-color:rgba(0,0,0,.1)}.ag-transition-\\[border-color\\,background-color\\,box-shadow\\]{transition-property:border-color,background-color,box-shadow;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.ag-transition-\\[opacity\\,transform\\]{transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.ag-transition-all{transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.ag-transition-colors{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.ag-transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.ag-duration-100{transition-duration:.1s}.ag-duration-150{transition-duration:.15s}.ag-duration-200{transition-duration:.2s}.ag-duration-300{transition-duration:.3s}.ag-ease-out{transition-timing-function:cubic-bezier(0,0,.2,1)}@keyframes enter{0%{opacity:var(--tw-enter-opacity,1);transform:translate3d(var(--tw-enter-translate-x,0),var(--tw-enter-translate-y,0),0) scale3d(var(--tw-enter-scale,1),var(--tw-enter-scale,1),var(--tw-enter-scale,1)) rotate(var(--tw-enter-rotate,0))}}@keyframes exit{to{opacity:var(--tw-exit-opacity,1);transform:translate3d(var(--tw-exit-translate-x,0),var(--tw-exit-translate-y,0),0) scale3d(var(--tw-exit-scale,1),var(--tw-exit-scale,1),var(--tw-exit-scale,1)) rotate(var(--tw-exit-rotate,0))}}.ag-animate-in{animation-name:enter;animation-duration:.15s;--tw-enter-opacity:initial;--tw-enter-scale:initial;--tw-enter-rotate:initial;--tw-enter-translate-x:initial;--tw-enter-translate-y:initial}.ag-fade-in-0{--tw-enter-opacity:0}.ag-duration-100{animation-duration:.1s}.ag-duration-150{animation-duration:.15s}.ag-duration-200{animation-duration:.2s}.ag-duration-300{animation-duration:.3s}.ag-ease-out{animation-timing-function:cubic-bezier(0,0,.2,1)}.placeholder\\:ag-text-neutral-400::-moz-placeholder{--tw-text-opacity:1;color:rgb(163 163 163/var(--tw-text-opacity,1))}.placeholder\\:ag-text-neutral-400::placeholder{--tw-text-opacity:1;color:rgb(163 163 163/var(--tw-text-opacity,1))}.last\\:ag-mb-0:last-child{margin-bottom:0}.hover\\:ag-border-neutral-200:hover{--tw-border-opacity:1;border-color:rgb(229 229 229/var(--tw-border-opacity,1))}.hover\\:ag-bg-neutral-100:hover{--tw-bg-opacity:1;background-color:rgb(245 245 245/var(--tw-bg-opacity,1))}.hover\\:ag-bg-neutral-300:hover{--tw-bg-opacity:1;background-color:rgb(212 212 212/var(--tw-bg-opacity,1))}.hover\\:ag-bg-neutral-50:hover{--tw-bg-opacity:1;background-color:rgb(250 250 250/var(--tw-bg-opacity,1))}.hover\\:ag-bg-neutral-600:hover{--tw-bg-opacity:1;background-color:rgb(82 82 82/var(--tw-bg-opacity,1))}.hover\\:ag-bg-rose-700:hover{--tw-bg-opacity:1;background-color:rgb(190 18 60/var(--tw-bg-opacity,1))}.hover\\:ag-bg-transparent:hover{background-color:transparent}.hover\\:ag-text-neutral-700:hover{--tw-text-opacity:1;color:rgb(64 64 64/var(--tw-text-opacity,1))}.hover\\:ag-decoration-neutral-500:hover{text-decoration-color:#737373}.focus\\:ag-border-neutral-200:focus{--tw-border-opacity:1;border-color:rgb(229 229 229/var(--tw-border-opacity,1))}.focus\\:ag-bg-neutral-100:focus{--tw-bg-opacity:1;background-color:rgb(245 245 245/var(--tw-bg-opacity,1))}.focus\\:ag-outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\\:ag-ring-1:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus\\:ag-ring-neutral-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(212 212 212/var(--tw-ring-opacity,1))}.focus-visible\\:ag-outline-none:focus-visible{outline:2px solid transparent;outline-offset:2px}.focus-visible\\:ag-ring-2:focus-visible{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus-visible\\:ag-ring-offset-2:focus-visible{--tw-ring-offset-width:2px}.disabled\\:ag-pointer-events-none:disabled{pointer-events:none}.disabled\\:ag-cursor-not-allowed:disabled{cursor:not-allowed}.disabled\\:ag-opacity-50:disabled{opacity:.5}.disabled\\:ag-opacity-60:disabled{opacity:.6}.data-\\[state\\=closed\\]\\:-ag-translate-x-full[data-state=closed]{--tw-translate-x:-100%}.data-\\[state\\=closed\\]\\:-ag-translate-x-full[data-state=closed],.data-\\[state\\=closed\\]\\:-ag-translate-y-full[data-state=closed]{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.data-\\[state\\=closed\\]\\:-ag-translate-y-full[data-state=closed]{--tw-translate-y:-100%}.data-\\[state\\=closed\\]\\:ag-translate-x-full[data-state=closed]{--tw-translate-x:100%}.data-\\[state\\=closed\\]\\:ag-translate-x-full[data-state=closed],.data-\\[state\\=closed\\]\\:ag-translate-y-full[data-state=closed]{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.data-\\[state\\=closed\\]\\:ag-translate-y-full[data-state=closed]{--tw-translate-y:100%}.data-\\[state\\=closed\\]\\:ag-opacity-0[data-state=closed]{opacity:0}.data-\\[state\\=open\\]\\:ag-animate-in[data-state=open]{animation-name:enter;animation-duration:.15s;--tw-enter-opacity:initial;--tw-enter-scale:initial;--tw-enter-rotate:initial;--tw-enter-translate-x:initial;--tw-enter-translate-y:initial}.data-\\[state\\=closed\\]\\:ag-animate-out[data-state=closed]{animation-name:exit;animation-duration:.15s;--tw-exit-opacity:initial;--tw-exit-scale:initial;--tw-exit-rotate:initial;--tw-exit-translate-x:initial;--tw-exit-translate-y:initial}.data-\\[state\\=closed\\]\\:ag-fade-out-0[data-state=closed],.data-\\[state\\=closed\\]\\:ag-fade-out[data-state=closed]{--tw-exit-opacity:0}.data-\\[state\\=open\\]\\:ag-fade-in-0[data-state=open],.data-\\[state\\=open\\]\\:ag-fade-in[data-state=open]{--tw-enter-opacity:0}.data-\\[state\\=closed\\]\\:ag-zoom-out[data-state=closed]{--tw-exit-scale:0}.data-\\[state\\=closed\\]\\:ag-zoom-out-95[data-state=closed]{--tw-exit-scale:.95}.data-\\[state\\=open\\]\\:ag-zoom-in[data-state=open]{--tw-enter-scale:0}.data-\\[state\\=open\\]\\:ag-zoom-in-95[data-state=open]{--tw-enter-scale:.95}.data-\\[state\\=closed\\]\\:ag-slide-out-to-bottom[data-state=closed]{--tw-exit-translate-y:100%}.data-\\[state\\=closed\\]\\:ag-slide-out-to-left[data-state=closed]{--tw-exit-translate-x:-100%}.data-\\[state\\=closed\\]\\:ag-slide-out-to-right[data-state=closed]{--tw-exit-translate-x:100%}.data-\\[state\\=closed\\]\\:ag-slide-out-to-top[data-state=closed]{--tw-exit-translate-y:-100%}.data-\\[state\\=open\\]\\:ag-slide-in-from-bottom[data-state=open]{--tw-enter-translate-y:100%}.data-\\[state\\=open\\]\\:ag-slide-in-from-left[data-state=open]{--tw-enter-translate-x:-100%}.data-\\[state\\=open\\]\\:ag-slide-in-from-right[data-state=open]{--tw-enter-translate-x:100%}.data-\\[state\\=open\\]\\:ag-slide-in-from-top[data-state=open]{--tw-enter-translate-y:-100%}@media (min-width:768px){.md\\:ag-h-1\\/2{height:50%}.md\\:ag-w-96{width:24rem}}@media (prefers-color-scheme:dark){.dark\\:ag-border-neutral-600:not(:where([data-ag-theme=light] *)){--tw-border-opacity:1;border-color:rgb(82 82 82/var(--tw-border-opacity,1))}.dark\\:ag-border-neutral-700:not(:where([data-ag-theme=light] *)){--tw-border-opacity:1;border-color:rgb(64 64 64/var(--tw-border-opacity,1))}.dark\\:ag-bg-\\[rgba\\(195\\2c 212\\2c 249\\2c 0\\.18\\)\\]:not(:where([data-ag-theme=light] *)){background-color:rgba(195,212,249,.18)}.dark\\:ag-bg-neutral-600:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(82 82 82/var(--tw-bg-opacity,1))}.dark\\:ag-bg-neutral-700:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.dark\\:ag-bg-neutral-800:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(38 38 38/var(--tw-bg-opacity,1))}.dark\\:ag-bg-neutral-800\\/60:not(:where([data-ag-theme=light] *)){background-color:rgba(38,38,38,.6)}.dark\\:ag-bg-neutral-900\\/60:not(:where([data-ag-theme=light] *)){background-color:hsla(0,0%,9%,.6)}.dark\\:ag-text-gray-100:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(243 244 246/var(--tw-text-opacity,1))}.dark\\:ag-text-neutral-100:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(245 245 245/var(--tw-text-opacity,1))}.dark\\:ag-text-neutral-300:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(212 212 212/var(--tw-text-opacity,1))}.dark\\:ag-text-neutral-400:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(163 163 163/var(--tw-text-opacity,1))}.dark\\:ag-text-neutral-500:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.dark\\:ag-text-white:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.dark\\:ag-decoration-neutral-600:not(:where([data-ag-theme=light] *)){text-decoration-color:#525252}.dark\\:ag-ring-white\\/10:not(:where([data-ag-theme=light] *)){--tw-ring-color:hsla(0,0%,100%,.1)}.dark\\:placeholder\\:ag-text-neutral-500:not(:where([data-ag-theme=light] *))::-moz-placeholder{--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.dark\\:placeholder\\:ag-text-neutral-500:not(:where([data-ag-theme=light] *))::placeholder{--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.dark\\:hover\\:ag-border-neutral-600:hover:not(:where([data-ag-theme=light] *)){--tw-border-opacity:1;border-color:rgb(82 82 82/var(--tw-border-opacity,1))}.dark\\:hover\\:ag-bg-neutral-600:hover:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(82 82 82/var(--tw-bg-opacity,1))}.dark\\:hover\\:ag-bg-neutral-700:hover:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.dark\\:hover\\:ag-bg-neutral-800\\/50:hover:not(:where([data-ag-theme=light] *)){background-color:rgba(38,38,38,.5)}.dark\\:hover\\:ag-bg-transparent:hover:not(:where([data-ag-theme=light] *)){background-color:transparent}.dark\\:hover\\:ag-text-neutral-200:hover:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(229 229 229/var(--tw-text-opacity,1))}.dark\\:hover\\:ag-decoration-neutral-400:hover:not(:where([data-ag-theme=light] *)){text-decoration-color:#a3a3a3}.dark\\:focus\\:ag-border-neutral-600:focus:not(:where([data-ag-theme=light] *)){--tw-border-opacity:1;border-color:rgb(82 82 82/var(--tw-border-opacity,1))}.dark\\:focus\\:ag-bg-neutral-700:focus:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.dark\\:focus\\:ag-ring-neutral-500:focus:not(:where([data-ag-theme=light] *)){--tw-ring-opacity:1;--tw-ring-color:rgb(115 115 115/var(--tw-ring-opacity,1))}}.dark\\:ag-border-neutral-600:where([data-ag-theme=dark] *){--tw-border-opacity:1;border-color:rgb(82 82 82/var(--tw-border-opacity,1))}.dark\\:ag-border-neutral-700:where([data-ag-theme=dark] *){--tw-border-opacity:1;border-color:rgb(64 64 64/var(--tw-border-opacity,1))}.dark\\:ag-bg-\\[rgba\\(195\\2c 212\\2c 249\\2c 0\\.18\\)\\]:where([data-ag-theme=dark] *){background-color:rgba(195,212,249,.18)}.dark\\:ag-bg-neutral-600:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(82 82 82/var(--tw-bg-opacity,1))}.dark\\:ag-bg-neutral-700:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.dark\\:ag-bg-neutral-800:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(38 38 38/var(--tw-bg-opacity,1))}.dark\\:ag-bg-neutral-800\\/60:where([data-ag-theme=dark] *){background-color:rgba(38,38,38,.6)}.dark\\:ag-bg-neutral-900\\/60:where([data-ag-theme=dark] *){background-color:hsla(0,0%,9%,.6)}.dark\\:ag-text-gray-100:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(243 244 246/var(--tw-text-opacity,1))}.dark\\:ag-text-neutral-100:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(245 245 245/var(--tw-text-opacity,1))}.dark\\:ag-text-neutral-300:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(212 212 212/var(--tw-text-opacity,1))}.dark\\:ag-text-neutral-400:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(163 163 163/var(--tw-text-opacity,1))}.dark\\:ag-text-neutral-500:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.dark\\:ag-text-white:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.dark\\:ag-decoration-neutral-600:where([data-ag-theme=dark] *){text-decoration-color:#525252}.dark\\:ag-ring-white\\/10:where([data-ag-theme=dark] *){--tw-ring-color:hsla(0,0%,100%,.1)}.dark\\:placeholder\\:ag-text-neutral-500:where([data-ag-theme=dark] *)::-moz-placeholder{--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.dark\\:placeholder\\:ag-text-neutral-500:where([data-ag-theme=dark] *)::placeholder{--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.dark\\:hover\\:ag-border-neutral-600:hover:where([data-ag-theme=dark] *){--tw-border-opacity:1;border-color:rgb(82 82 82/var(--tw-border-opacity,1))}.dark\\:hover\\:ag-bg-neutral-600:hover:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(82 82 82/var(--tw-bg-opacity,1))}.dark\\:hover\\:ag-bg-neutral-700:hover:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.dark\\:hover\\:ag-bg-neutral-800\\/50:hover:where([data-ag-theme=dark] *){background-color:rgba(38,38,38,.5)}.dark\\:hover\\:ag-bg-transparent:hover:where([data-ag-theme=dark] *){background-color:transparent}.dark\\:hover\\:ag-text-neutral-200:hover:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(229 229 229/var(--tw-text-opacity,1))}.dark\\:hover\\:ag-decoration-neutral-400:hover:where([data-ag-theme=dark] *){text-decoration-color:#a3a3a3}.dark\\:focus\\:ag-border-neutral-600:focus:where([data-ag-theme=dark] *){--tw-border-opacity:1;border-color:rgb(82 82 82/var(--tw-border-opacity,1))}.dark\\:focus\\:ag-bg-neutral-700:focus:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.dark\\:focus\\:ag-ring-neutral-500:focus:where([data-ag-theme=dark] *){--tw-ring-opacity:1;--tw-ring-color:rgb(115 115 115/var(--tw-ring-opacity,1))}.\\[\\&_tr\\:last-child\\]\\:ag-border-0 tr:last-child{border-width:0}";
       document.head.appendChild(style);
     }
   });
@@ -50762,7 +50851,7 @@ export interface AiText {
     "frontend/style.css"() {
       "use strict";
       style2 = document.createElement("style");
-      style2.textContent = '*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }\n\n/*! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Courier,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.static{position:static}.relative{position:relative}.m-0{margin:0}.my-4{margin-top:1rem;margin-bottom:1rem}.mb-1{margin-bottom:.25rem}.mb-2{margin-bottom:.5rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.ml-auto{margin-left:auto}.mt-2{margin-top:.5rem}.mt-3{margin-top:.75rem}.inline{display:inline}.flex{display:flex}.inline-flex{display:inline-flex}.\\!table{display:table!important}.table{display:table}.grid{display:grid}.hidden{display:none}.h-24{height:6rem}.min-h-\\[40px\\]{min-height:40px}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-24{width:6rem}.w-32{width:8rem}.w-40{width:10rem}.w-56{width:14rem}.w-64{width:16rem}.w-72{width:18rem}.w-80{width:20rem}.w-96{width:24rem}.w-full{width:100%}.min-w-0{min-width:0}.cursor-pointer{cursor:pointer}.list-none{list-style-type:none}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-center{justify-content:center}.gap-1{gap:.25rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.whitespace-pre-wrap{white-space:pre-wrap}.break-all{word-break:break-all}.rounded-md{border-radius:.375rem}.rounded-sm{border-radius:.1875rem}.border{border-width:1px}.border-0{border-width:0}.border-b{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-blue-500{--tw-border-opacity:1;border-color:rgb(59 130 246/var(--tw-border-opacity,1))}.border-gray-gray100{--tw-border-opacity:1;border-color:rgb(229 233 240/var(--tw-border-opacity,1))}.border-gray-gray200{--tw-border-opacity:1;border-color:rgb(218 222 230/var(--tw-border-opacity,1))}.border-gray-gray300{--tw-border-opacity:1;border-color:rgb(196 199 205/var(--tw-border-opacity,1))}.border-red-400{--tw-border-opacity:1;border-color:rgb(248 113 113/var(--tw-border-opacity,1))}.border-transparent{border-color:transparent}.bg-gray-gray50{--tw-bg-opacity:1;background-color:rgb(246 248 252/var(--tw-bg-opacity,1))}.bg-gray-gray75{--tw-bg-opacity:1;background-color:rgb(242 244 248/var(--tw-bg-opacity,1))}.bg-red-50{--tw-bg-opacity:1;background-color:rgb(254 242 242/var(--tw-bg-opacity,1))}.bg-transparent{background-color:transparent}.p-3{padding:.75rem}.p-4{padding:1rem}.px-1{padding-left:.25rem;padding-right:.25rem}.px-3{padding-left:.75rem;padding-right:.75rem}.py-0\\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-1\\.5{padding-top:.375rem;padding-bottom:.375rem}.py-2{padding-top:.5rem}.pb-2,.py-2{padding-bottom:.5rem}.pl-0{padding-left:0}.pl-4{padding-left:1rem}.pl-5{padding-left:1.25rem}.text-left{text-align:left}.text-right{text-align:right}.font-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Courier,monospace}.text-base{font-size:.8125rem;line-height:1.25rem}.text-sm{font-size:.6875rem;line-height:1rem}.font-medium{font-weight:500}.font-semibold{font-weight:600}.italic{font-style:italic}.text-blue-500{--tw-text-opacity:1;color:rgb(59 130 246/var(--tw-text-opacity,1))}.text-gray-gray400{--tw-text-opacity:1;color:rgb(151 154 160/var(--tw-text-opacity,1))}.text-gray-gray700{--tw-text-opacity:1;color:rgb(49 53 62/var(--tw-text-opacity,1))}.text-inherit{color:inherit}.underline{text-decoration-line:underline}.outline{outline-style:solid}.\\!filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)!important}.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}@media (prefers-color-scheme:dark){.dark\\:border-gray-gray600{--tw-border-opacity:1;border-color:rgb(65 69 77/var(--tw-border-opacity,1))}.dark\\:border-gray-gray700{--tw-border-opacity:1;border-color:rgb(49 53 62/var(--tw-border-opacity,1))}.dark\\:bg-gray-gray700{--tw-bg-opacity:1;background-color:rgb(49 53 62/var(--tw-bg-opacity,1))}.dark\\:bg-red-950\\/40{background-color:rgba(69,10,10,.4)}.dark\\:text-gray-gray200{--tw-text-opacity:1;color:rgb(218 222 230/var(--tw-text-opacity,1))}}';
+      style2.textContent = '*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }\n\n/*! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Courier,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.static{position:static}.relative{position:relative}.m-0{margin:0}.my-4{margin-top:1rem;margin-bottom:1rem}.mb-1{margin-bottom:.25rem}.mb-2{margin-bottom:.5rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.ml-auto{margin-left:auto}.mt-2{margin-top:.5rem}.mt-3{margin-top:.75rem}.inline{display:inline}.flex{display:flex}.inline-flex{display:inline-flex}.\\!table{display:table!important}.table{display:table}.grid{display:grid}.hidden{display:none}.h-24{height:6rem}.min-h-\\[40px\\]{min-height:40px}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-24{width:6rem}.w-32{width:8rem}.w-40{width:10rem}.w-56{width:14rem}.w-64{width:16rem}.w-72{width:18rem}.w-80{width:20rem}.w-96{width:24rem}.w-full{width:100%}.min-w-0{min-width:0}.cursor-pointer{cursor:pointer}.list-none{list-style-type:none}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-center{justify-content:center}.gap-1{gap:.25rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.whitespace-pre-wrap{white-space:pre-wrap}.break-all{word-break:break-all}.rounded-md{border-radius:.375rem}.rounded-sm{border-radius:.1875rem}.border{border-width:1px}.border-0{border-width:0}.border-b{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-blue-500{--tw-border-opacity:1;border-color:rgb(59 130 246/var(--tw-border-opacity,1))}.border-gray-gray100{--tw-border-opacity:1;border-color:rgb(229 233 240/var(--tw-border-opacity,1))}.border-gray-gray200{--tw-border-opacity:1;border-color:rgb(218 222 230/var(--tw-border-opacity,1))}.border-gray-gray300{--tw-border-opacity:1;border-color:rgb(196 199 205/var(--tw-border-opacity,1))}.border-red-400{--tw-border-opacity:1;border-color:rgb(248 113 113/var(--tw-border-opacity,1))}.border-transparent{border-color:transparent}.bg-gray-gray50{--tw-bg-opacity:1;background-color:rgb(246 248 252/var(--tw-bg-opacity,1))}.bg-gray-gray75{--tw-bg-opacity:1;background-color:rgb(242 244 248/var(--tw-bg-opacity,1))}.bg-red-50{--tw-bg-opacity:1;background-color:rgb(254 242 242/var(--tw-bg-opacity,1))}.bg-transparent{background-color:transparent}.p-3{padding:.75rem}.p-4{padding:1rem}.px-1{padding-left:.25rem;padding-right:.25rem}.px-3{padding-left:.75rem;padding-right:.75rem}.py-0\\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-1\\.5{padding-top:.375rem;padding-bottom:.375rem}.py-2{padding-top:.5rem}.pb-2,.py-2{padding-bottom:.5rem}.pl-0{padding-left:0}.pl-4{padding-left:1rem}.pl-5{padding-left:1.25rem}.text-left{text-align:left}.text-right{text-align:right}.font-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Courier,monospace}.text-base{font-size:.8125rem;line-height:1.25rem}.text-sm{font-size:.6875rem;line-height:1rem}.font-medium{font-weight:500}.font-semibold{font-weight:600}.italic{font-style:italic}.text-blue-500{--tw-text-opacity:1;color:rgb(59 130 246/var(--tw-text-opacity,1))}.text-gray-gray400{--tw-text-opacity:1;color:rgb(151 154 160/var(--tw-text-opacity,1))}.text-gray-gray700{--tw-text-opacity:1;color:rgb(49 53 62/var(--tw-text-opacity,1))}.text-inherit{color:inherit}.underline{text-decoration-line:underline}.outline{outline-style:solid}.\\!filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)!important}.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}@media (prefers-color-scheme:dark){.dark\\:border-gray-gray600:not(:where([data-ag-theme=light] *)){--tw-border-opacity:1;border-color:rgb(65 69 77/var(--tw-border-opacity,1))}.dark\\:border-gray-gray700:not(:where([data-ag-theme=light] *)){--tw-border-opacity:1;border-color:rgb(49 53 62/var(--tw-border-opacity,1))}.dark\\:bg-gray-gray700:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(49 53 62/var(--tw-bg-opacity,1))}.dark\\:bg-gray-gray800:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(29 31 37/var(--tw-bg-opacity,1))}.dark\\:bg-red-950\\/40:not(:where([data-ag-theme=light] *)){background-color:rgba(69,10,10,.4)}.dark\\:text-gray-gray200:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(218 222 230/var(--tw-text-opacity,1))}}.dark\\:border-gray-gray600:where([data-ag-theme=dark] *){--tw-border-opacity:1;border-color:rgb(65 69 77/var(--tw-border-opacity,1))}.dark\\:border-gray-gray700:where([data-ag-theme=dark] *){--tw-border-opacity:1;border-color:rgb(49 53 62/var(--tw-border-opacity,1))}.dark\\:bg-gray-gray700:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(49 53 62/var(--tw-bg-opacity,1))}.dark\\:bg-gray-gray800:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(29 31 37/var(--tw-bg-opacity,1))}.dark\\:bg-red-950\\/40:where([data-ag-theme=dark] *){background-color:rgba(69,10,10,.4)}.dark\\:text-gray-gray200:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(218 222 230/var(--tw-text-opacity,1))}';
       document.head.appendChild(style2);
     }
   });
@@ -51446,18 +51535,18 @@ export interface AiText {
         function isValidElement5(object) {
           return "object" === typeof object && null !== object && object.$$typeof === REACT_ELEMENT_TYPE;
         }
-        var React35 = require_react(), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_VIEW_TRANSITION_TYPE = Symbol.for("react.view_transition"), REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = React35.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, hasOwnProperty = Object.prototype.hasOwnProperty, isArrayImpl = Array.isArray, createTask = console.createTask ? console.createTask : function() {
+        var React36 = require_react(), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_VIEW_TRANSITION_TYPE = Symbol.for("react.view_transition"), REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = React36.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, hasOwnProperty = Object.prototype.hasOwnProperty, isArrayImpl = Array.isArray, createTask = console.createTask ? console.createTask : function() {
           return null;
         };
-        React35 = {
+        React36 = {
           react_stack_bottom_frame: function(callStackForError) {
             return callStackForError();
           }
         };
         var specialPropKeyWarningShown;
         var didWarnAboutElementRef = {};
-        var unknownOwnerDebugStack = React35.react_stack_bottom_frame.bind(
-          React35,
+        var unknownOwnerDebugStack = React36.react_stack_bottom_frame.bind(
+          React36,
           UnknownOwner
         )();
         var unknownOwnerDebugTask = createTask(getTaskName(UnknownOwner));
@@ -54392,29 +54481,92 @@ export interface AiText {
 
   // frontend/index.tsx
   var frontend_exports = {};
-  function Tester() {
+  function ThemeProbe({ scheme, onScheme }) {
+    const { colorScheme } = useColorScheme();
+    const query2 = window.matchMedia("(prefers-color-scheme: dark)");
+    const [media, setMedia] = (0, import_react20.useState)(query2.matches);
+    import_react20.default.useEffect(() => {
+      const onChange = (event) => setMedia(event.matches);
+      query2.addEventListener("change", onChange);
+      return () => query2.removeEventListener("change", onChange);
+    }, [query2]);
+    import_react20.default.useEffect(() => {
+      console.log("[theme] useColorScheme:", colorScheme, "prefers-color-scheme dark:", media);
+    }, [colorScheme, media]);
+    return /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "ml-auto flex items-center gap-2 text-sm text-gray-gray400", children: [
+      /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("span", { children: [
+        "useColorScheme: ",
+        /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("strong", { children: colorScheme }, void 0, false, {
+          fileName: "frontend/index.tsx",
+          lineNumber: 68,
+          columnNumber: 25
+        }, this),
+        " \xB7 media: ",
+        /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("strong", { children: media ? "dark" : "light" }, void 0, false, {
+          fileName: "frontend/index.tsx",
+          lineNumber: 68,
+          columnNumber: 65
+        }, this)
+      ] }, void 0, true, {
+        fileName: "frontend/index.tsx",
+        lineNumber: 67,
+        columnNumber: 7
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("select", { value: scheme, onChange: (event) => onScheme(event.target.value), children: [
+        /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("option", { value: "system", children: "system" }, void 0, false, {
+          fileName: "frontend/index.tsx",
+          lineNumber: 71,
+          columnNumber: 9
+        }, this),
+        /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("option", { value: "light", children: "light" }, void 0, false, {
+          fileName: "frontend/index.tsx",
+          lineNumber: 72,
+          columnNumber: 9
+        }, this),
+        /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("option", { value: "dark", children: "dark" }, void 0, false, {
+          fileName: "frontend/index.tsx",
+          lineNumber: 73,
+          columnNumber: 9
+        }, this)
+      ] }, void 0, true, {
+        fileName: "frontend/index.tsx",
+        lineNumber: 70,
+        columnNumber: 7
+      }, this)
+    ] }, void 0, true, {
+      fileName: "frontend/index.tsx",
+      lineNumber: 66,
+      columnNumber: 5
+    }, this);
+  }
+  function Tester({ scheme, onScheme }) {
     const [panel, setPanel] = (0, import_react20.useState)("Overview");
     const Panel = PANELS[panel];
-    return /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "min-h-screen p-4 text-base text-gray-gray700 dark:text-gray-gray200", children: [
+    return /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("div", { className: "min-h-screen p-4 text-base bg-gray-gray50 dark:bg-gray-gray800 text-gray-gray700 dark:text-gray-gray200", children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(SchemaObserver, { meta: airgenMeta }, void 0, false, {
         fileName: "frontend/index.tsx",
-        lineNumber: 57,
+        lineNumber: 84,
         columnNumber: 7
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("header", { className: "flex items-baseline gap-3 mt-2 mb-3", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(Text, { variant: "title", children: "airgen tester" }, void 0, false, {
           fileName: "frontend/index.tsx",
-          lineNumber: 59,
+          lineNumber: 86,
           columnNumber: 9
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(Text, { variant: "muted", children: "airgen + @airgen/ui against the live base" }, void 0, false, {
           fileName: "frontend/index.tsx",
-          lineNumber: 60,
+          lineNumber: 87,
+          columnNumber: 9
+        }, this),
+        /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(ThemeProbe, { scheme, onScheme }, void 0, false, {
+          fileName: "frontend/index.tsx",
+          lineNumber: 88,
           columnNumber: 9
         }, this)
       ] }, void 0, true, {
         fileName: "frontend/index.tsx",
-        lineNumber: 58,
+        lineNumber: 85,
         columnNumber: 7
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)("nav", { className: "flex flex-wrap gap-1 mb-4 border-b border-gray-gray200 dark:border-gray-gray600", children: Object.keys(PANELS).map((name) => /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(
@@ -54429,27 +54581,47 @@ export interface AiText {
         false,
         {
           fileName: "frontend/index.tsx",
-          lineNumber: 64,
+          lineNumber: 92,
           columnNumber: 11
         },
         this
       )) }, void 0, false, {
         fileName: "frontend/index.tsx",
-        lineNumber: 62,
+        lineNumber: 90,
         columnNumber: 7
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(PanelBoundary, { name: panel, children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(Panel, {}, void 0, false, {
         fileName: "frontend/index.tsx",
-        lineNumber: 77,
+        lineNumber: 105,
         columnNumber: 9
       }, this) }, panel, false, {
         fileName: "frontend/index.tsx",
-        lineNumber: 76,
+        lineNumber: 104,
         columnNumber: 7
       }, this)
     ] }, void 0, true, {
       fileName: "frontend/index.tsx",
-      lineNumber: 56,
+      lineNumber: 83,
+      columnNumber: 5
+    }, this);
+  }
+  function Root() {
+    const [scheme, setScheme] = (0, import_react20.useState)("system");
+    return /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(ThemeProvider, { colorScheme: scheme, children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(ToastProvider, { position: "bottom-right", children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(SheetProvider, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(Tester, { scheme, onScheme: setScheme }, void 0, false, {
+      fileName: "frontend/index.tsx",
+      lineNumber: 117,
+      columnNumber: 11
+    }, this) }, void 0, false, {
+      fileName: "frontend/index.tsx",
+      lineNumber: 116,
+      columnNumber: 9
+    }, this) }, void 0, false, {
+      fileName: "frontend/index.tsx",
+      lineNumber: 115,
+      columnNumber: 7
+    }, this) }, void 0, false, {
+      fileName: "frontend/index.tsx",
+      lineNumber: 114,
       columnNumber: 5
     }, this);
   }
@@ -54521,29 +54693,19 @@ export interface AiText {
           }, this);
         }
       };
-      initializeBlock({
-        interface: () => /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(ToastProvider, { position: "bottom-right", children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(SheetProvider, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(Tester, {}, void 0, false, {
-          fileName: "frontend/index.tsx",
-          lineNumber: 87,
-          columnNumber: 9
-        }) }, void 0, false, {
-          fileName: "frontend/index.tsx",
-          lineNumber: 86,
-          columnNumber: 7
-        }) }, void 0, false, {
-          fileName: "frontend/index.tsx",
-          lineNumber: 85,
-          columnNumber: 5
-        })
-      });
+      initializeBlock({ interface: () => /* @__PURE__ */ (0, import_jsx_dev_runtime12.jsxDEV)(Root, {}, void 0, false, {
+        fileName: "frontend/index.tsx",
+        lineNumber: 124,
+        columnNumber: 35
+      }) });
     }
   });
 
   // .tmp/index.js
   var ReactDOM = require_react_dom();
-  var React34 = require_react();
+  var React35 = require_react();
   var ReactDOMServer = require_server_browser();
-  window["_airtableReact"] = React34;
+  window["_airtableReact"] = React35;
   window["_airtableReactDOM"] = ReactDOM;
   window["_airtableReactDOMServer"] = ReactDOMServer;
   var didRun = false;

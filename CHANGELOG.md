@@ -7,27 +7,6 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
-### Fixed
-
-- **`--fix` under TypeScript 7.** TypeScript 7 ships no JS compiler API, so the
-  codemod worker had nothing to drive and failed with an obscure error. The
-  daemon now detects the compiler's major version, says at startup that `--fix`
-  can't run, and reports fixes as unavailable with that reason. The typecheck
-  is unaffected.
-- **Extensions nested in another TypeScript project.** The project-config
-  lookup walked up to the filesystem root, so an extension inside a monorepo
-  (or airgen's own `sandbox/`) picked up the enclosing project's `tsconfig.json`:
-  no config was created on first run, the panel checked the wrong files, and
-  esbuild compiled JSX with that config's `jsx` setting. The lookup now stops at
-  the extension's root (the directory with `block.json`, else the nearest
-  `package.json`).
-- **`<SchemaObserver />` in dark mode.** The panel had fixed light-theme
-  colors, so on a dark interface its "Copy schema" button all but vanished. It
-  now follows Airtable's theme through the SDK's `useColorScheme` (an optional
-  `BlocksSdkAdapter.useColorScheme`), painting its own dark surface. SDK builds
-  without the hook (stable before 1.19) keep the light palette; the entries
-  import the SDK as a namespace so those builds still bundle.
-
 ## [0.4.0]
 
 Typed relations. `useRecords(key, {include})` follows link fields into the
@@ -76,6 +55,27 @@ the record's `name`.
   adapter now wraps it (`nullSafeUseRecords`): the SDK hook still runs, on any
   table of the base, so the hook count is unchanged, and the result is `[]` as
   documented. The stable and base flavors already handled `null`.
+
+- **`--fix` under TypeScript 7.** TypeScript 7 ships no JS compiler API, so the
+  codemod worker had nothing to drive and failed with an obscure error. The
+  daemon now detects the compiler's major version, says at startup that `--fix`
+  can't run, and reports fixes as unavailable with that reason. The typecheck
+  is unaffected.
+- **Extensions nested in another TypeScript project.** The project-config
+  lookup walked up to the filesystem root, so an extension inside a monorepo
+  (or airgen's own `sandbox/`) picked up the enclosing project's `tsconfig.json`:
+  no config was created on first run, the panel checked the wrong files, and
+  esbuild compiled JSX with that config's `jsx` setting. The lookup now stops at
+  the extension's root (the directory with `block.json`, else the nearest
+  `package.json`).
+- **`<SchemaObserver />` in dark mode.** The panel had fixed light-theme
+  colors, so on a dark interface its "Copy schema" button all but vanished. It
+  now follows Airtable's theme through the SDK's `useColorScheme` (an optional
+  `BlocksSdkAdapter.useColorScheme`), painting its own dark surface. SDK builds
+  without the hook (stable before 1.19) keep the light palette; the entries
+  import the SDK as a namespace so those builds still bundle.
+
+
 
 ## [0.3.2]
 
