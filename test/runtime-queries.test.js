@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import {cellText, containsMatcher, groupRecords, query} from '../dist/client/runtime/queries.js';
+import {aggregate, cellText, containsMatcher, groupRecords, query} from '../dist/client/runtime/queries.js';
 
 // `useRecords` rows: empty cells are absent from `fields`.
 const todo = {id: 'selTodo', name: 'Todo', color: 'red'};
@@ -143,4 +143,86 @@ test('groupRecords: several fields group by every combination; by id', () => {
       [['selTodo', 'selDev'], ['rec2']],
     ],
   );
+});
+
+test('aggregate: sum, avg, min, max skip empty cells; empty pools are 0 / null', () => {
+  assert.deepEqual(
+    aggregate(records, {
+      total: {field: 'budget', op: 'sum'},
+      avg: {field: 'budget', op: 'avg'},
+      min: {field: 'budget', op: 'min'},
+      max: {field: 'budget', op: 'max'},
+    }),
+    {total: 100, avg: 50, min: 0, max: 100},
+  );
+  assert.deepEqual(
+    aggregate([], {
+      total: {field: 'budget', op: 'sum'},
+      avg: {field: 'budget', op: 'avg'},
+      min: {field: 'budget', op: 'min'},
+      max: {field: 'budget', op: 'max'},
+      n: {op: 'count'},
+    }),
+    {total: 0, avg: null, min: null, max: null, n: 0},
+  );
+});
+
+test('aggregate: lookups and arrays contribute each number; non-numbers never count', () => {
+  const rows = [
+    {
+      id: 'a',
+      fields: {
+        amounts: [
+          {linkedRecordId: 'r1', value: 10},
+          {linkedRecordId: 'r2', value: 5},
+          {linkedRecordId: 'r3', value: null},
+        ],
+        value: 1,
+      },
+    },
+    {id: 'b', fields: {amounts: [2], value: '7'}},
+    {id: 'c', fields: {amounts: [], value: NaN}},
+    {id: 'd', fields: {value: {id: 'x', name: '3'}}},
+  ];
+  assert.deepEqual(
+    aggregate(rows, {
+      amounts: {field: 'amounts', op: 'sum'},
+      avgAmount: {field: 'amounts', op: 'avg'},
+      value: {field: 'value', op: 'sum'},
+      maxValue: {field: 'value', op: 'max'},
+    }),
+    {amounts: 17, avgAmount: 17 / 3, value: 1, maxValue: 1},
+  );
+});
+
+test('aggregate: count, countFilled / countEmpty, countDistinct by id across multi-values', () => {
+  assert.deepEqual(
+    aggregate(records, {
+      n: {op: 'count'},
+      budgeted: {field: 'budget', op: 'countFilled'},
+      unbudgeted: {field: 'budget', op: 'countEmpty'},
+      statuses: {field: 'status', op: 'countDistinct'},
+      tags: {field: 'tags', op: 'countDistinct'},
+      owners: {field: 'owner', op: 'countDistinct'},
+    }),
+    {n: 4, budgeted: 2, unbudgeted: 2, statuses: 2, tags: 2, owners: 1},
+  );
+  // Same name, different ids: distinct by id.
+  const rows = [
+    {id: 'a', fields: {owner: {id: 'usr1', name: 'Ana'}}},
+    {id: 'b', fields: {owner: {id: 'usr2', name: 'Ana'}}},
+  ];
+  assert.equal(aggregate(rows, {owners: {field: 'owner', op: 'countDistinct'}}).owners, 2);
+});
+
+test('aggregate per group: a record in two groups counts in each', () => {
+  const sums = groupRecords(records, {fields: ['tags']}).map(group => [
+    group.values[0],
+    aggregate(group.records, {budget: {field: 'budget', op: 'sum'}}).budget,
+  ]);
+  assert.deepEqual(sums, [
+    ['Dev', 100],
+    ['Design', 0],
+    [null, 0],
+  ]);
 });

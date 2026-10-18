@@ -6,7 +6,7 @@
  * are written against structural SDK types (`SdkBase`, `SdkTable`,
  * `SdkRecord`): pass the real SDK objects, or a fake in tests.
  */
-import {cloneValues, createMutations, findTable, groupRecords, inspectField, query} from 'airgen';
+import {aggregate, cloneValues, createMutations, findTable, groupRecords, inspectField, query} from 'airgen';
 import type {MutationResult, SdkBase, TypedRecord} from 'airgen';
 import {airgenMeta} from './airtable-schema';
 import type {TableRecordMap, TasksWrite} from './airtable-schema';
@@ -27,7 +27,7 @@ export async function closeOutProject(base: SdkBase, tasks: ReadonlyArray<Task>)
 export function hoursByAssignee(tasks: ReadonlyArray<Task>): Array<{assignee: string; hours: number}> {
   return groupRecords(tasks, {fields: ['assignee'], by: 'name'}).map(group => ({
     assignee: group.values[0] ?? 'Unassigned',
-    hours: group.records.reduce((total, task) => total + (task.fields.hours ?? 0), 0),
+    ...aggregate(group.records, {hours: {field: 'hours', op: 'sum'}}),
   }));
 }
 

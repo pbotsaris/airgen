@@ -10,7 +10,7 @@
  * should.
  */
 import React, {useState} from 'react';
-import {cellText, groupRecords} from 'airgen';
+import {aggregate, cellText, groupRecords} from 'airgen';
 import type {SearchMatcher} from 'airgen';
 import {useQuery, useRecords} from './airtable-schema';
 
@@ -113,5 +113,42 @@ export function TasksByAssigneeAndPriority() {
         </li>
       ))}
     </ul>
+  );
+}
+
+/**
+ * `aggregate` reduces rows to numbers: `sum`, `avg`, `min`, `max` on numeric
+ * fields (numbers, currency, percent, duration, rollups, numeric formulas and
+ * lookups of numbers; anything else is a type error), plus `count`,
+ * `countFilled`, `countEmpty` and `countDistinct` on any field. Empty cells
+ * are skipped; `avg`/`min`/`max` are `null` when no record has a value. Run it
+ * on a `useQuery` result, or on each group's records.
+ */
+export function OpenWork() {
+  const open = useQuery('Tasks', {where: [{field: 'completed', op: 'empty'}]});
+  const {hours, average, people} = aggregate(open, {
+    hours: {field: 'hours', op: 'sum'},
+    average: {field: 'hours', op: 'avg'},
+    people: {field: 'assignee', op: 'countDistinct'},
+  });
+
+  const byStatus = groupRecords(open, {fields: ['status']}).map(group => ({
+    status: group.values[0] ?? 'No status',
+    ...aggregate(group.records, {hours: {field: 'hours', op: 'sum'}, tasks: {op: 'count'}}),
+  }));
+
+  return (
+    <>
+      <p>
+        {hours} open hours across {people} people (avg {average?.toFixed(1) ?? '–'} per task)
+      </p>
+      <ul>
+        {byStatus.map(row => (
+          <li key={row.status}>
+            {row.status}: {row.tasks} tasks, {row.hours} h
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }

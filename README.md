@@ -150,6 +150,7 @@ if (!result.ok) toast(result.error.message);
 - **Matching:** Selects, linked records, and collaborators by ID, name, or email
 - **Search:** Pluggable `SearchMatcher`, including a Fuse.js implementation in `@airgen/ui`
 - **Grouping:** `groupRecords` groups records by one or more fields
+- **Aggregation:** `aggregate` sums, averages, min/max and counts over records or each group; numeric ops only accept numeric fields
 
 ##### [Schema Drift](examples/05-drift.tsx)
 
@@ -177,7 +178,7 @@ Users can select tables directly in Interface Designer. Selected tables are vali
 
 Use standalone functions without React hooks:
 
-`createMutations`, `inspectField`, `cloneValues`, `query`, `groupRecords`, `findTable`
+`createMutations`, `inspectField`, `cloneValues`, `query`, `groupRecords`, `aggregate`, `findTable`
 
 Useful for event handlers, scripts, and tests.
 
@@ -224,7 +225,7 @@ All exports are available from `airgen`, `airgen/interface`, and `airgen/base`.
 | `SchemaObserver` | Development panel with schema monitoring and typechecking. |
 | `useRecords`, `useTable`, `useFields`, `useMutations`, `useQuery`, `useSchemaDrift` | Schema-bound hooks exported from the generated file. |
 | `createTypedHooks<M, W, L>` | Creates typed hooks with optional custom properties. |
-| `createMutations`, `inspectField`, `cloneValues`, `query`, `groupRecords`, `cellText`, `findTable`, `resolveTableOverride` | Standalone runtime utilities. |
+| `createMutations`, `inspectField`, `cloneValues`, `query`, `groupRecords`, `aggregate`, `cellText`, `findTable`, `resolveTableOverride` | Standalone runtime utilities. |
 | `lookupValues`, `firstLookupValue`, `cellIds`, `cellNames`, `firstLinkedRecord` | Helpers for reading Airtable cell values. |
 | `checkSchemaDrift` | Compares live schema against generated metadata. |
 | `generateTypeScriptFromBase`, `computeSchemaSignature` | Schema generation and signature utilities. |

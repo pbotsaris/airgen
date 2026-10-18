@@ -7,6 +7,18 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+### Added
+
+- **`aggregate`.** `aggregate(records, {total: {field: 'value', op: 'sum'}})`
+  reduces rows to named numbers: `sum`, `avg`, `min`, `max` on numeric fields
+  (numbers, currency, percent, duration, rating, rollups, numeric formulas and
+  lookups of numbers; any other field is a type error), plus `count`,
+  `countFilled`, `countEmpty` and `countDistinct` (by id) on any field. Empty
+  cells are skipped, a lookup contributes each of its values, and
+  `avg`/`min`/`max` are `null` over no values. Run it on a `useQuery` result
+  or on each group's records; the result is a valid `@airgen/ui` `GroupTable`
+  summary as is.
+
 ## [0.4.0]
 
 Typed relations. `useRecords(key, {include})` follows link fields into the

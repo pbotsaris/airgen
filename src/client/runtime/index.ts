@@ -17,12 +17,16 @@ export {FieldInspector, inspectField} from './fields.js';
 export type {Choice} from './fields.js';
 export {cloneValues} from './clone.js';
 export type {CloneOptions, RecordSource} from './clone.js';
-export {cellText, containsMatcher, groupRecords, query} from './queries.js';
+export {aggregate, cellText, containsMatcher, groupRecords, query} from './queries.js';
 export type {
+  AggregateResult,
+  AggregateSpec,
+  Aggregation,
   FieldKey,
   Filter,
   FilterValue,
   GroupSpec,
+  NumericFieldKey,
   QueryableRecord,
   QueryGroup,
   QuerySpec,

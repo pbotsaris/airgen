@@ -11,9 +11,13 @@
  * Search takes a pluggable matcher. The default is accent- and
  * case-insensitive token containment, which keeps airgen dependency-free; for
  * fuzzy ranking pass one built on fuse.js (`@airgen/ui` ships `fuseMatcher`).
+ *
+ * `aggregate` reduces rows to numbers (sums, averages, counts), so it composes
+ * with both: aggregate a `query` result, or each group's `records`.
  */
 
 import {deaccent} from '../deaccent.js';
+import type {LookupEntry} from './normalize.js';
 
 /** Anything with a `fields` object: `useRecords` rows, or plain objects in tests. */
 export interface QueryableRecord {
@@ -212,4 +216,90 @@ export function groupRecords<R extends QueryableRecord>(
   }
 
   return [...groups].map(([key, group]) => ({key, values: group.values, records: group.records}));
+}
+
+/** A cell `sum`/`avg`/`min`/`max` accept: a number, or a lookup (or array) of numbers. */
+type NumericCell = number | ReadonlyArray<number | null> | ReadonlyArray<LookupEntry<number | null>>;
+
+/** Field keys whose cells are numeric: number, currency, percent, duration, rating, numeric formulas, rollups and lookups. */
+export type NumericFieldKey<R extends QueryableRecord> = {
+  [K in FieldKey<R>]-?: [NonNullable<R['fields'][K & keyof R['fields']]>] extends [never]
+    ? never
+    : NonNullable<R['fields'][K & keyof R['fields']]> extends NumericCell
+      ? K
+      : never;
+}[FieldKey<R>];
+
+export type Aggregation<R extends QueryableRecord> =
+  | {readonly op: 'count'}
+  | {readonly field: FieldKey<R>; readonly op: 'countFilled' | 'countEmpty' | 'countDistinct'}
+  | {readonly field: NumericFieldKey<R>; readonly op: 'sum' | 'avg' | 'min' | 'max'};
+
+/** Named aggregations, e.g. `{total: {field: 'value', op: 'sum'}, n: {op: 'count'}}`. */
+export type AggregateSpec<R extends QueryableRecord> = {readonly [name: string]: Aggregation<R>};
+
+/** One number per spec entry; `avg`/`min`/`max` are null when no record has a value. */
+export type AggregateResult<S> = {
+  -readonly [K in keyof S]: S[K] extends {readonly op: 'avg' | 'min' | 'max'} ? number | null : number;
+};
+
+/** The numbers a cell contributes: itself, or every element of an array or lookup. */
+function numbersOf(cell: unknown): number[] {
+  if (typeof cell === 'number') return Number.isFinite(cell) ? [cell] : [];
+  if (Array.isArray(cell)) return cell.flatMap(item => numbersOf(isLookup(item) ? item.value : item));
+  return [];
+}
+
+function isLookup(value: unknown): value is LookupEntry<unknown> {
+  return typeof value === 'object' && value !== null && 'linkedRecordId' in value && 'value' in value;
+}
+
+function aggregateOne<R extends QueryableRecord>(
+  records: ReadonlyArray<R>,
+  aggregation: Aggregation<R>,
+): number | null {
+  if (aggregation.op === 'count') return records.length;
+  const cells = records.map(record => cellOf(record, aggregation.field));
+
+  switch (aggregation.op) {
+    case 'countFilled':
+      return cells.filter(cell => !isEmptyCell(cell)).length;
+    case 'countEmpty':
+      return cells.filter(isEmptyCell).length;
+    case 'countDistinct':
+      return new Set(cells.flatMap(cell => groupKeys(cell, 'id')).filter(key => key !== null)).size;
+  }
+
+  const numbers = cells.flatMap(numbersOf);
+  switch (aggregation.op) {
+    case 'sum':
+      return numbers.reduce((total, n) => total + n, 0);
+    case 'avg':
+      return numbers.length > 0 ? numbers.reduce((total, n) => total + n, 0) / numbers.length : null;
+    case 'min':
+      return numbers.length > 0 ? numbers.reduce((low, n) => Math.min(low, n)) : null;
+    case 'max':
+      return numbers.length > 0 ? numbers.reduce((high, n) => Math.max(high, n)) : null;
+    default:
+      return null;
+  }
+}
+
+/**
+ * Reduces records to one number per named aggregation. Empty cells are
+ * skipped; a lookup or multi-value cell contributes each of its numbers, so
+ * summing a lookup of amounts sums across the linked records. Non-numeric
+ * values never count toward `sum`/`avg`/`min`/`max`, and `countDistinct`
+ * counts selects, links and collaborators by id.
+ *
+ * A record in several groups (a multi-value grouping cell) counts in each, so
+ * per-group sums can add up to more than the total over every record.
+ */
+export function aggregate<R extends QueryableRecord, S extends AggregateSpec<R>>(
+  records: ReadonlyArray<R>,
+  spec: S,
+): AggregateResult<S> {
+  const result: {[name: string]: number | null} = {};
+  for (const [name, aggregation] of Object.entries(spec)) result[name] = aggregateOne(records, aggregation);
+  return result as AggregateResult<S>;
 }
