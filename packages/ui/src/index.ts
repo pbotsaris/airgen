@@ -28,6 +28,7 @@ export {
   RecordTable,
   RecordCellValue,
   type TableProps,
+  type TableHeadProps,
   type RecordTableRecord,
   type RecordTableFieldKey,
   type RecordTableCellContext,

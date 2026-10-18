@@ -99,6 +99,27 @@ Because generated fields are optional and empty cells are omitted, automatic
 inference can only discover field keys populated in the current records. Pass
 `columns` when an empty field must remain visible.
 
+Enable column resizing with `<RecordTable resizable records={projects} />` or
+`<Table resizable>`. Resizing supports a single header row without column or
+row spans; use it without a custom `colgroup`. Drag a header's right edge, or
+focus its handle and press Left/Right (10 px, or 50 px with Shift). Home sets
+the minimum width; End sets the maximum when supplied. Other columns keep
+their widths, and wider tables scroll horizontally.
+
+Set `minWidth` (default 80 px), `maxWidth`, `resizable: false`, or `resizeLabel`
+on individual `RecordTable` column definitions, or as props on `TableHead`.
+For example, `{id: 'name', width: 240, minWidth: 120, maxWidth: 480}` starts
+with the normal column width and constrains subsequent resizing. Provide
+`resizeLabel` for headers containing icons or other non-text content.
+
+Add `columnLines` to `Table` or `RecordTable` to show thin vertical dividers
+between columns in the header, body, and footer. Dividers support light and
+dark themes and can be used with or without `resizable`:
+
+```tsx
+<RecordTable records={projects} columns={['name', 'status', 'owner']} columnLines resizable />
+```
+
 `color` on options and `Button` accepts an Airtable color name
 (`"blueBright"`) or any CSS hex. The CSS ships precompiled with the
 package's own tokens; your project needs no Tailwind config (and if it has

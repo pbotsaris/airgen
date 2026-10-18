@@ -3,12 +3,23 @@ import * as React from 'react';
 import {PillOption} from './PillOption.js';
 import {Spinner} from './Spinner.js';
 import {Text} from './Text.js';
-import {cx} from '../utils.js';
+import {cx, mergeRefs} from '../utils.js';
 
 export interface TableProps extends React.TableHTMLAttributes<HTMLTableElement> {
   /** Classes applied to the scroll container around the native table. */
   containerClassName?: string;
+  /** Enable resizing for a single row of column headers. @defaultValue false */
+  resizable?: boolean;
+  /** Show vertical dividers between header, body, and footer cells. @defaultValue false */
+  columnLines?: boolean;
 }
+
+interface TableResizeContextValue {
+  widths: number[];
+  resize: (header: HTMLTableCellElement, width: number) => void;
+}
+
+const TableResizeContext = React.createContext<TableResizeContextValue | null>(null);
 
 /**
  * Native table inside a horizontally scrollable border container. Composes with
@@ -25,22 +36,53 @@ export interface TableProps extends React.TableHTMLAttributes<HTMLTableElement> 
  * ```
  */
 export const Table = React.forwardRef<HTMLTableElement, TableProps>(function Table(
-  {className, containerClassName, ...props},
+  {className, containerClassName, resizable = false, columnLines = false, children, style, ...props},
   ref,
 ) {
+  const [widths, setWidths] = React.useState<number[]>([]);
+  const resize = React.useCallback((header: HTMLTableCellElement, width: number) => {
+    const cells = header.parentElement?.children;
+    if (!cells) return;
+    const measured = Array.from(cells, cell => cell.getBoundingClientRect().width);
+    const index = header.cellIndex;
+    setWidths(previous => {
+      const next = previous.length === measured.length ? [...previous] : measured;
+      next[index] = width;
+      return next;
+    });
+  }, []);
+  const context = React.useMemo(() => (resizable ? {widths, resize} : null), [resizable, widths, resize]);
+  const tableWidth = widths.reduce((sum, width) => sum + width, 0);
+
   return (
-    <div
-      className={cx(
-        'ag-w-full ag-overflow-x-auto ag-rounded-md ag-border ag-border-neutral-200 dark:ag-border-neutral-700',
-        containerClassName,
-      )}
-    >
-      <table
-        ref={ref}
-        className={cx('ag-w-full ag-caption-bottom ag-border-collapse ag-text-base', className)}
-        {...props}
-      />
-    </div>
+    <TableResizeContext.Provider value={context}>
+      <div
+        className={cx(
+          'ag-w-full ag-overflow-x-auto ag-rounded-md ag-border ag-border-neutral-200 dark:ag-border-neutral-700',
+          containerClassName,
+        )}
+      >
+        <table
+          ref={ref}
+          className={cx(
+            'ag-w-full ag-caption-bottom ag-border-collapse ag-text-base',
+            columnLines && 'ag-column-lines',
+            className,
+          )}
+          {...props}
+          style={{...style, ...(resizable && widths.length > 0 ? {tableLayout: 'fixed', width: tableWidth} : {})}}
+        >
+          {resizable && widths.length > 0 && (
+            <colgroup>
+              {widths.map((width, index) => (
+                <col key={index} style={{width}} />
+              ))}
+            </colgroup>
+          )}
+          {children}
+        </table>
+      </div>
+    </TableResizeContext.Provider>
   );
 });
 
@@ -94,28 +136,130 @@ export const TableRow = React.forwardRef<HTMLTableRowElement, React.HTMLAttribut
  * Styled `th`; set `scope="col"` or `scope="row"` to associate headers with cells.
  * Accepts native attributes and forwards its ref.
  */
-export const TableHead = React.forwardRef<HTMLTableCellElement, React.ThHTMLAttributes<HTMLTableCellElement>>(
-  function TableHead({className, ...props}, ref) {
-    return (
-      <th
-        ref={ref}
-        className={cx(
-          'ag-h-9 ag-px-3 ag-text-left ag-align-middle ag-font-medium ag-text-neutral-500 dark:ag-text-neutral-400',
-          className,
-        )}
-        {...props}
-      />
-    );
+export interface TableHeadProps extends React.ThHTMLAttributes<HTMLTableCellElement> {
+  /** Disable resizing for this column when the table is resizable. @defaultValue true */
+  resizable?: boolean;
+  /** Minimum resized width in pixels. @defaultValue 80 */
+  minWidth?: number;
+  /** Maximum resized width in pixels. */
+  maxWidth?: number;
+  /** Accessible resize handle name, useful for non-text headers. */
+  resizeLabel?: string;
+}
+
+export const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(function TableHead(
+  {
+    className,
+    children,
+    resizable = true,
+    minWidth = 80,
+    maxWidth,
+    resizeLabel,
+    scope,
+    colSpan = 1,
+    rowSpan = 1,
+    ...props
   },
-);
+  ref,
+) {
+  const context = React.useContext(TableResizeContext);
+  const headerRef = React.useRef<HTMLTableCellElement | null>(null);
+  const mergedRef = React.useMemo(() => mergeRefs(headerRef, ref), [ref]);
+  const drag = React.useRef<{pointerId: number; x: number; width: number; direction: number} | null>(null);
+  const enabled = context !== null && resizable && scope !== 'row' && colSpan === 1 && rowSpan === 1;
+  const [measuredWidth, setMeasuredWidth] = React.useState<number>();
+  React.useEffect(() => {
+    if (enabled) setMeasuredWidth(headerRef.current?.getBoundingClientRect().width);
+  }, [enabled]);
+  const minimum = Math.max(1, minWidth);
+  const maximum = maxWidth === undefined ? undefined : Math.max(minimum, maxWidth);
+  const resizedWidth = headerRef.current ? context?.widths[headerRef.current.cellIndex] : undefined;
+  const width = resizedWidth ?? measuredWidth;
+  const getWidth = () => resizedWidth ?? headerRef.current?.getBoundingClientRect().width ?? minimum;
+  const resize = (value: number) => {
+    if (headerRef.current) context?.resize(headerRef.current, Math.min(maximum ?? Infinity, Math.max(minimum, value)));
+  };
+  const direction = () => (headerRef.current && getComputedStyle(headerRef.current).direction === 'rtl' ? -1 : 1);
+
+  return (
+    <th
+      ref={mergedRef}
+      scope={scope}
+      colSpan={colSpan}
+      rowSpan={rowSpan}
+      className={cx(
+        'ag-h-9 ag-px-3 ag-text-left ag-align-middle ag-font-medium ag-text-neutral-500 dark:ag-text-neutral-400',
+        enabled && 'ag-relative ag-pr-4',
+        context && 'ag-overflow-hidden',
+        className,
+      )}
+      {...props}
+    >
+      {children}
+      {enabled && (
+        <span
+          role="separator"
+          tabIndex={0}
+          aria-orientation="vertical"
+          aria-label={resizeLabel ?? `Resize ${typeof children === 'string' ? children : 'column'}`}
+          aria-valuemin={minimum}
+          aria-valuemax={maximum}
+          aria-valuenow={Math.round(width ?? minimum)}
+          onFocus={() => setMeasuredWidth(headerRef.current?.getBoundingClientRect().width)}
+          className="ag-absolute ag-inset-y-0 ag-right-0 ag-w-2 ag-cursor-col-resize ag-touch-none ag-select-none after:ag-absolute after:ag-inset-y-0 after:ag-right-0 after:ag-w-px hover:after:ag-bg-neutral-300 focus-visible:ag-outline-none focus-visible:after:ag-bg-neutral-300 dark:hover:after:ag-bg-neutral-400 dark:focus-visible:after:ag-bg-neutral-400"
+          onClick={event => event.stopPropagation()}
+          onPointerDown={event => {
+            if (event.button !== 0) return;
+            event.preventDefault();
+            event.stopPropagation();
+            event.currentTarget.focus();
+            event.currentTarget.setPointerCapture(event.pointerId);
+            drag.current = {pointerId: event.pointerId, x: event.clientX, width: getWidth(), direction: direction()};
+          }}
+          onPointerMove={event => {
+            const start = drag.current;
+            if (start && start.pointerId === event.pointerId) {
+              resize(start.width + (event.clientX - start.x) * start.direction);
+            }
+          }}
+          onPointerUp={() => {
+            drag.current = null;
+          }}
+          onPointerCancel={() => {
+            drag.current = null;
+          }}
+          onLostPointerCapture={() => {
+            drag.current = null;
+          }}
+          onKeyDown={event => {
+            let next: number;
+            if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+              next = getWidth() + (event.key === 'ArrowRight' ? 1 : -1) * direction() * (event.shiftKey ? 50 : 10);
+            } else if (event.key === 'Home') next = minimum;
+            else if (event.key === 'End' && maximum !== undefined) next = maximum;
+            else return;
+            event.preventDefault();
+            event.stopPropagation();
+            resize(next);
+          }}
+        />
+      )}
+    </th>
+  );
+});
 
 /** Styled `td` for a data cell. Accepts native attributes and forwards its ref. */
 export const TableCell = React.forwardRef<HTMLTableCellElement, React.TdHTMLAttributes<HTMLTableCellElement>>(
   function TableCell({className, ...props}, ref) {
+    const context = React.useContext(TableResizeContext);
     return (
       <td
         ref={ref}
-        className={cx('ag-px-3 ag-py-2 ag-align-middle ag-text-neutral-900 dark:ag-text-neutral-100', className)}
+        className={cx(
+          'ag-px-3 ag-py-2 ag-align-middle ag-text-neutral-900 dark:ag-text-neutral-100',
+          context && 'ag-overflow-hidden',
+          className,
+        )}
         {...props}
       />
     );
@@ -161,6 +305,14 @@ export interface RecordTableCellContext<TRecord extends {id: string; fields: obj
 interface RecordTableColumnOptions<TRecord extends {id: string; fields: object}> {
   /** Column width in pixels (number) or a CSS width string. */
   width?: number | string;
+  /** Disable resizing for this column. @defaultValue true */
+  resizable?: boolean;
+  /** Minimum resized width in pixels. @defaultValue 80 */
+  minWidth?: number;
+  /** Maximum resized width in pixels. */
+  maxWidth?: number;
+  /** Accessible resize handle name, useful for non-text headers. */
+  resizeLabel?: string;
   /** Header and cell text alignment. @defaultValue 'left' */
   align?: 'left' | 'center' | 'right';
   headerClassName?: string;
@@ -188,6 +340,10 @@ export type RecordTableColumn<TRecord extends {id: string; fields: object}> =
     });
 
 export interface RecordTableProps<TRecord extends {id: string; fields: object}> {
+  /** Enable pointer and keyboard column resizing. @defaultValue false */
+  resizable?: boolean;
+  /** Show vertical dividers between columns. @defaultValue false */
+  columnLines?: boolean;
   /** Rows to display; `id` is the default row key and `fields` supplies cell values. */
   records: ReadonlyArray<TRecord>;
   /**
@@ -245,12 +401,14 @@ export function RecordTable<TRecord extends {id: string; fields: object}>({
   rowClassName,
   className,
   tableClassName,
+  resizable,
+  columnLines,
 }: RecordTableProps<TRecord>) {
   const columns = resolveColumns(records, columnsProp);
 
   return (
     <div className={className} aria-busy={loading || undefined}>
-      <Table className={tableClassName}>
+      <Table className={tableClassName} resizable={resizable} columnLines={columnLines}>
         {caption != null && <TableCaption>{caption}</TableCaption>}
         {columns.length > 0 && (
           <TableHeader>
@@ -261,6 +419,10 @@ export function RecordTable<TRecord extends {id: string; fields: object}>({
                   scope="col"
                   className={cx(alignmentClass(column.align), column.headerClassName)}
                   style={{width: column.width}}
+                  resizable={column.resizable}
+                  minWidth={column.minWidth}
+                  maxWidth={column.maxWidth}
+                  resizeLabel={column.resizeLabel}
                 >
                   {column.header}
                 </TableHead>

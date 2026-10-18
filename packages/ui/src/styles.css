@@ -3,3 +3,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .ag-column-lines > * > tr > :not(:last-child) {
+    border-right: 1px solid;
+    @apply ag-border-neutral-200 dark:ag-border-neutral-700;
+  }
+}

@@ -8,6 +8,15 @@ Pre-1.0, minor versions may contain breaking changes.
 
 ## [Unreleased]
 
+### Added
+
+- Optional `columnLines` on `Table` and `RecordTable` for vertical dividers
+  between columns, with light and dark theme colors.
+- Opt-in column resizing on `Table` and `RecordTable` with `resizable`.
+  Drag header handles or use arrow keys (Shift for larger steps), Home, and
+  End. Columns support `minWidth`, `maxWidth`, `resizeLabel`, and individual
+  `resizable={false}` opt-outs.
+
 ## [0.1.0] — 2026-10-18
 
 ### Added
