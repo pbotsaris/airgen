@@ -26,6 +26,8 @@ heights), so components sit visually flush with the host SDK UI.
   restore, scroll lock, exit animations, `asChild` triggers).
 - **Feedback** — `ToastProvider`/`useToast` and `SheetProvider`/`useSheet`
   for imperative toasts and side panels.
+- **Tables** — semantic table primitives plus `RecordTable`, a typed renderer
+  for the `{id, fields, raw}` rows returned by airgen's `useRecords`.
 - **Helpers** — `airtableColorToHex`, `shouldUseLightText`, size class
   helpers, `SelectOption`/`SelectGroup` types.
 
@@ -57,6 +59,45 @@ export function App() {
   );
 }
 ```
+
+Render an airgen record collection directly; `RecordTable` infers populated
+fields when `columns` is omitted. Pass typed field keys to limit or reorder the
+visible columns. Common Airtable values such as select choices, linked records,
+lookups, and arrays receive useful defaults; use a full column definition for
+custom output.
+
+```tsx
+import {RecordTable, type RecordTableColumn} from '@airgen/ui';
+import {useRecords, type TableRecordMap} from './airtable-schema';
+import type {TypedRecord} from 'airgen';
+
+type Project = TypedRecord<TableRecordMap, 'Projects'>;
+
+export function ProjectsTable() {
+  const projects = useRecords('Projects');
+
+  // `columns` is optional. These keys autocomplete from Project.fields.
+  return <RecordTable records={projects} columns={['name', 'status', 'owner']} />;
+}
+```
+
+For derived or action columns, provide an accessor and optional custom cell:
+
+```tsx
+const columns: RecordTableColumn<Project>[] = [
+  {id: 'name', header: 'Project'},
+  {
+    id: 'actions',
+    header: '',
+    accessor: record => record.id,
+    cell: ({record}) => <button>Edit {record.fields.name}</button>,
+  },
+];
+```
+
+Because generated fields are optional and empty cells are omitted, automatic
+inference can only discover field keys populated in the current records. Pass
+`columns` when an empty field must remain visible.
 
 `color` on options and `Button` accepts an Airtable color name
 (`"blueBright"`) or any CSS hex. The CSS ships precompiled with the
