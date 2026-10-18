@@ -111,6 +111,29 @@ build never matches their elements. The classes you pass (`className`,
 `optionClassName`, `rowClassName`, …) are yours and stay unprefixed; only
 `pillSizeClasses()` hands back the package's own (prefixed) classes.
 
+Dark variants follow the iframe's `prefers-color-scheme`, which is the OS
+setting and can disagree with Airtable's own theme. Wrap the app in
+`ThemeProvider` with the SDK's `useColorScheme` to follow Airtable instead;
+menus, dialogs and toasts portalled to `document.body` follow it too:
+
+```tsx
+import {useColorScheme} from '@airtable/blocks/interface/ui'; // or '@airtable/blocks/ui' (1.19+)
+import {ThemeProvider} from '@airgen/ui';
+
+function Root() {
+  const {colorScheme} = useColorScheme();
+  return (
+    <ThemeProvider colorScheme={colorScheme}>
+      <App />
+    </ThemeProvider>
+  );
+}
+```
+
+`colorScheme="system"` keeps the OS behavior. The components don't paint the
+page background; that stays with your extension (the scaffold's
+`bg-gray-gray50 dark:bg-gray-gray800`).
+
 Until the package is published, install it from a tarball:
 
 ```sh

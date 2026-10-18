@@ -14,6 +14,7 @@ export {Icon, type IconComponent, type IconProps} from './components/Icon.js';
 export {Input, type InputProps, type InputVariant} from './components/Input.js';
 export {Label, type LabelProps} from './components/Label.js';
 export {Portal, type PortalProps} from './components/Portal.js';
+export {ThemeProvider, type ThemeProviderProps, type ColorScheme} from './providers/ThemeProvider.js';
 export {Spinner, LoadingOverlay, type SpinnerProps, type LoadingOverlayProps} from './components/Spinner.js';
 export {
   Table,

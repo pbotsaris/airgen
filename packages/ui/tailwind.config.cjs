@@ -14,7 +14,16 @@ module.exports = {
   // Every utility is ag- prefixed so a consumer's own Tailwind can never emit
   // the same selector (and win on load order).
   prefix: "ag-",
-  darkMode: "media",
+  // The OS scheme unless a ThemeProvider says otherwise: `dark:` applies under
+  // [data-ag-theme="dark"], and under the media query anywhere not inside
+  // [data-ag-theme="light"]. With no provider this is exactly darkMode "media".
+  darkMode: [
+    "variant",
+    [
+      '@media (prefers-color-scheme: dark) { &:not(:where([data-ag-theme="light"] *)) }',
+      '&:where([data-ag-theme="dark"] *)',
+    ],
+  ],
   corePlugins: {
     // Never restyle the host extension or Airtable SDK UI.
     preflight: false,

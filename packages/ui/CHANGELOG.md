@@ -8,6 +8,14 @@ Pre-1.0, minor versions may contain breaking changes.
 
 ## [Unreleased]
 
+### Added
+
+- **`ThemeProvider`** — `<ThemeProvider colorScheme={useColorScheme().colorScheme}>`
+  pins the components' dark variants to Airtable's theme rather than the
+  iframe's `prefers-color-scheme` (the OS setting), portals included. SDK-free:
+  the caller passes the scheme. `"system"`, or no provider, keeps the media
+  query.
+
 ### Changed
 
 - **Utilities are prefixed `ag-`.** The precompiled stylesheet used Tailwind's
