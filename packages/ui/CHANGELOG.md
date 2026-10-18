@@ -33,6 +33,14 @@ Pre-1.0, minor versions may contain breaking changes.
   hovered to near-white, so `ButtonToggle`, icon-only buttons and the usual
   Popover/Sheet triggers were unreadable on a dark frame. All three now carry
   dark variants matching the `Select` trigger.
+- **Neutral pills in dark mode.** A pill with no color of its own (linked
+  records in `RecordCellValue`, colorless choices, avatars) was an inline
+  `#eeeeee`, so it stayed light gray on a dark frame. It's now classes, with
+  Airtable's own dark linked-record pill (`rgba(195,212,249,0.18)`, white
+  text) under `dark:`. `PillOption`'s `bg`/`useLightText` overrides still win.
+- **`Badge` wrapped in narrow cells.** It was an `inline-block` div, so a long
+  name in a table cell wrapped into a two-line blob with the text pushed to one
+  side. It's now a single-line, truncating `span` (full name in `title`).
 
 ### Added
 

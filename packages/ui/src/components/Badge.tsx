@@ -1,4 +1,5 @@
-import {airtableColorToHex, shouldUseLightText} from '../colors.js';
+import {NEUTRAL_PILL_CLASSES, airtableColorToHex, shouldUseLightText} from '../colors.js';
+import {cx} from '../utils.js';
 
 export interface BadgeOptions {
   id?: string;
@@ -21,18 +22,24 @@ export function Badge({opts, variant = 'sm'}: BadgeProps) {
   if (!opts || opts.name == null) return <InvalidBadge opts={opts} />;
 
   const color = opts.color ? airtableColorToHex(opts.color) : null;
-  const bg = color ?? '#eeeeee';
   const textColor = opts.color && shouldUseLightText(opts.color) ? '#ffffff' : 'rgba(0,0,0,0.72)';
 
   const textSize = variant === 'sm' ? 'ag-text-sm' : 'ag-text-base';
 
+  // One line, truncated: a pill that wraps in a narrow table cell turns into a
+  // blob with the text pushed to one side.
   return (
-    <div
-      className={'ag-inline-block ag-px-2 ag-py-0.5 ag-rounded-full ag-font-medium ' + textSize}
-      style={{backgroundColor: bg, color: textColor}}
+    <span
+      className={cx(
+        'ag-inline-flex ag-items-center ag-max-w-full ag-min-w-0 ag-px-2 ag-py-0.5 ag-rounded-full ag-font-medium ag-whitespace-nowrap',
+        textSize,
+        !color && NEUTRAL_PILL_CLASSES,
+      )}
+      style={color ? {backgroundColor: color, color: textColor} : undefined}
+      title={opts.name}
     >
-      {opts.name}
-    </div>
+      <span className="ag-truncate">{opts.name}</span>
+    </span>
   );
 }
 

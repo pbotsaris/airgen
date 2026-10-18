@@ -7,6 +7,7 @@ import {Badge} from '../src/components/Badge';
 import {Button} from '../src/components/Button';
 import {ButtonToggle} from '../src/components/ButtonToggle';
 import {Input} from '../src/components/Input';
+import {PillOption} from '../src/components/PillOption';
 import {Text} from '../src/components/Text';
 import {Toggle} from '../src/components/Toggle';
 
@@ -102,17 +103,44 @@ describe('Badge', () => {
     spy.mockRestore();
   });
 
-  test('a name-only option renders a neutral pill', () => {
+  test('a name-only option renders a neutral pill that has a dark variant', () => {
     render(<Badge opts={{name: 'Draft'}} />);
-    const pill = screen.getByText('Draft');
-    expect(pill.style.backgroundColor).toBe('rgb(238, 238, 238)'); // #eeeeee
+    const pill = screen.getByTitle('Draft');
+    expect(pill.style.backgroundColor).toBe('');
+    expect(pill.className).toContain('ag-bg-[#eeeeee]');
+    expect(pill.className).toContain('dark:ag-bg-[rgba(195,212,249,0.18)]');
+  });
+
+  test('stays on one line and truncates instead of wrapping', () => {
+    render(<Badge opts={{name: 'Custo de Serviços (CoS)', color: 'purpleLight2'}} />);
+    const pill = screen.getByTitle('Custo de Serviços (CoS)');
+    expect(pill.className).toContain('ag-whitespace-nowrap');
+    expect(pill.className).toContain('ag-max-w-full');
+    expect(screen.getByText('Custo de Serviços (CoS)').className).toContain('ag-truncate');
   });
 
   test('a colored option resolves its Airtable color', () => {
     render(<Badge opts={{name: 'Live', color: 'blueBright'}} />);
-    const pill = screen.getByText('Live');
+    const pill = screen.getByTitle('Live');
     expect(pill.style.backgroundColor).toBe('rgb(45, 127, 249)');
     expect(pill.style.color).toBe('rgb(255, 255, 255)'); // light text per SDK table
+  });
+});
+
+describe('PillOption', () => {
+  test('a colorless pill (a linked record) uses the neutral classes, so dark mode repaints it', () => {
+    render(<PillOption opt={{value: 'rec1', label: 'Devolução'}} />);
+    const pill = screen.getByTitle('Devolução');
+    expect(pill.style.background).toBe('');
+    expect(pill.className).toContain('dark:ag-bg-[rgba(195,212,249,0.18)]');
+    expect(pill.className).toContain('dark:ag-text-white');
+  });
+
+  test('a colored pill keeps its inline color and no neutral classes', () => {
+    render(<PillOption opt={{value: 'a', label: 'Live', color: 'blueBright'}} />);
+    const pill = screen.getByTitle('Live');
+    expect(pill.style.background).toBe('rgb(45, 127, 249)');
+    expect(pill.className).not.toContain('dark:ag-bg-');
   });
 });
 

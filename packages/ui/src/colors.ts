@@ -45,3 +45,10 @@ export function shouldUseLightText(color: string | null | undefined): boolean {
   if (isHexColor(color)) return hexLuminance(color) < 0.55;
   return false;
 }
+
+/**
+ * A pill with no color of its own (linked records, colorless choices,
+ * avatars). Classes, not an inline style, so dark mode can repaint it; the
+ * dark values are what Airtable's grid paints a linked-record pill.
+ */
+export const NEUTRAL_PILL_CLASSES = 'ag-bg-[#eeeeee] ag-text-black/70 dark:ag-bg-[rgba(195,212,249,0.18)] dark:ag-text-white';
