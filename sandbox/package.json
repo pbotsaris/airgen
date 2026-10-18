@@ -3,9 +3,9 @@
         "lint": "eslint frontend"
     },
     "dependencies": {
-        "@airgen/ui": "file:vendor/airgen-ui-0.1.0-dev.1.tgz",
+        "@airgen/ui": "file:vendor/airgen-ui.tgz",
         "@airtable/blocks": "interface-alpha",
-        "airgen": "file:vendor/airgen-0.3.2.tgz",
+        "airgen": "file:vendor/airgen.tgz",
         "react": "^19.1.0",
         "react-dom": "^19.1.0"
     },
