@@ -16,16 +16,36 @@ function variantClasses(variant: InputVariant, {disabled}: {disabled?: boolean} 
   return cx(VARIANT[variant], disabled && 'ag-opacity-60 ag-cursor-not-allowed');
 }
 
-export interface InputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value' | 'defaultValue' | 'size'> {
+export interface InputProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'onChange' | 'value' | 'defaultValue' | 'size'
+> {
+  /** Border treatment. @defaultValue 'default' */
   variant?: InputVariant;
   /** Shared control size (shadows the native `size` char-width attribute). */
   size?: ComponentSize;
+  /** Controlled text; pair with `onChange` to update it. */
   value?: string;
+  /** Initial text in uncontrolled mode. @defaultValue '' */
   defaultValue?: string;
+  /** Called with the new text after an edit. */
   onChange?: (value: string) => void;
 }
 
+/**
+ * Text input with controlled or uncontrolled string state. `onChange` receives
+ * the new string, rather than a DOM event. Forwards its ref to the input.
+ *
+ * @example
+ * ```tsx
+ * const [name, setName] = useState('');
+ *
+ * <>
+ *   <Label htmlFor="name">Name</Label>
+ *   <Input id="name" value={name} onChange={setName} />
+ * </>;
+ * ```
+ */
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(props, ref) {
   const {variant = 'default', size = 'base', value, defaultValue = '', onChange, className, ...rest} = props;
 

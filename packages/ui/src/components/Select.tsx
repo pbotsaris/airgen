@@ -21,12 +21,15 @@ import {
 } from '../optionList.js';
 import type {SelectOption, SelectGroup} from '../types.js';
 
+/** Interaction state passed to `Select.renderOption`. */
 export interface SelectOptionState {
   selected: boolean;
+  /** Current keyboard navigation target, independent of selection. */
   active: boolean;
   disabled: boolean;
 }
 
+/** Custom trigger bindings. Attach the ref and wire `toggle` to your control. */
 export interface SelectTriggerArgs {
   ref: React.Ref<HTMLButtonElement>;
   /** Forwarded `id` prop (pair with a Label htmlFor). */
@@ -34,11 +37,14 @@ export interface SelectTriggerArgs {
   open: boolean;
   toggle: () => void;
   disabled: boolean;
+  /** Selected option in single mode; undefined in multiple mode. */
   selected: SelectOption | undefined;
 }
 
 interface SelectBaseProps {
+  /** Choices with unique string values; disabled choices remain visible but cannot be selected. */
   options: SelectOption[];
+  /** Trigger content when nothing is selected. @defaultValue 'Select…' */
   placeholder?: React.ReactNode;
   /** Forwarded to the trigger (pair with a Label htmlFor). */
   id?: string;
@@ -46,8 +52,11 @@ interface SelectBaseProps {
   pill?: boolean;
   /** Shared control size (default "base"). Matches Button/Input heights. */
   size?: ComponentSize;
+  /** Disable the trigger and prevent opening. @defaultValue false */
   disabled?: boolean;
+  /** Initial menu visibility; subsequent visibility is managed internally. @defaultValue false */
   defaultOpen?: boolean;
+  /** Called when the menu opens or closes. */
   onOpenChange?: (open: boolean) => void;
   /**
    * Fully owns an option row's visuals (e.g. a card); Select keeps keyboard
@@ -70,6 +79,7 @@ interface SelectBaseProps {
    * input while open (typeahead disabled, arrows/Enter handled there).
    */
   searchable?: boolean;
+  /** Search input placeholder. @defaultValue 'Search…' */
   searchPlaceholder?: string;
   /** Max options rendered while the search query is empty (default unlimited). */
   maxItems?: number;
@@ -77,30 +87,44 @@ interface SelectBaseProps {
   emptyMessage?: React.ReactNode;
   /** Header label/color for `opt.group` keys. */
   groups?: SelectGroup[];
+  /** Classes on the outer Select wrapper. */
   className?: string;
+  /** Classes on the default trigger. */
   triggerClassName?: string;
+  /** Classes on the portalled listbox menu. */
   menuClassName?: string;
+  /** Classes applied to each option row. */
   optionClassName?: string;
 }
 
+/** Single-choice mode: values and change callbacks use a string. */
 export interface SingleSelectProps extends SelectBaseProps {
   multiple?: false;
+  /** Controlled option value; pair with `onChange`. */
   value?: string;
+  /** Initial option value in uncontrolled mode. */
   defaultValue?: string;
+  /** Called with the chosen option value, rather than a DOM event. */
   onChange?: (value: string) => void;
   /** Custom trigger content for the selected option. */
   renderValue?: (opt: SelectOption) => React.ReactNode;
 }
 
+/** Multiple-choice mode: values and change callbacks use arrays of strings. */
 export interface MultiSelectProps extends SelectBaseProps {
+  /** Enables selection without closing the menu. */
   multiple: true;
+  /** Controlled option values; pass an empty array for no selection. */
   value?: string[];
+  /** Initial option values in uncontrolled mode. @defaultValue [] */
   defaultValue?: string[];
+  /** Called with the full next selection after toggling or removing an option. */
   onChange?: (value: string[]) => void;
   /** Custom trigger content for the selected options. */
   renderValue?: (opts: SelectOption[]) => React.ReactNode;
 }
 
+/** Discriminated by `multiple`; omit it for single-choice selection. */
 export type SelectProps = SingleSelectProps | MultiSelectProps;
 
 function useTypeahead({enabled, onMatch}: {enabled: boolean; onMatch: (query: string) => void}) {
@@ -155,7 +179,28 @@ function useTypeahead({enabled, onMatch}: {enabled: boolean; onMatch: (query: st
  * selection as removable pills, choosing an option toggles it without closing
  * the menu, and Backspace (in the trigger, or in an empty search input)
  * removes the last pill. The search query is kept after a toggle so several
- * matches of one query can be picked in a row.
+ * matches of one query can be picked in a row. Import `@airgen/ui/styles.css`
+ * once in your app to load component styles.
+ *
+ * @example Single selection with a visible label
+ * ```tsx
+ * import {Label, Select} from '@airgen/ui';
+ *
+ * const options = [
+ *   {value: 'todo', label: 'Todo', color: 'yellowBright'},
+ *   {value: 'done', label: 'Done', color: 'greenBright'},
+ * ];
+ * <>
+ *   <Label htmlFor="status">Status</Label>
+ *   <Select id="status" options={options} defaultValue="todo" pill />
+ * </>;
+ * ```
+ *
+ * @example Controlled multiple selection with search
+ * ```tsx
+ * const [values, setValues] = useState<string[]>([]);
+ * <Select multiple searchable options={options} value={values} onChange={setValues} />;
+ * ```
  */
 export function Select(props: SelectProps) {
   const {
@@ -288,7 +333,11 @@ export function Select(props: SelectProps) {
     },
   });
 
-  const {style: menuPosStyle, anchorWidth, update} = useAnchoredPosition({
+  const {
+    style: menuPosStyle,
+    anchorWidth,
+    update,
+  } = useAnchoredPosition({
     open,
     anchorRef: triggerRef,
     align,
@@ -487,7 +536,11 @@ export function Select(props: SelectProps) {
               ) : (
                 <span className="ag-flex ag-items-center ag-gap-2 ag-min-w-0">
                   {opt.profilePicUrl ? (
-                    <img src={opt.profilePicUrl} alt="" className="ag-h-5 ag-w-5 ag-rounded-full ag-ring-1 ag-ring-black/10 dark:ag-ring-white/10" />
+                    <img
+                      src={opt.profilePicUrl}
+                      alt=""
+                      className="ag-h-5 ag-w-5 ag-rounded-full ag-ring-1 ag-ring-black/10 dark:ag-ring-white/10"
+                    />
                   ) : opt.color ? (
                     <span
                       className="ag-h-1.5 ag-w-1.5 ag-rounded-full ag-ring-1 ag-ring-black/10 dark:ag-ring-white/10"
@@ -511,7 +564,9 @@ export function Select(props: SelectProps) {
 
   const optionRows =
     entries.length === 0 ? (
-      <div className="ag-px-2 ag-py-3 ag-text-base ag-text-neutral-400 dark:ag-text-neutral-500 ag-text-center">{emptyMessage}</div>
+      <div className="ag-px-2 ag-py-3 ag-text-base ag-text-neutral-400 dark:ag-text-neutral-500 ag-text-center">
+        {emptyMessage}
+      </div>
     ) : (
       entries.map((entry, idx) => {
         if (entry.type === 'divider') return <Divide key={`div-${idx}`} className="ag-my-1" />;
@@ -568,7 +623,10 @@ export function Select(props: SelectProps) {
       onKeyDown={onTriggerKeyDown}
       className={cx(triggerClasses, 'ag-h-auto ag-min-h-8 ag-flex-wrap ag-justify-start')}
     >
-      <span id={`${listboxId}-value`} className={cx('ag-min-w-0 ag-flex-1 ag-flex ag-flex-wrap ag-items-center ag-gap-1')}>
+      <span
+        id={`${listboxId}-value`}
+        className={cx('ag-min-w-0 ag-flex-1 ag-flex ag-flex-wrap ag-items-center ag-gap-1')}
+      >
         {selectedOptions.length > 0 ? (
           (props as MultiSelectProps).renderValue ? (
             (props as MultiSelectProps).renderValue!(selectedOptions)
@@ -659,12 +717,16 @@ export function Select(props: SelectProps) {
               'dark:ag-border-neutral-600 dark:ag-bg-neutral-800',
               searchable ? 'ag-flex ag-flex-col ag-max-h-72' : 'ag-p-1 ag-max-h-72 ag-overflow-auto',
               'ag-transition-[opacity,transform] ag-duration-100 ag-ease-out',
-              animateIn ? 'ag-opacity-100 ag-translate-y-0 ag-scale-100' : 'ag-opacity-0 -ag-translate-y-1 ag-scale-[0.95] ag-pointer-events-none',
+              animateIn
+                ? 'ag-opacity-100 ag-translate-y-0 ag-scale-100'
+                : 'ag-opacity-0 -ag-translate-y-1 ag-scale-[0.95] ag-pointer-events-none',
               menuClassName,
             )}
             style={{
               ...menuPosStyle,
-              ...(matchTriggerWidth ? {} : {minWidth: minMenuWidth ? Math.max(anchorWidth, minMenuWidth) : anchorWidth}),
+              ...(matchTriggerWidth
+                ? {}
+                : {minWidth: minMenuWidth ? Math.max(anchorWidth, minMenuWidth) : anchorWidth}),
             }}
           >
             {searchable ? (

@@ -36,7 +36,12 @@ export interface CaretButtonProps extends React.ButtonHTMLAttributes<HTMLButtonE
 /**
  * A small square button with an animated caret, for expanding/collapsing menus
  * or panels. Forwards its ref to the underlying button so it can anchor
- * popovers/pickers.
+ * popovers/pickers. Sets `aria-expanded`; supply a label or `aria-label`.
+ *
+ * @example
+ * ```tsx
+ * <CaretButton open={expanded} onClick={() => setExpanded(!expanded)} aria-label="Details" />;
+ * ```
  */
 export const CaretButton = React.forwardRef<HTMLButtonElement, CaretButtonProps>(function CaretButton(
   {open = false, direction = 'left', label, variant = 'outline', size = 'icon-sm', className, ...props},

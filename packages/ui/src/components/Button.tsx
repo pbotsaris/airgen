@@ -49,9 +49,9 @@ const iconSizeMap: Record<ButtonSize, IconSize> = {
 };
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /** Visual style variant of the button. */
+  /** Visual treatment. @defaultValue 'default' */
   variant?: ButtonVariant;
-  /** Size variant of the button. */
+  /** Control size; `default` aliases `base`. `icon*` sizes are square. @defaultValue 'default' */
   size?: ButtonSize;
   /** A lucide-react icon component. Auto-sizes based on button size. */
   icon?: IconComponent;
@@ -67,7 +67,19 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   color?: string;
 }
 
-/** Button component with multiple variants and sizes. */
+/**
+ * Native button with optional leading icon. Forwards its ref and native button
+ * attributes. Set `type="button"` for actions inside a form that should not submit.
+ * Give icon-only buttons an accessible name with `aria-label`.
+ *
+ * @example
+ * ```tsx
+ * import {Save} from 'lucide-react';
+ * import {Button} from '@airgen/ui';
+ *
+ * <Button type="button" variant="outline" icon={Save} onClick={save}>Save</Button>;
+ * ```
+ */
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   {className, variant = 'default', size = 'default', icon, iconSize, color, style, children, ...props},
   ref,
@@ -79,7 +91,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
 
   // Setting CSS `color` cascades to the label text and to the icon (lucide
   // strokes with `currentColor`).
-  const resolvedColor = color ? airtableColorToHex(color) ?? color : undefined;
+  const resolvedColor = color ? (airtableColorToHex(color) ?? color) : undefined;
 
   return (
     <button

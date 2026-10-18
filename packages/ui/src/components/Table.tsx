@@ -10,7 +10,20 @@ export interface TableProps extends React.TableHTMLAttributes<HTMLTableElement> 
   containerClassName?: string;
 }
 
-/** Minimal, horizontally scrollable native table styled for Airtable extensions. */
+/**
+ * Native table inside a horizontally scrollable border container. Composes with
+ * the TableHeader/Body/Row/Head/Cell primitives; ref points to the table itself.
+ * Use RecordTable to render `{id, fields}` records with automatic cell formatting.
+ *
+ * @example
+ * ```tsx
+ * <Table>
+ *   <TableCaption>Projects</TableCaption>
+ *   <TableHeader><TableRow><TableHead scope="col">Name</TableHead></TableRow></TableHeader>
+ *   <TableBody><TableRow><TableCell>Website</TableCell></TableRow></TableBody>
+ * </Table>;
+ * ```
+ */
 export const Table = React.forwardRef<HTMLTableElement, TableProps>(function Table(
   {className, containerClassName, ...props},
   ref,
@@ -22,23 +35,30 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(function Tab
         containerClassName,
       )}
     >
-      <table ref={ref} className={cx('ag-w-full ag-caption-bottom ag-border-collapse ag-text-base', className)} {...props} />
+      <table
+        ref={ref}
+        className={cx('ag-w-full ag-caption-bottom ag-border-collapse ag-text-base', className)}
+        {...props}
+      />
     </div>
   );
 });
 
+/** Styled `thead`; place header rows here. Accepts native attributes and forwards its ref. */
 export const TableHeader = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
   function TableHeader({className, ...props}, ref) {
     return <thead ref={ref} className={cx('ag-bg-neutral-50 dark:ag-bg-neutral-800/60', className)} {...props} />;
   },
 );
 
+/** Styled `tbody`; place data rows here. Accepts native attributes and forwards its ref. */
 export const TableBody = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
   function TableBody({className, ...props}, ref) {
     return <tbody ref={ref} className={cx('[&_tr:last-child]:ag-border-0', className)} {...props} />;
   },
 );
 
+/** Styled `tfoot` for summary rows. Accepts native attributes and forwards its ref. */
 export const TableFooter = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
   function TableFooter({className, ...props}, ref) {
     return (
@@ -54,6 +74,7 @@ export const TableFooter = React.forwardRef<HTMLTableSectionElement, React.HTMLA
   },
 );
 
+/** Styled `tr` with a bottom border and hover treatment. Accepts native attributes and forwards its ref. */
 export const TableRow = React.forwardRef<HTMLTableRowElement, React.HTMLAttributes<HTMLTableRowElement>>(
   function TableRow({className, ...props}, ref) {
     return (
@@ -69,18 +90,26 @@ export const TableRow = React.forwardRef<HTMLTableRowElement, React.HTMLAttribut
   },
 );
 
+/**
+ * Styled `th`; set `scope="col"` or `scope="row"` to associate headers with cells.
+ * Accepts native attributes and forwards its ref.
+ */
 export const TableHead = React.forwardRef<HTMLTableCellElement, React.ThHTMLAttributes<HTMLTableCellElement>>(
   function TableHead({className, ...props}, ref) {
     return (
       <th
         ref={ref}
-        className={cx('ag-h-9 ag-px-3 ag-text-left ag-align-middle ag-font-medium ag-text-neutral-500 dark:ag-text-neutral-400', className)}
+        className={cx(
+          'ag-h-9 ag-px-3 ag-text-left ag-align-middle ag-font-medium ag-text-neutral-500 dark:ag-text-neutral-400',
+          className,
+        )}
         {...props}
       />
     );
   },
 );
 
+/** Styled `td` for a data cell. Accepts native attributes and forwards its ref. */
 export const TableCell = React.forwardRef<HTMLTableCellElement, React.TdHTMLAttributes<HTMLTableCellElement>>(
   function TableCell({className, ...props}, ref) {
     return (
@@ -93,10 +122,15 @@ export const TableCell = React.forwardRef<HTMLTableCellElement, React.TdHTMLAttr
   },
 );
 
+/** Styled `caption` that names or describes the table. Accepts native attributes and forwards its ref. */
 export const TableCaption = React.forwardRef<HTMLTableCaptionElement, React.HTMLAttributes<HTMLTableCaptionElement>>(
   function TableCaption({className, ...props}, ref) {
     return (
-      <caption ref={ref} className={cx('ag-mt-3 ag-text-sm ag-text-neutral-500 dark:ag-text-neutral-400', className)} {...props} />
+      <caption
+        ref={ref}
+        className={cx('ag-mt-3 ag-text-sm ag-text-neutral-500 dark:ag-text-neutral-400', className)}
+        {...props}
+      />
     );
   },
 );
@@ -108,19 +142,26 @@ export interface RecordTableRecord<TFields extends object = Record<string, unkno
   raw: unknown;
 }
 
+/** String field keys inferred from a record's `fields` object. */
 export type RecordTableFieldKey<TRecord extends {id: string; fields: object}> = Extract<
   keyof TRecord['fields'],
   string
 >;
 
+/** Inputs to a column's custom cell renderer. */
 export interface RecordTableCellContext<TRecord extends {id: string; fields: object}> {
+  /** Complete record for this row. */
   record: TRecord;
+  /** Field value or the result of the column accessor. */
   value: unknown;
+  /** Zero-based index in the supplied records. */
   rowIndex: number;
 }
 
 interface RecordTableColumnOptions<TRecord extends {id: string; fields: object}> {
+  /** Column width in pixels (number) or a CSS width string. */
   width?: number | string;
+  /** Header and cell text alignment. @defaultValue 'left' */
   align?: 'left' | 'center' | 'right';
   headerClassName?: string;
   cellClassName?: string;
@@ -147,26 +188,51 @@ export type RecordTableColumn<TRecord extends {id: string; fields: object}> =
     });
 
 export interface RecordTableProps<TRecord extends {id: string; fields: object}> {
+  /** Rows to display; `id` is the default row key and `fields` supplies cell values. */
   records: ReadonlyArray<TRecord>;
   /**
    * Fields to show, in order. Omit to infer all populated field keys from the
    * records. String entries are a typed shorthand for `{id: fieldKey}`.
    */
   columns?: ReadonlyArray<RecordTableFieldKey<TRecord> | RecordTableColumn<TRecord>>;
+  /** Accessible table caption, displayed below the table. */
   caption?: React.ReactNode;
+  /** Content shown when there are no records. @defaultValue 'No records.' */
   emptyMessage?: React.ReactNode;
+  /** Replace data rows with a loading row and mark the wrapper busy. @defaultValue false */
   loading?: boolean;
+  /** Visible loading text and spinner accessible name. @defaultValue 'Loading records' */
   loadingLabel?: string;
+  /** Stable React row key; defaults to the record id. */
   getRowKey?: (record: TRecord, index: number) => React.Key;
+  /** Classes on each data row, or a function of the record and zero-based index. */
   rowClassName?: string | ((record: TRecord, index: number) => string | undefined);
+  /** Classes on the outer RecordTable wrapper. */
   className?: string;
+  /** Classes on the native table element. */
   tableClassName?: string;
 }
 
 /**
  * Renders records from airgen's generated `useRecords` hook. It deliberately
  * depends only on the hook's structural result, so the root entry remains
- * compatible with every Airtable SDK flavor.
+ * compatible with every Airtable SDK flavor. Inferred columns only include
+ * field keys present in the supplied records; specify `columns` to keep empty
+ * fields visible. Custom cells receive the record, resolved value, and row index.
+ *
+ * @example Typed field columns and a derived column
+ * ```tsx
+ * const records = [{id: 'rec1', fields: {name: 'Website', hours: 4}}];
+ * <RecordTable
+ *   records={records}
+ *   caption="Projects"
+ *   columns={[
+ *     'name',
+ *     {id: 'hours', header: 'Hours', align: 'right'},
+ *     {id: 'double', header: 'Double hours', accessor: record => record.fields.hours * 2},
+ *   ]}
+ * />;
+ * ```
  */
 export function RecordTable<TRecord extends {id: string; fields: object}>({
   records,
@@ -247,12 +313,24 @@ export function RecordTable<TRecord extends {id: string; fields: object}>({
 }
 
 export interface RecordCellValueProps {
+  /** Airtable cell value, including arrays, named objects, lookups, and primitives. */
   value: unknown;
+  /** Content for null, undefined, empty strings, and empty arrays. @defaultValue '—' */
   empty?: React.ReactNode;
   className?: string;
 }
 
-/** Default renderer for common Airtable cell shapes emitted by airgen. */
+/**
+ * Default renderer for common Airtable cell shapes emitted by airgen. Named
+ * objects render as pills, arrays render each value, Dates use local formatting,
+ * and booleans render as Yes/No. Unknown objects fall back to serialized text.
+ *
+ * @example
+ * ```tsx
+ * <RecordCellValue value={{id: 'sel1', name: 'Done', color: 'greenBright'}} />;
+ * <RecordCellValue value={null} empty="Not set" />;
+ * ```
+ */
 export function RecordCellValue({value, empty = '—', className}: RecordCellValueProps) {
   if (value == null || value === '') {
     return (

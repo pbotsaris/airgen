@@ -5,7 +5,9 @@ import {airtableColorToHex} from '../colors.js';
 export type TextVariant = 'heading' | 'default' | 'muted' | 'title' | 'large';
 
 export interface TextProps extends Omit<React.HTMLAttributes<HTMLElement>, 'color'> {
+  /** Rendered element; defaults to `h3` for heading, otherwise `p`. */
   as?: React.ElementType;
+  /** Visual typography, independent of `as`. @defaultValue 'default' */
   variant?: TextVariant;
   /**
    * Sizes the text box like a control of this size (same height and
@@ -36,6 +38,18 @@ const VARIANT_TEXT: Record<TextVariant, string> = {
   muted: 'ag-text-sm',
 };
 
+/**
+ * Typography primitive that forwards its ref to the rendered element. Defaults
+ * to a paragraph, or `h3` for `variant="heading"`; use `as` to choose semantics.
+ *
+ * @example
+ * ```tsx
+ * <>
+ *   <Text as="h1" variant="title" bold>Projects</Text>
+ *   <Text variant="muted">Choose a project to continue.</Text>
+ * </>;
+ * ```
+ */
 export const Text = React.forwardRef<HTMLElement, TextProps>(function Text(
   {
     as,
@@ -69,7 +83,7 @@ export const Text = React.forwardRef<HTMLElement, TextProps>(function Text(
   if (underline) styleClasses.push('ag-underline');
   if (className) styleClasses.push(className);
 
-  const resolvedColor = color ? airtableColorToHex(color) ?? color : undefined;
+  const resolvedColor = color ? (airtableColorToHex(color) ?? color) : undefined;
   const style = resolvedColor ? {...styleProp, color: resolvedColor} : styleProp;
 
   const Component = (as ?? (variant === 'heading' ? 'h3' : 'p')) as React.ElementType;

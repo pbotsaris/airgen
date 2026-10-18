@@ -29,11 +29,14 @@ function useDialogCtx(name: string): DialogCtx {
 }
 
 export interface DialogRootProps {
+  /** Controlled visibility; pair with `onOpenChange`. */
   open?: boolean;
+  /** Initial visibility in uncontrolled mode. @defaultValue false */
   defaultOpen?: boolean;
+  /** Called when the dialog requests a visibility change. */
   onOpenChange?: (open: boolean) => void;
   children?: React.ReactNode;
-  /** Exit-animation hold; must match the content's CSS duration. */
+  /** Exit-animation hold in milliseconds; match the content CSS duration. @defaultValue 200 */
   durationMs?: number;
 }
 
@@ -184,15 +187,28 @@ function DialogOverlay({className, ...props}: React.HTMLAttributes<HTMLDivElemen
 }
 
 export interface DialogContentProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Element to focus on open; defaults to the first focusable child, then the content itself. */
   initialFocusRef?: React.RefObject<HTMLElement | null>;
+  /** Close when Escape is pressed inside the content. @defaultValue true */
   closeOnEscape?: boolean;
+  /** Keep Tab navigation inside the content. @defaultValue true */
   trapFocus?: boolean;
+  /** Restore focus to the trigger or previously focused element on close. @defaultValue true */
   restoreFocus?: boolean;
+  /** Lock document.body scrolling while open. @defaultValue true */
   lockScroll?: boolean;
 }
 
 const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(function DialogContent(
-  {className, initialFocusRef, closeOnEscape = true, trapFocus: shouldTrapFocus = true, restoreFocus = true, lockScroll = true, ...props},
+  {
+    className,
+    initialFocusRef,
+    closeOnEscape = true,
+    trapFocus: shouldTrapFocus = true,
+    restoreFocus = true,
+    lockScroll = true,
+    ...props
+  },
   ref,
 ) {
   const ctx = useDialogCtx('Dialog.Content');
@@ -296,6 +312,7 @@ const DialogDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttri
 );
 
 export interface DialogCloseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  /** Clone handlers/ref onto one element child instead of rendering a button. */
   asChild?: boolean;
   children?: React.ReactNode;
 }
@@ -361,14 +378,42 @@ const DialogClose = React.forwardRef<HTMLButtonElement, DialogCloseProps>(functi
   } as React.ButtonHTMLAttributes<HTMLButtonElement> & {ref: React.Ref<HTMLButtonElement>});
 });
 
+/**
+ * Modal composition primitives. Compose Root, Trigger, Portal, Overlay, and
+ * Content explicitly. Content manages focus, Escape, and scroll locking; give it
+ * a Title or `aria-label`. Supply layout and surface styles via `className`.
+ *
+ * @example
+ * ```tsx
+ * <Dialog.Root>
+ *   <Dialog.Trigger asChild><Button type="button">Details</Button></Dialog.Trigger>
+ *   <Dialog.Portal>
+ *     <Dialog.Overlay />
+ *     <Dialog.Content style={{top: '25%', left: '25%', background: 'white', padding: 24}}>
+ *       <Dialog.Title>Project details</Dialog.Title>
+ *       <Dialog.Description>Review your project settings.</Dialog.Description>
+ *       <Dialog.Close>Done</Dialog.Close>
+ *     </Dialog.Content>
+ *   </Dialog.Portal>
+ * </Dialog.Root>;
+ * ```
+ */
 export const Dialog = {
+  /** Owns controlled or uncontrolled visibility for the modal and its descendants. */
   Root: DialogRoot,
+  /** Button that toggles the modal. Use `asChild` to compose a ref-capable button child. */
   Trigger: DialogTrigger,
+  /** Mounts children into document.body (or `container`), retaining them during exit animation. */
   Portal: DialogPortal,
+  /** Full-screen dimmed backdrop; clicking the backdrop closes the modal. */
   Overlay: DialogOverlay,
+  /** Modal content with focus management; supply positioning and surface styles. */
   Content: DialogContent,
+  /** Heading that supplies the accessible name for Content. */
   Title: DialogTitle,
+  /** Paragraph that supplies the accessible description for Content. */
   Description: DialogDescription,
+  /** Button that closes the modal; supports `asChild` composition. */
   Close: DialogClose,
 };
 
@@ -379,6 +424,7 @@ export const Dialog = {
 export type SheetSide = 'right' | 'left' | 'top' | 'bottom';
 
 export interface SheetContentProps extends DialogContentProps {
+  /** Viewport edge from which the panel slides in. @defaultValue 'right' */
   side?: SheetSide;
 }
 
@@ -412,16 +458,51 @@ const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(functio
     'data-[state=open]:ag-animate-in data-[state=closed]:ag-animate-out ag-duration-200 ' +
     'data-[state=closed]:ag-opacity-0'; // Keep it invisible when closed
 
-  return <DialogContent {...props} ref={ref} className={cx(base, sideClasses[side], className)} restoreFocus={restoreFocus} />;
+  return (
+    <DialogContent
+      {...props}
+      ref={ref}
+      className={cx(base, sideClasses[side], className)}
+      restoreFocus={restoreFocus}
+    />
+  );
 });
 
+/**
+ * Modal side panel using the Dialog primitives. Content adds a surface, edge
+ * positioning, and slide animation; defaults to the right edge. Include Portal,
+ * Overlay, and Title as shown to provide the modal backdrop and accessible name.
+ *
+ * @example
+ * ```tsx
+ * <Sheet.Root>
+ *   <Sheet.Trigger asChild><Button type="button">Settings</Button></Sheet.Trigger>
+ *   <Sheet.Portal>
+ *     <Sheet.Overlay />
+ *     <Sheet.Content side="right">
+ *       <Sheet.Title>Settings</Sheet.Title>
+ *       <Sheet.Description>Manage this project.</Sheet.Description>
+ *       <Sheet.Close>Done</Sheet.Close>
+ *     </Sheet.Content>
+ *   </Sheet.Portal>
+ * </Sheet.Root>;
+ * ```
+ */
 export const Sheet = {
+  /** Owns controlled or uncontrolled visibility for the modal and its descendants. */
   Root: DialogRoot,
+  /** Button that toggles the modal. Use `asChild` to compose a ref-capable button child. */
   Trigger: DialogTrigger,
+  /** Mounts children into document.body (or `container`), retaining them during exit animation. */
   Portal: DialogPortal,
+  /** Full-screen dimmed backdrop; clicking the backdrop closes the modal. */
   Overlay: DialogOverlay,
+  /** Heading that supplies the accessible name for Content. */
   Title: DialogTitle,
+  /** Paragraph that supplies the accessible description for Content. */
   Description: DialogDescription,
+  /** Button that closes the modal; supports `asChild` composition. */
   Close: DialogClose,
+  /** Modal panel with edge positioning and slide animation; defaults to the right side. */
   Content: SheetContent,
 };

@@ -13,7 +13,7 @@ export interface ButtonToggleProps {
   children?: React.ReactNode;
   /** A lucide-react icon component (optional). */
   icon?: IconComponent;
-  /** Callback when value changes. */
+  /** Emits a boolean in `checked` mode, or the next option value in `options` mode. */
   onChange: (newValue: string | boolean) => void;
   variant?: ButtonVariant;
   size?: ButtonSize;
@@ -26,7 +26,16 @@ export interface ButtonToggleProps {
  * - **Multi-option**: pass `options` and `value` to cycle through options
  * - **Boolean**: pass `checked` (and optional `children`/`icon`) for on/off toggle
  *
- * Invalid input warns and renders null rather than throwing.
+ * `checked` takes precedence when provided. Both modes are controlled: update
+ * the corresponding prop in `onChange`. Invalid input warns and renders null.
+ *
+ * @example
+ * ```tsx
+ * const [enabled, setEnabled] = useState(false);
+ * <ButtonToggle checked={enabled} onChange={value => setEnabled(Boolean(value))}>
+ *   Notifications
+ * </ButtonToggle>;
+ * ```
  */
 export function ButtonToggle({
   options,
@@ -44,7 +53,14 @@ export function ButtonToggle({
     const label = children ?? (checked ? 'On' : 'Off');
 
     return (
-      <Button variant={variant} size={size} className={className} onClick={handleClick} icon={icon} aria-pressed={checked}>
+      <Button
+        variant={variant}
+        size={size}
+        className={className}
+        onClick={handleClick}
+        icon={icon}
+        aria-pressed={checked}
+      >
         {label}
       </Button>
     );

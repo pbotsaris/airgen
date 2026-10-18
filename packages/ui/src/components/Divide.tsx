@@ -4,9 +4,20 @@ import {cx} from '../utils.js';
 export type DivideDirection = 'horizontal' | 'vertical';
 
 export interface DivideProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Separator orientation. @defaultValue 'horizontal' */
   direction?: DivideDirection;
 }
 
+/**
+ * Semantic separator. Vertical separators stretch to their flex container's
+ * height; horizontal separators fill the available width.
+ *
+ * @example
+ * ```tsx
+ * <Divide />;
+ * <Divide direction="vertical" />;
+ * ```
+ */
 export function Divide({direction = 'horizontal', className, ...rest}: DivideProps) {
   const isVertical = direction === 'vertical';
 

@@ -24,15 +24,30 @@ function useTooltipCtx(name: string): TooltipContextValue {
 
 export interface TooltipProps {
   children?: React.ReactNode;
-  /** Hover delay before opening, in ms. */
+  /** Hover/focus delay before opening, in milliseconds. @defaultValue 250 */
   delay?: number;
   /** When true (default) the content ignores pointer events. */
   disableHoverableContent?: boolean;
+  /** Controlled visibility; pair with `onOpenChange`. */
   open?: boolean;
+  /** Initial visibility in uncontrolled mode. @defaultValue false */
   defaultOpen?: boolean;
+  /** Called when visibility changes, including in controlled mode. */
   onOpenChange?: (open: boolean) => void;
 }
 
+/**
+ * Description shown on hover or focus; Escape dismisses it. Use Trigger and
+ * Content inside this root (also available as Tooltip.Trigger/Content).
+ *
+ * @example
+ * ```tsx
+ * <Tooltip>
+ *   <Tooltip.Trigger asChild><Button type="button">Save</Button></Tooltip.Trigger>
+ *   <Tooltip.Content>Save your changes</Tooltip.Content>
+ * </Tooltip>;
+ * ```
+ */
 export function Tooltip({
   children,
   delay = 250,
@@ -89,6 +104,15 @@ export interface TooltipTriggerProps {
   asChild?: boolean;
 }
 
+/**
+ * Tooltip anchor. Use `asChild` with one ref-capable element to attach the
+ * description to the focusable control; otherwise renders a span wrapper.
+ *
+ * @example
+ * ```tsx
+ * <Tooltip.Trigger asChild><Button type="button">Help</Button></Tooltip.Trigger>;
+ * ```
+ */
 export function TooltipTrigger({children, asChild = false}: TooltipTriggerProps) {
   const ctx = useTooltipCtx('TooltipTrigger');
   const {triggerRef, scheduleOpen, closeNow, open, contentId} = ctx;
@@ -138,13 +162,31 @@ export function TooltipTrigger({children, asChild = false}: TooltipTriggerProps)
 
 export interface TooltipContentProps {
   children?: React.ReactNode;
+  /** Preferred side of the trigger. @defaultValue 'top' */
   side?: Side;
+  /** Alignment along the trigger edge. @defaultValue 'center' */
   align?: Align;
+  /** Gap from the trigger in pixels. @defaultValue 8 */
   sideOffset?: number;
   className?: string;
 }
 
-export function TooltipContent({children, side = 'top', align = 'center', sideOffset = 8, className = ''}: TooltipContentProps) {
+/**
+ * Portalled description for the enclosing Tooltip. Content is mounted only
+ * while open; placement follows the trigger on scroll and resize.
+ *
+ * @example
+ * ```tsx
+ * <Tooltip.Content side="right">More information</Tooltip.Content>;
+ * ```
+ */
+export function TooltipContent({
+  children,
+  side = 'top',
+  align = 'center',
+  sideOffset = 8,
+  className = '',
+}: TooltipContentProps) {
   const ctx = useTooltipCtx('TooltipContent');
   const {open, closeNow, triggerRef, contentRef, contentId, disableHoverableContent} = ctx;
 

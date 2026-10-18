@@ -15,6 +15,11 @@ export interface PortalProps {
  * so components can render `<Portal>` unconditionally (and SSR never touches
  * `document`). Under a ThemeProvider the content is wrapped in its scheme,
  * since the portal target sits outside the provider's element.
+ *
+ * @example
+ * ```tsx
+ * <Portal><div role="status">Saved</div></Portal>;
+ * ```
  */
 export function Portal({children, container}: PortalProps) {
   const [mounted, setMounted] = React.useState(false);

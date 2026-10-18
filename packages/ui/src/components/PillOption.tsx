@@ -4,12 +4,14 @@ import {PILL_SIZE, type ComponentSize} from '../sizes.js';
 import type {SelectOption} from '../types.js';
 
 export interface PillOptionProps {
+  /** Option whose label, color, and optional avatar are displayed. */
   opt: SelectOption;
   /** Control size the pill nests in. */
   size?: ComponentSize;
   className?: string;
   /** Optional override hex background. */
   bg?: string;
+  /** Override automatic contrast; useful with a custom `bg`. */
   useLightText?: boolean;
   /** If false, just render label (and avatar if present) without the pill chrome. */
   show?: boolean;
@@ -21,7 +23,13 @@ export interface PillOptionProps {
  * - Else if color exists => colored pill bg + auto text color
  * - Else => neutral pill
  *
- * `opt.color` may be an Airtable color name or CSS hex (resolved via colors.ts).
+ * `opt.color` may be an Airtable color name or CSS hex. This is display-only;
+ * use Select for interactive selection.
+ *
+ * @example
+ * ```tsx
+ * <PillOption opt={{value: 'done', label: 'Done', color: 'greenBright'}} size="sm" />;
+ * ```
  */
 export function PillOption({opt, size = 'base', className, bg, useLightText, show = true}: PillOptionProps) {
   const s = PILL_SIZE[size] || PILL_SIZE.base;

@@ -9,14 +9,21 @@ export interface BadgeOptions {
 }
 
 export interface BadgeProps {
+  /** Choice to display; requires a `name` for valid output. */
   opts: BadgeOptions | null | undefined;
+  /** Label size. @defaultValue 'sm' */
   variant?: 'sm' | 'md';
 }
 
 /**
  * Colored pill for a select choice-shaped value. Colorless options render a
  * neutral pill; anything without a `name` renders a safe "Invalid" fallback
- * instead of throwing.
+ * instead of throwing (and logs an error).
+ *
+ * @example
+ * ```tsx
+ * <Badge opts={{name: 'Done', color: 'greenBright'}} />;
+ * ```
  */
 export function Badge({opts, variant = 'sm'}: BadgeProps) {
   if (!opts || opts.name == null) return <InvalidBadge opts={opts} />;

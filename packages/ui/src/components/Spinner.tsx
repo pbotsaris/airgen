@@ -13,7 +13,15 @@ export interface SpinnerProps {
   'aria-label'?: string;
 }
 
-/** Indeterminate spinner. Inherits `currentColor`, so callers set the color. */
+/**
+ * Indeterminate status indicator. Inherits `currentColor`; defaults to a 16px
+ * icon with accessible label "Loading".
+ *
+ * @example
+ * ```tsx
+ * <Spinner size="sm" aria-label="Loading projects" />;
+ * ```
+ */
 export function Spinner({size = 'base', className, 'aria-label': ariaLabel = 'Loading'}: SpinnerProps) {
   const pixelSize = typeof size === 'number' ? size : ICON_SIZES[size];
 
@@ -27,7 +35,7 @@ export interface LoadingOverlayProps {
   size?: IconSize | number;
   /** Optional text beside the spinner. */
   label?: string;
-  /** Wait this long before showing, so quick work doesn't flash a spinner. */
+  /** Delay in milliseconds before showing. @defaultValue 120 */
   delay?: number;
   className?: string;
 }
@@ -35,7 +43,16 @@ export interface LoadingOverlayProps {
 /**
  * Dims its nearest positioned ancestor while `pending` and swallows pointer
  * events, so the controls underneath can't be clicked twice. The ancestor must
- * be `relative`.
+ * have `position: relative`. Blocks pointer interaction once visible; keyboard
+ * focus is not trapped, so disable controls separately when necessary.
+ *
+ * @example
+ * ```tsx
+ * <div style={{position: 'relative'}}>
+ *   <Button disabled={saving}>Save</Button>
+ *   <LoadingOverlay pending={saving} label="Saving…" />
+ * </div>;
+ * ```
  */
 export function LoadingOverlay({pending, size = 'lg', label, delay = 120, className}: LoadingOverlayProps) {
   const [visible, setVisible] = React.useState(false);

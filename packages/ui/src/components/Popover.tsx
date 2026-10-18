@@ -35,15 +35,25 @@ function usePopoverCtx(name: string): PopoverContextValue {
 
 export interface PopoverProps {
   children?: React.ReactNode;
+  /** Controlled visibility; pair with `onOpenChange`. */
   open?: boolean;
+  /** Initial visibility in uncontrolled mode. @defaultValue false */
   defaultOpen?: boolean;
+  /** Called when visibility changes, including in controlled mode. */
   onOpenChange?: (open: boolean) => void;
+  /** Preferred side of the trigger. @defaultValue 'bottom' */
   side?: Side;
+  /** Alignment along the trigger edge. @defaultValue 'center' */
   align?: Align;
+  /** Gap from the trigger in pixels. @defaultValue 8 */
   offset?: number;
+  /** Mount content in document.body through Portal. @defaultValue true */
   portal?: boolean;
+  /** Keep Tab navigation inside the open content. @defaultValue false */
   trapFocus?: boolean;
+  /** Shift content to stay within the viewport. @defaultValue true */
   avoidCollisions?: boolean;
+  /** Minimum viewport edge spacing in pixels. @defaultValue 8 */
   collisionPadding?: number;
   /** Flip to the opposite side when the content would overflow the viewport. */
   flip?: boolean;
@@ -51,7 +61,20 @@ export interface PopoverProps {
 
 /**
  * Popover root. Provides Trigger/Content/Close as compound components
- * (`Popover.Trigger` statics and named exports both work).
+ * (`Popover.Trigger` statics and named exports both work). Escape and outside
+ * pointer interaction close the popover. Trigger children must accept a ref
+ * and forward event handlers and ARIA attributes to a DOM element.
+ *
+ * @example
+ * ```tsx
+ * <Popover align="start">
+ *   <Popover.Trigger><Button type="button">Details</Button></Popover.Trigger>
+ *   <Popover.Content aria-label="Project details">
+ *     <Text>Project settings</Text>
+ *     <Popover.Close><Button type="button">Done</Button></Popover.Close>
+ *   </Popover.Content>
+ * </Popover>;
+ * ```
  */
 export function Popover({
   children,
@@ -118,6 +141,15 @@ export interface PopoverTriggerProps extends React.HTMLAttributes<HTMLElement> {
   children: React.ReactElement;
 }
 
+/**
+ * Clones open/close handlers, ARIA attributes, and an anchor ref onto one
+ * child element. Must be inside Popover.
+ *
+ * @example
+ * ```tsx
+ * <Popover.Trigger><Button type="button">Open</Button></Popover.Trigger>;
+ * ```
+ */
 export function PopoverTrigger({children, ...rest}: PopoverTriggerProps) {
   const ctx = usePopoverCtx('Popover.Trigger');
 
@@ -146,11 +178,29 @@ export function PopoverTrigger({children, ...rest}: PopoverTriggerProps) {
 }
 
 export interface PopoverContentProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Called before Escape closes the popover; `preventDefault()` cancels closing. */
   onEscapeKeyDown?: (ev: KeyboardEvent) => void;
+  /** Called before an outside pointer press closes it; `preventDefault()` cancels closing. */
   onInteractOutside?: (ev: PointerEvent) => void;
 }
 
-export function PopoverContent({id, className = '', style, onEscapeKeyDown, onInteractOutside, ...rest}: PopoverContentProps) {
+/**
+ * Anchored dialog surface inside Popover. Portalled by default; provide
+ * `aria-label` or `aria-labelledby` to name it.
+ *
+ * @example
+ * ```tsx
+ * <Popover.Content aria-label="Details"><Text>Project details</Text></Popover.Content>;
+ * ```
+ */
+export function PopoverContent({
+  id,
+  className = '',
+  style,
+  onEscapeKeyDown,
+  onInteractOutside,
+  ...rest
+}: PopoverContentProps) {
   const ctx = usePopoverCtx('Popover.Content');
   const present = usePresence(ctx.open, EXIT_MS);
 
@@ -161,7 +211,11 @@ export function PopoverContent({id, className = '', style, onEscapeKeyDown, onIn
   }, [id, ctx]);
   const contentId = id ?? ctx.contentId;
 
-  const {style: posStyle, ready, contentRefCallback} = useAnchoredPosition({
+  const {
+    style: posStyle,
+    ready,
+    contentRefCallback,
+  } = useAnchoredPosition({
     open: ctx.open,
     anchorRef: ctx.triggerRef,
     contentRef: ctx.contentRef,
@@ -271,6 +325,15 @@ export interface PopoverCloseProps extends React.HTMLAttributes<HTMLElement> {
   children: React.ReactElement;
 }
 
+/**
+ * Clones a close handler onto one child inside Popover. Child or user click
+ * handlers can call `preventDefault()` to cancel closing.
+ *
+ * @example
+ * ```tsx
+ * <Popover.Close><Button type="button">Done</Button></Popover.Close>;
+ * ```
+ */
 export function PopoverClose({children, ...rest}: PopoverCloseProps) {
   const ctx = usePopoverCtx('Popover.Close');
 

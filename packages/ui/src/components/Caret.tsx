@@ -1,14 +1,28 @@
 import {cx} from '../utils.js';
 
 export interface CaretProps {
+  /** Shape of the indicator. @defaultValue 'chevron' */
   variant?: 'chevron' | 'triangle';
+  /** Indicator size. @defaultValue 'md' */
   size?: 'sm' | 'md' | 'lg';
+  /** Chevron stroke width; ignored for triangles. @defaultValue 2.5 */
   weight?: 1.5 | 2 | 2.5 | 3;
+  /** Flip a downward caret upward. @defaultValue false */
   open?: boolean;
   className?: string;
+  /** Resting direction. @defaultValue 'down' */
   direction?: 'down' | 'up' | 'left' | 'right';
 }
 
+/**
+ * Decorative, aria-hidden direction indicator. `open` flips a downward caret
+ * upward; it has no effect when `direction` is up, left, or right.
+ *
+ * @example
+ * ```tsx
+ * <Caret open={expanded} />;
+ * ```
+ */
 export function Caret({
   variant = 'chevron',
   size = 'md',

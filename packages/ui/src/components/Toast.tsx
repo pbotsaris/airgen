@@ -6,8 +6,10 @@ import {Text} from './Text.js';
 import {Button} from './Button.js';
 import {Portal} from './Portal.js';
 
+/** Notification severity used by ToastProvider and useToast. */
 export type ToastType = 'error' | 'warning' | 'info';
 
+/** Active notification created by useToast; its id can be passed to `dismiss`. */
 export interface ToastItem {
   id: string;
   message: string;
@@ -16,6 +18,7 @@ export interface ToastItem {
   duration: number;
 }
 
+/** Viewport corner in which ToastProvider stacks notifications. */
 export type ToastPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
 
 const ICONS: Record<ToastType, IconComponent> = {
@@ -110,7 +113,10 @@ export function ToastViewport({toasts, onDismiss, position = 'top-right', contai
       <div
         aria-live="polite"
         aria-label="Notifications"
-        className={cx('ag-fixed ag-z-toast ag-flex ag-flex-col ag-gap-2 ag-pointer-events-none', POSITION_CLASSES[position])}
+        className={cx(
+          'ag-fixed ag-z-toast ag-flex ag-flex-col ag-gap-2 ag-pointer-events-none',
+          POSITION_CLASSES[position],
+        )}
       >
         {toasts.map(t => (
           <ToastEntry key={t.id} toast={t} onDismiss={onDismiss} />

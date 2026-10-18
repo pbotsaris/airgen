@@ -30,7 +30,16 @@ const thumbTranslate: Record<ToggleSize, string> = {
   base: 'ag-translate-x-4',
 };
 
-/** Classic sliding toggle switch with a rounded thumb. */
+/**
+ * Controlled switch. Update `checked` in `onChange`; use `label` to provide
+ * a visible, accessible name.
+ *
+ * @example
+ * ```tsx
+ * const [enabled, setEnabled] = useState(false);
+ * <Toggle checked={enabled} onChange={setEnabled} label="Notifications" />;
+ * ```
+ */
 export function Toggle({checked, onChange, disabled = false, size = 'base', className, label}: ToggleProps) {
   const handleClick = () => {
     if (!disabled) onChange(!checked);
