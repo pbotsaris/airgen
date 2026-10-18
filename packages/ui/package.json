@@ -26,12 +26,14 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "examples"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json && tailwindcss -c tailwind.config.cjs -i src/styles.css -o dist/styles.css --minify",
     "test": "vitest run",
     "check:react17": "tsc -p tsconfig.react17.json",
+    "check:examples": "tsc -p examples/tsconfig.json",
     "gen:colors": "node scripts/gen-colors.mjs",
     "prepack": "npm run build",
     "prepublishOnly": "npm test && npm run check:react17"

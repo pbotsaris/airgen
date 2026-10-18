@@ -1,0 +1,16 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "..",
+    "noEmit": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "paths": {
+      "@airgen/ui": ["./src/index.ts"],
+      "react": ["./node_modules/@types/react", "../../node_modules/@types/react"],
+      "react/jsx-runtime": ["./node_modules/@types/react/jsx-runtime", "../../node_modules/@types/react/jsx-runtime"],
+      "react-dom": ["./node_modules/@types/react-dom", "../../node_modules/@types/react-dom"]
+    }
+  },
+  "include": ["./*.ts", "./*.tsx"]
+}
