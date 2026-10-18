@@ -8,6 +8,8 @@ Pre-1.0, minor versions may contain breaking changes.
 
 ## [Unreleased]
 
+## [0.2.1] — 2026-10-18
+
 ### Added
 
 - **`GroupTable` `formatSummary`** — renders numeric summary values (currency,

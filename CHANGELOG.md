@@ -7,6 +7,8 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.4.1]
+
 ### Added
 
 - **`aggregate`.** `aggregate(records, {total: {field: 'value', op: 'sum'}})`
