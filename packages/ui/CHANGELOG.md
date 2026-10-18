@@ -6,10 +6,32 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Pre-1.0, minor versions may contain breaking changes.
 
-## [Unreleased]
+## [0.2.2] — 2026-10-18
+
+### Added
+
+- **`GroupTable` for deep grouping and totals-only views.**
+  `summaryPlacement="auto"` keeps a group's summary in its row while
+  collapsed and moves it to a totals row while expanded. `showRecords={false}`
+  renders group rows and summaries only (leaves lose their toggle), for an
+  aggregate view over several grouped fields. `groupColumn` (`{header, width,
+  resizable, …}`, `GroupColumnOptions`) moves labels and toggles into a leading
+  column of their own, so data columns carry only values and summaries; it is
+  implied by `showRecords={false}`. Also `groupLabelPlacement` (`'above'` |
+  `'inline'`), `groupRowClassName` (string or function of the group context),
+  and `totalLabel` for the totals row's label cell. `examples/GroupTable.tsx`
+  gains `GroupTotalsExample` (totals only) and `GroupFooterExample` (group
+  column with records, inline labels, footer totals).
+- **`RecordRow` `leadingClassName`** (internal) lets a leading cell drop the
+  narrow toggle-column width; `GroupTable` uses it for the group column.
 
 ### Changed
 
+- **`GroupTable` group rows.** Level labels now render as a small caption
+  over the value instead of a `Status: ` prefix (`groupLabelPlacement="inline"`
+  restores the prefix, in smaller muted text). Levels are told apart beyond
+  indentation: depth 0 has the darkest background, semibold text and a 2px top
+  border, and each deeper level a lighter background.
 - **Larger pills at `base` and `sm`.** A `base` pill was 15px tall with 11px
   text inside a 32px control; it now takes the control's 13px text and is
   19px tall. `sm` pills move from 9px to 11px text (15px in a 24px control).

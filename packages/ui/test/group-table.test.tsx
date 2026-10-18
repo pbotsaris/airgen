@@ -85,7 +85,7 @@ describe('nestGroups', () => {
 
 describe('GroupTable', () => {
   test('renders nested group rows with labels, counts and records', () => {
-    render(
+    const {rerender} = render(
       <GroupTable
         groups={twoLevel}
         columns={['name', 'status', 'owner']}
@@ -94,18 +94,53 @@ describe('GroupTable', () => {
       />,
     );
 
+    // Default placement stacks the label as a caption over the value.
     const groupRows = screen.getAllByRole('rowheader');
     expect(groupRows.map(cell => cell.textContent)).toEqual([
+      'StatusActive(3)',
+      'OwnerAna(2)',
+      'OwnerBruno(1)',
+      'StatusDone(1)',
+      'OwnerUnowned(1)',
+    ]);
+    expect(within(groupRows[0]!).getByText('Status')).toHaveClass('ag-uppercase');
+    expect(screen.getByText('Website')).toBeDefined();
+    expect(screen.getByText('Legacy')).toBeDefined();
+    expect(screen.getAllByRole('button', {name: /Collapse/})).toHaveLength(5);
+    expect(screen.getByRole('button', {name: 'Collapse Unowned'})).toBeDefined();
+
+    rerender(
+      <GroupTable
+        groups={twoLevel}
+        columns={['name', 'status', 'owner']}
+        groupLabels={['Status', 'Owner']}
+        emptyGroupLabel="Unowned"
+        groupLabelPlacement="inline"
+      />,
+    );
+    expect(screen.getAllByRole('rowheader').map(cell => cell.textContent)).toEqual([
       'Status: Active(3)',
       'Owner: Ana(2)',
       'Owner: Bruno(1)',
       'Status: Done(1)',
       'Owner: Unowned(1)',
     ]);
-    expect(screen.getByText('Website')).toBeDefined();
-    expect(screen.getByText('Legacy')).toBeDefined();
-    expect(screen.getAllByRole('button', {name: /Collapse/})).toHaveLength(5);
-    expect(screen.getByRole('button', {name: 'Collapse Unowned'})).toBeDefined();
+  });
+
+  test('levels get a background ramp, a top border at depth 0, and groupRowClassName', () => {
+    render(
+      <GroupTable
+        groups={twoLevel}
+        columns={['name']}
+        groupRowClassName={context => `level-${context.depth}${context.leaf ? '-leaf' : ''}`}
+      />,
+    );
+
+    const activeRow = screen.getByRole('rowheader', {name: /Active/}).closest('tr')!;
+    const anaRow = screen.getByRole('rowheader', {name: /Ana/}).closest('tr')!;
+    expect(activeRow).toHaveClass('ag-border-t-2', 'ag-bg-neutral-100', 'level-0');
+    expect(anaRow).toHaveClass('ag-bg-neutral-50', 'level-1-leaf');
+    expect(anaRow).not.toHaveClass('ag-border-t-2');
   });
 
   test('collapsing a leaf hides its records and collapsing a parent hides its children', async () => {
@@ -166,6 +201,106 @@ describe('GroupTable', () => {
     await user.click(screen.getByRole('button', {name: 'Collapse Active'}));
     expect(screen.queryByText('14')).toBeNull();
     expect(screen.queryByText('12')).toBeNull();
+  });
+
+  test('auto placement shows the summary in the group row only while collapsed', async () => {
+    const user = userEvent.setup();
+    render(
+      <GroupTable
+        groups={twoLevel}
+        columns={['name', 'hours']}
+        summary={hours}
+        summaryPlacement="auto"
+        defaultExpanded={false}
+      />,
+    );
+
+    const activeRow = screen.getByRole('rowheader', {name: /Active/}).closest('tr')!;
+    expect(within(activeRow).getByRole('cell')).toHaveTextContent('14');
+    expect(screen.queryByText('12')).toBeNull();
+
+    await user.click(screen.getByRole('button', {name: 'Expand Active'}));
+    // The header row drops the sum (spanning the table); a totals row follows the children.
+    expect(within(activeRow).queryByRole('cell')).toBeNull();
+    expect(within(activeRow).getByRole('rowheader')).toHaveAttribute('colspan', '2');
+    const anaRow = screen.getByRole('rowheader', {name: /Ana/}).closest('tr')!;
+    expect(within(anaRow).getByRole('cell')).toHaveTextContent('12');
+    const rows = () => screen.getAllByRole('row').map(row => row.textContent);
+    expect(rows()[rows().indexOf('14')]).toBe('14');
+    expect(rows().indexOf('14')).toBeGreaterThan(rows().findIndex(row => row?.includes('Bruno')));
+
+    await user.click(screen.getByRole('button', {name: 'Expand Ana'}));
+    expect(within(anaRow).queryByRole('cell')).toBeNull();
+    expect(rows().indexOf('12')).toBeGreaterThan(rows().findIndex(row => row?.includes('API')));
+  });
+
+  test('showRecords={false} renders group rows and summaries only, in a group column', () => {
+    render(
+      <GroupTable
+        groups={twoLevel}
+        columns={['name', {id: 'hours', header: 'Total hours', align: 'right'}]}
+        groupLabels={['Status', 'Owner']}
+        summary={records => ({...hours(records), name: `${records.length} projects`})}
+        summaryPlacement="auto"
+        showRecords={false}
+      />,
+    );
+
+    expect(screen.queryByText('Website')).toBeNull();
+    expect(screen.queryByText('Legacy')).toBeNull();
+    // Parents still collapse; leaves have nothing to open.
+    expect(screen.getByRole('button', {name: 'Collapse Active'})).toBeDefined();
+    expect(screen.queryByRole('button', {name: /Ana/})).toBeNull();
+
+    const headers = screen.getAllByRole('columnheader').map(cell => cell.textContent);
+    expect(headers).toEqual(['Group', 'Name', 'Total hours']);
+    // Every data column sits under its own header: no colspan, one cell per column.
+    const anaRow = screen.getByRole('rowheader', {name: /Ana/}).closest('tr')!;
+    expect(within(anaRow).getByRole('rowheader')).toHaveAttribute('colspan', '1');
+    expect(
+      within(anaRow)
+        .getAllByRole('cell')
+        .map(cell => cell.textContent),
+    ).toEqual(['2 projects', '12']);
+    // Open parents under `auto` move their sum to a totals row even though their leaves cannot open.
+    const activeRow = screen.getByRole('rowheader', {name: /Active/}).closest('tr')!;
+    expect(
+      within(activeRow)
+        .getAllByRole('cell')
+        .map(cell => cell.textContent),
+    ).toEqual(['', '']);
+    const totals = screen.getAllByRole('row').find(row => row.textContent?.startsWith('Total'))!;
+    expect(
+      within(totals)
+        .getAllByRole('cell')
+        .map(cell => cell.textContent),
+    ).toEqual(['Total Active', '3 projects', '14']);
+  });
+
+  test('groupColumn adds a labelled leading column and keeps records aligned', () => {
+    render(
+      <GroupTable
+        groups={twoLevel}
+        columns={['name', 'hours']}
+        summary={hours}
+        groupColumn={{header: 'Conta', resizable: false}}
+        resizable
+      />,
+    );
+
+    expect(screen.getAllByRole('columnheader').map(cell => cell.textContent)).toEqual(['Conta', 'Name', 'Hours']);
+    expect(screen.getAllByRole('separator')).toHaveLength(2);
+    const websiteRow = screen.getByText('Website').closest('tr')!;
+    const cells = within(websiteRow).getAllByRole('cell');
+    expect(cells).toHaveLength(3);
+    expect(cells[0]).toHaveTextContent('');
+    expect(cells[0]).not.toHaveClass('ag-w-10');
+    const anaRow = screen.getByRole('rowheader', {name: /Ana/}).closest('tr')!;
+    expect(
+      within(anaRow)
+        .getAllByRole('cell')
+        .map(cell => cell.textContent),
+    ).toEqual(['', '12']);
   });
 
   test('defaultExpanded as a depth and controlled expansion keyed by node key', async () => {
@@ -257,6 +392,19 @@ describe('GroupTable', () => {
     );
     expect((await axe.run(container, axeOptions)).violations).toEqual([]);
     rerender(<GroupTable groups={twoLevel} columns={['name', 'hours']} summary={hours} summaryPlacement="footer" />);
+    expect((await axe.run(container, axeOptions)).violations).toEqual([]);
+    rerender(<GroupTable groups={twoLevel} columns={['name', 'hours']} summary={hours} summaryPlacement="auto" />);
+    expect((await axe.run(container, axeOptions)).violations).toEqual([]);
+    rerender(
+      <GroupTable
+        groups={twoLevel}
+        columns={['hours']}
+        groupLabels={['Status', 'Owner']}
+        summary={hours}
+        groupColumn={{header: 'Owner'}}
+        showRecords={false}
+      />,
+    );
     expect((await axe.run(container, axeOptions)).violations).toEqual([]);
   });
 });

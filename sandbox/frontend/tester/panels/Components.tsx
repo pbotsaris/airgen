@@ -525,7 +525,8 @@ function GroupTables({ rows, tableKey }: { rows: Row[]; tableKey: string }) {
    const numeric = Object.keys(fields).find(k => ['number', 'currency', 'percent', 'duration', 'count', 'rating'].includes(fields[k].type));
    const [first, setFirst] = useState(groupable[0] ?? Object.keys(fields)[0] ?? '');
    const [second, setSecond] = useState(groupable[1] ?? '');
-   const [placement, setPlacement] = useState<'header' | 'footer'>('header');
+   const [placement, setPlacement] = useState<'header' | 'footer' | 'auto'>('header');
+   const [view, setView] = useState<'records' | 'totals' | 'column'>('records');
    const groupFields = second && second !== first ? [first, second] : [first];
    const groups = first ? groupRecords(rows, { fields: groupFields }) : [];
    const fieldOptions = Object.keys(fields).map(k => ({ value: k, label: fields[k].name ?? k }));
@@ -539,21 +540,41 @@ function GroupTables({ rows, tableKey }: { rows: Row[]; tableKey: string }) {
                options={[
                   { value: 'header', label: 'summary in header' },
                   { value: 'footer', label: 'summary in footer' },
+                  { value: 'auto', label: 'auto (footer while open)' },
                ]}
                value={placement}
-               onChange={value => setPlacement(value as 'header' | 'footer')}
+               onChange={value => setPlacement(value as 'header' | 'footer' | 'auto')}
+               size="sm"
+            />
+            <ButtonToggle
+               options={[
+                  { value: 'records', label: 'records' },
+                  { value: 'column', label: 'records + group column' },
+                  { value: 'totals', label: 'totals only' },
+               ]}
+               value={view}
+               onChange={value => setView(value as 'records' | 'totals' | 'column')}
                size="sm"
             />
             <Badge opts={{ name: `${groups.length} groups`, color: 'tealLight2' }} />
          </div>
          <GroupTable
             groups={groups}
-            columns={[
-               { id: 'record', header: meta.tables[tableKey]?.name ?? tableKey, accessor: (r: Row) => r.name },
-               ...groupFields,
-               ...(numeric ? [{ id: numeric, align: 'right' as const }] : []),
-            ]}
+            columns={
+               view === 'totals'
+                  ? [
+                       { id: 'record', header: 'Distinct', accessor: (r: Row) => r.name, align: 'right' as const },
+                       ...(numeric ? [{ id: numeric, header: `Sum of ${fields[numeric]?.name ?? numeric}`, align: 'right' as const }] : []),
+                    ]
+                  : [
+                       { id: 'record', header: meta.tables[tableKey]?.name ?? tableKey, accessor: (r: Row) => r.name },
+                       ...groupFields,
+                       ...(numeric ? [{ id: numeric, align: 'right' as const }] : []),
+                    ]
+            }
             groupLabels={groupFields.map(k => fields[k]?.name ?? k)}
+            groupColumn={view === 'records' ? undefined : { header: groupFields.map(k => fields[k]?.name ?? k).join(' / ') }}
+            showRecords={view !== 'totals'}
             summary={records => ({
                record: `${new Set(records.map(r => r.id)).size} distinct`,
                ...(numeric ? { [numeric]: sum(records).toLocaleString() } : {}),

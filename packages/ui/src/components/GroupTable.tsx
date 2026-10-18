@@ -51,17 +51,41 @@ export interface GroupContext<TRecord> {
 /** Summary cells keyed by column id (field key or accessor id). */
 export type GroupSummary = Readonly<Record<string, React.ReactNode>>;
 
+/** The leading column that holds group labels and toggles. */
+export interface GroupColumnOptions {
+  /** Column header. @defaultValue a visually hidden "Group" */
+  header?: React.ReactNode;
+  /** Column width in pixels (number) or a CSS width string. */
+  width?: number | string;
+  /** Disable resizing for this column when the table is resizable. @defaultValue true */
+  resizable?: boolean;
+  /** Minimum resized width in pixels. @defaultValue 80 */
+  minWidth?: number;
+  /** Maximum resized width in pixels. */
+  maxWidth?: number;
+  /** Accessible resize handle name. */
+  resizeLabel?: string;
+  headerClassName?: string;
+  /** Classes on the group, record and totals cells of this column. */
+  cellClassName?: string;
+}
+
 export interface GroupTableProps<TRecord extends Structural> extends Omit<
   RecordTableProps<TRecord>,
   'records' | 'renderExpanded' | 'canExpand' | 'defaultExpanded' | 'expanded' | 'onExpandedChange'
 > {
   /** Output of `groupRecords`; several grouped fields nest, one level per field. */
   groups: ReadonlyArray<RecordGroup<TRecord>>;
-  /** One prefix per level, shown as "Status: Done". */
+  /** One label per level: "Status" over (or before) each status value. */
   groupLabels?: ReadonlyArray<React.ReactNode>;
+  /**
+   * `above` stacks the level's label as a small caption over the value;
+   * `inline` prefixes it, as in "Status: Done". @defaultValue 'above'
+   */
+  groupLabelPlacement?: 'above' | 'inline';
   /** Label for a `null` value. @defaultValue '(empty)' */
   emptyGroupLabel?: React.ReactNode;
-  /** Replaces the default label; the caret, count and summary stay. */
+  /** Replaces the default label (caption and value); the caret, count and summary stay. */
   renderGroupLabel?: (context: GroupContext<TRecord>) => React.ReactNode;
   /** Show the record count after the label. @defaultValue true */
   showCount?: boolean;
@@ -74,10 +98,27 @@ export interface GroupTableProps<TRecord extends Structural> extends Omit<
   /** Renders numeric summary values, e.g. as currency. Other values render as given. */
   formatSummary?: (value: number, columnId: string, context: GroupContext<TRecord>) => React.ReactNode;
   /**
-   * `header` puts summaries in the group row, visible while collapsed;
-   * `footer` adds a totals row after the group's records. @defaultValue 'header'
+   * `header` keeps summaries in the group row, visible while collapsed;
+   * `footer` adds a totals row after the group's records; `auto` shows the
+   * summary in the group row while collapsed and moves it to a totals row
+   * while expanded. A leaf with `showRecords={false}` has nothing to open,
+   * so its summary always stays in the group row. @defaultValue 'header'
    */
-  summaryPlacement?: 'header' | 'footer';
+  summaryPlacement?: 'header' | 'footer' | 'auto';
+  /** Leading text of a totals row's label cell (group column only). @defaultValue 'Total' */
+  totalLabel?: React.ReactNode;
+  /**
+   * Render records under leaf groups. `false` shows group rows and their
+   * summaries only, and implies `groupColumn`. @defaultValue true
+   */
+  showRecords?: boolean;
+  /**
+   * Adds a leading column holding the group labels and toggles, so data
+   * columns carry only values and summaries. Implied by `showRecords={false}`.
+   */
+  groupColumn?: GroupColumnOptions;
+  /** Classes on group rows, or a function of the group context; appended to the per-level style. */
+  groupRowClassName?: string | ((context: GroupContext<TRecord>) => string | undefined);
   /** Show expand/collapse toggles on group rows. @defaultValue true */
   collapsible?: boolean;
   /** `true` opens every level; a number opens the levels shallower than it. @defaultValue true */
@@ -139,16 +180,36 @@ export function nestGroups<TRecord extends {id: string}>(
 }
 
 const NO_OVERRIDES: RecordTableExpandedMap = {};
-const GROUP_ROW_CLASS =
-  'ag-bg-neutral-50 hover:ag-bg-neutral-50 dark:ag-bg-neutral-800/60 dark:hover:ag-bg-neutral-800/60';
+const NO_GROUP_COLUMN: GroupColumnOptions = {};
+
+/**
+ * Group row style per level: the top level gets the darkest background and a
+ * stronger top border (collapsed with the previous row's bottom border), each
+ * deeper level a lighter one. Levels past the last entry reuse it.
+ */
+const GROUP_ROW_BY_DEPTH = [
+  'ag-border-t-2 ag-border-t-neutral-300 ag-bg-neutral-100 hover:ag-bg-neutral-100 dark:ag-border-t-neutral-600 dark:ag-bg-neutral-800 dark:hover:ag-bg-neutral-800',
+  'ag-bg-neutral-50 hover:ag-bg-neutral-50 dark:ag-bg-neutral-800/60 dark:hover:ag-bg-neutral-800/60',
+  'ag-bg-neutral-50/50 hover:ag-bg-neutral-50/50 dark:ag-bg-neutral-800/30 dark:hover:ag-bg-neutral-800/30',
+];
 const SUMMARY_ROW_CLASS =
   'ag-bg-neutral-50/60 ag-font-medium hover:ag-bg-neutral-50/60 dark:ag-bg-neutral-800/30 dark:hover:ag-bg-neutral-800/30';
+const CAPTION_CLASS =
+  'ag-block ag-text-xs ag-font-medium ag-uppercase ag-tracking-wide ag-text-neutral-500 dark:ag-text-neutral-400';
+const MUTED_CLASS = 'ag-font-normal ag-text-neutral-500 dark:ag-text-neutral-400';
 
 /**
  * Renders `groupRecords` output as grouped rows: a header row per group, its
  * records under it, and one nested level per grouped field. Group rows carry
- * an optional per-column `summary` (count, sums, …) either in the header row
- * or in a totals row after the records. Every level collapses independently.
+ * an optional per-column `summary` (count, sums, …) in the group row, in a
+ * totals row after the records, or in the group row only while collapsed
+ * (`summaryPlacement`). Every level collapses independently; levels are told
+ * apart by indentation and a background that lightens with depth.
+ *
+ * For an aggregate-only view pass `showRecords={false}`: leaf groups show
+ * their summary and no records. That (or an explicit `groupColumn`) moves
+ * the labels into a leading column of their own, so every data column holds
+ * only values and summaries; rename data columns with `{id, header}` entries.
  *
  * @example
  * ```tsx
@@ -159,6 +220,18 @@ const SUMMARY_ROW_CLASS =
  *   groupLabels={['Status', 'Owner']}
  *   summary={records => aggregate(records, {hours: {field: 'hours', op: 'sum'}})}
  *   formatSummary={hours => `${hours} h`}
+ *   summaryPlacement="auto"
+ * />;
+ * ```
+ *
+ * @example Totals per group, no records
+ * ```tsx
+ * <GroupTable
+ *   groups={groups}
+ *   columns={[{id: 'hours', header: 'Total hours', align: 'right'}]}
+ *   groupColumn={{header: 'Owner'}}
+ *   showRecords={false}
+ *   summary={records => aggregate(records, {hours: {field: 'hours', op: 'sum'}})}
  * />;
  * ```
  */
@@ -176,12 +249,17 @@ export function GroupTable<TRecord extends Structural>({
   resizable,
   columnLines,
   groupLabels,
+  groupLabelPlacement = 'above',
   emptyGroupLabel = '(empty)',
   renderGroupLabel,
   showCount = true,
   summary,
   formatSummary,
   summaryPlacement = 'header',
+  totalLabel = 'Total',
+  showRecords = true,
+  groupColumn,
+  groupRowClassName,
   collapsible = true,
   defaultExpanded = true,
   expanded: expandedProp,
@@ -197,15 +275,20 @@ export function GroupTable<TRecord extends Structural>({
     defaultValue: NO_OVERRIDES,
     onChange: onExpandedChange,
   });
-  const span = Math.max(columns.length, 1);
+  const hasGroupColumn = groupColumn !== undefined || !showRecords;
+  const groupCell = groupColumn ?? NO_GROUP_COLUMN;
+  const span = Math.max(columns.length + (hasGroupColumn ? 1 : 0), 1);
   const [first, ...rest] = columns;
+  const indent = (depth: number) => ({paddingLeft: 12 + depth * 16});
 
   const isOpen = (node: GroupNode<TRecord>) =>
     expanded[node.key] ?? (typeof defaultExpanded === 'number' ? node.depth < defaultExpanded : defaultExpanded);
 
   const renderNode = (node: GroupNode<TRecord>): React.ReactNode[] => {
-    const open = isOpen(node);
     const leaf = node.children.length === 0;
+    // A leaf without records has nothing to open: no caret, summary in its row.
+    const openable = !leaf || showRecords;
+    const open = openable && isOpen(node);
     const context: GroupContext<TRecord> = {
       key: node.key,
       values: node.values,
@@ -227,12 +310,28 @@ export function GroupTable<TRecord extends Structural>({
           )
         : raw;
     const hasSummary = sums !== undefined && Object.keys(sums).length > 0;
+    const placement = !openable
+      ? 'header'
+      : summaryPlacement === 'auto'
+        ? open
+          ? 'footer'
+          : 'header'
+        : summaryPlacement;
+    const summaryInHeader = placement === 'header';
     const valueText = node.value ?? (typeof emptyGroupLabel === 'string' ? emptyGroupLabel : 'empty');
-    const indent = {paddingLeft: 12 + node.depth * 16};
+    const prefix = groupLabels?.[node.depth];
+    const weight = node.depth === 0 ? 'ag-font-semibold' : 'ag-font-medium';
+    const rowClass = cx(
+      GROUP_ROW_BY_DEPTH[Math.min(node.depth, GROUP_ROW_BY_DEPTH.length - 1)],
+      typeof groupRowClassName === 'function' ? groupRowClassName(context) : groupRowClassName,
+    );
+    const cellStyle = indent(node.depth);
 
     const label = (
-      <span className="ag-inline-flex ag-items-center ag-gap-1 ag-text-neutral-900 dark:ag-text-neutral-100">
-        {collapsible && (
+      <span
+        className={cx('ag-inline-flex ag-items-center ag-gap-1 ag-text-neutral-900 dark:ag-text-neutral-100', weight)}
+      >
+        {collapsible && openable && (
           <CaretButton
             size="icon-xs"
             variant="ghost"
@@ -242,63 +341,92 @@ export function GroupTable<TRecord extends Structural>({
             onClick={() => setExpanded({...expanded, [node.key]: !open})}
           />
         )}
-        <span>
-          {renderGroupLabel ? (
-            renderGroupLabel(context)
-          ) : (
-            <>
-              {groupLabels?.[node.depth] != null && (
-                <span className="ag-text-neutral-500 dark:ag-text-neutral-400">{groupLabels[node.depth]}: </span>
-              )}
-              {node.value ?? emptyGroupLabel}
-            </>
+        {collapsible && !openable && <span aria-hidden className="ag-inline-block ag-w-5 ag-shrink-0" />}
+        <span className={groupLabelPlacement === 'above' ? 'ag-flex ag-flex-col' : undefined}>
+          {groupLabelPlacement === 'above' && !renderGroupLabel && prefix != null && (
+            <span className={CAPTION_CLASS}>{prefix}</span>
           )}
+          <span className="ag-inline-flex ag-items-center ag-gap-1">
+            {renderGroupLabel ? (
+              renderGroupLabel(context)
+            ) : (
+              <span>
+                {groupLabelPlacement === 'inline' && prefix != null && (
+                  <span className={cx('ag-text-sm', MUTED_CLASS)}>{prefix}: </span>
+                )}
+                {node.value ?? emptyGroupLabel}
+              </span>
+            )}
+            {showCount && <span className={MUTED_CLASS}>({node.records.length})</span>}
+          </span>
         </span>
-        {showCount && (
-          <span className="ag-font-normal ag-text-neutral-500 dark:ag-text-neutral-400">({node.records.length})</span>
-        )}
       </span>
     );
 
-    const headerRow =
-      summaryPlacement === 'header' && first ? (
-        <TableRow className={GROUP_ROW_CLASS}>
-          <TableHead scope="rowgroup" style={indent} className={cx('ag-whitespace-nowrap', first.headerClassName)}>
-            <span className="ag-flex ag-items-center ag-gap-2">
-              {label}
-              {sums?.[first.id] != null && (
-                <span
-                  className={cx('ag-ml-auto ag-text-neutral-900 dark:ag-text-neutral-100', alignmentClass(first.align))}
-                >
-                  {sums[first.id]}
-                </span>
-              )}
-            </span>
-          </TableHead>
-          {rest.map(column => (
-            <TableCell
-              key={column.id}
-              className={cx('ag-font-medium', alignmentClass(column.align), column.cellClassName)}
-            >
-              {sums?.[column.id]}
-            </TableCell>
-          ))}
-        </TableRow>
-      ) : (
-        <TableRow className={GROUP_ROW_CLASS}>
-          <TableHead scope="rowgroup" colSpan={span} style={indent} className="ag-whitespace-nowrap">
+    const headerRow = hasGroupColumn ? (
+      <TableRow className={rowClass}>
+        <TableHead
+          scope="rowgroup"
+          style={cellStyle}
+          className={cx('ag-whitespace-nowrap ag-py-1.5', groupCell.cellClassName)}
+        >
+          {label}
+        </TableHead>
+        {columns.map(column => (
+          <TableCell key={column.id} className={cx(weight, alignmentClass(column.align), column.cellClassName)}>
+            {summaryInHeader ? sums?.[column.id] : null}
+          </TableCell>
+        ))}
+      </TableRow>
+    ) : summaryInHeader && first ? (
+      <TableRow className={rowClass}>
+        <TableHead
+          scope="rowgroup"
+          style={cellStyle}
+          className={cx('ag-whitespace-nowrap ag-py-1.5', first.headerClassName)}
+        >
+          <span className="ag-flex ag-items-center ag-gap-2">
             {label}
-          </TableHead>
-        </TableRow>
-      );
+            {sums?.[first.id] != null && (
+              <span
+                className={cx(
+                  'ag-ml-auto ag-text-neutral-900 dark:ag-text-neutral-100',
+                  weight,
+                  alignmentClass(first.align),
+                )}
+              >
+                {sums[first.id]}
+              </span>
+            )}
+          </span>
+        </TableHead>
+        {rest.map(column => (
+          <TableCell key={column.id} className={cx(weight, alignmentClass(column.align), column.cellClassName)}>
+            {sums?.[column.id]}
+          </TableCell>
+        ))}
+      </TableRow>
+    ) : (
+      <TableRow className={rowClass}>
+        <TableHead scope="rowgroup" colSpan={span} style={cellStyle} className="ag-whitespace-nowrap ag-py-1.5">
+          {label}
+        </TableHead>
+      </TableRow>
+    );
 
     const footerRow =
-      summaryPlacement === 'footer' && hasSummary ? (
+      placement === 'footer' && hasSummary ? (
         <TableRow className={SUMMARY_ROW_CLASS}>
+          {hasGroupColumn && (
+            <TableCell style={cellStyle} className={cx('ag-whitespace-nowrap', groupCell.cellClassName)}>
+              <span className={MUTED_CLASS}>{totalLabel} </span>
+              {node.value ?? emptyGroupLabel}
+            </TableCell>
+          )}
           {columns.map((column, index) => (
             <TableCell
               key={column.id}
-              style={index === 0 ? indent : undefined}
+              style={!hasGroupColumn && index === 0 ? cellStyle : undefined}
               className={cx(alignmentClass(column.align), column.cellClassName)}
             >
               {sums?.[column.id]}
@@ -318,6 +446,8 @@ export function GroupTable<TRecord extends Structural>({
               record={record}
               rowIndex={rowIndex}
               columns={columns}
+              leading={hasGroupColumn ? null : undefined}
+              leadingClassName={groupCell.cellClassName ?? ''}
               className={typeof rowClassName === 'function' ? rowClassName(record, rowIndex) : rowClassName}
             />
           ))}
@@ -337,9 +467,22 @@ export function GroupTable<TRecord extends Structural>({
     <div className={className} aria-busy={loading || undefined}>
       <Table className={tableClassName} resizable={resizable} columnLines={columnLines}>
         {caption != null && <TableCaption>{caption}</TableCaption>}
-        {columns.length > 0 && (
+        {(hasGroupColumn || columns.length > 0) && (
           <TableHeader>
             <TableRow className="hover:ag-bg-transparent dark:hover:ag-bg-transparent">
+              {hasGroupColumn && (
+                <TableHead
+                  scope="col"
+                  className={groupCell.headerClassName}
+                  style={{width: groupCell.width}}
+                  resizable={groupCell.resizable}
+                  minWidth={groupCell.minWidth}
+                  maxWidth={groupCell.maxWidth}
+                  resizeLabel={groupCell.resizeLabel ?? 'Resize group column'}
+                >
+                  {groupCell.header ?? <span className="ag-sr-only">Group</span>}
+                </TableHead>
+              )}
               {columns.map(column => (
                 <TableHead
                   key={column.id}

@@ -556,6 +556,7 @@ export function RecordRow<TRecord extends {id: string; fields: object}>({
   columns,
   className,
   leading,
+  leadingClassName = 'ag-w-10 ag-py-1 ag-pr-0',
 }: {
   record: TRecord;
   rowIndex: number;
@@ -563,10 +564,12 @@ export function RecordRow<TRecord extends {id: string; fields: object}>({
   className?: string;
   /** `undefined` renders no leading cell; `null` an empty one. */
   leading?: React.ReactNode;
+  /** Classes on the leading cell; defaults to the narrow toggle column. */
+  leadingClassName?: string;
 }) {
   return (
     <TableRow className={className}>
-      {leading !== undefined && <TableCell className="ag-w-10 ag-py-1 ag-pr-0">{leading}</TableCell>}
+      {leading !== undefined && <TableCell className={leadingClassName}>{leading}</TableCell>}
       {columns.map(column => {
         const value = column.accessor ? column.accessor(record) : (record.fields as Record<string, unknown>)[column.id];
 

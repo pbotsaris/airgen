@@ -53,7 +53,7 @@ Each link opens TypeScript source with imports and usage examples.
 | [RecordTable](examples/RecordTable.tsx)                | Typed record columns and expandable rows.                     |
 | [RecordCellValue](examples/RecordCellValue.tsx)        | Airtable-aware cell rendering.                                |
 | [NestedRecordTable](examples/NestedRecordTable.tsx)    | Nested tables for hydrated links.                             |
-| [GroupTable](examples/GroupTable.tsx)                  | Collapsible groups and summaries.                             |
+| [GroupTable](examples/GroupTable.tsx)                  | Collapsible groups, summaries, and totals-only views.         |
 | [ToastProvider / useToast](examples/ToastProvider.tsx) | Imperative notifications.                                     |
 | [SheetProvider / useSheet](examples/SheetProvider.tsx) | Imperative side panels.                                       |
 | [ThemeProvider](examples/ThemeProvider.tsx)            | Light, dark, or system themes.                                |

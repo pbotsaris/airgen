@@ -53,6 +53,7 @@ export {
   type RecordGroup,
   type GroupContext,
   type GroupSummary,
+  type GroupColumnOptions,
 } from './components/GroupTable.js';
 export {Text, type TextProps, type TextVariant} from './components/Text.js';
 export {Toggle, type ToggleProps, type ToggleSize} from './components/Toggle.js';
