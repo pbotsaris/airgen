@@ -5,11 +5,13 @@ All notable changes to airgen are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.4.0]
 
-Runtime expansion (`v0.3.0/docs/PLAN.md`, Phases 0–3). The generated file
-gains write types and a richer meta, an SDK-free runtime core lands behind it,
-and the generated hooks bind it. One breaking type change on regeneration: lookup cells (see Changed).
+Runtime expansion (`v0.3.0/docs/PLAN.md`). The generated file gains write
+types and a richer meta, an SDK-free runtime core lands behind it, the
+generated hooks bind it, and `examples/` shows all of it. One breaking type
+change on regeneration: lookup cells (see Changed). Upgrade notes in
+`docs/upgrading.md`.
 
 ### Changed
 
@@ -22,6 +24,11 @@ and the generated hooks bind it. One breaking type change on regeneration: looku
 
 ### Added
 
+- **`examples/`**: commented `.tsx`/`.ts` files covering setup, reading,
+  fields, writes, queries, drift, custom properties, and the runtime outside
+  React, written against the generated file of a generic project-tracker base
+  (`test/fixtures/example-base.js`). Typechecked by the `tsc --strict` compile
+  test, never shipped.
 - **`<Table>Write` interfaces and `TableWriteMap`.** One write interface per
   table, holding only writable fields, each typed with the SDK's documented
   **cell write format** (`field_core.d.ts`): scalars admit `null` to clear,
@@ -86,8 +93,17 @@ and the generated hooks bind it. One breaking type change on regeneration: looku
   - `lookupValues`, `firstLookupValue`, `cellIds`, `cellNames`,
     `firstLinkedRecord` read helpers.
 
+### Docs
+
+- README cut down to the consumer story (quick start, what you get, the
+  runtime with a link per example, upgrade notes, API table). The deep guides
+  moved to `docs/`: `generated-file.md`, `typecheck-and-fixes.md`,
+  `cli-and-daemon.md`, `upgrading.md`, `releasing.md`.
+
 ### Internal
 
+- `v0.3.0/reference/` (the plain-JS code the runtime was ported from) is
+  removed now that the port is done; only the plan remains under `v0.3.0/`.
 - `field-types.ts` holds the per-type write kinds that both the generator's
   `resolveWriteType` and the runtime's `convertTo` switch on, so the emitted
   write type and the converted value come from one table. Generated output is

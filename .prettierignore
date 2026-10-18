@@ -3,7 +3,7 @@ dist/
 node_modules/
 # Workspaces run their own toolchain
 packages/
-# Plan + reference code being ported (see v0.3.0/reference/README.md)
+# Runtime-expansion plan (v0.3.0/docs/PLAN.md)
 v0.3.0/
 plan/
 # Tooling state and generated files
@@ -13,3 +13,4 @@ package-lock.json
 *.md
 # Generated golden files
 test/fixtures/snapshots/
+examples/airtable-schema.ts

@@ -1,7 +1,6 @@
 // ESLint 10 flat config. Lints the TypeScript client (src/client), the
-// uncompiled daemon (src/daemon), the bin, and the tests. `v0.3.0/` holds the
-// plan and the airkit reference code being ported — never lint, build, or
-// ship it (see v0.3.0/reference/README.md).
+// uncompiled daemon (src/daemon), the bin, the tests, and the examples.
+// `v0.3.0/` holds the runtime-expansion plan — never lint, build, or ship it.
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import reactHooks from 'eslint-plugin-react-hooks';
@@ -11,7 +10,16 @@ import globals from 'globals';
 export default tseslint.config(
   {
     // packages/ui has its own toolchain (vitest + its tsconfigs) and is not linted from the root.
-    ignores: ['dist/', 'node_modules/', 'packages/', 'v0.3.0/', 'plan/', 'coverage/', 'test/fixtures/snapshots/'],
+    ignores: [
+      'dist/',
+      'node_modules/',
+      'packages/',
+      'v0.3.0/',
+      'plan/',
+      'coverage/',
+      'test/fixtures/snapshots/',
+      'examples/airtable-schema.ts',
+    ],
   },
   js.configs.recommended,
   // Node-side plain ESM (daemon, bin, tests, config files).
@@ -26,10 +34,14 @@ export default tseslint.config(
       'no-unused-vars': ['error', {argsIgnorePattern: '^_', caughtErrors: 'none'}],
     },
   },
-  // Browser-side TypeScript (runs in the extension iframe).
-  ...tseslint.configs.recommended.map(config => ({...config, files: ['src/client/**/*.{ts,tsx}']})),
+  // Browser-side TypeScript (runs in the extension iframe), and the examples
+  // written against it (typechecked by generator.test.js, never shipped).
+  ...tseslint.configs.recommended.map(config => ({
+    ...config,
+    files: ['src/client/**/*.{ts,tsx}', 'examples/**/*.{ts,tsx}'],
+  })),
   {
-    files: ['src/client/**/*.{ts,tsx}'],
+    files: ['src/client/**/*.{ts,tsx}', 'examples/**/*.{ts,tsx}'],
     languageOptions: {
       globals: {...globals.browser},
     },
