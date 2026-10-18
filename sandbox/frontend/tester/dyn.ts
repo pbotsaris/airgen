@@ -4,6 +4,7 @@
  * separately in panels/Typed.tsx; everything here is the same runtime code
  * reached through a string key.
  */
+import type {NestedSpec} from '@airgen/ui';
 import type {FieldInspector, MutableTable, QuerySpec, SdkRecord, SdkTable} from 'airgen/interface';
 import {airgenMeta, useFields, useMutations, useQuery, useRecords, useTable} from '../airtable-schema';
 
@@ -93,4 +94,26 @@ export function preview(value: unknown, max = 140): string {
     text = String(value);
   }
   return text.length > max ? `${text.slice(0, max)}…` : text;
+}
+
+/** The untyped row shape `NestedRecordTable` sees at every level. */
+export type Loose = {id: string; fields: {[fieldKey: string]: unknown}};
+
+/** NestedRecordTable levels for an include spec: each target's primary field plus a few non-link fields. */
+export function nestedLevels(tableKey: string, spec: IncludeTree): NestedSpec<Row> {
+  const levels: {[fieldKey: string]: NestedSpec<Row>[string]} = {};
+  for (const [fieldKey, sub] of Object.entries(spec)) {
+    const target = includableLinks(tableKey).find(l => l.fieldKey === fieldKey)?.target;
+    const targetMeta = target ? meta.tables[target] : undefined;
+    const fieldKeys = targetMeta
+      ? Object.keys(targetMeta.fields).filter(k => targetMeta.fields[k].type !== 'multipleRecordLinks').slice(0, 3)
+      : [];
+    levels[fieldKey] = {
+      title: `${meta.tables[tableKey].fields[fieldKey].name ?? fieldKey} → ${targetMeta?.name ?? '?'}`,
+      columns: [{id: 'record', header: targetMeta?.name ?? 'Record', accessor: (r: Loose) => (r as Row).name}, ...fieldKeys],
+      nested: sub === true || !target ? undefined : nestedLevels(target, sub),
+      emptyMessage: 'No linked records',
+    };
+  }
+  return levels;
 }

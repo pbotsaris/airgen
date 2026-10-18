@@ -1,6 +1,7 @@
 /** Every @airgen/ui export, fed live base data where it makes sense. */
 import React, { useState } from 'react';
 import { Bell, Check, Pencil, Plus, Search, Trash2 } from 'lucide-react';
+import { groupRecords } from 'airgen/interface';
 import {
    Badge,
    Button,
@@ -10,10 +11,13 @@ import {
    Circle,
    Dialog,
    Divide,
+   GroupTable,
    Icon,
+   InlineEdit,
    Input,
    Label,
    LoadingOverlay,
+   NestedRecordTable,
    PillOption,
    Popover,
    RecordCellValue,
@@ -40,7 +44,7 @@ import {
    type ButtonVariant,
    type SelectOption,
 } from '@airgen/ui';
-import { dyn, includableLinks, meta, tableKeys, type Row } from '../dyn';
+import { dyn, includableLinks, meta, nestedLevels, tableKeys, widestInclude, type Loose, type Row } from '../dyn';
 import { Code, Section } from '../kit';
 
 const HUES = ['blue', 'cyan', 'teal', 'green', 'yellow', 'orange', 'red', 'pink', 'purple', 'gray'];
@@ -58,8 +62,10 @@ function useLiveData() {
    const fields = dyn.useFields(selectTable);
    const selectRows = dyn.useRecords(selectTable);
    const linkRows = dyn.useRecords(linkTable);
+   // Static per call site: linkTable comes from the generated meta, so the include shape never changes.
+   const nestedRows = dyn.useRecords(linkTable, { include: widestInclude(linkTable, 2) });
    const choices = selectKey ? fields[selectKey].choices : [];
-   return { selectTable, selectKey, choices, selectRows, linkTable, linkRows };
+   return { selectTable, selectKey, choices, selectRows, linkTable, linkRows, nestedRows };
 }
 
 export function Components() {
@@ -80,6 +86,12 @@ export function Components() {
          <Feedback />
          <Divide className="my-4" />
          <Tables rows={live.linkRows} tableKey={live.linkTable} />
+         <Divide className="my-4" />
+         <NestedTables rows={live.nestedRows} tableKey={live.linkTable} />
+         <Divide className="my-4" />
+         <GroupTables rows={live.linkRows} tableKey={live.linkTable} />
+         <Divide className="my-4" />
+         <InlineEdits choices={live.choices} />
       </>
    );
 }
@@ -447,6 +459,186 @@ function Tables({ rows, tableKey }: { rows: Row[]; tableKey: string }) {
          />
          <div className="mt-3">
             <RecordTable records={[]} emptyMessage="Empty state: no records match." columns={fieldKeys.slice(0, 2)} />
+         </div>
+         <Text variant="muted" className="mt-6">Expandable rows (renderExpanded): the first row opens by default; a row with no fields has no toggle.</Text>
+         <RecordTable
+            records={rows.slice(0, 5)}
+            columns={[{ id: 'record', header: tableKey, accessor: (r: Row) => r.name }, ...fieldKeys.slice(0, 2)]}
+            canExpand={(r: Row) => Object.keys(r.fields).length > 0}
+            defaultExpanded={(_, i) => i === 0}
+            renderExpanded={({ record }: { record: Row }) => (
+               <dl className="grid gap-x-4 gap-y-1 p-3" style={{ gridTemplateColumns: 'max-content 1fr' }}>
+                  {Object.entries(record.fields).map(([key, value]) => (
+                     <React.Fragment key={key}>
+                        <dt className="text-gray-gray400">{meta.tables[tableKey]?.fields[key]?.name ?? key}</dt>
+                        <dd className="m-0"><RecordCellValue value={value} /></dd>
+                     </React.Fragment>
+                  ))}
+               </dl>
+            )}
+         />
+      </Section>
+   );
+}
+
+function NestedTables({ rows, tableKey }: { rows: Row[]; tableKey: string }) {
+   const spec = widestInclude(tableKey, 2);
+   const [depth, setDepth] = useState('1');
+   const [expanded, setExpanded] = useState<{ [path: string]: boolean }>({});
+   const paths = Object.keys(expanded).filter(path => expanded[path]);
+   return (
+      <Section
+         title="NestedRecordTable"
+         hint={<>Rows of <Code>{tableKey}</Code> hydrated with <Code>{JSON.stringify(spec).replace(/"/g, '')}</Code>: one sub-table per included link, each with its own columns.</>}
+      >
+         <div className="flex flex-wrap items-center gap-2 mb-2">
+            <ButtonToggle
+               options={[
+                  { value: '0', label: 'all collapsed' },
+                  { value: '1', label: 'root open' },
+                  { value: 'true', label: 'all open' },
+               ]}
+               value={depth}
+               onChange={value => { setDepth(String(value)); setExpanded({}); }}
+               size="sm"
+            />
+            <Text variant="muted">controlled expansion · {paths.length ? paths.join(', ') : 'no overrides yet'}</Text>
+         </div>
+         <NestedRecordTable
+            records={rows.slice(0, 6)}
+            columns={[{ id: 'record', header: meta.tables[tableKey]?.name ?? tableKey, accessor: (r: Loose) => (r as Row).name }]}
+            nested={nestedLevels(tableKey, spec)}
+            defaultExpanded={depth === 'true' ? true : Number(depth)}
+            expanded={expanded}
+            onExpandedChange={setExpanded}
+            caption={`${tableKey}: first 6 records, ${Object.keys(spec).length} included link(s)`}
+         />
+      </Section>
+   );
+}
+
+function GroupTables({ rows, tableKey }: { rows: Row[]; tableKey: string }) {
+   const fields = meta.tables[tableKey]?.fields ?? {};
+   const groupable = Object.keys(fields).filter(k =>
+      ['singleSelect', 'multipleSelects', 'singleCollaborator', 'multipleCollaborators', 'multipleRecordLinks', 'checkbox'].includes(fields[k].type),
+   );
+   const numeric = Object.keys(fields).find(k => ['number', 'currency', 'percent', 'duration', 'count', 'rating'].includes(fields[k].type));
+   const [first, setFirst] = useState(groupable[0] ?? Object.keys(fields)[0] ?? '');
+   const [second, setSecond] = useState(groupable[1] ?? '');
+   const [placement, setPlacement] = useState<'header' | 'footer'>('header');
+   const groupFields = second && second !== first ? [first, second] : [first];
+   const groups = first ? groupRecords(rows, { fields: groupFields }) : [];
+   const fieldOptions = Object.keys(fields).map(k => ({ value: k, label: fields[k].name ?? k }));
+   const sum = (records: ReadonlyArray<Row>) => records.reduce((total, r) => total + (typeof r.fields[numeric ?? ''] === 'number' ? (r.fields[numeric ?? ''] as number) : 0), 0);
+   return (
+      <Section title="GroupTable" hint={<>groupRecords output as is; a second field nests the groups. Summary: distinct count{numeric ? <> and the sum of <Code>{numeric}</Code></> : null}.</>}>
+         <div className="flex flex-wrap items-center gap-2 mb-2">
+            <Select options={fieldOptions} value={first} onChange={v => setFirst(v ?? '')} size="sm" searchable className="w-52" />
+            <Select options={[{ value: '', label: '(no second level)' }, ...fieldOptions]} value={second} onChange={v => setSecond(v ?? '')} size="sm" searchable className="w-52" />
+            <ButtonToggle
+               options={[
+                  { value: 'header', label: 'summary in header' },
+                  { value: 'footer', label: 'summary in footer' },
+               ]}
+               value={placement}
+               onChange={value => setPlacement(value as 'header' | 'footer')}
+               size="sm"
+            />
+            <Badge opts={{ name: `${groups.length} groups`, color: 'tealLight2' }} />
+         </div>
+         <GroupTable
+            groups={groups}
+            columns={[
+               { id: 'record', header: meta.tables[tableKey]?.name ?? tableKey, accessor: (r: Row) => r.name },
+               ...groupFields,
+               ...(numeric ? [{ id: numeric, align: 'right' as const }] : []),
+            ]}
+            groupLabels={groupFields.map(k => fields[k]?.name ?? k)}
+            summary={records => ({
+               record: `${new Set(records.map(r => r.id)).size} distinct`,
+               ...(numeric ? { [numeric]: sum(records).toLocaleString() } : {}),
+            })}
+            summaryPlacement={placement}
+            defaultExpanded={1}
+            resizable
+         />
+      </Section>
+   );
+}
+
+function InlineEdits({ choices }: { choices: ReadonlyArray<{ id: string; name: string; color?: string }> }) {
+   const toast = useToast();
+   const [name, setName] = useState('Website redesign');
+   const [hours, setHours] = useState(12.5);
+   const [amount, setAmount] = useState(1999.99);
+   const [choice, setChoice] = useState(choices[0]?.id ?? '');
+   const usd = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format;
+   const commit = <T,>(set: (value: T) => void, label: string) => (value: T) => {
+      set(value);
+      toast.info(`${label} → ${String(value)}`);
+   };
+   return (
+      <Section title="InlineEdit" hint="Click or Enter to edit, Enter/blur saves, Escape cancels. The value only commits when it changed; a thrown error keeps the draft open.">
+         <div className="grid gap-x-6 gap-y-2 items-center" style={{ gridTemplateColumns: 'max-content 1fr' }}>
+            <Label>text</Label>
+            <InlineEdit label="Name" value={name} onCommit={commit(setName, 'name')} placeholder="Untitled" />
+            <Label>number, right aligned</Label>
+            <InlineEdit label="Hours" value={hours} onCommit={commit(setHours, 'hours')} align="right" className="w-32" />
+            <Label>currency: format / toInputValue / parse</Label>
+            <InlineEdit
+               label="Amount"
+               value={amount}
+               onCommit={commit(setAmount, 'amount')}
+               format={usd}
+               toInputValue={value => value.toFixed(2)}
+               parse={draft => {
+                  const number = Number(draft.replace(/[^0-9.-]/g, ''));
+                  if (!draft.trim() || !Number.isFinite(number)) throw new Error('Enter an amount like 1999.99');
+                  return number;
+               }}
+               align="right"
+               bold
+               className="w-40"
+            />
+            <Label>async commit that rejects empty</Label>
+            <InlineEdit
+               label="Required name"
+               value={name}
+               onCommit={async value => {
+                  await new Promise(resolve => setTimeout(resolve, 400));
+                  if (!value.trim()) throw new Error('Name is required.');
+                  commit(setName, 'name')(value);
+               }}
+            />
+            <Label>renderValue + renderEditor (Select)</Label>
+
+            <InlineEdit
+               label="Status"
+               value={choice}
+               onCommit={commit(setChoice, 'status')}
+               renderValue={value => <Badge opts={choices.find(c => c.id === value) ?? { name: '(none)' }} />}
+               renderEditor={({ draft, setDraft, commit: save, cancel }) => (
+                  <div className="flex items-center gap-1">
+                     <Select
+                        options={choices.map(c => ({ value: c.id, label: c.name, color: c.color }))}
+                        value={draft || undefined}
+                        onChange={v => setDraft(v ?? '')}
+                        size="sm"
+                        className="w-48"
+                     />
+                     <Button size="xs" onClick={() => void save()}>Save</Button>
+                     <Button size="xs" variant="ghost" onClick={cancel}>Cancel</Button>
+                  </div>
+               )}
+            />
+            <Label>sizes, variants, disabled</Label>
+            <div className="flex flex-wrap items-center gap-3">
+               {(['xs', 'sm', 'base', 'lg'] as const).map(size => (
+                  <InlineEdit key={size} label={`Size ${size}`} size={size} value={size} onCommit={() => { }} />
+               ))}
+               <InlineEdit label="Heading" variant="heading" value="heading variant" onCommit={() => { }} />
+               <InlineEdit label="Disabled" value="disabled" disabled onCommit={() => { }} />
+            </div>
          </div>
       </Section>
    );

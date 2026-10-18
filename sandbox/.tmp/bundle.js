@@ -1122,7 +1122,7 @@
           return dispatcher;
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React36 = require_react(), Internals = {
+        var React37 = require_react(), Internals = {
           d: {
             f: noop,
             r: function() {
@@ -1140,7 +1140,7 @@
           },
           p: 0,
           findDOMNode: null
-        }, REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_RECOVERABLE_TYPE = Symbol.for("react.recoverable"), REACT_OPTIMISTIC_KEY = Symbol.for("react.optimistic_key"), ReactSharedInternals = React36.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
+        }, REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_RECOVERABLE_TYPE = Symbol.for("react.recoverable"), REACT_OPTIMISTIC_KEY = Symbol.for("react.optimistic_key"), ReactSharedInternals = React37.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
         "function" === typeof Map && null != Map.prototype && "function" === typeof Map.prototype.forEach && "function" === typeof Set && null != Set.prototype && "function" === typeof Set.prototype.clear && "function" === typeof Set.prototype.forEach || console.error(
           "React depends on Map and Set built-in types. Make sure that you load a polyfill in older browsers. https://reactjs.org/link/react-polyfills"
         );
@@ -2360,7 +2360,7 @@
         }
         function flattenOptionChildren(children) {
           var content = "";
-          React36.Children.forEach(children, function(child) {
+          React37.Children.forEach(children, function(child) {
             null != child && (content += child, didWarnInvalidOptionChildren || "string" === typeof child || "number" === typeof child || "bigint" === typeof child || (didWarnInvalidOptionChildren = true, console.error(
               "Cannot infer the option value of complex children. Pass a `value` prop or use a plain string as children to <option>."
             )));
@@ -7791,7 +7791,7 @@
             );
           return result;
         }
-        var React36 = require_react(), ReactDOM2 = require_react_dom(), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_SCOPE_TYPE = Symbol.for("react.scope"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_LEGACY_HIDDEN_TYPE = Symbol.for("react.legacy_hidden"), REACT_MEMO_CACHE_SENTINEL = Symbol.for("react.memo_cache_sentinel"), REACT_VIEW_TRANSITION_TYPE = Symbol.for("react.view_transition"), REACT_RECOVERABLE_TYPE = Symbol.for("react.recoverable"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, ASYNC_ITERATOR = Symbol.asyncIterator, REACT_OPTIMISTIC_KEY = Symbol.for("react.optimistic_key"), isArrayImpl = Array.isArray, jsxPropsParents = /* @__PURE__ */ new WeakMap(), jsxChildrenParents = /* @__PURE__ */ new WeakMap(), CLIENT_REFERENCE_TAG = Symbol.for("react.client.reference"), assign = Object.assign, hasOwnProperty = Object.prototype.hasOwnProperty, VALID_ATTRIBUTE_NAME_REGEX = RegExp(
+        var React37 = require_react(), ReactDOM2 = require_react_dom(), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_SCOPE_TYPE = Symbol.for("react.scope"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_LEGACY_HIDDEN_TYPE = Symbol.for("react.legacy_hidden"), REACT_MEMO_CACHE_SENTINEL = Symbol.for("react.memo_cache_sentinel"), REACT_VIEW_TRANSITION_TYPE = Symbol.for("react.view_transition"), REACT_RECOVERABLE_TYPE = Symbol.for("react.recoverable"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, ASYNC_ITERATOR = Symbol.asyncIterator, REACT_OPTIMISTIC_KEY = Symbol.for("react.optimistic_key"), isArrayImpl = Array.isArray, jsxPropsParents = /* @__PURE__ */ new WeakMap(), jsxChildrenParents = /* @__PURE__ */ new WeakMap(), CLIENT_REFERENCE_TAG = Symbol.for("react.client.reference"), assign = Object.assign, hasOwnProperty = Object.prototype.hasOwnProperty, VALID_ATTRIBUTE_NAME_REGEX = RegExp(
           "^[:A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD][:A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD\\-.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040]*$"
         ), illegalAttributeNameCache = {}, validatedAttributeNameCache = {}, unitlessNumbers = new Set(
           "animationIterationCount aspectRatio borderImageOutset borderImageSlice borderImageWidth boxFlex boxFlexGroup boxOrdinalGroup columnCount columns flex flexGrow flexPositive flexShrink flexNegative flexOrder gridArea gridRow gridRowEnd gridRowSpan gridRowStart gridColumn gridColumnEnd gridColumnSpan gridColumnStart fontWeight lineClamp lineHeight opacity order orphans scale tabSize widows zIndex zoom fillOpacity floodOpacity stopOpacity strokeDasharray strokeDashoffset strokeMiterlimit strokeOpacity strokeWidth MozAnimationIterationCount MozBoxFlex MozBoxFlexGroup MozLineClamp msAnimationIterationCount msFlex msZoom msFlexGrow msFlexNegative msFlexOrder msFlexPositive msFlexShrink msGridColumn msGridColumnSpan msGridRow msGridRowSpan WebkitAnimationIterationCount WebkitBoxFlex WebKitBoxFlexGroup WebkitBoxOrdinalGroup WebkitColumnCount WebkitColumns WebkitFlex WebkitFlexGrow WebkitFlexPositive WebkitFlexShrink WebkitLineClamp".split(
@@ -8442,7 +8442,7 @@
           "^(aria)-[:A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD\\-.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040]*$"
         ), rARIACamel = RegExp(
           "^(aria)[A-Z][:A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD\\-.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040]*$"
-        ), badVendoredStyleNamePattern = /^(?:webkit|moz|o)[A-Z]/, msPattern$1 = /^-ms-/, hyphenPattern = /-(.)/g, badStyleValueWithSemicolonPattern = /;\s*$/, warnedStyleNames = {}, warnedStyleValues = {}, warnedForNaNValue = false, warnedForInfinityValue = false, matchHtmlRegExp = /["'&<>]/, uppercasePattern = /([A-Z])/g, msPattern = /^ms-/, isJavaScriptProtocol = /^[\u0000-\u001F ]*j[\r\n\t]*a[\r\n\t]*v[\r\n\t]*a[\r\n\t]*s[\r\n\t]*c[\r\n\t]*r[\r\n\t]*i[\r\n\t]*p[\r\n\t]*t[\r\n\t]*:/i, ReactSharedInternals = React36.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ReactDOMSharedInternals = ReactDOM2.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, NotPending = Object.freeze({
+        ), badVendoredStyleNamePattern = /^(?:webkit|moz|o)[A-Z]/, msPattern$1 = /^-ms-/, hyphenPattern = /-(.)/g, badStyleValueWithSemicolonPattern = /;\s*$/, warnedStyleNames = {}, warnedStyleValues = {}, warnedForNaNValue = false, warnedForInfinityValue = false, matchHtmlRegExp = /["'&<>]/, uppercasePattern = /([A-Z])/g, msPattern = /^ms-/, isJavaScriptProtocol = /^[\u0000-\u001F ]*j[\r\n\t]*a[\r\n\t]*v[\r\n\t]*a[\r\n\t]*s[\r\n\t]*c[\r\n\t]*r[\r\n\t]*i[\r\n\t]*p[\r\n\t]*t[\r\n\t]*:/i, ReactSharedInternals = React37.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ReactDOMSharedInternals = ReactDOM2.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, NotPending = Object.freeze({
           pending: false,
           data: null,
           method: null,
@@ -10091,7 +10091,7 @@ A.finished.finally(function(){document.__reactViewTransition===A&&(document.__re
         }
         function flattenOptionChildren(children) {
           var content = "";
-          React36.Children.forEach(children, function(child) {
+          React37.Children.forEach(children, function(child) {
             null != child && (content += child, didWarnInvalidOptionChildren || "string" === typeof child || "number" === typeof child || "bigint" === typeof child || (didWarnInvalidOptionChildren = true, console.error(
               "Cannot infer the option value of complex children. Pass a `value` prop or use a plain string as children to <option>."
             )));
@@ -15640,13 +15640,13 @@ A.finished.finally(function(){document.__reactViewTransition===A&&(document.__re
           return trackedPostpones;
         }
         function ensureCorrectIsomorphicReactVersion() {
-          var isomorphicReactPackageVersion = React36.version;
+          var isomorphicReactPackageVersion = React37.version;
           if ("19.3.1" !== isomorphicReactPackageVersion)
             throw Error(
               'Incompatible React versions: The "react" and "react-dom" packages must have the exact same version. Instead got:\n  - react:      ' + (isomorphicReactPackageVersion + "\n  - react-dom:  19.3.1\nLearn more: https://react.dev/warnings/version-mismatch")
             );
         }
-        var React36 = require_react(), ReactDOM2 = require_react_dom(), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_SCOPE_TYPE = Symbol.for("react.scope"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_LEGACY_HIDDEN_TYPE = Symbol.for("react.legacy_hidden"), REACT_MEMO_CACHE_SENTINEL = Symbol.for("react.memo_cache_sentinel"), REACT_VIEW_TRANSITION_TYPE = Symbol.for("react.view_transition"), REACT_RECOVERABLE_TYPE = Symbol.for("react.recoverable"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, ASYNC_ITERATOR = Symbol.asyncIterator, REACT_OPTIMISTIC_KEY = Symbol.for("react.optimistic_key"), isArrayImpl = Array.isArray, jsxPropsParents = /* @__PURE__ */ new WeakMap(), jsxChildrenParents = /* @__PURE__ */ new WeakMap(), CLIENT_REFERENCE_TAG = Symbol.for("react.client.reference"), hasOwnProperty = Object.prototype.hasOwnProperty, channel = new MessageChannel(), taskQueue = [];
+        var React37 = require_react(), ReactDOM2 = require_react_dom(), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_SCOPE_TYPE = Symbol.for("react.scope"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_LEGACY_HIDDEN_TYPE = Symbol.for("react.legacy_hidden"), REACT_MEMO_CACHE_SENTINEL = Symbol.for("react.memo_cache_sentinel"), REACT_VIEW_TRANSITION_TYPE = Symbol.for("react.view_transition"), REACT_RECOVERABLE_TYPE = Symbol.for("react.recoverable"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, ASYNC_ITERATOR = Symbol.asyncIterator, REACT_OPTIMISTIC_KEY = Symbol.for("react.optimistic_key"), isArrayImpl = Array.isArray, jsxPropsParents = /* @__PURE__ */ new WeakMap(), jsxChildrenParents = /* @__PURE__ */ new WeakMap(), CLIENT_REFERENCE_TAG = Symbol.for("react.client.reference"), hasOwnProperty = Object.prototype.hasOwnProperty, channel = new MessageChannel(), taskQueue = [];
         channel.port1.onmessage = function() {
           var task = taskQueue.shift();
           task && task();
@@ -16307,7 +16307,7 @@ A.finished.finally(function(){document.__reactViewTransition===A&&(document.__re
           "^(aria)-[:A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD\\-.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040]*$"
         ), rARIACamel = RegExp(
           "^(aria)[A-Z][:A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD\\-.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040]*$"
-        ), badVendoredStyleNamePattern = /^(?:webkit|moz|o)[A-Z]/, msPattern$1 = /^-ms-/, hyphenPattern = /-(.)/g, badStyleValueWithSemicolonPattern = /;\s*$/, warnedStyleNames = {}, warnedStyleValues = {}, warnedForNaNValue = false, warnedForInfinityValue = false, matchHtmlRegExp = /["'&<>]/, uppercasePattern = /([A-Z])/g, msPattern = /^ms-/, isJavaScriptProtocol = /^[\u0000-\u001F ]*j[\r\n\t]*a[\r\n\t]*v[\r\n\t]*a[\r\n\t]*s[\r\n\t]*c[\r\n\t]*r[\r\n\t]*i[\r\n\t]*p[\r\n\t]*t[\r\n\t]*:/i, ReactSharedInternals = React36.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ReactDOMSharedInternals = ReactDOM2.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, NotPending = Object.freeze({
+        ), badVendoredStyleNamePattern = /^(?:webkit|moz|o)[A-Z]/, msPattern$1 = /^-ms-/, hyphenPattern = /-(.)/g, badStyleValueWithSemicolonPattern = /;\s*$/, warnedStyleNames = {}, warnedStyleValues = {}, warnedForNaNValue = false, warnedForInfinityValue = false, matchHtmlRegExp = /["'&<>]/, uppercasePattern = /([A-Z])/g, msPattern = /^ms-/, isJavaScriptProtocol = /^[\u0000-\u001F ]*j[\r\n\t]*a[\r\n\t]*v[\r\n\t]*a[\r\n\t]*s[\r\n\t]*c[\r\n\t]*r[\r\n\t]*i[\r\n\t]*p[\r\n\t]*t[\r\n\t]*:/i, ReactSharedInternals = React37.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ReactDOMSharedInternals = ReactDOM2.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, NotPending = Object.freeze({
           pending: false,
           data: null,
           method: null,
@@ -22838,7 +22838,7 @@ A.finished.finally(function(){document.__reactViewTransition===A&&(document.__re
           node.defaultValue !== "" + value && (node.defaultValue = "" + value);
         }
         function validateOptionProps(element, props) {
-          null == props.value && ("object" === typeof props.children && null !== props.children ? React36.Children.forEach(props.children, function(child) {
+          null == props.value && ("object" === typeof props.children && null !== props.children ? React37.Children.forEach(props.children, function(child) {
             null == child || "string" === typeof child || "number" === typeof child || "bigint" === typeof child || didWarnInvalidChild || (didWarnInvalidChild = true, console.error(
               "Cannot infer the option value of complex children. Pass a `value` prop or use a plain string as children to <option>."
             ));
@@ -39986,11 +39986,11 @@ A.finished.finally(function(){document.__reactViewTransition===A&&(document.__re
           ));
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var Scheduler = require_scheduler(), React36 = require_react(), ReactDOM2 = require_react_dom(), searchTarget = null, searchBoundary = null, assign = Object.assign, REACT_LEGACY_ELEMENT_TYPE = Symbol.for("react.element"), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy");
+        var Scheduler = require_scheduler(), React37 = require_react(), ReactDOM2 = require_react_dom(), searchTarget = null, searchBoundary = null, assign = Object.assign, REACT_LEGACY_ELEMENT_TYPE = Symbol.for("react.element"), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy");
         Symbol.for("react.scope");
         var REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_LEGACY_HIDDEN_TYPE = Symbol.for("react.legacy_hidden");
         Symbol.for("react.tracing_marker");
-        var REACT_MEMO_CACHE_SENTINEL = Symbol.for("react.memo_cache_sentinel"), REACT_VIEW_TRANSITION_TYPE = Symbol.for("react.view_transition"), REACT_RECOVERABLE_TYPE = Symbol.for("react.recoverable"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), isArrayImpl = Array.isArray, ReactSharedInternals = React36.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ReactDOMSharedInternals = ReactDOM2.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, NotPending = Object.freeze({
+        var REACT_MEMO_CACHE_SENTINEL = Symbol.for("react.memo_cache_sentinel"), REACT_VIEW_TRANSITION_TYPE = Symbol.for("react.view_transition"), REACT_RECOVERABLE_TYPE = Symbol.for("react.recoverable"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), isArrayImpl = Array.isArray, ReactSharedInternals = React37.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ReactDOMSharedInternals = ReactDOM2.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, NotPending = Object.freeze({
           pending: false,
           data: null,
           method: null,
@@ -43182,7 +43182,7 @@ A.finished.finally(function(){document.__reactViewTransition===A&&(document.__re
           }
         };
         (function() {
-          var isomorphicReactPackageVersion = React36.version;
+          var isomorphicReactPackageVersion = React37.version;
           if ("19.3.1" !== isomorphicReactPackageVersion)
             throw Error(
               'Incompatible React versions: The "react" and "react-dom" packages must have the exact same version. Instead got:\n  - react:      ' + (isomorphicReactPackageVersion + "\n  - react-dom:  19.3.1\nLearn more: https://react.dev/warnings/version-mismatch")
@@ -46462,18 +46462,18 @@ export interface AiText {
         function isValidElement5(object) {
           return "object" === typeof object && null !== object && object.$$typeof === REACT_ELEMENT_TYPE;
         }
-        var React36 = require_react(), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_VIEW_TRANSITION_TYPE = Symbol.for("react.view_transition"), REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = React36.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, hasOwnProperty = Object.prototype.hasOwnProperty, isArrayImpl = Array.isArray, createTask = console.createTask ? console.createTask : function() {
+        var React37 = require_react(), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_VIEW_TRANSITION_TYPE = Symbol.for("react.view_transition"), REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = React37.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, hasOwnProperty = Object.prototype.hasOwnProperty, isArrayImpl = Array.isArray, createTask = console.createTask ? console.createTask : function() {
           return null;
         };
-        React36 = {
+        React37 = {
           react_stack_bottom_frame: function(callStackForError) {
             return callStackForError();
           }
         };
         var specialPropKeyWarningShown;
         var didWarnAboutElementRef = {};
-        var unknownOwnerDebugStack = React36.react_stack_bottom_frame.bind(
-          React36,
+        var unknownOwnerDebugStack = React37.react_stack_bottom_frame.bind(
+          React37,
           UnknownOwner
         )();
         var unknownOwnerDebugTask = createTask(getTaskName(UnknownOwner));
@@ -47026,52 +47026,195 @@ export interface AiText {
     }
   });
 
+  // node_modules/@airgen/ui/dist/components/InlineEdit.js
+  function InlineEditImpl({ value, onCommit, label, placeholder = "", disabled = false, size = "base", variant, bold, align = "left", className, style: style3, format: format2, toInputValue, parse: parse2, renderValue, renderEditor, commitOnBlur = !renderEditor, commitOnEnter = !renderEditor, inputMode }, forwardedRef) {
+    const raw = toInputValue ? toInputValue(value) : String(value ?? "");
+    const display = format2 ? format2(value) : String(value ?? "");
+    const [editing, setEditing] = React13.useState(false);
+    const [draft, updateDraft] = React13.useState(raw);
+    const [pending, setPending] = React13.useState(false);
+    const [error, setError] = React13.useState(null);
+    const inputRef = React13.useRef(null);
+    const triggerRef = React13.useRef(null);
+    const editorRef = React13.useRef(null);
+    const active = React13.useRef(false);
+    const saving = React13.useRef(false);
+    const draftRef = React13.useRef(raw);
+    const mounted = React13.useRef(false);
+    const restoreFocusRef = React13.useRef(false);
+    const errorId = useStableId("inline-edit-error");
+    const metrics = SIZE_SCALE[size];
+    React13.useEffect(() => {
+      mounted.current = true;
+      return () => {
+        mounted.current = false;
+      };
+    }, []);
+    React13.useEffect(() => {
+      if (!editing)
+        return;
+      if (renderEditor) {
+        getFocusable(editorRef.current)[0]?.focus();
+      } else {
+        inputRef.current?.focus();
+        inputRef.current?.select();
+      }
+    }, [editing, !!renderEditor]);
+    const setDraft = (next) => {
+      if (saving.current || disabled)
+        return;
+      draftRef.current = next;
+      updateDraft(next);
+      setError(null);
+    };
+    const start = () => {
+      if (disabled || active.current)
+        return;
+      draftRef.current = raw;
+      updateDraft(raw);
+      setError(null);
+      active.current = true;
+      setEditing(true);
+    };
+    const finish = (restoreFocus) => {
+      active.current = false;
+      setEditing(false);
+      setError(null);
+      if (restoreFocus) {
+        restoreFocusRef.current = true;
+      }
+    };
+    React13.useEffect(() => {
+      if (!editing && restoreFocusRef.current) {
+        restoreFocusRef.current = false;
+        (triggerRef.current ?? inputRef.current)?.focus();
+      }
+    }, [editing]);
+    const commit = async (restoreFocus = true) => {
+      if (!active.current || saving.current || disabled)
+        return false;
+      saving.current = true;
+      setPending(true);
+      try {
+        const text = draftRef.current;
+        let next;
+        if (parse2)
+          next = parse2(text);
+        else if (typeof value === "number") {
+          const number = Number(text);
+          if (!text.trim() || !Number.isFinite(number))
+            throw new Error("Enter a valid number.");
+          next = number;
+        } else if (typeof value === "string")
+          next = text;
+        else
+          throw new Error("Provide a parse function for this value.");
+        if (!Object.is(next, value))
+          await onCommit(next);
+        if (mounted.current)
+          finish(restoreFocus);
+        return true;
+      } catch (cause) {
+        if (mounted.current)
+          setError(cause instanceof Error ? cause.message : "Unable to save. Please try again.");
+        return false;
+      } finally {
+        saving.current = false;
+        if (mounted.current)
+          setPending(false);
+      }
+    };
+    const cancel = () => {
+      if (saving.current)
+        return;
+      draftRef.current = raw;
+      updateDraft(raw);
+      finish(true);
+    };
+    const controlClass = cx("ag-box-border ag-w-full ag-min-w-0 ag-rounded-md ag-border ag-border-solid ag-bg-transparent ag-outline-none ag-text-inherit", "focus-visible:ag-ring-2 focus-visible:ag-ring-blue-500", "ag-transition-[border-color,background-color] ag-duration-150", metrics.h, metrics.px, align === "right" ? "ag-text-right" : "ag-text-left", editing ? "ag-border-neutral-200 focus:ag-bg-neutral-100 dark:ag-border-neutral-600 dark:focus:ag-bg-neutral-700" : "ag-border-transparent hover:ag-border-neutral-200 dark:hover:ag-border-neutral-600", disabled ? "ag-cursor-not-allowed ag-opacity-60" : "ag-cursor-text");
+    const input = (0, import_jsx_runtime11.jsx)("input", { ref: inputRef, type: "text", inputMode: inputMode ?? (typeof value === "number" ? "decimal" : void 0), "aria-label": label, "aria-invalid": error ? true : void 0, "aria-describedby": error ? errorId : void 0, disabled, readOnly: !editing || pending, value: editing ? draft : display, placeholder, onClick: start, onChange: (event) => setDraft(event.target.value), className: cx(controlClass, "ag-col-start-1 ag-row-start-1"), style: __spreadValues({ font: "inherit" }, !renderEditor && !renderValue ? { width: 0, minWidth: "100%" } : {}) });
+    return (0, import_jsx_runtime11.jsxs)(Text, { as: "div", ref: forwardedRef, variant, bold, className: cx("ag-inline-grid ag-min-w-0 ag-max-w-full", !variant && metrics.text, className), style: style3, "aria-busy": pending || void 0, onKeyDown: (event) => {
+      if (event.defaultPrevented || event.nativeEvent.isComposing || disabled)
+        return;
+      if (!active.current) {
+        if (event.key === "Enter" && !renderEditor && !renderValue) {
+          event.preventDefault();
+          start();
+        }
+        return;
+      }
+      if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        cancel();
+      } else if (event.key === "Enter" && commitOnEnter && !event.shiftKey) {
+        event.preventDefault();
+        void commit();
+      }
+    }, onBlur: (event) => {
+      if (!active.current || !commitOnBlur || event.currentTarget.contains(event.relatedTarget))
+        return;
+      void commit(false);
+    }, children: [renderEditor || renderValue ? editing ? (0, import_jsx_runtime11.jsx)("div", { ref: editorRef, children: renderEditor ? renderEditor({ draft, setDraft, commit: () => commit(), cancel, pending, error, label }) : input }) : (0, import_jsx_runtime11.jsx)("button", { ref: triggerRef, type: "button", disabled, "aria-label": `Edit ${label}`, onClick: start, className: controlClass, style: { font: "inherit" }, children: renderValue ? renderValue(value) : display || placeholder }) : (0, import_jsx_runtime11.jsxs)(import_jsx_runtime11.Fragment, { children: [(0, import_jsx_runtime11.jsx)("span", { "aria-hidden": "true", className: cx(controlClass, "ag-invisible ag-col-start-1 ag-row-start-1 ag-whitespace-pre"), children: display || placeholder || "\xA0" }), (0, import_jsx_runtime11.jsx)("span", { "aria-hidden": "true", className: cx(controlClass, "ag-invisible ag-col-start-1 ag-row-start-1 ag-whitespace-pre"), children: raw || "\xA0" }), input] }), error && (0, import_jsx_runtime11.jsx)("span", { id: errorId, role: "alert", className: "ag-text-sm ag-text-red-600 dark:ag-text-red-400", children: error })] });
+  }
+  var import_jsx_runtime11, React13, InlineEdit;
+  var init_InlineEdit = __esm({
+    "node_modules/@airgen/ui/dist/components/InlineEdit.js"() {
+      import_jsx_runtime11 = __toESM(require_jsx_runtime(), 1);
+      React13 = __toESM(require_react(), 1);
+      init_Text();
+      init_sizes();
+      init_utils();
+      InlineEdit = React13.forwardRef(InlineEditImpl);
+    }
+  });
+
   // node_modules/@airgen/ui/dist/components/Label.js
   function Label({ htmlFor, children, className }) {
-    return (0, import_jsx_runtime11.jsx)("label", { htmlFor, className: ["ag-block ag-ml-1 ag-cursor-pointer", className].filter(Boolean).join(" "), children: (0, import_jsx_runtime11.jsx)(Text, { as: "span", variant: "muted", bold: true, children }) });
+    return (0, import_jsx_runtime12.jsx)("label", { htmlFor, className: ["ag-block ag-ml-1 ag-cursor-pointer", className].filter(Boolean).join(" "), children: (0, import_jsx_runtime12.jsx)(Text, { as: "span", variant: "muted", bold: true, children }) });
   }
-  var import_jsx_runtime11;
+  var import_jsx_runtime12;
   var init_Label = __esm({
     "node_modules/@airgen/ui/dist/components/Label.js"() {
-      import_jsx_runtime11 = __toESM(require_jsx_runtime(), 1);
+      import_jsx_runtime12 = __toESM(require_jsx_runtime(), 1);
       init_Text();
     }
   });
 
   // node_modules/@airgen/ui/dist/providers/ThemeProvider.js
   function useThemeScheme() {
-    return React13.useContext(ThemeContext);
+    return React14.useContext(ThemeContext);
   }
   function ThemeScope({ scheme, children }) {
-    return (0, import_jsx_runtime12.jsx)("div", { "data-ag-theme": scheme, style: { display: "contents" }, children });
+    return (0, import_jsx_runtime13.jsx)("div", { "data-ag-theme": scheme, style: { display: "contents" }, children });
   }
   function ThemeProvider({ colorScheme, children }) {
-    return (0, import_jsx_runtime12.jsx)(ThemeContext.Provider, { value: colorScheme, children: (0, import_jsx_runtime12.jsx)(ThemeScope, { scheme: colorScheme, children }) });
+    return (0, import_jsx_runtime13.jsx)(ThemeContext.Provider, { value: colorScheme, children: (0, import_jsx_runtime13.jsx)(ThemeScope, { scheme: colorScheme, children }) });
   }
-  var import_jsx_runtime12, React13, ThemeContext;
+  var import_jsx_runtime13, React14, ThemeContext;
   var init_ThemeProvider = __esm({
     "node_modules/@airgen/ui/dist/providers/ThemeProvider.js"() {
-      import_jsx_runtime12 = __toESM(require_jsx_runtime(), 1);
-      React13 = __toESM(require_react(), 1);
-      ThemeContext = React13.createContext(null);
+      import_jsx_runtime13 = __toESM(require_jsx_runtime(), 1);
+      React14 = __toESM(require_react(), 1);
+      ThemeContext = React14.createContext(null);
     }
   });
 
   // node_modules/@airgen/ui/dist/components/Portal.js
   function Portal({ children, container }) {
-    const [mounted, setMounted] = React14.useState(false);
+    const [mounted, setMounted] = React15.useState(false);
     const scheme = useThemeScheme();
-    React14.useLayoutEffect(() => setMounted(true), []);
+    React15.useLayoutEffect(() => setMounted(true), []);
     const target = container ?? (mounted ? document.body : null);
     if (!target)
       return null;
-    return (0, import_react_dom.createPortal)(scheme === null ? children : (0, import_jsx_runtime13.jsx)(ThemeScope, { scheme, children }), target);
+    return (0, import_react_dom.createPortal)(scheme === null ? children : (0, import_jsx_runtime14.jsx)(ThemeScope, { scheme, children }), target);
   }
-  var import_jsx_runtime13, React14, import_react_dom;
+  var import_jsx_runtime14, React15, import_react_dom;
   var init_Portal = __esm({
     "node_modules/@airgen/ui/dist/components/Portal.js"() {
-      import_jsx_runtime13 = __toESM(require_jsx_runtime(), 1);
-      React14 = __toESM(require_react(), 1);
+      import_jsx_runtime14 = __toESM(require_jsx_runtime(), 1);
+      React15 = __toESM(require_react(), 1);
       import_react_dom = __toESM(require_react_dom(), 1);
       init_ThemeProvider();
     }
@@ -47617,11 +47760,11 @@ export interface AiText {
   // node_modules/@airgen/ui/dist/components/Spinner.js
   function Spinner({ size = "base", className, "aria-label": ariaLabel = "Loading" }) {
     const pixelSize = typeof size === "number" ? size : ICON_SIZES[size];
-    return (0, import_jsx_runtime14.jsx)(Loader2, { size: pixelSize, role: "status", "aria-label": ariaLabel, className: cx("ag-animate-spin", className) });
+    return (0, import_jsx_runtime15.jsx)(Loader2, { size: pixelSize, role: "status", "aria-label": ariaLabel, className: cx("ag-animate-spin", className) });
   }
   function LoadingOverlay({ pending, size = "lg", label, delay = 120, className }) {
-    const [visible, setVisible] = React15.useState(false);
-    React15.useEffect(() => {
+    const [visible, setVisible] = React16.useState(false);
+    React16.useEffect(() => {
       if (!pending) {
         setVisible(false);
         return;
@@ -47631,13 +47774,13 @@ export interface AiText {
     }, [pending, delay]);
     if (!visible)
       return null;
-    return (0, import_jsx_runtime14.jsxs)("div", { "aria-busy": "true", "aria-live": "polite", className: cx("ag-absolute ag-inset-0 ag-z-10 ag-flex ag-items-center ag-justify-center ag-gap-2 ag-cursor-wait", "ag-bg-white/60 dark:ag-bg-neutral-900/60", "ag-animate-in ag-fade-in-0 ag-duration-200", className), children: [(0, import_jsx_runtime14.jsx)(Spinner, { size, className: "ag-text-neutral-500 dark:ag-text-neutral-400" }), label && (0, import_jsx_runtime14.jsx)(Text, { variant: "muted", children: label })] });
+    return (0, import_jsx_runtime15.jsxs)("div", { "aria-busy": "true", "aria-live": "polite", className: cx("ag-absolute ag-inset-0 ag-z-10 ag-flex ag-items-center ag-justify-center ag-gap-2 ag-cursor-wait", "ag-bg-white/60 dark:ag-bg-neutral-900/60", "ag-animate-in ag-fade-in-0 ag-duration-200", className), children: [(0, import_jsx_runtime15.jsx)(Spinner, { size, className: "ag-text-neutral-500 dark:ag-text-neutral-400" }), label && (0, import_jsx_runtime15.jsx)(Text, { variant: "muted", children: label })] });
   }
-  var import_jsx_runtime14, React15;
+  var import_jsx_runtime15, React16;
   var init_Spinner = __esm({
     "node_modules/@airgen/ui/dist/components/Spinner.js"() {
-      import_jsx_runtime14 = __toESM(require_jsx_runtime(), 1);
-      React15 = __toESM(require_react(), 1);
+      import_jsx_runtime15 = __toESM(require_jsx_runtime(), 1);
+      React16 = __toESM(require_react(), 1);
       init_lucide_react();
       init_sizes();
       init_Text();
@@ -47654,9 +47797,9 @@ export interface AiText {
     const derivedUseLight = useLightText ?? (!pic && opt?.color ? shouldUseLightText(opt.color) : false);
     const colorStyle = derivedBg ? { background: derivedBg, color: derivedUseLight ? "#ffffff" : "rgba(0,0,0,0.72)" } : useLightText != null ? { color: useLightText ? "#ffffff" : "rgba(0,0,0,0.72)" } : void 0;
     if (!show) {
-      return (0, import_jsx_runtime15.jsxs)("span", { className: cx("ag-inline-flex ag-items-center ag-min-w-0", s.gap, className), children: [pic ? (0, import_jsx_runtime15.jsx)("img", { src: pic, alt: "", className: cx(s.avatar, "ag-rounded-full ag-ring-1 ag-ring-black/10") }) : null, (0, import_jsx_runtime15.jsx)("span", { className: "ag-truncate", children: label })] });
+      return (0, import_jsx_runtime16.jsxs)("span", { className: cx("ag-inline-flex ag-items-center ag-min-w-0", s.gap, className), children: [pic ? (0, import_jsx_runtime16.jsx)("img", { src: pic, alt: "", className: cx(s.avatar, "ag-rounded-full ag-ring-1 ag-ring-black/10") }) : null, (0, import_jsx_runtime16.jsx)("span", { className: "ag-truncate", children: label })] });
     }
-    return (0, import_jsx_runtime15.jsxs)("span", { className: cx(
+    return (0, import_jsx_runtime16.jsxs)("span", { className: cx(
       "ag-inline-flex ag-items-center ag-rounded-full",
       s.gap,
       s.pad,
@@ -47667,12 +47810,12 @@ export interface AiText {
       // allows inner truncate to work
       !derivedBg && NEUTRAL_PILL_CLASSES,
       className
-    ), style: colorStyle, title: typeof label === "string" ? label : void 0, children: [pic ? (0, import_jsx_runtime15.jsx)("img", { src: pic, alt: "", className: cx(s.avatar, "ag-rounded-full ag-ring-1 ag-ring-black/10") }) : null, (0, import_jsx_runtime15.jsx)("span", { className: "ag-truncate", children: label })] });
+    ), style: colorStyle, title: typeof label === "string" ? label : void 0, children: [pic ? (0, import_jsx_runtime16.jsx)("img", { src: pic, alt: "", className: cx(s.avatar, "ag-rounded-full ag-ring-1 ag-ring-black/10") }) : null, (0, import_jsx_runtime16.jsx)("span", { className: "ag-truncate", children: label })] });
   }
-  var import_jsx_runtime15;
+  var import_jsx_runtime16;
   var init_PillOption = __esm({
     "node_modules/@airgen/ui/dist/components/PillOption.js"() {
-      import_jsx_runtime15 = __toESM(require_jsx_runtime(), 1);
+      import_jsx_runtime16 = __toESM(require_jsx_runtime(), 1);
       init_utils();
       init_colors2();
       init_sizes();
@@ -47680,28 +47823,49 @@ export interface AiText {
   });
 
   // node_modules/@airgen/ui/dist/components/Table.js
-  function RecordTable({ records, columns: columnsProp, caption, emptyMessage = "No records.", loading = false, loadingLabel = "Loading records", getRowKey = (record) => record.id, rowClassName, className, tableClassName, resizable, columnLines }) {
+  function RecordTable({ records, columns: columnsProp, caption, emptyMessage = "No records.", loading = false, loadingLabel = "Loading records", getRowKey = (record) => record.id, rowClassName, className, tableClassName, resizable, columnLines, renderExpanded, canExpand, defaultExpanded = false, expanded: expandedProp, onExpandedChange }) {
     const columns = resolveColumns(records, columnsProp);
-    return (0, import_jsx_runtime16.jsx)("div", { className, "aria-busy": loading || void 0, children: (0, import_jsx_runtime16.jsxs)(Table2, { className: tableClassName, resizable, columnLines, children: [caption != null && (0, import_jsx_runtime16.jsx)(TableCaption, { children: caption }), columns.length > 0 && (0, import_jsx_runtime16.jsx)(TableHeader, { children: (0, import_jsx_runtime16.jsx)(TableRow, { className: "hover:ag-bg-transparent dark:hover:ag-bg-transparent", children: columns.map((column) => (0, import_jsx_runtime16.jsx)(TableHead, { scope: "col", className: cx(alignmentClass(column.align), column.headerClassName), style: { width: column.width }, resizable: column.resizable, minWidth: column.minWidth, maxWidth: column.maxWidth, resizeLabel: column.resizeLabel, children: column.header }, column.id)) }) }), (0, import_jsx_runtime16.jsx)(TableBody, { children: loading ? (0, import_jsx_runtime16.jsx)(TableRow, { className: "hover:ag-bg-transparent dark:hover:ag-bg-transparent", children: (0, import_jsx_runtime16.jsx)(TableCell, { colSpan: Math.max(columns.length, 1), className: "ag-h-20 ag-text-center", children: (0, import_jsx_runtime16.jsxs)("span", { className: "ag-inline-flex ag-items-center ag-gap-2 ag-text-neutral-500 dark:ag-text-neutral-400", children: [(0, import_jsx_runtime16.jsx)(Spinner, { "aria-label": loadingLabel }), (0, import_jsx_runtime16.jsx)("span", { children: loadingLabel })] }) }) }) : records.length === 0 ? (0, import_jsx_runtime16.jsx)(TableRow, { className: "hover:ag-bg-transparent dark:hover:ag-bg-transparent", children: (0, import_jsx_runtime16.jsx)(TableCell, { colSpan: Math.max(columns.length, 1), className: "ag-h-20 ag-text-center", children: (0, import_jsx_runtime16.jsx)(Text, { as: "span", variant: "muted", children: emptyMessage }) }) }) : records.map((record, rowIndex) => (0, import_jsx_runtime16.jsx)(TableRow, { className: typeof rowClassName === "function" ? rowClassName(record, rowIndex) : rowClassName, children: columns.map((column) => {
+    const [expanded, setExpanded] = useControllableState({
+      value: expandedProp,
+      defaultValue: NO_OVERRIDES,
+      onChange: onExpandedChange
+    });
+    const baseId = useStableId("record-table");
+    const lead = renderExpanded ? 1 : 0;
+    const span = Math.max(lead + columns.length, 1);
+    return (0, import_jsx_runtime17.jsx)("div", { className, "aria-busy": loading || void 0, children: (0, import_jsx_runtime17.jsxs)(Table2, { className: tableClassName, resizable, columnLines, children: [caption != null && (0, import_jsx_runtime17.jsx)(TableCaption, { children: caption }), lead + columns.length > 0 && (0, import_jsx_runtime17.jsx)(TableHeader, { children: (0, import_jsx_runtime17.jsxs)(TableRow, { className: "hover:ag-bg-transparent dark:hover:ag-bg-transparent", children: [renderExpanded && (0, import_jsx_runtime17.jsx)(TableHead, { scope: "col", resizable: false, className: "ag-w-10 ag-pr-0", style: { width: 40 }, children: (0, import_jsx_runtime17.jsx)("span", { className: "ag-sr-only", children: "Expand" }) }), columns.map((column) => (0, import_jsx_runtime17.jsx)(TableHead, { scope: "col", className: cx(alignmentClass(column.align), column.headerClassName), style: { width: column.width }, resizable: column.resizable, minWidth: column.minWidth, maxWidth: column.maxWidth, resizeLabel: column.resizeLabel, children: column.header }, column.id))] }) }), (0, import_jsx_runtime17.jsx)(TableBody, { children: loading ? (0, import_jsx_runtime17.jsx)(TableStateRow, { colSpan: span, children: (0, import_jsx_runtime17.jsxs)("span", { className: "ag-inline-flex ag-items-center ag-gap-2 ag-text-neutral-500 dark:ag-text-neutral-400", children: [(0, import_jsx_runtime17.jsx)(Spinner, { "aria-label": loadingLabel }), (0, import_jsx_runtime17.jsx)("span", { children: loadingLabel })] }) }) : records.length === 0 ? (0, import_jsx_runtime17.jsx)(TableStateRow, { colSpan: span, children: (0, import_jsx_runtime17.jsx)(Text, { as: "span", variant: "muted", children: emptyMessage }) }) : records.map((record, rowIndex) => {
+      const key = getRowKey(record, rowIndex);
+      const expandable = renderExpanded !== void 0 && (canExpand ? canExpand(record, rowIndex) : true);
+      const isOpen = expandable && (expanded[String(key)] ?? (typeof defaultExpanded === "function" ? defaultExpanded(record, rowIndex) : defaultExpanded));
+      const detailId = `${baseId}-detail-${rowIndex}`;
+      const leading = !renderExpanded ? void 0 : !expandable ? null : (0, import_jsx_runtime17.jsx)(CaretButton, { size: "icon-xs", variant: "ghost", direction: "right", open: isOpen, "aria-label": isOpen ? "Collapse row" : "Expand row", "aria-controls": isOpen ? detailId : void 0, onClick: () => setExpanded((previous) => __spreadProps(__spreadValues({}, previous), { [String(key)]: !isOpen })) });
+      return (0, import_jsx_runtime17.jsxs)(React17.Fragment, { children: [(0, import_jsx_runtime17.jsx)(RecordRow, { record, rowIndex, columns, leading, className: typeof rowClassName === "function" ? rowClassName(record, rowIndex) : rowClassName }), isOpen && renderExpanded && (0, import_jsx_runtime17.jsx)(TableRow, { id: detailId, className: "hover:ag-bg-transparent dark:hover:ag-bg-transparent", children: (0, import_jsx_runtime17.jsx)(TableCell, { colSpan: span, className: "ag-p-0 ag-bg-neutral-50/60 dark:ag-bg-neutral-800/30", children: renderExpanded({ record, rowIndex, expanded: true }) }) })] }, key);
+    }) })] }) });
+  }
+  function RecordRow({ record, rowIndex, columns, className, leading }) {
+    return (0, import_jsx_runtime17.jsxs)(TableRow, { className, children: [leading !== void 0 && (0, import_jsx_runtime17.jsx)(TableCell, { className: "ag-w-10 ag-py-1 ag-pr-0", children: leading }), columns.map((column) => {
       const value = column.accessor ? column.accessor(record) : record.fields[column.id];
-      return (0, import_jsx_runtime16.jsx)(TableCell, { className: cx(alignmentClass(column.align), column.cellClassName), children: column.cell ? column.cell({ record, value, rowIndex }) : (0, import_jsx_runtime16.jsx)(RecordCellValue, { value }) }, column.id);
-    }) }, getRowKey(record, rowIndex))) })] }) });
+      return (0, import_jsx_runtime17.jsx)(TableCell, { className: cx(alignmentClass(column.align), column.cellClassName), children: column.cell ? column.cell({ record, value, rowIndex }) : (0, import_jsx_runtime17.jsx)(RecordCellValue, { value }) }, column.id);
+    })] });
+  }
+  function TableStateRow({ colSpan, children }) {
+    return (0, import_jsx_runtime17.jsx)(TableRow, { className: "hover:ag-bg-transparent dark:hover:ag-bg-transparent", children: (0, import_jsx_runtime17.jsx)(TableCell, { colSpan, className: "ag-h-20 ag-text-center", children }) });
   }
   function RecordCellValue({ value, empty = "\u2014", className }) {
     if (value == null || value === "") {
-      return (0, import_jsx_runtime16.jsx)(Text, { as: "span", variant: "muted", className, children: empty });
+      return (0, import_jsx_runtime17.jsx)(Text, { as: "span", variant: "muted", className, children: empty });
     }
     if (Array.isArray(value)) {
       if (value.length === 0)
-        return (0, import_jsx_runtime16.jsx)(RecordCellValue, { value: null, empty, className });
-      return (0, import_jsx_runtime16.jsx)("span", { className: cx("ag-flex ag-flex-wrap ag-items-center ag-gap-1.5", className), children: value.map((item, index) => (0, import_jsx_runtime16.jsx)(RecordCellValue, { value: unwrapLookup(item), empty }, cellValueKey(item, index))) });
+        return (0, import_jsx_runtime17.jsx)(RecordCellValue, { value: null, empty, className });
+      return (0, import_jsx_runtime17.jsx)("span", { className: cx("ag-flex ag-flex-wrap ag-items-center ag-gap-1.5", className), children: value.map((item, index) => (0, import_jsx_runtime17.jsx)(RecordCellValue, { value: unwrapLookup(item), empty }, cellValueKey(item, index))) });
     }
     if (value instanceof Date)
-      return (0, import_jsx_runtime16.jsx)("span", { className, children: value.toLocaleString() });
+      return (0, import_jsx_runtime17.jsx)("span", { className, children: value.toLocaleString() });
     if (typeof value === "object") {
       const named = value;
       if (typeof named.name === "string") {
-        return (0, import_jsx_runtime16.jsx)(PillOption, { size: "sm", className, opt: {
+        return (0, import_jsx_runtime17.jsx)(PillOption, { size: "sm", className, opt: {
           value: typeof named.id === "string" ? named.id : named.name,
           label: named.name,
           color: typeof named.color === "string" ? named.color : void 0,
@@ -47710,14 +47874,14 @@ export interface AiText {
       }
       const display = value;
       if (typeof display.email === "string")
-        return (0, import_jsx_runtime16.jsx)("span", { className, children: display.email });
+        return (0, import_jsx_runtime17.jsx)("span", { className, children: display.email });
       if (typeof display.filename === "string")
-        return (0, import_jsx_runtime16.jsx)("span", { className, children: display.filename });
+        return (0, import_jsx_runtime17.jsx)("span", { className, children: display.filename });
       if ("value" in display)
-        return (0, import_jsx_runtime16.jsx)(RecordCellValue, { value: display.value, empty, className });
-      return (0, import_jsx_runtime16.jsx)(Text, { as: "span", variant: "muted", className, children: safeStringify(value) });
+        return (0, import_jsx_runtime17.jsx)(RecordCellValue, { value: display.value, empty, className });
+      return (0, import_jsx_runtime17.jsx)(Text, { as: "span", variant: "muted", className, children: safeStringify(value) });
     }
-    return (0, import_jsx_runtime16.jsx)("span", { className, children: typeof value === "boolean" ? value ? "Yes" : "No" : String(value) });
+    return (0, import_jsx_runtime17.jsx)("span", { className, children: typeof value === "boolean" ? value ? "Yes" : "No" : String(value) });
   }
   function alignmentClass(align) {
     if (align === "center")
@@ -47768,20 +47932,21 @@ export interface AiText {
       return String(value);
     }
   }
-  var import_jsx_runtime16, React16, TableResizeContext, Table2, TableHeader, TableBody, TableFooter, TableRow, TableHead, TableCell, TableCaption;
+  var import_jsx_runtime17, React17, TableResizeContext, Table2, TableHeader, TableBody, TableFooter, TableRow, TableHead, TableCell, TableCaption, NO_OVERRIDES;
   var init_Table = __esm({
     "node_modules/@airgen/ui/dist/components/Table.js"() {
-      import_jsx_runtime16 = __toESM(require_jsx_runtime(), 1);
-      React16 = __toESM(require_react(), 1);
+      import_jsx_runtime17 = __toESM(require_jsx_runtime(), 1);
+      React17 = __toESM(require_react(), 1);
+      init_CaretButton();
       init_PillOption();
       init_Spinner();
       init_Text();
       init_utils();
-      TableResizeContext = React16.createContext(null);
-      Table2 = React16.forwardRef(function Table3(_a, ref) {
+      TableResizeContext = React17.createContext(null);
+      Table2 = React17.forwardRef(function Table3(_a, ref) {
         var _b = _a, { className, containerClassName, resizable = false, columnLines = false, children, style: style3 } = _b, props = __objRest(_b, ["className", "containerClassName", "resizable", "columnLines", "children", "style"]);
-        const [widths, setWidths] = React16.useState([]);
-        const resize = React16.useCallback((header, width) => {
+        const [widths, setWidths] = React17.useState([]);
+        const resize = React17.useCallback((header, width) => {
           const cells = header.parentElement?.children;
           if (!cells)
             return;
@@ -47793,35 +47958,35 @@ export interface AiText {
             return next;
           });
         }, []);
-        const context = React16.useMemo(() => resizable ? { widths, resize } : null, [resizable, widths, resize]);
+        const context = React17.useMemo(() => resizable ? { widths, resize } : null, [resizable, widths, resize]);
         const tableWidth = widths.reduce((sum, width) => sum + width, 0);
-        return (0, import_jsx_runtime16.jsx)(TableResizeContext.Provider, { value: context, children: (0, import_jsx_runtime16.jsx)("div", { className: cx("ag-w-full ag-overflow-x-auto ag-rounded-md ag-border ag-border-neutral-200 dark:ag-border-neutral-700", containerClassName), children: (0, import_jsx_runtime16.jsxs)("table", __spreadProps(__spreadValues({ ref, className: cx("ag-w-full ag-caption-bottom ag-border-collapse ag-text-base", columnLines && "ag-column-lines", className) }, props), { style: __spreadValues(__spreadValues({}, style3), resizable && widths.length > 0 ? { tableLayout: "fixed", width: tableWidth } : {}), children: [resizable && widths.length > 0 && (0, import_jsx_runtime16.jsx)("colgroup", { children: widths.map((width, index) => (0, import_jsx_runtime16.jsx)("col", { style: { width } }, index)) }), children] })) }) });
+        return (0, import_jsx_runtime17.jsx)(TableResizeContext.Provider, { value: context, children: (0, import_jsx_runtime17.jsx)("div", { className: cx("ag-w-full ag-overflow-x-auto ag-rounded-md ag-border ag-border-neutral-200 dark:ag-border-neutral-700", containerClassName), children: (0, import_jsx_runtime17.jsxs)("table", __spreadProps(__spreadValues({ ref, className: cx("ag-w-full ag-caption-bottom ag-border-collapse ag-text-base", columnLines && "ag-column-lines", className) }, props), { style: __spreadValues(__spreadValues({}, style3), resizable && widths.length > 0 ? { tableLayout: "fixed", width: tableWidth } : {}), children: [resizable && widths.length > 0 && (0, import_jsx_runtime17.jsx)("colgroup", { children: widths.map((width, index) => (0, import_jsx_runtime17.jsx)("col", { style: { width } }, index)) }), children] })) }) });
       });
-      TableHeader = React16.forwardRef(function TableHeader2(_a, ref) {
+      TableHeader = React17.forwardRef(function TableHeader2(_a, ref) {
         var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-        return (0, import_jsx_runtime16.jsx)("thead", __spreadValues({ ref, className: cx("ag-bg-neutral-50 dark:ag-bg-neutral-800/60", className) }, props));
+        return (0, import_jsx_runtime17.jsx)("thead", __spreadValues({ ref, className: cx("ag-bg-neutral-50 dark:ag-bg-neutral-800/60", className) }, props));
       });
-      TableBody = React16.forwardRef(function TableBody2(_a, ref) {
+      TableBody = React17.forwardRef(function TableBody2(_a, ref) {
         var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-        return (0, import_jsx_runtime16.jsx)("tbody", __spreadValues({ ref, className: cx("[&_tr:last-child]:ag-border-0", className) }, props));
+        return (0, import_jsx_runtime17.jsx)("tbody", __spreadValues({ ref, className: cx("[&_tr:last-child]:ag-border-0", className) }, props));
       });
-      TableFooter = React16.forwardRef(function TableFooter2(_a, ref) {
+      TableFooter = React17.forwardRef(function TableFooter2(_a, ref) {
         var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-        return (0, import_jsx_runtime16.jsx)("tfoot", __spreadValues({ ref, className: cx("ag-border-t ag-border-neutral-200 ag-bg-neutral-50 ag-font-medium dark:ag-border-neutral-700 dark:ag-bg-neutral-800/60", className) }, props));
+        return (0, import_jsx_runtime17.jsx)("tfoot", __spreadValues({ ref, className: cx("ag-border-t ag-border-neutral-200 ag-bg-neutral-50 ag-font-medium dark:ag-border-neutral-700 dark:ag-bg-neutral-800/60", className) }, props));
       });
-      TableRow = React16.forwardRef(function TableRow2(_a, ref) {
+      TableRow = React17.forwardRef(function TableRow2(_a, ref) {
         var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-        return (0, import_jsx_runtime16.jsx)("tr", __spreadValues({ ref, className: cx("ag-border-b ag-border-neutral-200 ag-transition-colors hover:ag-bg-neutral-50 dark:ag-border-neutral-700 dark:hover:ag-bg-neutral-800/50", className) }, props));
+        return (0, import_jsx_runtime17.jsx)("tr", __spreadValues({ ref, className: cx("ag-border-b ag-border-neutral-200 ag-transition-colors hover:ag-bg-neutral-50 dark:ag-border-neutral-700 dark:hover:ag-bg-neutral-800/50", className) }, props));
       });
-      TableHead = React16.forwardRef(function TableHead2(_a, ref) {
+      TableHead = React17.forwardRef(function TableHead2(_a, ref) {
         var _b = _a, { className, children, resizable = true, minWidth = 80, maxWidth, resizeLabel, scope, colSpan = 1, rowSpan = 1 } = _b, props = __objRest(_b, ["className", "children", "resizable", "minWidth", "maxWidth", "resizeLabel", "scope", "colSpan", "rowSpan"]);
-        const context = React16.useContext(TableResizeContext);
-        const headerRef = React16.useRef(null);
-        const mergedRef = React16.useMemo(() => mergeRefs(headerRef, ref), [ref]);
-        const drag = React16.useRef(null);
-        const enabled = context !== null && resizable && scope !== "row" && colSpan === 1 && rowSpan === 1;
-        const [measuredWidth, setMeasuredWidth] = React16.useState();
-        React16.useEffect(() => {
+        const context = React17.useContext(TableResizeContext);
+        const headerRef = React17.useRef(null);
+        const mergedRef = React17.useMemo(() => mergeRefs(headerRef, ref), [ref]);
+        const drag = React17.useRef(null);
+        const enabled = context !== null && resizable && scope !== "row" && scope !== "rowgroup" && colSpan === 1 && rowSpan === 1;
+        const [measuredWidth, setMeasuredWidth] = React17.useState();
+        React17.useEffect(() => {
           if (enabled)
             setMeasuredWidth(headerRef.current?.getBoundingClientRect().width);
         }, [enabled]);
@@ -47835,7 +48000,7 @@ export interface AiText {
             context?.resize(headerRef.current, Math.min(maximum ?? Infinity, Math.max(minimum, value)));
         };
         const direction = () => headerRef.current && getComputedStyle(headerRef.current).direction === "rtl" ? -1 : 1;
-        return (0, import_jsx_runtime16.jsxs)("th", __spreadProps(__spreadValues({ ref: mergedRef, scope, colSpan, rowSpan, className: cx("ag-h-9 ag-px-3 ag-text-left ag-align-middle ag-font-medium ag-text-neutral-500 dark:ag-text-neutral-400", enabled && "ag-relative ag-pr-4", context && "ag-overflow-hidden", className) }, props), { children: [children, enabled && (0, import_jsx_runtime16.jsx)("span", { role: "separator", tabIndex: 0, "aria-orientation": "vertical", "aria-label": resizeLabel ?? `Resize ${typeof children === "string" ? children : "column"}`, "aria-valuemin": minimum, "aria-valuemax": maximum, "aria-valuenow": Math.round(width ?? minimum), onFocus: () => setMeasuredWidth(headerRef.current?.getBoundingClientRect().width), className: "ag-absolute ag-inset-y-0 ag-right-0 ag-w-2 ag-cursor-col-resize ag-touch-none ag-select-none after:ag-absolute after:ag-inset-y-0 after:ag-right-0 after:ag-w-px hover:after:ag-bg-neutral-300 focus-visible:ag-outline-none focus-visible:after:ag-bg-neutral-300 dark:hover:after:ag-bg-neutral-400 dark:focus-visible:after:ag-bg-neutral-400", onClick: (event) => event.stopPropagation(), onPointerDown: (event) => {
+        return (0, import_jsx_runtime17.jsxs)("th", __spreadProps(__spreadValues({ ref: mergedRef, scope, colSpan, rowSpan, className: cx("ag-h-9 ag-px-3 ag-text-left ag-align-middle ag-font-medium ag-text-neutral-500 dark:ag-text-neutral-400", enabled && "ag-relative ag-pr-4", context && "ag-overflow-hidden", className) }, props), { children: [children, enabled && (0, import_jsx_runtime17.jsx)("span", { role: "separator", tabIndex: 0, "aria-orientation": "vertical", "aria-label": resizeLabel ?? `Resize ${typeof children === "string" ? children : "column"}`, "aria-valuemin": minimum, "aria-valuemax": maximum, "aria-valuenow": Math.round(width ?? minimum), onFocus: () => setMeasuredWidth(headerRef.current?.getBoundingClientRect().width), className: "ag-absolute ag-inset-y-0 ag-right-0 ag-w-2 ag-cursor-col-resize ag-touch-none ag-select-none after:ag-absolute after:ag-inset-y-0 after:ag-right-0 after:ag-w-px hover:after:ag-bg-neutral-300 focus-visible:ag-outline-none focus-visible:after:ag-bg-neutral-300 dark:hover:after:ag-bg-neutral-400 dark:focus-visible:after:ag-bg-neutral-400", onClick: (event) => event.stopPropagation(), onPointerDown: (event) => {
           if (event.button !== 0)
             return;
           event.preventDefault();
@@ -47869,15 +48034,142 @@ export interface AiText {
           resize(next);
         } })] }));
       });
-      TableCell = React16.forwardRef(function TableCell2(_a, ref) {
+      TableCell = React17.forwardRef(function TableCell2(_a, ref) {
         var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-        const context = React16.useContext(TableResizeContext);
-        return (0, import_jsx_runtime16.jsx)("td", __spreadValues({ ref, className: cx("ag-px-3 ag-py-2 ag-align-middle ag-text-neutral-900 dark:ag-text-neutral-100", context && "ag-overflow-hidden", className) }, props));
+        const context = React17.useContext(TableResizeContext);
+        return (0, import_jsx_runtime17.jsx)("td", __spreadValues({ ref, className: cx("ag-px-3 ag-py-2 ag-align-middle ag-text-neutral-900 dark:ag-text-neutral-100", context && "ag-overflow-hidden", className) }, props));
       });
-      TableCaption = React16.forwardRef(function TableCaption2(_a, ref) {
+      TableCaption = React17.forwardRef(function TableCaption2(_a, ref) {
         var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-        return (0, import_jsx_runtime16.jsx)("caption", __spreadValues({ ref, className: cx("ag-mt-3 ag-text-sm ag-text-neutral-500 dark:ag-text-neutral-400", className) }, props));
+        return (0, import_jsx_runtime17.jsx)("caption", __spreadValues({ ref, className: cx("ag-mt-3 ag-text-sm ag-text-neutral-500 dark:ag-text-neutral-400", className) }, props));
       });
+      NO_OVERRIDES = {};
+    }
+  });
+
+  // node_modules/@airgen/ui/dist/components/NestedRecordTable.js
+  function NestedRecordTable(_a) {
+    var _b = _a, { nested, defaultExpanded = false, expanded: expandedProp, onExpandedChange } = _b, props = __objRest(_b, ["nested", "defaultExpanded", "expanded", "onExpandedChange"]);
+    const [expanded, setExpanded] = useControllableState({
+      value: expandedProp,
+      defaultValue: NO_OVERRIDES2,
+      onChange: onExpandedChange
+    });
+    return (0, import_jsx_runtime18.jsx)(NestedLevelTable, __spreadProps(__spreadValues({}, props), { nested, depth: 0, path: "", expanded, setExpanded, defaultExpanded }));
+  }
+  function linkedRows(record, fieldKey) {
+    const cell = record.fields[fieldKey];
+    return Array.isArray(cell) ? cell : [];
+  }
+  function NestedLevelTable(_a) {
+    var _b = _a, { nested, depth, path, expanded, setExpanded, defaultExpanded, getRowKey } = _b, props = __objRest(_b, ["nested", "depth", "path", "expanded", "setExpanded", "defaultExpanded", "getRowKey"]);
+    const spec = nested ?? {};
+    const keys2 = Object.keys(spec).filter((key) => spec[key] !== void 0);
+    const rowKey = (record, index) => getRowKey ? getRowKey(record, index) : record.id;
+    const pathOf = (record, index) => path === "" ? String(rowKey(record, index)) : `${path}/${rowKey(record, index)}`;
+    if (keys2.length === 0)
+      return (0, import_jsx_runtime18.jsx)(RecordTable, __spreadProps(__spreadValues({}, props), { getRowKey: rowKey }));
+    return (0, import_jsx_runtime18.jsx)(RecordTable, __spreadProps(__spreadValues({}, props), { getRowKey: pathOf, canExpand: (record) => keys2.some((key) => linkedRows(record, key).length > 0 || spec[key]?.emptyMessage != null), defaultExpanded: typeof defaultExpanded === "number" ? depth < defaultExpanded : defaultExpanded, expanded, onExpandedChange: setExpanded, renderExpanded: ({ record, rowIndex }) => (0, import_jsx_runtime18.jsx)("div", { className: "ag-flex ag-flex-col ag-gap-3 ag-py-2 ag-pr-3", style: { paddingLeft: 40 }, children: keys2.map((key) => {
+      const level = spec[key];
+      const rows = linkedRows(record, key);
+      return (0, import_jsx_runtime18.jsxs)("section", { children: [(0, import_jsx_runtime18.jsxs)(Text, { as: "h4", variant: "muted", bold: true, className: "ag-mb-1", children: [level.title ?? humanizeFieldKey(key), " ", (0, import_jsx_runtime18.jsxs)("span", { className: "ag-font-normal", children: ["(", rows.length, ")"] })] }), rows.length === 0 && level.emptyMessage != null ? (0, import_jsx_runtime18.jsx)(Text, { variant: "muted", children: level.emptyMessage }) : (0, import_jsx_runtime18.jsx)(NestedLevelTable, { records: rows, columns: level.columns, nested: level.nested, getRowKey: level.getRowKey, rowClassName: level.rowClassName, resizable: level.resizable, columnLines: level.columnLines, depth: depth + 1, path: `${pathOf(record, rowIndex)}/${key}`, expanded, setExpanded, defaultExpanded })] }, key);
+    }) }) }));
+  }
+  var import_jsx_runtime18, NO_OVERRIDES2;
+  var init_NestedRecordTable = __esm({
+    "node_modules/@airgen/ui/dist/components/NestedRecordTable.js"() {
+      import_jsx_runtime18 = __toESM(require_jsx_runtime(), 1);
+      init_Table();
+      init_Text();
+      init_utils();
+      NO_OVERRIDES2 = {};
+    }
+  });
+
+  // node_modules/@airgen/ui/dist/components/GroupTable.js
+  function nestGroups(groups) {
+    const roots = [];
+    const nodes = /* @__PURE__ */ new Map();
+    for (const group of groups) {
+      const levels = Math.max(group.values.length, 1);
+      let parent = null;
+      for (let depth = 0; depth < levels; depth++) {
+        const values = group.values.slice(0, depth + 1);
+        const key = depth === levels - 1 ? group.key : JSON.stringify(values);
+        let entry = nodes.get(key);
+        if (!entry) {
+          const node = { key, depth, values, value: values[depth] ?? null, children: [], records: [] };
+          entry = { node, ids: /* @__PURE__ */ new Set() };
+          nodes.set(key, entry);
+          (parent ? parent.children : roots).push(node);
+        }
+        for (const record of group.records) {
+          if (!entry.ids.has(record.id)) {
+            entry.ids.add(record.id);
+            entry.node.records.push(record);
+          }
+        }
+        parent = entry.node;
+      }
+    }
+    return roots;
+  }
+  function GroupTable({ groups, columns: columnsProp, caption, emptyMessage = "No records.", loading = false, loadingLabel = "Loading records", getRowKey = (record) => record.id, rowClassName, className, tableClassName, resizable, columnLines, groupLabels, emptyGroupLabel = "(empty)", renderGroupLabel, showCount = true, summary, summaryPlacement = "header", collapsible = true, defaultExpanded = true, expanded: expandedProp, onExpandedChange }) {
+    const columns = resolveColumns(groups.flatMap((group) => group.records), columnsProp);
+    const tree = nestGroups(groups);
+    const [expanded, setExpanded] = useControllableState({
+      value: expandedProp,
+      defaultValue: NO_OVERRIDES3,
+      onChange: onExpandedChange
+    });
+    const span = Math.max(columns.length, 1);
+    const [first, ...rest] = columns;
+    const isOpen = (node) => expanded[node.key] ?? (typeof defaultExpanded === "number" ? node.depth < defaultExpanded : defaultExpanded);
+    const renderNode = (node) => {
+      const open = isOpen(node);
+      const leaf = node.children.length === 0;
+      const context = {
+        key: node.key,
+        values: node.values,
+        value: node.value,
+        depth: node.depth,
+        leaf,
+        records: node.records,
+        count: node.records.length,
+        expanded: open
+      };
+      const sums = summary ? summary(node.records, context) : void 0;
+      const hasSummary = sums !== void 0 && Object.keys(sums).length > 0;
+      const valueText = node.value ?? (typeof emptyGroupLabel === "string" ? emptyGroupLabel : "empty");
+      const indent = { paddingLeft: 12 + node.depth * 16 };
+      const label = (0, import_jsx_runtime19.jsxs)("span", { className: "ag-inline-flex ag-items-center ag-gap-1 ag-text-neutral-900 dark:ag-text-neutral-100", children: [collapsible && (0, import_jsx_runtime19.jsx)(CaretButton, { size: "icon-xs", variant: "ghost", direction: "right", open, "aria-label": `${open ? "Collapse" : "Expand"} ${valueText}`, onClick: () => setExpanded(__spreadProps(__spreadValues({}, expanded), { [node.key]: !open })) }), (0, import_jsx_runtime19.jsx)("span", { children: renderGroupLabel ? renderGroupLabel(context) : (0, import_jsx_runtime19.jsxs)(import_jsx_runtime19.Fragment, { children: [groupLabels?.[node.depth] != null && (0, import_jsx_runtime19.jsxs)("span", { className: "ag-text-neutral-500 dark:ag-text-neutral-400", children: [groupLabels[node.depth], ": "] }), node.value ?? emptyGroupLabel] }) }), showCount && (0, import_jsx_runtime19.jsxs)("span", { className: "ag-font-normal ag-text-neutral-500 dark:ag-text-neutral-400", children: ["(", node.records.length, ")"] })] });
+      const headerRow = summaryPlacement === "header" && first ? (0, import_jsx_runtime19.jsxs)(TableRow, { className: GROUP_ROW_CLASS, children: [(0, import_jsx_runtime19.jsx)(TableHead, { scope: "rowgroup", style: indent, className: cx("ag-whitespace-nowrap", first.headerClassName), children: (0, import_jsx_runtime19.jsxs)("span", { className: "ag-flex ag-items-center ag-gap-2", children: [label, sums?.[first.id] != null && (0, import_jsx_runtime19.jsx)("span", { className: cx("ag-ml-auto ag-text-neutral-900 dark:ag-text-neutral-100", alignmentClass(first.align)), children: sums[first.id] })] }) }), rest.map((column) => (0, import_jsx_runtime19.jsx)(TableCell, { className: cx("ag-font-medium", alignmentClass(column.align), column.cellClassName), children: sums?.[column.id] }, column.id))] }) : (0, import_jsx_runtime19.jsx)(TableRow, { className: GROUP_ROW_CLASS, children: (0, import_jsx_runtime19.jsx)(TableHead, { scope: "rowgroup", colSpan: span, style: indent, className: "ag-whitespace-nowrap", children: label }) });
+      const footerRow = summaryPlacement === "footer" && hasSummary ? (0, import_jsx_runtime19.jsx)(TableRow, { className: SUMMARY_ROW_CLASS, children: columns.map((column, index) => (0, import_jsx_runtime19.jsx)(TableCell, { style: index === 0 ? indent : void 0, className: cx(alignmentClass(column.align), column.cellClassName), children: sums?.[column.id] }, column.id)) }) : null;
+      const out = [
+        (0, import_jsx_runtime19.jsxs)("tbody", { children: [headerRow, leaf && open && node.records.map((record, rowIndex) => (0, import_jsx_runtime19.jsx)(RecordRow, { record, rowIndex, columns, className: typeof rowClassName === "function" ? rowClassName(record, rowIndex) : rowClassName }, getRowKey(record, rowIndex))), leaf && open && footerRow] }, node.key)
+      ];
+      if (!leaf && open) {
+        for (const child of node.children)
+          out.push(...renderNode(child));
+        if (footerRow)
+          out.push((0, import_jsx_runtime19.jsx)("tbody", { children: footerRow }, `${node.key}:footer`));
+      }
+      return out;
+    };
+    return (0, import_jsx_runtime19.jsx)("div", { className, "aria-busy": loading || void 0, children: (0, import_jsx_runtime19.jsxs)(Table2, { className: tableClassName, resizable, columnLines, children: [caption != null && (0, import_jsx_runtime19.jsx)(TableCaption, { children: caption }), columns.length > 0 && (0, import_jsx_runtime19.jsx)(TableHeader, { children: (0, import_jsx_runtime19.jsx)(TableRow, { className: "hover:ag-bg-transparent dark:hover:ag-bg-transparent", children: columns.map((column) => (0, import_jsx_runtime19.jsx)(TableHead, { scope: "col", className: cx(alignmentClass(column.align), column.headerClassName), style: { width: column.width }, resizable: column.resizable, minWidth: column.minWidth, maxWidth: column.maxWidth, resizeLabel: column.resizeLabel, children: column.header }, column.id)) }) }), loading ? (0, import_jsx_runtime19.jsx)("tbody", { children: (0, import_jsx_runtime19.jsx)(TableStateRow, { colSpan: span, children: (0, import_jsx_runtime19.jsxs)("span", { className: "ag-inline-flex ag-items-center ag-gap-2 ag-text-neutral-500 dark:ag-text-neutral-400", children: [(0, import_jsx_runtime19.jsx)(Spinner, { "aria-label": loadingLabel }), (0, import_jsx_runtime19.jsx)("span", { children: loadingLabel })] }) }) }) : tree.length === 0 ? (0, import_jsx_runtime19.jsx)("tbody", { children: (0, import_jsx_runtime19.jsx)(TableStateRow, { colSpan: span, children: (0, import_jsx_runtime19.jsx)(Text, { as: "span", variant: "muted", children: emptyMessage }) }) }) : tree.flatMap(renderNode)] }) });
+  }
+  var import_jsx_runtime19, NO_OVERRIDES3, GROUP_ROW_CLASS, SUMMARY_ROW_CLASS;
+  var init_GroupTable = __esm({
+    "node_modules/@airgen/ui/dist/components/GroupTable.js"() {
+      import_jsx_runtime19 = __toESM(require_jsx_runtime(), 1);
+      init_CaretButton();
+      init_Spinner();
+      init_Table();
+      init_Text();
+      init_utils();
+      NO_OVERRIDES3 = {};
+      GROUP_ROW_CLASS = "ag-bg-neutral-50 hover:ag-bg-neutral-50 dark:ag-bg-neutral-800/60 dark:hover:ag-bg-neutral-800/60";
+      SUMMARY_ROW_CLASS = "ag-bg-neutral-50/60 ag-font-medium hover:ag-bg-neutral-50/60 dark:ag-bg-neutral-800/30 dark:hover:ag-bg-neutral-800/30";
     }
   });
 
@@ -47887,16 +48179,16 @@ export interface AiText {
       if (!disabled)
         onChange(!checked);
     };
-    const track = (0, import_jsx_runtime17.jsx)("button", { type: "button", role: "switch", "aria-checked": checked, disabled, onClick: handleClick, className: cx("ag-relative ag-inline-flex ag-shrink-0 ag-cursor-pointer ag-items-center ag-rounded-full ag-transition-colors ag-duration-150", trackSizes[size], checked ? "ag-bg-blue-600" : "ag-bg-neutral-300 dark:ag-bg-neutral-600", disabled && "ag-opacity-50 ag-cursor-not-allowed", !label && className), children: (0, import_jsx_runtime17.jsx)("span", { className: cx("ag-inline-block ag-rounded-full ag-bg-white ag-shadow ag-transform ag-transition-transform ag-duration-150", thumbSizes[size], checked ? thumbTranslate[size] : "ag-translate-x-0.5") }) });
+    const track = (0, import_jsx_runtime20.jsx)("button", { type: "button", role: "switch", "aria-checked": checked, disabled, onClick: handleClick, className: cx("ag-relative ag-inline-flex ag-shrink-0 ag-cursor-pointer ag-items-center ag-rounded-full ag-transition-colors ag-duration-150", trackSizes[size], checked ? "ag-bg-blue-600" : "ag-bg-neutral-300 dark:ag-bg-neutral-600", disabled && "ag-opacity-50 ag-cursor-not-allowed", !label && className), children: (0, import_jsx_runtime20.jsx)("span", { className: cx("ag-inline-block ag-rounded-full ag-bg-white ag-shadow ag-transform ag-transition-transform ag-duration-150", thumbSizes[size], checked ? thumbTranslate[size] : "ag-translate-x-0.5") }) });
     if (label) {
-      return (0, import_jsx_runtime17.jsxs)("label", { className: cx("ag-inline-flex ag-items-center ag-gap-2", className), children: [track, (0, import_jsx_runtime17.jsx)("span", { className: "ag-text-sm ag-text-neutral-700 dark:ag-text-neutral-300", children: label })] });
+      return (0, import_jsx_runtime20.jsxs)("label", { className: cx("ag-inline-flex ag-items-center ag-gap-2", className), children: [track, (0, import_jsx_runtime20.jsx)("span", { className: "ag-text-sm ag-text-neutral-700 dark:ag-text-neutral-300", children: label })] });
     }
     return track;
   }
-  var import_jsx_runtime17, trackSizes, thumbSizes, thumbTranslate;
+  var import_jsx_runtime20, trackSizes, thumbSizes, thumbTranslate;
   var init_Toggle = __esm({
     "node_modules/@airgen/ui/dist/components/Toggle.js"() {
-      import_jsx_runtime17 = __toESM(require_jsx_runtime(), 1);
+      import_jsx_runtime20 = __toESM(require_jsx_runtime(), 1);
       init_utils();
       trackSizes = {
         sm: "ag-w-7 ag-h-4",
@@ -47915,8 +48207,8 @@ export interface AiText {
 
   // node_modules/@airgen/ui/dist/dropdown.js
   function usePresence(open, durationMs = DROPDOWN_ANIMATION_MS) {
-    const [present, setPresent] = React17.useState(open);
-    React17.useEffect(() => {
+    const [present, setPresent] = React18.useState(open);
+    React18.useEffect(() => {
       if (open) {
         setPresent(true);
         return;
@@ -47927,11 +48219,11 @@ export interface AiText {
     return present;
   }
   function useOutsideDismiss({ enabled, refs, onDismiss }) {
-    const refsRef = React17.useRef(refs);
-    React17.useEffect(() => {
+    const refsRef = React18.useRef(refs);
+    React18.useEffect(() => {
       refsRef.current = refs;
     });
-    React17.useEffect(() => {
+    React18.useEffect(() => {
       if (!enabled)
         return;
       const onPointerDown = (e) => {
@@ -47948,41 +48240,41 @@ export interface AiText {
     }, [enabled, onDismiss]);
   }
   function useDropdownState({ disabled = false, defaultOpen = false, onOpenChange, onOpen, onClose }) {
-    const [open, setOpen] = React17.useState(false);
-    const onOpenRef = React17.useRef(onOpen);
-    const onCloseRef = React17.useRef(onClose);
-    const onOpenChangeRef = React17.useRef(onOpenChange);
-    React17.useLayoutEffect(() => {
+    const [open, setOpen] = React18.useState(false);
+    const onOpenRef = React18.useRef(onOpen);
+    const onCloseRef = React18.useRef(onClose);
+    const onOpenChangeRef = React18.useRef(onOpenChange);
+    React18.useLayoutEffect(() => {
       onOpenRef.current = onOpen;
       onCloseRef.current = onClose;
       onOpenChangeRef.current = onOpenChange;
     });
-    const openRef = React17.useRef(open);
-    const openMenu = React17.useCallback(() => {
+    const openRef = React18.useRef(open);
+    const openMenu = React18.useCallback(() => {
       if (disabled || openRef.current)
         return;
       onOpenRef.current?.();
       openRef.current = true;
       setOpen(true);
     }, [disabled]);
-    const close = React17.useCallback(() => {
+    const close = React18.useCallback(() => {
       if (!openRef.current)
         return;
       openRef.current = false;
       setOpen(false);
       onCloseRef.current?.();
     }, []);
-    const toggle = React17.useCallback(() => openRef.current ? close() : openMenu(), [close, openMenu]);
-    const mountedRef = React17.useRef(false);
-    React17.useEffect(() => {
+    const toggle = React18.useCallback(() => openRef.current ? close() : openMenu(), [close, openMenu]);
+    const mountedRef = React18.useRef(false);
+    React18.useEffect(() => {
       if (!mountedRef.current) {
         mountedRef.current = true;
         return;
       }
       onOpenChangeRef.current?.(open);
     }, [open]);
-    const didAutoOpen = React17.useRef(false);
-    React17.useEffect(() => {
+    const didAutoOpen = React18.useRef(false);
+    React18.useEffect(() => {
       if (defaultOpen && !didAutoOpen.current && !disabled) {
         didAutoOpen.current = true;
         const raf = requestAnimationFrame(() => openMenu());
@@ -47990,8 +48282,8 @@ export interface AiText {
       }
     }, [defaultOpen, disabled, openMenu]);
     const present = usePresence(open, DROPDOWN_ANIMATION_MS);
-    const [animateIn, setAnimateIn] = React17.useState(false);
-    React17.useLayoutEffect(() => {
+    const [animateIn, setAnimateIn] = React18.useState(false);
+    React18.useLayoutEffect(() => {
       if (!present) {
         setAnimateIn(false);
         return;
@@ -48002,10 +48294,10 @@ export interface AiText {
     }, [present]);
     return { open, openMenu, close, toggle, present, animateIn };
   }
-  var React17, DROPDOWN_ANIMATION_MS;
+  var React18, DROPDOWN_ANIMATION_MS;
   var init_dropdown = __esm({
     "node_modules/@airgen/ui/dist/dropdown.js"() {
-      React17 = __toESM(require_react(), 1);
+      React18 = __toESM(require_react(), 1);
       DROPDOWN_ANIMATION_MS = 130;
     }
   });
@@ -48022,13 +48314,13 @@ export interface AiText {
     return `${a} left`;
   }
   function useAnchoredPosition({ open, anchorRef, contentRef, side = "bottom", align = "start", offset = 6, collisionPadding = 8, avoidCollisions = true, flip = false, matchAnchorWidth = false }) {
-    const [state, setState] = React18.useState({
+    const [state, setState] = React19.useState({
       style: { position: "fixed", top: 0, left: 0 },
       ready: false,
       placedSide: side,
       anchorWidth: 0
     });
-    const update = React18.useCallback(() => {
+    const update = React19.useCallback(() => {
       const anchor = anchorRef.current;
       if (!anchor)
         return;
@@ -48095,7 +48387,7 @@ export interface AiText {
         style3.width = Math.round(rect.width);
       setState({ style: style3, ready: true, placedSide, anchorWidth: Math.round(rect.width) });
     }, [anchorRef, contentRef, side, align, offset, collisionPadding, avoidCollisions, flip, matchAnchorWidth]);
-    React18.useLayoutEffect(() => {
+    React19.useLayoutEffect(() => {
       if (!open)
         return;
       let observer;
@@ -48121,7 +48413,7 @@ export interface AiText {
         observer?.disconnect();
       };
     }, [open, update, contentRef]);
-    const contentRefCallback = React18.useCallback((node) => {
+    const contentRefCallback = React19.useCallback((node) => {
       if (contentRef)
         contentRef.current = node;
       if (node)
@@ -48129,10 +48421,10 @@ export interface AiText {
     }, [contentRef, update]);
     return { style: state.style, ready: state.ready, placedSide: state.placedSide, anchorWidth: state.anchorWidth, update, contentRefCallback };
   }
-  var React18;
+  var React19;
   var init_positioning = __esm({
     "node_modules/@airgen/ui/dist/positioning.js"() {
-      React18 = __toESM(require_react(), 1);
+      React19 = __toESM(require_react(), 1);
       init_utils();
     }
   });
@@ -49779,16 +50071,16 @@ export interface AiText {
 
   // node_modules/@airgen/ui/dist/components/Select.js
   function useTypeahead({ enabled, onMatch }) {
-    const buf = React19.useRef("");
-    const timer = React19.useRef(null);
-    const clear = React19.useCallback(() => {
+    const buf = React20.useRef("");
+    const timer = React20.useRef(null);
+    const clear = React20.useCallback(() => {
       buf.current = "";
       if (timer.current)
         window.clearTimeout(timer.current);
       timer.current = null;
     }, []);
-    React19.useEffect(() => () => clear(), [clear]);
-    const onKey = React19.useCallback((key) => {
+    React20.useEffect(() => () => clear(), [clear]);
+    const onKey = React20.useCallback((key) => {
       if (!enabled)
         return;
       buf.current = (buf.current + key).slice(0, 64);
@@ -49799,26 +50091,26 @@ export interface AiText {
       const repeated = q.length > 1 && [...q].every((c) => c === q[0]);
       onMatch(repeated ? q[0] : q);
     }, [clear, enabled, onMatch]);
-    const hasBuffer = React19.useCallback(() => buf.current.length > 0, []);
+    const hasBuffer = React20.useCallback(() => buf.current.length > 0, []);
     return { onKey, clear, hasBuffer };
   }
   function Select(props) {
     const { options, id, placeholder = "Select\u2026", size = "base", disabled = false, defaultOpen = false, onOpenChange, pill = false, renderOption, renderTrigger, matchTriggerWidth = true, minMenuWidth, align = "start", searchable = false, searchPlaceholder = "Search\u2026", maxItems, emptyMessage = "No results", groups, className, triggerClassName, menuClassName, optionClassName } = props;
     const multiple = props.multiple === true;
-    const [internalValues, setInternalValues] = React19.useState(() => {
+    const [internalValues, setInternalValues] = React20.useState(() => {
       if (props.multiple)
         return props.defaultValue ?? [];
       return props.defaultValue !== void 0 ? [props.defaultValue] : [];
     });
     const controlled = props.value !== void 0;
-    const values = React19.useMemo(() => {
+    const values = React20.useMemo(() => {
       if (!controlled)
         return internalValues;
       if (props.multiple)
         return props.value;
       return props.value !== void 0 ? [props.value] : [];
     }, [controlled, internalValues, props.multiple, props.value]);
-    const setValues = React19.useCallback((next) => {
+    const setValues = React20.useCallback((next) => {
       if (!controlled)
         setInternalValues(next);
       if (props.multiple)
@@ -49827,28 +50119,28 @@ export interface AiText {
         props.onChange?.(next[0]);
     }, [controlled, props.multiple, props.onChange]);
     const current = multiple ? void 0 : values[0];
-    const [query2, setQuery] = React19.useState("");
-    const [activeIndex, setActiveIndex] = React19.useState(() => {
+    const [query2, setQuery] = React20.useState("");
+    const [activeIndex, setActiveIndex] = React20.useState(() => {
       const sel = indexByValue(options, current);
       return sel !== -1 ? sel : nextEnabledIndex(options, 0, 1);
     });
-    const triggerRef = React19.useRef(null);
+    const triggerRef = React20.useRef(null);
     const multiTriggerRef = triggerRef;
-    const menuRef = React19.useRef(null);
-    const inputRef = React19.useRef(null);
+    const menuRef = React20.useRef(null);
+    const inputRef = React20.useRef(null);
     const listboxId = useStableId("select");
     const triggerId = id ?? `${listboxId}-trigger`;
-    const fuse = React19.useMemo(() => searchable ? createOptionFuse(options) : null, [searchable, options]);
-    const filtered = React19.useMemo(() => {
+    const fuse = React20.useMemo(() => searchable ? createOptionFuse(options) : null, [searchable, options]);
+    const filtered = React20.useMemo(() => {
       if (!searchable)
         return options;
       return truncateOptions(filterOptions(options, query2, fuse ?? void 0), query2, maxItems);
     }, [searchable, options, query2, maxItems, fuse]);
-    const entries2 = React19.useMemo(() => buildOptionEntries(filtered, groups), [filtered, groups]);
-    const navOptions = React19.useMemo(() => entryOptions(entries2), [entries2]);
-    const selected = React19.useMemo(() => options.find((o) => o.value === current), [options, current]);
-    const selectedOptions = React19.useMemo(() => values.map((v) => options.find((o) => o.value === v)).filter((o) => o !== void 0), [values, options]);
-    React19.useEffect(() => {
+    const entries2 = React20.useMemo(() => buildOptionEntries(filtered, groups), [filtered, groups]);
+    const navOptions = React20.useMemo(() => entryOptions(entries2), [entries2]);
+    const selected = React20.useMemo(() => options.find((o) => o.value === current), [options, current]);
+    const selectedOptions = React20.useMemo(() => values.map((v) => options.find((o) => o.value === v)).filter((o) => o !== void 0), [values, options]);
+    React20.useEffect(() => {
       if (searchable)
         return;
       const sel = indexByValue(navOptions, current);
@@ -49857,12 +50149,12 @@ export interface AiText {
       else
         setActiveIndex((prev) => nextEnabledIndex(navOptions, prev, 1));
     }, [searchable, navOptions, current]);
-    React19.useEffect(() => {
+    React20.useEffect(() => {
       if (!searchable)
         return;
       setActiveIndex((prev) => navOptions.length === 0 ? -1 : Math.min(prev, navOptions.length - 1));
     }, [searchable, navOptions.length]);
-    const focusActive = React19.useCallback((idx) => {
+    const focusActive = React20.useCallback((idx) => {
       const el = menuRef.current?.querySelector(`[data-idx="${idx}"]`);
       el?.focus?.({ preventScroll: true });
       el?.scrollIntoView?.({ block: "nearest" });
@@ -49901,7 +50193,7 @@ export interface AiText {
       matchAnchorWidth: matchTriggerWidth
     });
     useOutsideDismiss({ enabled: open, refs: [triggerRef, menuRef], onDismiss: close });
-    const commitIndex = React19.useCallback((idx) => {
+    const commitIndex = React20.useCallback((idx) => {
       const opt = navOptions[idx];
       if (!opt || opt.disabled)
         return;
@@ -49914,10 +50206,10 @@ export interface AiText {
       close();
       triggerRef.current?.focus({ preventScroll: true });
     }, [navOptions, multiple, values, setValues, close]);
-    const removeValue = React19.useCallback((value) => {
+    const removeValue = React20.useCallback((value) => {
       setValues(values.filter((v) => v !== value));
     }, [values, setValues]);
-    const removeLast = React19.useCallback(() => {
+    const removeLast = React20.useCallback(() => {
       if (values.length > 0)
         setValues(values.slice(0, -1));
     }, [values, setValues]);
@@ -50030,15 +50322,15 @@ export interface AiText {
       const isSelected = multiple ? values.includes(opt.value) : opt.value === current;
       const isActive = index === activeIndex;
       const isDisabled = !!opt.disabled;
-      return (0, import_jsx_runtime18.jsx)("div", { id: `${listboxId}-opt-${opt.value}`, role: "option", "aria-selected": isSelected, "aria-disabled": isDisabled || void 0, tabIndex: searchable || isDisabled ? -1 : isActive ? 0 : -1, "data-idx": index, onMouseMove: () => !isDisabled && setActiveIndex(index), onClick: () => !isDisabled && commitIndex(index), className: cx(renderOption ? "ag-rounded ag-mb-1 last:ag-mb-0" : cx("ag-flex ag-items-center ag-justify-between ag-gap-2 ag-rounded", multilineSizeClasses(size), "dark:ag-text-neutral-100", isActive && "ag-bg-neutral-100 dark:ag-bg-neutral-700"), "ag-outline-none ag-select-none", isDisabled && "ag-opacity-50 ag-cursor-not-allowed", !isDisabled && "ag-cursor-pointer", optionClassName), children: renderOption ? renderOption(opt, { selected: isSelected, active: isActive, disabled: isDisabled }) : (0, import_jsx_runtime18.jsxs)(import_jsx_runtime18.Fragment, { children: [(0, import_jsx_runtime18.jsx)("span", { className: "ag-min-w-0 ag-flex-1", children: pill ? (0, import_jsx_runtime18.jsx)(PillOption, { opt, show: true, size, className: "ag-max-w-full" }) : (0, import_jsx_runtime18.jsxs)("span", { className: "ag-flex ag-items-center ag-gap-2 ag-min-w-0", children: [opt.profilePicUrl ? (0, import_jsx_runtime18.jsx)("img", { src: opt.profilePicUrl, alt: "", className: "ag-h-5 ag-w-5 ag-rounded-full ag-ring-1 ag-ring-black/10 dark:ag-ring-white/10" }) : opt.color ? (0, import_jsx_runtime18.jsx)("span", { className: "ag-h-1.5 ag-w-1.5 ag-rounded-full ag-ring-1 ag-ring-black/10 dark:ag-ring-white/10", style: {
+      return (0, import_jsx_runtime21.jsx)("div", { id: `${listboxId}-opt-${opt.value}`, role: "option", "aria-selected": isSelected, "aria-disabled": isDisabled || void 0, tabIndex: searchable || isDisabled ? -1 : isActive ? 0 : -1, "data-idx": index, onMouseMove: () => !isDisabled && setActiveIndex(index), onClick: () => !isDisabled && commitIndex(index), className: cx(renderOption ? "ag-rounded ag-mb-1 last:ag-mb-0" : cx("ag-flex ag-items-center ag-justify-between ag-gap-2 ag-rounded", multilineSizeClasses(size), "dark:ag-text-neutral-100", isActive && "ag-bg-neutral-100 dark:ag-bg-neutral-700"), "ag-outline-none ag-select-none", isDisabled && "ag-opacity-50 ag-cursor-not-allowed", !isDisabled && "ag-cursor-pointer", optionClassName), children: renderOption ? renderOption(opt, { selected: isSelected, active: isActive, disabled: isDisabled }) : (0, import_jsx_runtime21.jsxs)(import_jsx_runtime21.Fragment, { children: [(0, import_jsx_runtime21.jsx)("span", { className: "ag-min-w-0 ag-flex-1", children: pill ? (0, import_jsx_runtime21.jsx)(PillOption, { opt, show: true, size, className: "ag-max-w-full" }) : (0, import_jsx_runtime21.jsxs)("span", { className: "ag-flex ag-items-center ag-gap-2 ag-min-w-0", children: [opt.profilePicUrl ? (0, import_jsx_runtime21.jsx)("img", { src: opt.profilePicUrl, alt: "", className: "ag-h-5 ag-w-5 ag-rounded-full ag-ring-1 ag-ring-black/10 dark:ag-ring-white/10" }) : opt.color ? (0, import_jsx_runtime21.jsx)("span", { className: "ag-h-1.5 ag-w-1.5 ag-rounded-full ag-ring-1 ag-ring-black/10 dark:ag-ring-white/10", style: {
         background: airtableColorToHex(opt.color) ?? void 0
-      } }) : null, (0, import_jsx_runtime18.jsx)("span", { className: "ag-truncate", children: opt.label })] }) }), isSelected ? (0, import_jsx_runtime18.jsx)("span", { className: "ag-text-neutral-600 dark:ag-text-neutral-300", children: "\u2713" }) : null] }) }, opt.value);
+      } }) : null, (0, import_jsx_runtime21.jsx)("span", { className: "ag-truncate", children: opt.label })] }) }), isSelected ? (0, import_jsx_runtime21.jsx)("span", { className: "ag-text-neutral-600 dark:ag-text-neutral-300", children: "\u2713" }) : null] }) }, opt.value);
     };
-    const optionRows = entries2.length === 0 ? (0, import_jsx_runtime18.jsx)("div", { className: "ag-px-2 ag-py-3 ag-text-base ag-text-neutral-400 dark:ag-text-neutral-500 ag-text-center", children: emptyMessage }) : entries2.map((entry, idx) => {
+    const optionRows = entries2.length === 0 ? (0, import_jsx_runtime21.jsx)("div", { className: "ag-px-2 ag-py-3 ag-text-base ag-text-neutral-400 dark:ag-text-neutral-500 ag-text-center", children: emptyMessage }) : entries2.map((entry, idx) => {
       if (entry.type === "divider")
-        return (0, import_jsx_runtime18.jsx)(Divide, { className: "ag-my-1" }, `div-${idx}`);
+        return (0, import_jsx_runtime21.jsx)(Divide, { className: "ag-my-1" }, `div-${idx}`);
       if (entry.type === "header") {
-        return (0, import_jsx_runtime18.jsxs)("div", { className: "ag-flex ag-items-center ag-gap-2 ag-px-2 ag-py-1.5 ag-text-sm ag-font-semibold ag-text-neutral-500 dark:ag-text-neutral-400 ag-select-none", children: [entry.color && (0, import_jsx_runtime18.jsx)("span", { className: "ag-h-2 ag-w-2 ag-rounded-full ag-ring-1 ag-ring-black/10 dark:ag-ring-white/10 ag-flex-none", style: { background: airtableColorToHex(entry.color) ?? void 0 } }), (0, import_jsx_runtime18.jsx)("span", { className: "ag-truncate", children: entry.label })] }, `hdr-${idx}`);
+        return (0, import_jsx_runtime21.jsxs)("div", { className: "ag-flex ag-items-center ag-gap-2 ag-px-2 ag-py-1.5 ag-text-sm ag-font-semibold ag-text-neutral-500 dark:ag-text-neutral-400 ag-select-none", children: [entry.color && (0, import_jsx_runtime21.jsx)("span", { className: "ag-h-2 ag-w-2 ag-rounded-full ag-ring-1 ag-ring-black/10 dark:ag-ring-white/10 ag-flex-none", style: { background: airtableColorToHex(entry.color) ?? void 0 } }), (0, import_jsx_runtime21.jsx)("span", { className: "ag-truncate", children: entry.label })] }, `hdr-${idx}`);
       }
       return renderOptionRow(entry);
     });
@@ -50046,7 +50338,7 @@ export interface AiText {
     const defaultTrigger = multiple ? (
       // A div, not a button: the pills carry real remove buttons and nested
       // interactive controls inside a button are invalid HTML.
-      (0, import_jsx_runtime18.jsxs)("div", {
+      (0, import_jsx_runtime21.jsxs)("div", {
         id: triggerId,
         // cast: @types/react@17 wants a non-nullable RefObject in ref position
         ref: multiTriggerRef,
@@ -50060,13 +50352,13 @@ export interface AiText {
         onClick: () => !disabled && toggle(),
         onKeyDown: onTriggerKeyDown,
         className: cx(triggerClasses, "ag-h-auto ag-min-h-8 ag-flex-wrap ag-justify-start"),
-        children: [(0, import_jsx_runtime18.jsx)("span", { id: `${listboxId}-value`, className: cx("ag-min-w-0 ag-flex-1 ag-flex ag-flex-wrap ag-items-center ag-gap-1"), children: selectedOptions.length > 0 ? props.renderValue ? props.renderValue(selectedOptions) : selectedOptions.map((opt) => (0, import_jsx_runtime18.jsxs)("span", { className: "ag-inline-flex ag-items-center ag-gap-0.5 ag-min-w-0", children: [(0, import_jsx_runtime18.jsx)(PillOption, { opt, size, className: "ag-max-w-full" }), !disabled && (0, import_jsx_runtime18.jsx)("button", { type: "button", tabIndex: -1, "aria-label": `Remove ${normalizeOptionText(opt)}`, onClick: (e) => {
+        children: [(0, import_jsx_runtime21.jsx)("span", { id: `${listboxId}-value`, className: cx("ag-min-w-0 ag-flex-1 ag-flex ag-flex-wrap ag-items-center ag-gap-1"), children: selectedOptions.length > 0 ? props.renderValue ? props.renderValue(selectedOptions) : selectedOptions.map((opt) => (0, import_jsx_runtime21.jsxs)("span", { className: "ag-inline-flex ag-items-center ag-gap-0.5 ag-min-w-0", children: [(0, import_jsx_runtime21.jsx)(PillOption, { opt, size, className: "ag-max-w-full" }), !disabled && (0, import_jsx_runtime21.jsx)("button", { type: "button", tabIndex: -1, "aria-label": `Remove ${normalizeOptionText(opt)}`, onClick: (e) => {
           e.stopPropagation();
           removeValue(opt.value);
-        }, className: "ag-flex-none ag-rounded-full ag-px-0.5 ag-text-neutral-400 hover:ag-text-neutral-700 dark:hover:ag-text-neutral-200", children: "\xD7" })] }, opt.value)) : (0, import_jsx_runtime18.jsx)("span", { className: "ag-text-neutral-500 dark:ag-text-neutral-400", children: placeholder }) }), (0, import_jsx_runtime18.jsx)(Caret, { open, weight: 2.5, className: "ag-ml-auto ag-flex-none" })]
+        }, className: "ag-flex-none ag-rounded-full ag-px-0.5 ag-text-neutral-400 hover:ag-text-neutral-700 dark:hover:ag-text-neutral-200", children: "\xD7" })] }, opt.value)) : (0, import_jsx_runtime21.jsx)("span", { className: "ag-text-neutral-500 dark:ag-text-neutral-400", children: placeholder }) }), (0, import_jsx_runtime21.jsx)(Caret, { open, weight: 2.5, className: "ag-ml-auto ag-flex-none" })]
       })
-    ) : (0, import_jsx_runtime18.jsxs)("button", { id: triggerId, ref: triggerRef, type: "button", disabled, "aria-haspopup": "listbox", "aria-expanded": open, "aria-controls": open ? listboxId : void 0, onClick: toggle, onKeyDown: onTriggerKeyDown, className: cx(triggerClasses, "disabled:ag-opacity-60 disabled:ag-cursor-not-allowed"), children: [(0, import_jsx_runtime18.jsx)("span", { className: cx("ag-min-w-0 ag-flex-1", pill && "ag-flex ag-justify-start"), children: selected ? props.renderValue ? props.renderValue(selected) : pill ? (0, import_jsx_runtime18.jsx)("div", { className: "ag-ml-1", children: (0, import_jsx_runtime18.jsx)(PillOption, { opt: selected, size, className: "ag-max-w-full ag-w-fit" }) }) : (0, import_jsx_runtime18.jsx)("span", { className: "ag-truncate", children: selected.label }) : (0, import_jsx_runtime18.jsx)("span", { className: "ag-text-neutral-500 dark:ag-text-neutral-400", children: placeholder }) }), (0, import_jsx_runtime18.jsx)(Caret, { open, weight: 2.5 })] });
-    return (0, import_jsx_runtime18.jsxs)("div", { className: cx("ag-inline-block", className), children: [renderTrigger ? renderTrigger({ ref: triggerRef, id, open, toggle, disabled, selected }) : defaultTrigger, present && (0, import_jsx_runtime18.jsx)(Portal, { children: (0, import_jsx_runtime18.jsx)("div", __spreadProps(__spreadValues({
+    ) : (0, import_jsx_runtime21.jsxs)("button", { id: triggerId, ref: triggerRef, type: "button", disabled, "aria-haspopup": "listbox", "aria-expanded": open, "aria-controls": open ? listboxId : void 0, onClick: toggle, onKeyDown: onTriggerKeyDown, className: cx(triggerClasses, "disabled:ag-opacity-60 disabled:ag-cursor-not-allowed"), children: [(0, import_jsx_runtime21.jsx)("span", { className: cx("ag-min-w-0 ag-flex-1", pill && "ag-flex ag-justify-start"), children: selected ? props.renderValue ? props.renderValue(selected) : pill ? (0, import_jsx_runtime21.jsx)("div", { className: "ag-ml-1", children: (0, import_jsx_runtime21.jsx)(PillOption, { opt: selected, size, className: "ag-max-w-full ag-w-fit" }) }) : (0, import_jsx_runtime21.jsx)("span", { className: "ag-truncate", children: selected.label }) : (0, import_jsx_runtime21.jsx)("span", { className: "ag-text-neutral-500 dark:ag-text-neutral-400", children: placeholder }) }), (0, import_jsx_runtime21.jsx)(Caret, { open, weight: 2.5 })] });
+    return (0, import_jsx_runtime21.jsxs)("div", { className: cx("ag-inline-block", className), children: [renderTrigger ? renderTrigger({ ref: triggerRef, id, open, toggle, disabled, selected }) : defaultTrigger, present && (0, import_jsx_runtime21.jsx)(Portal, { children: (0, import_jsx_runtime21.jsx)("div", __spreadProps(__spreadValues({
       // cast: @types/react@17 wants a non-nullable RefObject in ref position
       ref: menuRef
     }, searchable ? {} : {
@@ -50079,17 +50371,17 @@ export interface AiText {
       onKeyDown: searchable ? void 0 : onMenuKeyDown,
       className: cx("ag-fixed ag-z-popover ag-rounded ag-border ag-border-neutral-200 ag-bg-white ag-shadow-sm", "dark:ag-border-neutral-600 dark:ag-bg-neutral-800", searchable ? "ag-flex ag-flex-col ag-max-h-72" : "ag-p-1 ag-max-h-72 ag-overflow-auto", "ag-transition-[opacity,transform] ag-duration-100 ag-ease-out", animateIn ? "ag-opacity-100 ag-translate-y-0 ag-scale-100" : "ag-opacity-0 -ag-translate-y-1 ag-scale-[0.95] ag-pointer-events-none", menuClassName),
       style: __spreadValues(__spreadValues({}, menuPosStyle), matchTriggerWidth ? {} : { minWidth: minMenuWidth ? Math.max(anchorWidth, minMenuWidth) : anchorWidth }),
-      children: searchable ? (0, import_jsx_runtime18.jsxs)(import_jsx_runtime18.Fragment, { children: [(0, import_jsx_runtime18.jsx)("div", { className: "ag-flex-none ag-border-b ag-border-neutral-200 dark:ag-border-neutral-600 ag-p-1.5", children: (0, import_jsx_runtime18.jsx)("input", { ref: inputRef, type: "text", role: "combobox", "aria-expanded": open, "aria-controls": listboxId, "aria-autocomplete": "list", value: query2, onChange: (e) => {
+      children: searchable ? (0, import_jsx_runtime21.jsxs)(import_jsx_runtime21.Fragment, { children: [(0, import_jsx_runtime21.jsx)("div", { className: "ag-flex-none ag-border-b ag-border-neutral-200 dark:ag-border-neutral-600 ag-p-1.5", children: (0, import_jsx_runtime21.jsx)("input", { ref: inputRef, type: "text", role: "combobox", "aria-expanded": open, "aria-controls": listboxId, "aria-autocomplete": "list", value: query2, onChange: (e) => {
         setQuery(e.target.value);
         setActiveIndex(0);
-      }, onKeyDown: onSearchKeyDown, placeholder: searchPlaceholder, className: cx("ag-w-full ag-px-2 ag-py-1.5 ag-text-base ag-outline-none ag-rounded", "ag-bg-transparent dark:ag-text-neutral-100", "placeholder:ag-text-neutral-400 dark:placeholder:ag-text-neutral-500"), "aria-activedescendant": activeOption ? `${listboxId}-opt-${activeOption.value}` : void 0 }) }), (0, import_jsx_runtime18.jsx)("div", { id: listboxId, role: "listbox", "aria-labelledby": triggerId, "aria-multiselectable": multiple || void 0, className: "ag-flex-1 ag-overflow-auto ag-p-1.5", children: optionRows })] }) : optionRows
+      }, onKeyDown: onSearchKeyDown, placeholder: searchPlaceholder, className: cx("ag-w-full ag-px-2 ag-py-1.5 ag-text-base ag-outline-none ag-rounded", "ag-bg-transparent dark:ag-text-neutral-100", "placeholder:ag-text-neutral-400 dark:placeholder:ag-text-neutral-500"), "aria-activedescendant": activeOption ? `${listboxId}-opt-${activeOption.value}` : void 0 }) }), (0, import_jsx_runtime21.jsx)("div", { id: listboxId, role: "listbox", "aria-labelledby": triggerId, "aria-multiselectable": multiple || void 0, className: "ag-flex-1 ag-overflow-auto ag-p-1.5", children: optionRows })] }) : optionRows
     })) })] });
   }
-  var import_jsx_runtime18, React19;
+  var import_jsx_runtime21, React20;
   var init_Select = __esm({
     "node_modules/@airgen/ui/dist/components/Select.js"() {
-      import_jsx_runtime18 = __toESM(require_jsx_runtime(), 1);
-      React19 = __toESM(require_react(), 1);
+      import_jsx_runtime21 = __toESM(require_jsx_runtime(), 1);
+      React20 = __toESM(require_react(), 1);
       init_Caret();
       init_Divide();
       init_PillOption();
@@ -50117,26 +50409,26 @@ export interface AiText {
 
   // node_modules/@airgen/ui/dist/components/Popover.js
   function usePopoverCtx(name) {
-    const ctx = React20.useContext(PopoverCtx);
+    const ctx = React21.useContext(PopoverCtx);
     if (!ctx)
       throw new Error(`${name} must be used within <Popover>`);
     return ctx;
   }
   function Popover({ children, open: openProp, defaultOpen = false, onOpenChange, side = "bottom", align = "center", offset = 8, portal = true, trapFocus = false, avoidCollisions = true, collisionPadding = 8, flip = false }) {
-    const [uncontrolledOpen, setUncontrolledOpen] = React20.useState(defaultOpen);
+    const [uncontrolledOpen, setUncontrolledOpen] = React21.useState(defaultOpen);
     const controlled = openProp !== void 0;
     const open = controlled ? !!openProp : uncontrolledOpen;
-    const setOpen = React20.useCallback((next) => {
+    const setOpen = React21.useCallback((next) => {
       if (!controlled)
         setUncontrolledOpen(next);
       onOpenChange?.(next);
     }, [controlled, onOpenChange]);
-    const toggle = React20.useCallback(() => setOpen(!open), [open, setOpen]);
-    const triggerRef = React20.useRef(null);
-    const contentRef = React20.useRef(null);
+    const toggle = React21.useCallback(() => setOpen(!open), [open, setOpen]);
+    const triggerRef = React21.useRef(null);
+    const contentRef = React21.useRef(null);
     const defaultContentId = useStableId("popover");
-    const [contentId, setContentId] = React20.useState(defaultContentId);
-    const ctxValue = React20.useMemo(() => ({
+    const [contentId, setContentId] = React21.useState(defaultContentId);
+    const ctxValue = React21.useMemo(() => ({
       open,
       setOpen,
       toggle,
@@ -50153,18 +50445,18 @@ export interface AiText {
       collisionPadding,
       flip
     }), [open, setOpen, toggle, contentId, side, align, offset, portal, trapFocus, avoidCollisions, collisionPadding, flip]);
-    return (0, import_jsx_runtime19.jsx)(PopoverCtx.Provider, { value: ctxValue, children });
+    return (0, import_jsx_runtime22.jsx)(PopoverCtx.Provider, { value: ctxValue, children });
   }
   function PopoverTrigger(_a) {
     var _b = _a, { children } = _b, rest = __objRest(_b, ["children"]);
     const ctx = usePopoverCtx("Popover.Trigger");
-    if (!React20.isValidElement(children)) {
+    if (!React21.isValidElement(children)) {
       throw new Error("Popover.Trigger expects a single React element child.");
     }
     const childProps = children.props ?? {};
     const onClickChild = childProps.onClick;
     const onClickUser = rest.onClick;
-    return React20.cloneElement(children, __spreadProps(__spreadValues({}, rest), {
+    return React21.cloneElement(children, __spreadProps(__spreadValues({}, rest), {
       "aria-haspopup": "dialog",
       "aria-expanded": ctx.open,
       "aria-controls": ctx.open ? ctx.contentId : void 0,
@@ -50183,7 +50475,7 @@ export interface AiText {
     var _b = _a, { id, className = "", style: style3, onEscapeKeyDown, onInteractOutside } = _b, rest = __objRest(_b, ["id", "className", "style", "onEscapeKeyDown", "onInteractOutside"]);
     const ctx = usePopoverCtx("Popover.Content");
     const present = usePresence(ctx.open, EXIT_MS);
-    React20.useEffect(() => {
+    React21.useEffect(() => {
       if (id && id !== ctx.contentId)
         ctx.setContentId(id);
     }, [id, ctx]);
@@ -50199,7 +50491,7 @@ export interface AiText {
       avoidCollisions: ctx.avoidCollisions,
       flip: ctx.flip
     });
-    React20.useEffect(() => {
+    React21.useEffect(() => {
       if (!ctx.open)
         return;
       const onKeyDown = (ev) => {
@@ -50230,8 +50522,8 @@ export interface AiText {
         document.removeEventListener("pointerdown", onPointerDown, true);
       };
     }, [ctx, onEscapeKeyDown, onInteractOutside]);
-    const wasOpen = React20.useRef(false);
-    React20.useEffect(() => {
+    const wasOpen = React21.useRef(false);
+    React21.useEffect(() => {
       if (ctx.open && !wasOpen.current) {
         queueMicrotask(() => {
           const el = ctx.contentRef.current;
@@ -50245,7 +50537,7 @@ export interface AiText {
       }
       wasOpen.current = ctx.open;
     }, [ctx.open, ctx.contentRef, ctx.triggerRef]);
-    React20.useEffect(() => {
+    React21.useEffect(() => {
       if (!ctx.open || !ctx.trapFocus)
         return;
       const onKeyDown = (ev) => {
@@ -50258,21 +50550,21 @@ export interface AiText {
     }, [ctx.open, ctx.trapFocus, ctx.contentRef]);
     if (!present)
       return null;
-    const node = (0, import_jsx_runtime19.jsx)("div", __spreadProps(__spreadValues({}, rest), { id: contentId, role: "dialog", tabIndex: -1, "data-state": ctx.open ? "open" : "closed", ref: contentRefCallback, className: cx("ag-z-popover ag-rounded-md ag-border ag-border-neutral-200 ag-bg-white ag-p-4 ag-text-neutral-900 ag-shadow-md ag-outline-none", "dark:ag-border-neutral-600 dark:ag-bg-neutral-800 dark:ag-text-neutral-100", "data-[state=open]:ag-animate-in data-[state=closed]:ag-animate-out", "data-[state=open]:ag-fade-in data-[state=closed]:ag-fade-out", "data-[state=open]:ag-zoom-in data-[state=closed]:ag-zoom-out", className), style: __spreadValues(__spreadProps(__spreadValues({}, posStyle), {
+    const node = (0, import_jsx_runtime22.jsx)("div", __spreadProps(__spreadValues({}, rest), { id: contentId, role: "dialog", tabIndex: -1, "data-state": ctx.open ? "open" : "closed", ref: contentRefCallback, className: cx("ag-z-popover ag-rounded-md ag-border ag-border-neutral-200 ag-bg-white ag-p-4 ag-text-neutral-900 ag-shadow-md ag-outline-none", "dark:ag-border-neutral-600 dark:ag-bg-neutral-800 dark:ag-text-neutral-100", "data-[state=open]:ag-animate-in data-[state=closed]:ag-animate-out", "data-[state=open]:ag-fade-in data-[state=closed]:ag-fade-out", "data-[state=open]:ag-zoom-in data-[state=closed]:ag-zoom-out", className), style: __spreadValues(__spreadProps(__spreadValues({}, posStyle), {
       visibility: ready ? void 0 : "hidden"
     }), style3) }));
-    return ctx.portal ? (0, import_jsx_runtime19.jsx)(Portal, { children: node }) : node;
+    return ctx.portal ? (0, import_jsx_runtime22.jsx)(Portal, { children: node }) : node;
   }
   function PopoverClose(_a) {
     var _b = _a, { children } = _b, rest = __objRest(_b, ["children"]);
     const ctx = usePopoverCtx("Popover.Close");
-    if (!React20.isValidElement(children)) {
+    if (!React21.isValidElement(children)) {
       throw new Error("Popover.Close expects a single React element child.");
     }
     const childProps = children.props ?? {};
     const onClickChild = childProps.onClick;
     const onClickUser = rest.onClick;
-    return React20.cloneElement(children, __spreadProps(__spreadValues({}, rest), {
+    return React21.cloneElement(children, __spreadProps(__spreadValues({}, rest), {
       onClick: (e) => {
         onClickChild?.(e);
         onClickUser?.(e);
@@ -50282,18 +50574,18 @@ export interface AiText {
       }
     }));
   }
-  var import_jsx_runtime19, React20, EXIT_MS, PopoverCtx;
+  var import_jsx_runtime22, React21, EXIT_MS, PopoverCtx;
   var init_Popover = __esm({
     "node_modules/@airgen/ui/dist/components/Popover.js"() {
-      import_jsx_runtime19 = __toESM(require_jsx_runtime(), 1);
-      React20 = __toESM(require_react(), 1);
+      import_jsx_runtime22 = __toESM(require_jsx_runtime(), 1);
+      React21 = __toESM(require_react(), 1);
       init_Portal();
       init_utils();
       init_dropdown();
       init_positioning();
       init_slot();
       EXIT_MS = 150;
-      PopoverCtx = React20.createContext(null);
+      PopoverCtx = React21.createContext(null);
       Popover.Trigger = PopoverTrigger;
       Popover.Content = PopoverContent;
       Popover.Close = PopoverClose;
@@ -50302,44 +50594,44 @@ export interface AiText {
 
   // node_modules/@airgen/ui/dist/components/Tooltip.js
   function useTooltipCtx(name) {
-    const ctx = React21.useContext(TooltipContext);
+    const ctx = React22.useContext(TooltipContext);
     if (!ctx)
       throw new Error(`${name} must be used within <Tooltip>`);
     return ctx;
   }
   function Tooltip({ children, delay = 250, disableHoverableContent = true, open: openProp, defaultOpen = false, onOpenChange }) {
-    const [uncontrolledOpen, setUncontrolledOpen] = React21.useState(defaultOpen);
+    const [uncontrolledOpen, setUncontrolledOpen] = React22.useState(defaultOpen);
     const controlled = openProp !== void 0;
     const open = controlled ? !!openProp : uncontrolledOpen;
-    const setOpen = React21.useCallback((next) => {
+    const setOpen = React22.useCallback((next) => {
       if (!controlled)
         setUncontrolledOpen(next);
       onOpenChange?.(next);
     }, [controlled, onOpenChange]);
-    const triggerRef = React21.useRef(null);
-    const contentRef = React21.useRef(null);
-    const openTimerRef = React21.useRef(0);
+    const triggerRef = React22.useRef(null);
+    const contentRef = React22.useRef(null);
+    const openTimerRef = React22.useRef(0);
     const contentId = useStableId("tooltip");
-    const scheduleOpen = React21.useCallback(() => {
+    const scheduleOpen = React22.useCallback(() => {
       window.clearTimeout(openTimerRef.current);
       openTimerRef.current = window.setTimeout(() => setOpen(true), delay);
     }, [delay, setOpen]);
-    const closeNow = React21.useCallback(() => {
+    const closeNow = React22.useCallback(() => {
       window.clearTimeout(openTimerRef.current);
       openTimerRef.current = 0;
       setOpen(false);
     }, [setOpen]);
-    React21.useEffect(() => () => window.clearTimeout(openTimerRef.current), []);
-    const value = React21.useMemo(() => ({ open, scheduleOpen, closeNow, triggerRef, contentRef, contentId, disableHoverableContent }), [open, scheduleOpen, closeNow, contentId, disableHoverableContent]);
-    return (0, import_jsx_runtime20.jsx)(TooltipContext.Provider, { value, children });
+    React22.useEffect(() => () => window.clearTimeout(openTimerRef.current), []);
+    const value = React22.useMemo(() => ({ open, scheduleOpen, closeNow, triggerRef, contentRef, contentId, disableHoverableContent }), [open, scheduleOpen, closeNow, contentId, disableHoverableContent]);
+    return (0, import_jsx_runtime23.jsx)(TooltipContext.Provider, { value, children });
   }
   function TooltipTrigger({ children, asChild = false }) {
     const ctx = useTooltipCtx("TooltipTrigger");
     const { triggerRef, scheduleOpen, closeNow, open, contentId } = ctx;
     const describedBy = open ? contentId : void 0;
-    if (asChild && React21.isValidElement(children)) {
+    if (asChild && React22.isValidElement(children)) {
       const childProps = children.props ?? {};
-      return React21.cloneElement(children, {
+      return React22.cloneElement(children, {
         "aria-describedby": describedBy,
         ref: mergeRefs(getElementRef(children), triggerRef),
         onPointerEnter: (e) => {
@@ -50360,7 +50652,7 @@ export interface AiText {
         }
       });
     }
-    return (0, import_jsx_runtime20.jsx)("span", {
+    return (0, import_jsx_runtime23.jsx)("span", {
       // cast: @types/react@17 wants a non-nullable RefObject in ref position
       ref: triggerRef,
       "aria-describedby": describedBy,
@@ -50384,7 +50676,7 @@ export interface AiText {
       offset: sideOffset,
       collisionPadding: 8
     });
-    React21.useEffect(() => {
+    React22.useEffect(() => {
       if (!open)
         return;
       const onKeyDown = (e) => e.key === "Escape" && closeNow();
@@ -50393,21 +50685,21 @@ export interface AiText {
     }, [open, closeNow]);
     if (!open)
       return null;
-    return (0, import_jsx_runtime20.jsx)(Portal, { children: (0, import_jsx_runtime20.jsx)("div", { ref: contentRefCallback, id: contentId, role: "tooltip", className: cx("ag-fixed ag-z-tooltip ag-rounded-md ag-border ag-border-neutral-200 ag-bg-white ag-px-2 ag-py-1 ag-text-sm ag-text-neutral-900 ag-shadow-md", "dark:ag-border-neutral-600 dark:ag-bg-neutral-800 dark:ag-text-neutral-100", className), style: __spreadProps(__spreadValues({}, style3), {
+    return (0, import_jsx_runtime23.jsx)(Portal, { children: (0, import_jsx_runtime23.jsx)("div", { ref: contentRefCallback, id: contentId, role: "tooltip", className: cx("ag-fixed ag-z-tooltip ag-rounded-md ag-border ag-border-neutral-200 ag-bg-white ag-px-2 ag-py-1 ag-text-sm ag-text-neutral-900 ag-shadow-md", "dark:ag-border-neutral-600 dark:ag-bg-neutral-800 dark:ag-text-neutral-100", className), style: __spreadProps(__spreadValues({}, style3), {
       opacity: ready ? 1 : 0,
       pointerEvents: disableHoverableContent ? "none" : "auto"
     }), children }) });
   }
-  var import_jsx_runtime20, React21, TooltipContext;
+  var import_jsx_runtime23, React22, TooltipContext;
   var init_Tooltip = __esm({
     "node_modules/@airgen/ui/dist/components/Tooltip.js"() {
-      import_jsx_runtime20 = __toESM(require_jsx_runtime(), 1);
-      React21 = __toESM(require_react(), 1);
+      import_jsx_runtime23 = __toESM(require_jsx_runtime(), 1);
+      React22 = __toESM(require_react(), 1);
       init_Portal();
       init_utils();
       init_positioning();
       init_slot();
-      TooltipContext = React21.createContext(null);
+      TooltipContext = React22.createContext(null);
       Tooltip.Trigger = TooltipTrigger;
       Tooltip.Content = TooltipContent;
     }
@@ -50415,7 +50707,7 @@ export interface AiText {
 
   // node_modules/@airgen/ui/dist/components/DialogSheet.js
   function useDialogCtx(name) {
-    const ctx = React22.useContext(DialogContext);
+    const ctx = React23.useContext(DialogContext);
     if (!ctx)
       throw new Error(`${name} must be used inside <Dialog.Root>`);
     return ctx;
@@ -50429,10 +50721,10 @@ export interface AiText {
     const contentId = useStableId("dialog-content");
     const titleId = useStableId("dialog-title");
     const descriptionId = useStableId("dialog-desc");
-    const triggerRef = React22.useRef(null);
-    const [hasTitle, setHasTitle] = React22.useState(false);
-    const [hasDescription, setHasDescription] = React22.useState(false);
-    const ctx = React22.useMemo(() => ({
+    const triggerRef = React23.useRef(null);
+    const [hasTitle, setHasTitle] = React23.useState(false);
+    const [hasDescription, setHasDescription] = React23.useState(false);
+    const ctx = React23.useMemo(() => ({
       open: isOpen,
       setOpen: (v) => setIsOpen(v),
       contentId,
@@ -50445,36 +50737,36 @@ export interface AiText {
       triggerRef,
       durationMs
     }), [isOpen, setIsOpen, contentId, titleId, descriptionId, hasTitle, hasDescription, durationMs]);
-    return (0, import_jsx_runtime21.jsx)(DialogContext.Provider, { value: ctx, children });
+    return (0, import_jsx_runtime24.jsx)(DialogContext.Provider, { value: ctx, children });
   }
   function DialogPortal({ children, container }) {
     const ctx = useDialogCtx("Dialog.Portal");
     const present = usePresence(ctx.open, ctx.durationMs);
     if (!present)
       return null;
-    return (0, import_jsx_runtime21.jsx)(Portal, { container, children });
+    return (0, import_jsx_runtime24.jsx)(Portal, { container, children });
   }
   function DialogOverlay(_a) {
     var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
     const ctx = useDialogCtx("Dialog.Overlay");
     const base = "ag-fixed ag-inset-0 ag-z-overlay ag-bg-black/50 data-[state=open]:ag-animate-in data-[state=open]:ag-fade-in-0 data-[state=closed]:ag-animate-out data-[state=closed]:ag-fade-out-0 ag-duration-200 data-[state=closed]:ag-opacity-0";
-    return (0, import_jsx_runtime21.jsx)("div", __spreadProps(__spreadValues({}, props), { "data-state": ctx.open ? "open" : "closed", className: cx(base, className), onClick: (e) => {
+    return (0, import_jsx_runtime24.jsx)("div", __spreadProps(__spreadValues({}, props), { "data-state": ctx.open ? "open" : "closed", className: cx(base, className), onClick: (e) => {
       props.onClick?.(e);
       if (!e.defaultPrevented && e.target === e.currentTarget)
         ctx.setOpen(false);
     } }));
   }
-  var import_jsx_runtime21, React22, DialogContext, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogClose, Dialog, SheetContent, Sheet;
+  var import_jsx_runtime24, React23, DialogContext, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogClose, Dialog, SheetContent, Sheet;
   var init_DialogSheet = __esm({
     "node_modules/@airgen/ui/dist/components/DialogSheet.js"() {
-      import_jsx_runtime21 = __toESM(require_jsx_runtime(), 1);
-      React22 = __toESM(require_react(), 1);
+      import_jsx_runtime24 = __toESM(require_jsx_runtime(), 1);
+      React23 = __toESM(require_react(), 1);
       init_Portal();
       init_utils();
       init_dropdown();
       init_slot();
-      DialogContext = React22.createContext(null);
-      DialogTrigger = React22.forwardRef(function DialogTrigger2(_a, ref) {
+      DialogContext = React23.createContext(null);
+      DialogTrigger = React23.forwardRef(function DialogTrigger2(_a, ref) {
         var _b = _a, { asChild = false, children } = _b, props = __objRest(_b, ["asChild", "children"]);
         const ctx = useDialogCtx("Dialog.Trigger");
         const setTriggerRef = (node) => {
@@ -50496,13 +50788,13 @@ export interface AiText {
           }
         });
         if (!asChild) {
-          return (0, import_jsx_runtime21.jsx)("button", __spreadProps(__spreadValues({}, injected), { ref: setTriggerRef, children }));
+          return (0, import_jsx_runtime24.jsx)("button", __spreadProps(__spreadValues({}, injected), { ref: setTriggerRef, children }));
         }
         let el = null;
-        React22.Children.forEach(children, (c) => {
+        React23.Children.forEach(children, (c) => {
           if (el)
             return;
-          if (React22.isValidElement(c))
+          if (React23.isValidElement(c))
             el = c;
         });
         if (!el) {
@@ -50522,7 +50814,7 @@ export interface AiText {
             childRef.current = node;
           setTriggerRef(node);
         };
-        return React22.cloneElement(element, __spreadProps(__spreadValues(__spreadValues({}, injected), elementProps), {
+        return React23.cloneElement(element, __spreadProps(__spreadValues(__spreadValues({}, injected), elementProps), {
           // ensure ARIA wins
           "aria-haspopup": "dialog",
           "aria-expanded": ctx.open,
@@ -50532,10 +50824,10 @@ export interface AiText {
           ref: mergedRef
         }));
       });
-      DialogContent = React22.forwardRef(function DialogContent2(_a, ref) {
+      DialogContent = React23.forwardRef(function DialogContent2(_a, ref) {
         var _b = _a, { className, initialFocusRef, closeOnEscape = true, trapFocus: shouldTrapFocus = true, restoreFocus = true, lockScroll = true } = _b, props = __objRest(_b, ["className", "initialFocusRef", "closeOnEscape", "trapFocus", "restoreFocus", "lockScroll"]);
         const ctx = useDialogCtx("Dialog.Content");
-        const localRef = React22.useRef(null);
+        const localRef = React23.useRef(null);
         const setRef = (node) => {
           localRef.current = node;
           if (typeof ref === "function")
@@ -50543,7 +50835,7 @@ export interface AiText {
           else if (ref)
             ref.current = node;
         };
-        React22.useEffect(() => {
+        React23.useEffect(() => {
           if (!ctx.open)
             return;
           const restoreScroll = lockScroll ? lockBodyScroll(true) : () => {
@@ -50587,27 +50879,27 @@ export interface AiText {
           };
         }, [ctx, closeOnEscape, shouldTrapFocus, restoreFocus, lockScroll, initialFocusRef]);
         const base = "ag-fixed ag-z-overlay ag-outline-none data-[state=open]:ag-animate-in data-[state=open]:ag-fade-in-0 data-[state=open]:ag-zoom-in-95 data-[state=closed]:ag-animate-out data-[state=closed]:ag-fade-out-0 data-[state=closed]:ag-zoom-out-95 ag-duration-200";
-        return (0, import_jsx_runtime21.jsx)("div", __spreadProps(__spreadValues({}, props), { ref: setRef, role: "dialog", "aria-modal": "true", id: ctx.contentId, "aria-labelledby": ctx.hasTitle ? ctx.titleId : void 0, "aria-describedby": ctx.hasDescription ? ctx.descriptionId : void 0, tabIndex: -1, "data-state": ctx.open ? "open" : "closed", className: cx(base, className) }));
+        return (0, import_jsx_runtime24.jsx)("div", __spreadProps(__spreadValues({}, props), { ref: setRef, role: "dialog", "aria-modal": "true", id: ctx.contentId, "aria-labelledby": ctx.hasTitle ? ctx.titleId : void 0, "aria-describedby": ctx.hasDescription ? ctx.descriptionId : void 0, tabIndex: -1, "data-state": ctx.open ? "open" : "closed", className: cx(base, className) }));
       });
-      DialogTitle = React22.forwardRef(function DialogTitle2(_a, ref) {
+      DialogTitle = React23.forwardRef(function DialogTitle2(_a, ref) {
         var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
         const ctx = useDialogCtx("Dialog.Title");
-        React22.useEffect(() => {
+        React23.useEffect(() => {
           ctx.setHasTitle(true);
           return () => ctx.setHasTitle(false);
         }, [ctx]);
-        return (0, import_jsx_runtime21.jsx)("h2", __spreadProps(__spreadValues({}, props), { ref, id: ctx.titleId, className }));
+        return (0, import_jsx_runtime24.jsx)("h2", __spreadProps(__spreadValues({}, props), { ref, id: ctx.titleId, className }));
       });
-      DialogDescription = React22.forwardRef(function DialogDescription2(_a, ref) {
+      DialogDescription = React23.forwardRef(function DialogDescription2(_a, ref) {
         var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
         const ctx = useDialogCtx("Dialog.Description");
-        React22.useEffect(() => {
+        React23.useEffect(() => {
           ctx.setHasDescription(true);
           return () => ctx.setHasDescription(false);
         }, [ctx]);
-        return (0, import_jsx_runtime21.jsx)("p", __spreadProps(__spreadValues({}, props), { ref, id: ctx.descriptionId, className }));
+        return (0, import_jsx_runtime24.jsx)("p", __spreadProps(__spreadValues({}, props), { ref, id: ctx.descriptionId, className }));
       });
-      DialogClose = React22.forwardRef(function DialogClose2(_a, ref) {
+      DialogClose = React23.forwardRef(function DialogClose2(_a, ref) {
         var _b = _a, { asChild = false, children } = _b, props = __objRest(_b, ["asChild", "children"]);
         const ctx = useDialogCtx("Dialog.Close");
         const setCloseRef = (node) => {
@@ -50625,13 +50917,13 @@ export interface AiText {
           }
         });
         if (!asChild) {
-          return (0, import_jsx_runtime21.jsx)("button", __spreadProps(__spreadValues({}, injected), { ref: setCloseRef, children }));
+          return (0, import_jsx_runtime24.jsx)("button", __spreadProps(__spreadValues({}, injected), { ref: setCloseRef, children }));
         }
         let el = null;
-        React22.Children.forEach(children, (c) => {
+        React23.Children.forEach(children, (c) => {
           if (el)
             return;
-          if (React22.isValidElement(c))
+          if (React23.isValidElement(c))
             el = c;
         });
         if (!el) {
@@ -50651,7 +50943,7 @@ export interface AiText {
             childRef.current = node;
           setCloseRef(node);
         };
-        return React22.cloneElement(element, __spreadProps(__spreadValues(__spreadValues({}, injected), elementProps), {
+        return React23.cloneElement(element, __spreadProps(__spreadValues(__spreadValues({}, injected), elementProps), {
           type: elementProps.type ?? injected.type,
           onClick: mergedOnClick,
           ref: mergedRef
@@ -50675,7 +50967,7 @@ export interface AiText {
         /** Button that closes the modal; supports `asChild` composition. */
         Close: DialogClose
       };
-      SheetContent = React22.forwardRef(function SheetContent2(_a, ref) {
+      SheetContent = React23.forwardRef(function SheetContent2(_a, ref) {
         var _b = _a, { side = "right", restoreFocus = true, className } = _b, props = __objRest(_b, ["side", "restoreFocus", "className"]);
         const sideClasses = {
           right: "ag-inset-y-0 ag-right-0 ag-h-full ag-w-80 md:ag-w-96 ag-border-l data-[state=open]:ag-slide-in-from-right data-[state=closed]:ag-slide-out-to-right data-[state=closed]:ag-translate-x-full",
@@ -50688,7 +50980,7 @@ export interface AiText {
           // `bg-background`-style CSS-variable token.
           "ag-bg-white dark:ag-bg-neutral-800 ag-border-neutral-200 dark:ag-border-neutral-600 ag-shadow-lg data-[state=open]:ag-animate-in data-[state=closed]:ag-animate-out ag-duration-200 data-[state=closed]:ag-opacity-0"
         );
-        return (0, import_jsx_runtime21.jsx)(DialogContent, __spreadProps(__spreadValues({}, props), { ref, className: cx(base, sideClasses[side], className), restoreFocus }));
+        return (0, import_jsx_runtime24.jsx)(DialogContent, __spreadProps(__spreadValues({}, props), { ref, className: cx(base, sideClasses[side], className), restoreFocus }));
       });
       Sheet = {
         /** Owns controlled or uncontrolled visibility for the modal and its descendants. */
@@ -50713,40 +51005,40 @@ export interface AiText {
 
   // node_modules/@airgen/ui/dist/components/Toast.js
   function ToastEntry({ toast, onDismiss }) {
-    const [visible, setVisible] = React23.useState(false);
-    const exitTimer = React23.useRef(0);
-    React23.useEffect(() => {
+    const [visible, setVisible] = React24.useState(false);
+    const exitTimer = React24.useRef(0);
+    React24.useEffect(() => {
       const raf = requestAnimationFrame(() => setVisible(true));
       return () => cancelAnimationFrame(raf);
     }, []);
-    React23.useEffect(() => {
+    React24.useEffect(() => {
       if (toast.duration <= 0)
         return;
       const t = window.setTimeout(() => onDismiss(toast.id), toast.duration);
       return () => window.clearTimeout(t);
     }, [toast.id, toast.duration, onDismiss]);
-    React23.useEffect(() => () => window.clearTimeout(exitTimer.current), []);
+    React24.useEffect(() => () => window.clearTimeout(exitTimer.current), []);
     const handleDismiss = () => {
       setVisible(false);
       window.clearTimeout(exitTimer.current);
       exitTimer.current = window.setTimeout(() => onDismiss(toast.id), EXIT_MS2);
     };
-    return (0, import_jsx_runtime22.jsxs)("div", {
+    return (0, import_jsx_runtime25.jsxs)("div", {
       // Errors interrupt (alert announces on insertion); the polite live
       // region for the rest is the persistent viewport container below.
       role: toast.type === "error" ? "alert" : void 0,
       className: cx("ag-pointer-events-auto ag-flex ag-items-start ag-gap-2.5 ag-rounded-md ag-border ag-border-neutral-400", "ag-bg-neutral-50 dark:ag-bg-neutral-800 dark:ag-border-neutral-600", "ag-shadow-md ag-px-3.5 ag-py-2.5 ag-min-w-[280px] ag-max-w-[400px]", "ag-transition-all ag-duration-300 ag-ease-out", visible ? "ag-opacity-100 ag-translate-x-0" : "ag-opacity-0 ag-translate-x-8"),
-      children: [(0, import_jsx_runtime22.jsx)("span", { className: "ag-flex ag-h-5 ag-shrink-0 ag-items-center", children: (0, import_jsx_runtime22.jsx)(Icon, { icon: ICONS[toast.type], size: "base" }) }), (0, import_jsx_runtime22.jsx)(Text, { className: "ag-flex-1 ag-min-w-0 ag-break-words", children: toast.message }), (0, import_jsx_runtime22.jsx)(Button, { type: "button", variant: "outline", size: "icon-xs", icon: X, "aria-label": "Dismiss", className: "ag-shrink-0", onClick: handleDismiss })]
+      children: [(0, import_jsx_runtime25.jsx)("span", { className: "ag-flex ag-h-5 ag-shrink-0 ag-items-center", children: (0, import_jsx_runtime25.jsx)(Icon, { icon: ICONS[toast.type], size: "base" }) }), (0, import_jsx_runtime25.jsx)(Text, { className: "ag-flex-1 ag-min-w-0 ag-break-words", children: toast.message }), (0, import_jsx_runtime25.jsx)(Button, { type: "button", variant: "outline", size: "icon-xs", icon: X, "aria-label": "Dismiss", className: "ag-shrink-0", onClick: handleDismiss })]
     });
   }
   function ToastViewport({ toasts, onDismiss, position = "top-right", container }) {
-    return (0, import_jsx_runtime22.jsx)(Portal, { container, children: (0, import_jsx_runtime22.jsx)("div", { "aria-live": "polite", "aria-label": "Notifications", className: cx("ag-fixed ag-z-toast ag-flex ag-flex-col ag-gap-2 ag-pointer-events-none", POSITION_CLASSES[position]), children: toasts.map((t) => (0, import_jsx_runtime22.jsx)(ToastEntry, { toast: t, onDismiss }, t.id)) }) });
+    return (0, import_jsx_runtime25.jsx)(Portal, { container, children: (0, import_jsx_runtime25.jsx)("div", { "aria-live": "polite", "aria-label": "Notifications", className: cx("ag-fixed ag-z-toast ag-flex ag-flex-col ag-gap-2 ag-pointer-events-none", POSITION_CLASSES[position]), children: toasts.map((t) => (0, import_jsx_runtime25.jsx)(ToastEntry, { toast: t, onDismiss }, t.id)) }) });
   }
-  var import_jsx_runtime22, React23, ICONS, EXIT_MS2, POSITION_CLASSES;
+  var import_jsx_runtime25, React24, ICONS, EXIT_MS2, POSITION_CLASSES;
   var init_Toast = __esm({
     "node_modules/@airgen/ui/dist/components/Toast.js"() {
-      import_jsx_runtime22 = __toESM(require_jsx_runtime(), 1);
-      React23 = __toESM(require_react(), 1);
+      import_jsx_runtime25 = __toESM(require_jsx_runtime(), 1);
+      React24 = __toESM(require_react(), 1);
       init_lucide_react();
       init_utils();
       init_Icon();
@@ -50770,27 +51062,27 @@ export interface AiText {
 
   // node_modules/@airgen/ui/dist/providers/ToastProvider.js
   function useToast() {
-    const ctx = React24.useContext(ToastContext);
+    const ctx = React25.useContext(ToastContext);
     if (!ctx)
       throw new Error("useToast must be used within <ToastProvider>");
     return ctx;
   }
   function ToastProvider({ children, position = "top-right", container, maxToasts = 5 }) {
-    const [toasts, setToasts] = React24.useState([]);
-    const nextIdRef = React24.useRef(0);
-    const delayTimers = React24.useRef(/* @__PURE__ */ new Map());
-    React24.useEffect(() => () => {
+    const [toasts, setToasts] = React25.useState([]);
+    const nextIdRef = React25.useRef(0);
+    const delayTimers = React25.useRef(/* @__PURE__ */ new Map());
+    React25.useEffect(() => () => {
       for (const timer of delayTimers.current.values())
         window.clearTimeout(timer);
       delayTimers.current.clear();
     }, []);
-    const dismiss = React24.useCallback((id) => {
+    const dismiss = React25.useCallback((id) => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
     }, []);
-    const clear = React24.useCallback(() => {
+    const clear = React25.useCallback(() => {
       setToasts([]);
     }, []);
-    const addToast = React24.useCallback((message, options = {}) => {
+    const addToast = React25.useCallback((message, options = {}) => {
       const { type = "info", duration = 5e3, delay = 0, key } = options;
       const id = `toast-${++nextIdRef.current}`;
       const show = () => {
@@ -50810,7 +51102,7 @@ export interface AiText {
       }
       return id;
     }, [maxToasts]);
-    const api = React24.useMemo(() => ({
+    const api = React25.useMemo(() => ({
       toast: addToast,
       error: (msg) => addToast(msg, { type: "error", duration: 8e3 }),
       warning: (msg) => addToast(msg, { type: "warning", duration: 6e3 }),
@@ -50818,37 +51110,37 @@ export interface AiText {
       dismiss,
       clear
     }), [addToast, dismiss, clear]);
-    return (0, import_jsx_runtime23.jsxs)(ToastContext.Provider, { value: api, children: [children, (0, import_jsx_runtime23.jsx)(ToastViewport, { toasts, onDismiss: dismiss, position, container })] });
+    return (0, import_jsx_runtime26.jsxs)(ToastContext.Provider, { value: api, children: [children, (0, import_jsx_runtime26.jsx)(ToastViewport, { toasts, onDismiss: dismiss, position, container })] });
   }
-  var import_jsx_runtime23, React24, ToastContext;
+  var import_jsx_runtime26, React25, ToastContext;
   var init_ToastProvider = __esm({
     "node_modules/@airgen/ui/dist/providers/ToastProvider.js"() {
-      import_jsx_runtime23 = __toESM(require_jsx_runtime(), 1);
-      React24 = __toESM(require_react(), 1);
+      import_jsx_runtime26 = __toESM(require_jsx_runtime(), 1);
+      React25 = __toESM(require_react(), 1);
       init_Toast();
-      ToastContext = React24.createContext(null);
+      ToastContext = React25.createContext(null);
     }
   });
 
   // node_modules/@airgen/ui/dist/providers/SheetProvider.js
   function useSheet() {
-    const ctx = React25.useContext(SheetContext);
+    const ctx = React26.useContext(SheetContext);
     if (!ctx)
       throw new Error("useSheet must be used within <SheetProvider>");
     return ctx;
   }
   function SheetProvider({ children, container, className }) {
-    const [state, setState] = React25.useState({ open: false, req: null });
-    const closeSheet = React25.useCallback(() => {
+    const [state, setState] = React26.useState({ open: false, req: null });
+    const closeSheet = React26.useCallback(() => {
       setState((prev) => __spreadProps(__spreadValues({}, prev), { open: false }));
     }, []);
-    const openSheet = React25.useCallback((r) => {
+    const openSheet = React26.useCallback((r) => {
       setState({ open: true, req: r });
     }, []);
-    const api = React25.useMemo(() => ({ openSheet, closeSheet }), [openSheet, closeSheet]);
+    const api = React26.useMemo(() => ({ openSheet, closeSheet }), [openSheet, closeSheet]);
     const { open, req } = state;
     const present = usePresence(open, SHEET_EXIT_MS);
-    React25.useEffect(() => {
+    React26.useEffect(() => {
       if (!present)
         setState((prev) => prev.req ? __spreadProps(__spreadValues({}, prev), { req: null }) : prev);
     }, [present]);
@@ -50862,20 +51154,20 @@ export interface AiText {
         return content(ctx);
       return content;
     };
-    const header = req?.renderHeader ? req.renderHeader(ctx) : req?.title !== void 0 ? (0, import_jsx_runtime24.jsxs)("div", { className: "ag-flex ag-items-end ag-justify-between ag-shrink-0", children: [(0, import_jsx_runtime24.jsx)(Sheet.Title, { className: "ag-text-lg ag-font-semibold ag-text-neutral-500 dark:ag-text-neutral-400", children: req.title }), (0, import_jsx_runtime24.jsx)(Sheet.Close, { asChild: true, children: (0, import_jsx_runtime24.jsx)(Button, { size: "icon-sm", icon: X, variant: "ghost", "aria-label": "Close" }) })] }) : null;
-    return (0, import_jsx_runtime24.jsxs)(SheetContext.Provider, { value: api, children: [children, (0, import_jsx_runtime24.jsx)(Sheet.Root, { open, onOpenChange: (v) => v ? void 0 : closeSheet(), children: (0, import_jsx_runtime24.jsxs)(Sheet.Portal, { container, children: [(0, import_jsx_runtime24.jsx)(Sheet.Overlay, {}), (0, import_jsx_runtime24.jsxs)(Sheet.Content, { side, className: ["ag-flex ag-flex-col ag-p-6", className, req?.className].filter(Boolean).join(" "), children: [header, (0, import_jsx_runtime24.jsx)("div", { className: header ? "ag-mt-4 ag-flex ag-flex-col ag-flex-1 ag-min-h-0" : "ag-flex ag-flex-col ag-flex-1 ag-min-h-0", children: renderContent() })] })] }) })] });
+    const header = req?.renderHeader ? req.renderHeader(ctx) : req?.title !== void 0 ? (0, import_jsx_runtime27.jsxs)("div", { className: "ag-flex ag-items-end ag-justify-between ag-shrink-0", children: [(0, import_jsx_runtime27.jsx)(Sheet.Title, { className: "ag-text-lg ag-font-semibold ag-text-neutral-500 dark:ag-text-neutral-400", children: req.title }), (0, import_jsx_runtime27.jsx)(Sheet.Close, { asChild: true, children: (0, import_jsx_runtime27.jsx)(Button, { size: "icon-sm", icon: X, variant: "ghost", "aria-label": "Close" }) })] }) : null;
+    return (0, import_jsx_runtime27.jsxs)(SheetContext.Provider, { value: api, children: [children, (0, import_jsx_runtime27.jsx)(Sheet.Root, { open, onOpenChange: (v) => v ? void 0 : closeSheet(), children: (0, import_jsx_runtime27.jsxs)(Sheet.Portal, { container, children: [(0, import_jsx_runtime27.jsx)(Sheet.Overlay, {}), (0, import_jsx_runtime27.jsxs)(Sheet.Content, { side, className: ["ag-flex ag-flex-col ag-p-6", className, req?.className].filter(Boolean).join(" "), children: [header, (0, import_jsx_runtime27.jsx)("div", { className: header ? "ag-mt-4 ag-flex ag-flex-col ag-flex-1 ag-min-h-0" : "ag-flex ag-flex-col ag-flex-1 ag-min-h-0", children: renderContent() })] })] }) })] });
   }
-  var import_jsx_runtime24, React25, SHEET_EXIT_MS, SheetContext;
+  var import_jsx_runtime27, React26, SHEET_EXIT_MS, SheetContext;
   var init_SheetProvider = __esm({
     "node_modules/@airgen/ui/dist/providers/SheetProvider.js"() {
-      import_jsx_runtime24 = __toESM(require_jsx_runtime(), 1);
-      React25 = __toESM(require_react(), 1);
+      import_jsx_runtime27 = __toESM(require_jsx_runtime(), 1);
+      React26 = __toESM(require_react(), 1);
       init_lucide_react();
       init_DialogSheet();
       init_Button();
       init_dropdown();
       SHEET_EXIT_MS = 200;
-      SheetContext = React25.createContext(null);
+      SheetContext = React26.createContext(null);
     }
   });
 
@@ -50900,11 +51192,14 @@ export interface AiText {
       init_Divide();
       init_Icon();
       init_Input();
+      init_InlineEdit();
       init_Label();
       init_Portal();
       init_ThemeProvider();
       init_Spinner();
       init_Table();
+      init_NestedRecordTable();
+      init_GroupTable();
       init_Text();
       init_Toggle();
       init_PillOption();
@@ -50925,7 +51220,7 @@ export interface AiText {
   var init_styles = __esm({
     "node_modules/@airgen/ui/dist/styles.css"() {
       style = document.createElement("style");
-      style.textContent = "*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }.ag-pointer-events-none{pointer-events:none}.ag-pointer-events-auto{pointer-events:auto}.ag-fixed{position:fixed}.ag-absolute{position:absolute}.ag-relative{position:relative}.ag-inset-0{inset:0}.ag-inset-x-0{left:0;right:0}.ag-inset-y-0{top:0;bottom:0}.ag-bottom-0{bottom:0}.ag-bottom-4{bottom:1rem}.ag-left-0{left:0}.ag-left-4{left:1rem}.ag-right-0{right:0}.ag-right-4{right:1rem}.ag-top-0{top:0}.ag-top-4{top:1rem}.ag-z-10{z-index:10}.ag-z-overlay{z-index:50}.ag-z-popover{z-index:60}.ag-z-toast{z-index:70}.ag-z-tooltip{z-index:80}.ag-my-1{margin-top:.25rem}.ag-mb-1,.ag-my-1{margin-bottom:.25rem}.ag-ml-1{margin-left:.25rem}.ag-ml-auto{margin-left:auto}.ag-mt-3{margin-top:.75rem}.ag-mt-4{margin-top:1rem}.ag-block{display:block}.ag-inline-block{display:inline-block}.ag-flex{display:flex}.ag-inline-flex{display:inline-flex}.ag-h-0{height:0}.ag-h-1\\.5{height:.375rem}.ag-h-1\\/3{height:33.333333%}.ag-h-10{height:2.5rem}.ag-h-2{height:.5rem}.ag-h-20{height:5rem}.ag-h-3{height:.75rem}.ag-h-3\\.5{height:.875rem}.ag-h-4{height:1rem}.ag-h-5{height:1.25rem}.ag-h-6{height:1.5rem}.ag-h-7{height:1.75rem}.ag-h-8{height:2rem}.ag-h-9{height:2.25rem}.ag-h-auto{height:auto}.ag-h-full{height:100%}.ag-max-h-72{max-height:18rem}.ag-min-h-0{min-height:0}.ag-min-h-8{min-height:2rem}.ag-w-0{width:0}.ag-w-1\\.5{width:.375rem}.ag-w-10{width:2.5rem}.ag-w-2{width:.5rem}.ag-w-3{width:.75rem}.ag-w-3\\.5{width:.875rem}.ag-w-4{width:1rem}.ag-w-5{width:1.25rem}.ag-w-6{width:1.5rem}.ag-w-7{width:1.75rem}.ag-w-8{width:2rem}.ag-w-80{width:20rem}.ag-w-9{width:2.25rem}.ag-w-auto{width:auto}.ag-w-fit{width:-moz-fit-content;width:fit-content}.ag-w-full{width:100%}.ag-min-w-0{min-width:0}.ag-min-w-\\[10rem\\]{min-width:10rem}.ag-min-w-\\[280px\\]{min-width:280px}.ag-min-w-\\[62px\\]{min-width:62px}.ag-max-w-\\[400px\\]{max-width:400px}.ag-max-w-full{max-width:100%}.ag-flex-1{flex:1 1 0%}.ag-flex-none{flex:none}.ag-shrink-0{flex-shrink:0}.ag-caption-bottom{caption-side:bottom}.ag-border-collapse{border-collapse:collapse}.-ag-translate-y-1{--tw-translate-y:-0.25rem}.-ag-translate-y-1,.ag-translate-x-0{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.ag-translate-x-0{--tw-translate-x:0px}.ag-translate-x-0\\.5{--tw-translate-x:0.125rem}.ag-translate-x-0\\.5,.ag-translate-x-3{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.ag-translate-x-3{--tw-translate-x:0.75rem}.ag-translate-x-4{--tw-translate-x:1rem}.ag-translate-x-4,.ag-translate-x-8{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.ag-translate-x-8{--tw-translate-x:2rem}.ag-translate-y-0{--tw-translate-y:0px}.-ag-rotate-90,.ag-translate-y-0{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-ag-rotate-90{--tw-rotate:-90deg}.ag-rotate-0{--tw-rotate:0deg}.ag-rotate-0,.ag-rotate-180{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.ag-rotate-180{--tw-rotate:180deg}.ag-rotate-90{--tw-rotate:90deg}.ag-rotate-90,.ag-scale-100{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.ag-scale-100{--tw-scale-x:1;--tw-scale-y:1}.ag-scale-\\[0\\.95\\]{--tw-scale-x:0.95;--tw-scale-y:0.95}.ag-scale-\\[0\\.95\\],.ag-transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes ag-spin{to{transform:rotate(1turn)}}.ag-animate-spin{animation:ag-spin 1s linear infinite}.ag-cursor-col-resize{cursor:col-resize}.ag-cursor-not-allowed{cursor:not-allowed}.ag-cursor-pointer{cursor:pointer}.ag-cursor-wait{cursor:wait}.ag-touch-none{touch-action:none}.ag-select-none{-webkit-user-select:none;-moz-user-select:none;user-select:none}.ag-flex-col{flex-direction:column}.ag-flex-col-reverse{flex-direction:column-reverse}.ag-flex-wrap{flex-wrap:wrap}.ag-items-start{align-items:flex-start}.ag-items-end{align-items:flex-end}.ag-items-center{align-items:center}.ag-justify-start{justify-content:flex-start}.ag-justify-center{justify-content:center}.ag-justify-between{justify-content:space-between}.ag-gap-0\\.5{gap:.125rem}.ag-gap-1{gap:.25rem}.ag-gap-1\\.5{gap:.375rem}.ag-gap-2{gap:.5rem}.ag-gap-2\\.5{gap:.625rem}.ag-gap-\\[4px\\]{gap:4px}.ag-self-stretch{align-self:stretch}.ag-overflow-auto{overflow:auto}.ag-overflow-hidden{overflow:hidden}.ag-overflow-x-auto{overflow-x:auto}.ag-truncate{overflow:hidden;text-overflow:ellipsis}.ag-truncate,.ag-whitespace-nowrap{white-space:nowrap}.ag-break-words{overflow-wrap:break-word}.ag-rounded{border-radius:.25rem}.ag-rounded-full{border-radius:9999px}.ag-rounded-md{border-radius:.375rem}.ag-border{border-width:1px}.ag-border-b{border-bottom-width:1px}.ag-border-l{border-left-width:1px}.ag-border-r{border-right-width:1px}.ag-border-t{border-top-width:1px}.ag-border-t-0{border-top-width:0}.ag-border-neutral-200{--tw-border-opacity:1;border-color:rgb(229 229 229/var(--tw-border-opacity,1))}.ag-border-neutral-300{--tw-border-opacity:1;border-color:rgb(212 212 212/var(--tw-border-opacity,1))}.ag-border-neutral-400{--tw-border-opacity:1;border-color:rgb(163 163 163/var(--tw-border-opacity,1))}.ag-border-transparent{border-color:transparent}.ag-bg-\\[\\#eeeeee\\]{--tw-bg-opacity:1;background-color:rgb(238 238 238/var(--tw-bg-opacity,1))}.ag-bg-black\\/50{background-color:rgba(0,0,0,.5)}.ag-bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235/var(--tw-bg-opacity,1))}.ag-bg-neutral-100{--tw-bg-opacity:1;background-color:rgb(245 245 245/var(--tw-bg-opacity,1))}.ag-bg-neutral-200{--tw-bg-opacity:1;background-color:rgb(229 229 229/var(--tw-bg-opacity,1))}.ag-bg-neutral-300{--tw-bg-opacity:1;background-color:rgb(212 212 212/var(--tw-bg-opacity,1))}.ag-bg-neutral-50{--tw-bg-opacity:1;background-color:rgb(250 250 250/var(--tw-bg-opacity,1))}.ag-bg-neutral-700{--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.ag-bg-rose-600{--tw-bg-opacity:1;background-color:rgb(225 29 72/var(--tw-bg-opacity,1))}.ag-bg-transparent{background-color:transparent}.ag-bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1))}.ag-bg-white\\/60{background-color:hsla(0,0%,100%,.6)}.ag-p-0{padding:0}.ag-p-1{padding:.25rem}.ag-p-1\\.5{padding:.375rem}.ag-p-4{padding:1rem}.ag-p-6{padding:1.5rem}.ag-px-0\\.5{padding-left:.125rem;padding-right:.125rem}.ag-px-1\\.5{padding-left:.375rem;padding-right:.375rem}.ag-px-2{padding-left:.5rem;padding-right:.5rem}.ag-px-2\\.5{padding-left:.625rem;padding-right:.625rem}.ag-px-3{padding-left:.75rem;padding-right:.75rem}.ag-px-3\\.5{padding-left:.875rem;padding-right:.875rem}.ag-px-control-x-base{padding-left:.75rem;padding-right:.75rem}.ag-px-control-x-lg{padding-left:1rem;padding-right:1rem}.ag-px-control-x-sm{padding-left:.5rem;padding-right:.5rem}.ag-px-control-x-xl{padding-left:1.25rem;padding-right:1.25rem}.ag-px-control-x-xs{padding-left:.375rem;padding-right:.375rem}.ag-py-0\\.5{padding-top:.125rem;padding-bottom:.125rem}.ag-py-1{padding-top:.25rem;padding-bottom:.25rem}.ag-py-1\\.5{padding-top:.375rem;padding-bottom:.375rem}.ag-py-2{padding-top:.5rem;padding-bottom:.5rem}.ag-py-2\\.5{padding-top:.625rem;padding-bottom:.625rem}.ag-py-3{padding-top:.75rem;padding-bottom:.75rem}.ag-py-control-y-base{padding-top:.3125rem;padding-bottom:.3125rem}.ag-py-control-y-lg{padding-top:.375rem;padding-bottom:.375rem}.ag-py-control-y-sm{padding-top:.1875rem;padding-bottom:.1875rem}.ag-py-control-y-xl{padding-top:.4375rem;padding-bottom:.4375rem}.ag-py-control-y-xs{padding-top:.125rem;padding-bottom:.125rem}.ag-py-px{padding-top:1px;padding-bottom:1px}.ag-pl-1\\.5{padding-left:.375rem}.ag-pr-2{padding-right:.5rem}.ag-pr-4{padding-right:1rem}.ag-text-left{text-align:left}.ag-text-center{text-align:center}.ag-text-right{text-align:right}.ag-align-middle{vertical-align:middle}.ag-text-\\[10px\\]{font-size:10px}.ag-text-base{font-size:.8125rem;line-height:1.25rem}.ag-text-lg{font-size:.9375rem;line-height:1.375rem}.ag-text-sm{font-size:.6875rem;line-height:1rem}.ag-text-xl{font-size:1.0625rem;line-height:1.5rem}.ag-text-xs{font-size:.5625rem;line-height:.875rem}.ag-font-bold{font-weight:700}.ag-font-medium{font-weight:500}.ag-font-semibold{font-weight:600}.ag-italic{font-style:italic}.ag-leading-none{line-height:1}.ag-text-black\\/70{color:rgba(0,0,0,.7)}.ag-text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128/var(--tw-text-opacity,1))}.ag-text-neutral-400{--tw-text-opacity:1;color:rgb(163 163 163/var(--tw-text-opacity,1))}.ag-text-neutral-500{--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.ag-text-neutral-600{--tw-text-opacity:1;color:rgb(82 82 82/var(--tw-text-opacity,1))}.ag-text-neutral-700{--tw-text-opacity:1;color:rgb(64 64 64/var(--tw-text-opacity,1))}.ag-text-neutral-900{--tw-text-opacity:1;color:rgb(23 23 23/var(--tw-text-opacity,1))}.ag-text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.ag-underline{text-decoration-line:underline}.ag-decoration-neutral-300{text-decoration-color:#d4d4d4}.ag-underline-offset-4{text-underline-offset:4px}.ag-opacity-0{opacity:0}.ag-opacity-100{opacity:1}.ag-opacity-50{opacity:.5}.ag-opacity-60{opacity:.6}.ag-shadow{--tw-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px -1px rgba(0,0,0,.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color),0 1px 2px -1px var(--tw-shadow-color)}.ag-shadow,.ag-shadow-lg{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.ag-shadow-lg{--tw-shadow:0px 0px 1px 0px rgba(0,0,0,.48),0px 0px 2px 0px rgba(0,0,0,.08),0px 2px 4px 0px rgba(0,0,0,.12),0px 2px 8px 0px rgba(0,0,0,.08);--tw-shadow-colored:0px 0px 1px 0px var(--tw-shadow-color),0px 0px 2px 0px var(--tw-shadow-color),0px 2px 4px 0px var(--tw-shadow-color),0px 2px 8px 0px var(--tw-shadow-color)}.ag-shadow-md{--tw-shadow:0px 0px 1px 0px rgba(0,0,0,.24),0px 0px 2px 0px rgba(0,0,0,.08),0px 2px 4px 0px rgba(0,0,0,.08);--tw-shadow-colored:0px 0px 1px 0px var(--tw-shadow-color),0px 0px 2px 0px var(--tw-shadow-color),0px 2px 4px 0px var(--tw-shadow-color)}.ag-shadow-md,.ag-shadow-sm{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.ag-shadow-sm{--tw-shadow:0px 0px 1px rgba(0,0,0,.32),0px 0px 3px rgba(0,0,0,.11),0px 1px 4px rgba(0,0,0,.12);--tw-shadow-colored:0px 0px 1px var(--tw-shadow-color),0px 0px 3px var(--tw-shadow-color),0px 1px 4px var(--tw-shadow-color)}.ag-outline-none{outline:2px solid transparent;outline-offset:2px}.ag-ring-1{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.ag-ring-black\\/10{--tw-ring-color:rgba(0,0,0,.1)}.ag-transition-\\[border-color\\,background-color\\,box-shadow\\]{transition-property:border-color,background-color,box-shadow;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.ag-transition-\\[opacity\\,transform\\]{transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.ag-transition-all{transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.ag-transition-colors{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.ag-transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.ag-duration-100{transition-duration:.1s}.ag-duration-150{transition-duration:.15s}.ag-duration-200{transition-duration:.2s}.ag-duration-300{transition-duration:.3s}.ag-ease-out{transition-timing-function:cubic-bezier(0,0,.2,1)}@keyframes enter{0%{opacity:var(--tw-enter-opacity,1);transform:translate3d(var(--tw-enter-translate-x,0),var(--tw-enter-translate-y,0),0) scale3d(var(--tw-enter-scale,1),var(--tw-enter-scale,1),var(--tw-enter-scale,1)) rotate(var(--tw-enter-rotate,0))}}@keyframes exit{to{opacity:var(--tw-exit-opacity,1);transform:translate3d(var(--tw-exit-translate-x,0),var(--tw-exit-translate-y,0),0) scale3d(var(--tw-exit-scale,1),var(--tw-exit-scale,1),var(--tw-exit-scale,1)) rotate(var(--tw-exit-rotate,0))}}.ag-animate-in{animation-name:enter;animation-duration:.15s;--tw-enter-opacity:initial;--tw-enter-scale:initial;--tw-enter-rotate:initial;--tw-enter-translate-x:initial;--tw-enter-translate-y:initial}.ag-fade-in-0{--tw-enter-opacity:0}.ag-duration-100{animation-duration:.1s}.ag-duration-150{animation-duration:.15s}.ag-duration-200{animation-duration:.2s}.ag-duration-300{animation-duration:.3s}.ag-ease-out{animation-timing-function:cubic-bezier(0,0,.2,1)}.ag-column-lines>*>tr>:not(:last-child){border-right:1px solid;--tw-border-opacity:1;border-color:rgb(229 229 229/var(--tw-border-opacity,1))}@media (prefers-color-scheme:dark){.ag-column-lines>*>tr>:not(:last-child):not(:where([data-ag-theme=light] *)){--tw-border-opacity:1;border-color:rgb(64 64 64/var(--tw-border-opacity,1))}}.ag-column-lines>*>tr>:not(:last-child):where([data-ag-theme=dark] *){--tw-border-opacity:1;border-color:rgb(64 64 64/var(--tw-border-opacity,1))}.placeholder\\:ag-text-neutral-400::-moz-placeholder{--tw-text-opacity:1;color:rgb(163 163 163/var(--tw-text-opacity,1))}.placeholder\\:ag-text-neutral-400::placeholder{--tw-text-opacity:1;color:rgb(163 163 163/var(--tw-text-opacity,1))}.after\\:ag-absolute:after{content:var(--tw-content);position:absolute}.after\\:ag-inset-y-0:after{content:var(--tw-content);top:0;bottom:0}.after\\:ag-right-0:after{content:var(--tw-content);right:0}.after\\:ag-w-px:after{content:var(--tw-content);width:1px}.last\\:ag-mb-0:last-child{margin-bottom:0}.hover\\:ag-border-neutral-200:hover{--tw-border-opacity:1;border-color:rgb(229 229 229/var(--tw-border-opacity,1))}.hover\\:ag-bg-neutral-100:hover{--tw-bg-opacity:1;background-color:rgb(245 245 245/var(--tw-bg-opacity,1))}.hover\\:ag-bg-neutral-300:hover{--tw-bg-opacity:1;background-color:rgb(212 212 212/var(--tw-bg-opacity,1))}.hover\\:ag-bg-neutral-50:hover{--tw-bg-opacity:1;background-color:rgb(250 250 250/var(--tw-bg-opacity,1))}.hover\\:ag-bg-neutral-600:hover{--tw-bg-opacity:1;background-color:rgb(82 82 82/var(--tw-bg-opacity,1))}.hover\\:ag-bg-rose-700:hover{--tw-bg-opacity:1;background-color:rgb(190 18 60/var(--tw-bg-opacity,1))}.hover\\:ag-bg-transparent:hover{background-color:transparent}.hover\\:ag-text-neutral-700:hover{--tw-text-opacity:1;color:rgb(64 64 64/var(--tw-text-opacity,1))}.hover\\:ag-decoration-neutral-500:hover{text-decoration-color:#737373}.hover\\:after\\:ag-bg-neutral-300:hover:after{content:var(--tw-content);--tw-bg-opacity:1;background-color:rgb(212 212 212/var(--tw-bg-opacity,1))}.focus\\:ag-border-neutral-200:focus{--tw-border-opacity:1;border-color:rgb(229 229 229/var(--tw-border-opacity,1))}.focus\\:ag-bg-neutral-100:focus{--tw-bg-opacity:1;background-color:rgb(245 245 245/var(--tw-bg-opacity,1))}.focus\\:ag-outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\\:ag-ring-1:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus\\:ag-ring-neutral-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(212 212 212/var(--tw-ring-opacity,1))}.focus-visible\\:ag-outline-none:focus-visible{outline:2px solid transparent;outline-offset:2px}.focus-visible\\:ag-ring-2:focus-visible{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus-visible\\:ag-ring-offset-2:focus-visible{--tw-ring-offset-width:2px}.focus-visible\\:after\\:ag-bg-neutral-300:focus-visible:after{content:var(--tw-content);--tw-bg-opacity:1;background-color:rgb(212 212 212/var(--tw-bg-opacity,1))}.disabled\\:ag-pointer-events-none:disabled{pointer-events:none}.disabled\\:ag-cursor-not-allowed:disabled{cursor:not-allowed}.disabled\\:ag-opacity-50:disabled{opacity:.5}.disabled\\:ag-opacity-60:disabled{opacity:.6}.data-\\[state\\=closed\\]\\:-ag-translate-x-full[data-state=closed]{--tw-translate-x:-100%}.data-\\[state\\=closed\\]\\:-ag-translate-x-full[data-state=closed],.data-\\[state\\=closed\\]\\:-ag-translate-y-full[data-state=closed]{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.data-\\[state\\=closed\\]\\:-ag-translate-y-full[data-state=closed]{--tw-translate-y:-100%}.data-\\[state\\=closed\\]\\:ag-translate-x-full[data-state=closed]{--tw-translate-x:100%}.data-\\[state\\=closed\\]\\:ag-translate-x-full[data-state=closed],.data-\\[state\\=closed\\]\\:ag-translate-y-full[data-state=closed]{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.data-\\[state\\=closed\\]\\:ag-translate-y-full[data-state=closed]{--tw-translate-y:100%}.data-\\[state\\=closed\\]\\:ag-opacity-0[data-state=closed]{opacity:0}.data-\\[state\\=open\\]\\:ag-animate-in[data-state=open]{animation-name:enter;animation-duration:.15s;--tw-enter-opacity:initial;--tw-enter-scale:initial;--tw-enter-rotate:initial;--tw-enter-translate-x:initial;--tw-enter-translate-y:initial}.data-\\[state\\=closed\\]\\:ag-animate-out[data-state=closed]{animation-name:exit;animation-duration:.15s;--tw-exit-opacity:initial;--tw-exit-scale:initial;--tw-exit-rotate:initial;--tw-exit-translate-x:initial;--tw-exit-translate-y:initial}.data-\\[state\\=closed\\]\\:ag-fade-out-0[data-state=closed],.data-\\[state\\=closed\\]\\:ag-fade-out[data-state=closed]{--tw-exit-opacity:0}.data-\\[state\\=open\\]\\:ag-fade-in-0[data-state=open],.data-\\[state\\=open\\]\\:ag-fade-in[data-state=open]{--tw-enter-opacity:0}.data-\\[state\\=closed\\]\\:ag-zoom-out[data-state=closed]{--tw-exit-scale:0}.data-\\[state\\=closed\\]\\:ag-zoom-out-95[data-state=closed]{--tw-exit-scale:.95}.data-\\[state\\=open\\]\\:ag-zoom-in[data-state=open]{--tw-enter-scale:0}.data-\\[state\\=open\\]\\:ag-zoom-in-95[data-state=open]{--tw-enter-scale:.95}.data-\\[state\\=closed\\]\\:ag-slide-out-to-bottom[data-state=closed]{--tw-exit-translate-y:100%}.data-\\[state\\=closed\\]\\:ag-slide-out-to-left[data-state=closed]{--tw-exit-translate-x:-100%}.data-\\[state\\=closed\\]\\:ag-slide-out-to-right[data-state=closed]{--tw-exit-translate-x:100%}.data-\\[state\\=closed\\]\\:ag-slide-out-to-top[data-state=closed]{--tw-exit-translate-y:-100%}.data-\\[state\\=open\\]\\:ag-slide-in-from-bottom[data-state=open]{--tw-enter-translate-y:100%}.data-\\[state\\=open\\]\\:ag-slide-in-from-left[data-state=open]{--tw-enter-translate-x:-100%}.data-\\[state\\=open\\]\\:ag-slide-in-from-right[data-state=open]{--tw-enter-translate-x:100%}.data-\\[state\\=open\\]\\:ag-slide-in-from-top[data-state=open]{--tw-enter-translate-y:-100%}@media (min-width:768px){.md\\:ag-h-1\\/2{height:50%}.md\\:ag-w-96{width:24rem}}@media (prefers-color-scheme:dark){.dark\\:ag-border-neutral-600:not(:where([data-ag-theme=light] *)){--tw-border-opacity:1;border-color:rgb(82 82 82/var(--tw-border-opacity,1))}.dark\\:ag-border-neutral-700:not(:where([data-ag-theme=light] *)){--tw-border-opacity:1;border-color:rgb(64 64 64/var(--tw-border-opacity,1))}.dark\\:ag-bg-\\[rgba\\(195\\2c 212\\2c 249\\2c 0\\.18\\)\\]:not(:where([data-ag-theme=light] *)){background-color:rgba(195,212,249,.18)}.dark\\:ag-bg-neutral-600:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(82 82 82/var(--tw-bg-opacity,1))}.dark\\:ag-bg-neutral-700:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.dark\\:ag-bg-neutral-800:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(38 38 38/var(--tw-bg-opacity,1))}.dark\\:ag-bg-neutral-800\\/60:not(:where([data-ag-theme=light] *)){background-color:rgba(38,38,38,.6)}.dark\\:ag-bg-neutral-900\\/60:not(:where([data-ag-theme=light] *)){background-color:hsla(0,0%,9%,.6)}.dark\\:ag-text-gray-100:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(243 244 246/var(--tw-text-opacity,1))}.dark\\:ag-text-neutral-100:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(245 245 245/var(--tw-text-opacity,1))}.dark\\:ag-text-neutral-300:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(212 212 212/var(--tw-text-opacity,1))}.dark\\:ag-text-neutral-400:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(163 163 163/var(--tw-text-opacity,1))}.dark\\:ag-text-neutral-500:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.dark\\:ag-text-white:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.dark\\:ag-decoration-neutral-600:not(:where([data-ag-theme=light] *)){text-decoration-color:#525252}.dark\\:ag-ring-white\\/10:not(:where([data-ag-theme=light] *)){--tw-ring-color:hsla(0,0%,100%,.1)}.dark\\:placeholder\\:ag-text-neutral-500:not(:where([data-ag-theme=light] *))::-moz-placeholder{--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.dark\\:placeholder\\:ag-text-neutral-500:not(:where([data-ag-theme=light] *))::placeholder{--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.dark\\:hover\\:ag-border-neutral-600:hover:not(:where([data-ag-theme=light] *)){--tw-border-opacity:1;border-color:rgb(82 82 82/var(--tw-border-opacity,1))}.dark\\:hover\\:ag-bg-neutral-600:hover:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(82 82 82/var(--tw-bg-opacity,1))}.dark\\:hover\\:ag-bg-neutral-700:hover:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.dark\\:hover\\:ag-bg-neutral-800\\/50:hover:not(:where([data-ag-theme=light] *)){background-color:rgba(38,38,38,.5)}.dark\\:hover\\:ag-bg-transparent:hover:not(:where([data-ag-theme=light] *)){background-color:transparent}.dark\\:hover\\:ag-text-neutral-200:hover:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(229 229 229/var(--tw-text-opacity,1))}.dark\\:hover\\:ag-decoration-neutral-400:hover:not(:where([data-ag-theme=light] *)){text-decoration-color:#a3a3a3}.dark\\:hover\\:after\\:ag-bg-neutral-400:hover:not(:where([data-ag-theme=light] *)):after{content:var(--tw-content);--tw-bg-opacity:1;background-color:rgb(163 163 163/var(--tw-bg-opacity,1))}.dark\\:focus\\:ag-border-neutral-600:focus:not(:where([data-ag-theme=light] *)){--tw-border-opacity:1;border-color:rgb(82 82 82/var(--tw-border-opacity,1))}.dark\\:focus\\:ag-bg-neutral-700:focus:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.dark\\:focus\\:ag-ring-neutral-500:focus:not(:where([data-ag-theme=light] *)){--tw-ring-opacity:1;--tw-ring-color:rgb(115 115 115/var(--tw-ring-opacity,1))}.dark\\:focus-visible\\:after\\:ag-bg-neutral-400:focus-visible:not(:where([data-ag-theme=light] *)):after{content:var(--tw-content);--tw-bg-opacity:1;background-color:rgb(163 163 163/var(--tw-bg-opacity,1))}}.dark\\:ag-border-neutral-600:where([data-ag-theme=dark] *){--tw-border-opacity:1;border-color:rgb(82 82 82/var(--tw-border-opacity,1))}.dark\\:ag-border-neutral-700:where([data-ag-theme=dark] *){--tw-border-opacity:1;border-color:rgb(64 64 64/var(--tw-border-opacity,1))}.dark\\:ag-bg-\\[rgba\\(195\\2c 212\\2c 249\\2c 0\\.18\\)\\]:where([data-ag-theme=dark] *){background-color:rgba(195,212,249,.18)}.dark\\:ag-bg-neutral-600:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(82 82 82/var(--tw-bg-opacity,1))}.dark\\:ag-bg-neutral-700:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.dark\\:ag-bg-neutral-800:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(38 38 38/var(--tw-bg-opacity,1))}.dark\\:ag-bg-neutral-800\\/60:where([data-ag-theme=dark] *){background-color:rgba(38,38,38,.6)}.dark\\:ag-bg-neutral-900\\/60:where([data-ag-theme=dark] *){background-color:hsla(0,0%,9%,.6)}.dark\\:ag-text-gray-100:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(243 244 246/var(--tw-text-opacity,1))}.dark\\:ag-text-neutral-100:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(245 245 245/var(--tw-text-opacity,1))}.dark\\:ag-text-neutral-300:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(212 212 212/var(--tw-text-opacity,1))}.dark\\:ag-text-neutral-400:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(163 163 163/var(--tw-text-opacity,1))}.dark\\:ag-text-neutral-500:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.dark\\:ag-text-white:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.dark\\:ag-decoration-neutral-600:where([data-ag-theme=dark] *){text-decoration-color:#525252}.dark\\:ag-ring-white\\/10:where([data-ag-theme=dark] *){--tw-ring-color:hsla(0,0%,100%,.1)}.dark\\:placeholder\\:ag-text-neutral-500:where([data-ag-theme=dark] *)::-moz-placeholder{--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.dark\\:placeholder\\:ag-text-neutral-500:where([data-ag-theme=dark] *)::placeholder{--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.dark\\:hover\\:ag-border-neutral-600:hover:where([data-ag-theme=dark] *){--tw-border-opacity:1;border-color:rgb(82 82 82/var(--tw-border-opacity,1))}.dark\\:hover\\:ag-bg-neutral-600:hover:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(82 82 82/var(--tw-bg-opacity,1))}.dark\\:hover\\:ag-bg-neutral-700:hover:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.dark\\:hover\\:ag-bg-neutral-800\\/50:hover:where([data-ag-theme=dark] *){background-color:rgba(38,38,38,.5)}.dark\\:hover\\:ag-bg-transparent:hover:where([data-ag-theme=dark] *){background-color:transparent}.dark\\:hover\\:ag-text-neutral-200:hover:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(229 229 229/var(--tw-text-opacity,1))}.dark\\:hover\\:ag-decoration-neutral-400:hover:where([data-ag-theme=dark] *){text-decoration-color:#a3a3a3}.dark\\:hover\\:after\\:ag-bg-neutral-400:hover:where([data-ag-theme=dark] *):after{content:var(--tw-content);--tw-bg-opacity:1;background-color:rgb(163 163 163/var(--tw-bg-opacity,1))}.dark\\:focus\\:ag-border-neutral-600:focus:where([data-ag-theme=dark] *){--tw-border-opacity:1;border-color:rgb(82 82 82/var(--tw-border-opacity,1))}.dark\\:focus\\:ag-bg-neutral-700:focus:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.dark\\:focus\\:ag-ring-neutral-500:focus:where([data-ag-theme=dark] *){--tw-ring-opacity:1;--tw-ring-color:rgb(115 115 115/var(--tw-ring-opacity,1))}.dark\\:focus-visible\\:after\\:ag-bg-neutral-400:focus-visible:where([data-ag-theme=dark] *):after{content:var(--tw-content);--tw-bg-opacity:1;background-color:rgb(163 163 163/var(--tw-bg-opacity,1))}.\\[\\&_tr\\:last-child\\]\\:ag-border-0 tr:last-child{border-width:0}";
+      style.textContent = "*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }.ag-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}.ag-pointer-events-none{pointer-events:none}.ag-pointer-events-auto{pointer-events:auto}.ag-invisible{visibility:hidden}.ag-fixed{position:fixed}.ag-absolute{position:absolute}.ag-relative{position:relative}.ag-inset-0{inset:0}.ag-inset-x-0{left:0;right:0}.ag-inset-y-0{top:0;bottom:0}.ag-bottom-0{bottom:0}.ag-bottom-4{bottom:1rem}.ag-left-0{left:0}.ag-left-4{left:1rem}.ag-right-0{right:0}.ag-right-4{right:1rem}.ag-top-0{top:0}.ag-top-4{top:1rem}.ag-z-10{z-index:10}.ag-z-overlay{z-index:50}.ag-z-popover{z-index:60}.ag-z-toast{z-index:70}.ag-z-tooltip{z-index:80}.ag-col-start-1{grid-column-start:1}.ag-row-start-1{grid-row-start:1}.ag-my-1{margin-top:.25rem}.ag-mb-1,.ag-my-1{margin-bottom:.25rem}.ag-ml-1{margin-left:.25rem}.ag-ml-auto{margin-left:auto}.ag-mt-3{margin-top:.75rem}.ag-mt-4{margin-top:1rem}.ag-box-border{box-sizing:border-box}.ag-block{display:block}.ag-inline-block{display:inline-block}.ag-flex{display:flex}.ag-inline-flex{display:inline-flex}.ag-inline-grid{display:inline-grid}.ag-h-0{height:0}.ag-h-1\\.5{height:.375rem}.ag-h-1\\/3{height:33.333333%}.ag-h-10{height:2.5rem}.ag-h-2{height:.5rem}.ag-h-20{height:5rem}.ag-h-3{height:.75rem}.ag-h-3\\.5{height:.875rem}.ag-h-4{height:1rem}.ag-h-5{height:1.25rem}.ag-h-6{height:1.5rem}.ag-h-7{height:1.75rem}.ag-h-8{height:2rem}.ag-h-9{height:2.25rem}.ag-h-auto{height:auto}.ag-h-full{height:100%}.ag-max-h-72{max-height:18rem}.ag-min-h-0{min-height:0}.ag-min-h-8{min-height:2rem}.ag-w-0{width:0}.ag-w-1\\.5{width:.375rem}.ag-w-10{width:2.5rem}.ag-w-2{width:.5rem}.ag-w-3{width:.75rem}.ag-w-3\\.5{width:.875rem}.ag-w-4{width:1rem}.ag-w-5{width:1.25rem}.ag-w-6{width:1.5rem}.ag-w-7{width:1.75rem}.ag-w-8{width:2rem}.ag-w-80{width:20rem}.ag-w-9{width:2.25rem}.ag-w-auto{width:auto}.ag-w-fit{width:-moz-fit-content;width:fit-content}.ag-w-full{width:100%}.ag-min-w-0{min-width:0}.ag-min-w-\\[10rem\\]{min-width:10rem}.ag-min-w-\\[280px\\]{min-width:280px}.ag-min-w-\\[62px\\]{min-width:62px}.ag-max-w-\\[400px\\]{max-width:400px}.ag-max-w-full{max-width:100%}.ag-flex-1{flex:1 1 0%}.ag-flex-none{flex:none}.ag-shrink-0{flex-shrink:0}.ag-caption-bottom{caption-side:bottom}.ag-border-collapse{border-collapse:collapse}.-ag-translate-y-1{--tw-translate-y:-0.25rem}.-ag-translate-y-1,.ag-translate-x-0{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.ag-translate-x-0{--tw-translate-x:0px}.ag-translate-x-0\\.5{--tw-translate-x:0.125rem}.ag-translate-x-0\\.5,.ag-translate-x-3{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.ag-translate-x-3{--tw-translate-x:0.75rem}.ag-translate-x-4{--tw-translate-x:1rem}.ag-translate-x-4,.ag-translate-x-8{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.ag-translate-x-8{--tw-translate-x:2rem}.ag-translate-y-0{--tw-translate-y:0px}.-ag-rotate-90,.ag-translate-y-0{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-ag-rotate-90{--tw-rotate:-90deg}.ag-rotate-0{--tw-rotate:0deg}.ag-rotate-0,.ag-rotate-180{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.ag-rotate-180{--tw-rotate:180deg}.ag-rotate-90{--tw-rotate:90deg}.ag-rotate-90,.ag-scale-100{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.ag-scale-100{--tw-scale-x:1;--tw-scale-y:1}.ag-scale-\\[0\\.95\\]{--tw-scale-x:0.95;--tw-scale-y:0.95}.ag-scale-\\[0\\.95\\],.ag-transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes ag-spin{to{transform:rotate(1turn)}}.ag-animate-spin{animation:ag-spin 1s linear infinite}.ag-cursor-col-resize{cursor:col-resize}.ag-cursor-not-allowed{cursor:not-allowed}.ag-cursor-pointer{cursor:pointer}.ag-cursor-text{cursor:text}.ag-cursor-wait{cursor:wait}.ag-touch-none{touch-action:none}.ag-select-none{-webkit-user-select:none;-moz-user-select:none;user-select:none}.ag-flex-col{flex-direction:column}.ag-flex-col-reverse{flex-direction:column-reverse}.ag-flex-wrap{flex-wrap:wrap}.ag-items-start{align-items:flex-start}.ag-items-end{align-items:flex-end}.ag-items-center{align-items:center}.ag-justify-start{justify-content:flex-start}.ag-justify-center{justify-content:center}.ag-justify-between{justify-content:space-between}.ag-gap-0\\.5{gap:.125rem}.ag-gap-1{gap:.25rem}.ag-gap-1\\.5{gap:.375rem}.ag-gap-2{gap:.5rem}.ag-gap-2\\.5{gap:.625rem}.ag-gap-3{gap:.75rem}.ag-gap-\\[4px\\]{gap:4px}.ag-self-stretch{align-self:stretch}.ag-overflow-auto{overflow:auto}.ag-overflow-hidden{overflow:hidden}.ag-overflow-x-auto{overflow-x:auto}.ag-truncate{overflow:hidden;text-overflow:ellipsis}.ag-truncate,.ag-whitespace-nowrap{white-space:nowrap}.ag-whitespace-pre{white-space:pre}.ag-break-words{overflow-wrap:break-word}.ag-rounded{border-radius:.25rem}.ag-rounded-full{border-radius:9999px}.ag-rounded-md{border-radius:.375rem}.ag-border{border-width:1px}.ag-border-b{border-bottom-width:1px}.ag-border-l{border-left-width:1px}.ag-border-r{border-right-width:1px}.ag-border-t{border-top-width:1px}.ag-border-t-0{border-top-width:0}.ag-border-solid{border-style:solid}.ag-border-neutral-200{--tw-border-opacity:1;border-color:rgb(229 229 229/var(--tw-border-opacity,1))}.ag-border-neutral-300{--tw-border-opacity:1;border-color:rgb(212 212 212/var(--tw-border-opacity,1))}.ag-border-neutral-400{--tw-border-opacity:1;border-color:rgb(163 163 163/var(--tw-border-opacity,1))}.ag-border-transparent{border-color:transparent}.ag-bg-\\[\\#eeeeee\\]{--tw-bg-opacity:1;background-color:rgb(238 238 238/var(--tw-bg-opacity,1))}.ag-bg-black\\/50{background-color:rgba(0,0,0,.5)}.ag-bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235/var(--tw-bg-opacity,1))}.ag-bg-neutral-100{--tw-bg-opacity:1;background-color:rgb(245 245 245/var(--tw-bg-opacity,1))}.ag-bg-neutral-200{--tw-bg-opacity:1;background-color:rgb(229 229 229/var(--tw-bg-opacity,1))}.ag-bg-neutral-300{--tw-bg-opacity:1;background-color:rgb(212 212 212/var(--tw-bg-opacity,1))}.ag-bg-neutral-50{--tw-bg-opacity:1;background-color:rgb(250 250 250/var(--tw-bg-opacity,1))}.ag-bg-neutral-50\\/60{background-color:hsla(0,0%,98%,.6)}.ag-bg-neutral-700{--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.ag-bg-rose-600{--tw-bg-opacity:1;background-color:rgb(225 29 72/var(--tw-bg-opacity,1))}.ag-bg-transparent{background-color:transparent}.ag-bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1))}.ag-bg-white\\/60{background-color:hsla(0,0%,100%,.6)}.ag-p-0{padding:0}.ag-p-1{padding:.25rem}.ag-p-1\\.5{padding:.375rem}.ag-p-4{padding:1rem}.ag-p-6{padding:1.5rem}.ag-px-0\\.5{padding-left:.125rem;padding-right:.125rem}.ag-px-1\\.5{padding-left:.375rem;padding-right:.375rem}.ag-px-2{padding-left:.5rem;padding-right:.5rem}.ag-px-2\\.5{padding-left:.625rem;padding-right:.625rem}.ag-px-3{padding-left:.75rem;padding-right:.75rem}.ag-px-3\\.5{padding-left:.875rem;padding-right:.875rem}.ag-px-control-x-base{padding-left:.75rem;padding-right:.75rem}.ag-px-control-x-lg{padding-left:1rem;padding-right:1rem}.ag-px-control-x-sm{padding-left:.5rem;padding-right:.5rem}.ag-px-control-x-xl{padding-left:1.25rem;padding-right:1.25rem}.ag-px-control-x-xs{padding-left:.375rem;padding-right:.375rem}.ag-py-0\\.5{padding-top:.125rem;padding-bottom:.125rem}.ag-py-1{padding-top:.25rem;padding-bottom:.25rem}.ag-py-1\\.5{padding-top:.375rem;padding-bottom:.375rem}.ag-py-2{padding-top:.5rem;padding-bottom:.5rem}.ag-py-2\\.5{padding-top:.625rem;padding-bottom:.625rem}.ag-py-3{padding-top:.75rem;padding-bottom:.75rem}.ag-py-control-y-base{padding-top:.3125rem;padding-bottom:.3125rem}.ag-py-control-y-lg{padding-top:.375rem;padding-bottom:.375rem}.ag-py-control-y-sm{padding-top:.1875rem;padding-bottom:.1875rem}.ag-py-control-y-xl{padding-top:.4375rem;padding-bottom:.4375rem}.ag-py-control-y-xs{padding-top:.125rem;padding-bottom:.125rem}.ag-py-px{padding-top:1px;padding-bottom:1px}.ag-pl-1\\.5{padding-left:.375rem}.ag-pr-0{padding-right:0}.ag-pr-2{padding-right:.5rem}.ag-pr-3{padding-right:.75rem}.ag-pr-4{padding-right:1rem}.ag-text-left{text-align:left}.ag-text-center{text-align:center}.ag-text-right{text-align:right}.ag-align-middle{vertical-align:middle}.ag-text-\\[10px\\]{font-size:10px}.ag-text-base{font-size:.8125rem;line-height:1.25rem}.ag-text-lg{font-size:.9375rem;line-height:1.375rem}.ag-text-sm{font-size:.6875rem;line-height:1rem}.ag-text-xl{font-size:1.0625rem;line-height:1.5rem}.ag-text-xs{font-size:.5625rem;line-height:.875rem}.ag-font-bold{font-weight:700}.ag-font-medium{font-weight:500}.ag-font-normal{font-weight:400}.ag-font-semibold{font-weight:600}.ag-italic{font-style:italic}.ag-leading-none{line-height:1}.ag-text-black\\/70{color:rgba(0,0,0,.7)}.ag-text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128/var(--tw-text-opacity,1))}.ag-text-inherit{color:inherit}.ag-text-neutral-400{--tw-text-opacity:1;color:rgb(163 163 163/var(--tw-text-opacity,1))}.ag-text-neutral-500{--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.ag-text-neutral-600{--tw-text-opacity:1;color:rgb(82 82 82/var(--tw-text-opacity,1))}.ag-text-neutral-700{--tw-text-opacity:1;color:rgb(64 64 64/var(--tw-text-opacity,1))}.ag-text-neutral-900{--tw-text-opacity:1;color:rgb(23 23 23/var(--tw-text-opacity,1))}.ag-text-red-600{--tw-text-opacity:1;color:rgb(220 38 38/var(--tw-text-opacity,1))}.ag-text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.ag-underline{text-decoration-line:underline}.ag-decoration-neutral-300{text-decoration-color:#d4d4d4}.ag-underline-offset-4{text-underline-offset:4px}.ag-opacity-0{opacity:0}.ag-opacity-100{opacity:1}.ag-opacity-50{opacity:.5}.ag-opacity-60{opacity:.6}.ag-shadow{--tw-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px -1px rgba(0,0,0,.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color),0 1px 2px -1px var(--tw-shadow-color)}.ag-shadow,.ag-shadow-lg{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.ag-shadow-lg{--tw-shadow:0px 0px 1px 0px rgba(0,0,0,.48),0px 0px 2px 0px rgba(0,0,0,.08),0px 2px 4px 0px rgba(0,0,0,.12),0px 2px 8px 0px rgba(0,0,0,.08);--tw-shadow-colored:0px 0px 1px 0px var(--tw-shadow-color),0px 0px 2px 0px var(--tw-shadow-color),0px 2px 4px 0px var(--tw-shadow-color),0px 2px 8px 0px var(--tw-shadow-color)}.ag-shadow-md{--tw-shadow:0px 0px 1px 0px rgba(0,0,0,.24),0px 0px 2px 0px rgba(0,0,0,.08),0px 2px 4px 0px rgba(0,0,0,.08);--tw-shadow-colored:0px 0px 1px 0px var(--tw-shadow-color),0px 0px 2px 0px var(--tw-shadow-color),0px 2px 4px 0px var(--tw-shadow-color)}.ag-shadow-md,.ag-shadow-sm{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.ag-shadow-sm{--tw-shadow:0px 0px 1px rgba(0,0,0,.32),0px 0px 3px rgba(0,0,0,.11),0px 1px 4px rgba(0,0,0,.12);--tw-shadow-colored:0px 0px 1px var(--tw-shadow-color),0px 0px 3px var(--tw-shadow-color),0px 1px 4px var(--tw-shadow-color)}.ag-outline-none{outline:2px solid transparent;outline-offset:2px}.ag-ring-1{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.ag-ring-black\\/10{--tw-ring-color:rgba(0,0,0,.1)}.ag-transition-\\[border-color\\,background-color\\,box-shadow\\]{transition-property:border-color,background-color,box-shadow;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.ag-transition-\\[border-color\\,background-color\\]{transition-property:border-color,background-color;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.ag-transition-\\[opacity\\,transform\\]{transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.ag-transition-all{transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.ag-transition-colors{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.ag-transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.ag-duration-100{transition-duration:.1s}.ag-duration-150{transition-duration:.15s}.ag-duration-200{transition-duration:.2s}.ag-duration-300{transition-duration:.3s}.ag-ease-out{transition-timing-function:cubic-bezier(0,0,.2,1)}@keyframes enter{0%{opacity:var(--tw-enter-opacity,1);transform:translate3d(var(--tw-enter-translate-x,0),var(--tw-enter-translate-y,0),0) scale3d(var(--tw-enter-scale,1),var(--tw-enter-scale,1),var(--tw-enter-scale,1)) rotate(var(--tw-enter-rotate,0))}}@keyframes exit{to{opacity:var(--tw-exit-opacity,1);transform:translate3d(var(--tw-exit-translate-x,0),var(--tw-exit-translate-y,0),0) scale3d(var(--tw-exit-scale,1),var(--tw-exit-scale,1),var(--tw-exit-scale,1)) rotate(var(--tw-exit-rotate,0))}}.ag-animate-in{animation-name:enter;animation-duration:.15s;--tw-enter-opacity:initial;--tw-enter-scale:initial;--tw-enter-rotate:initial;--tw-enter-translate-x:initial;--tw-enter-translate-y:initial}.ag-fade-in-0{--tw-enter-opacity:0}.ag-duration-100{animation-duration:.1s}.ag-duration-150{animation-duration:.15s}.ag-duration-200{animation-duration:.2s}.ag-duration-300{animation-duration:.3s}.ag-ease-out{animation-timing-function:cubic-bezier(0,0,.2,1)}.ag-column-lines>*>tr>:not(:last-child){border-right:1px solid;--tw-border-opacity:1;border-color:rgb(229 229 229/var(--tw-border-opacity,1))}@media (prefers-color-scheme:dark){.ag-column-lines>*>tr>:not(:last-child):not(:where([data-ag-theme=light] *)){--tw-border-opacity:1;border-color:rgb(64 64 64/var(--tw-border-opacity,1))}}.ag-column-lines>*>tr>:not(:last-child):where([data-ag-theme=dark] *){--tw-border-opacity:1;border-color:rgb(64 64 64/var(--tw-border-opacity,1))}.placeholder\\:ag-text-neutral-400::-moz-placeholder{--tw-text-opacity:1;color:rgb(163 163 163/var(--tw-text-opacity,1))}.placeholder\\:ag-text-neutral-400::placeholder{--tw-text-opacity:1;color:rgb(163 163 163/var(--tw-text-opacity,1))}.after\\:ag-absolute:after{content:var(--tw-content);position:absolute}.after\\:ag-inset-y-0:after{content:var(--tw-content);top:0;bottom:0}.after\\:ag-right-0:after{content:var(--tw-content);right:0}.after\\:ag-w-px:after{content:var(--tw-content);width:1px}.last\\:ag-mb-0:last-child{margin-bottom:0}.hover\\:ag-border-neutral-200:hover{--tw-border-opacity:1;border-color:rgb(229 229 229/var(--tw-border-opacity,1))}.hover\\:ag-bg-neutral-100:hover{--tw-bg-opacity:1;background-color:rgb(245 245 245/var(--tw-bg-opacity,1))}.hover\\:ag-bg-neutral-300:hover{--tw-bg-opacity:1;background-color:rgb(212 212 212/var(--tw-bg-opacity,1))}.hover\\:ag-bg-neutral-50:hover{--tw-bg-opacity:1;background-color:rgb(250 250 250/var(--tw-bg-opacity,1))}.hover\\:ag-bg-neutral-50\\/60:hover{background-color:hsla(0,0%,98%,.6)}.hover\\:ag-bg-neutral-600:hover{--tw-bg-opacity:1;background-color:rgb(82 82 82/var(--tw-bg-opacity,1))}.hover\\:ag-bg-rose-700:hover{--tw-bg-opacity:1;background-color:rgb(190 18 60/var(--tw-bg-opacity,1))}.hover\\:ag-bg-transparent:hover{background-color:transparent}.hover\\:ag-text-neutral-700:hover{--tw-text-opacity:1;color:rgb(64 64 64/var(--tw-text-opacity,1))}.hover\\:ag-decoration-neutral-500:hover{text-decoration-color:#737373}.hover\\:after\\:ag-bg-neutral-300:hover:after{content:var(--tw-content);--tw-bg-opacity:1;background-color:rgb(212 212 212/var(--tw-bg-opacity,1))}.focus\\:ag-border-neutral-200:focus{--tw-border-opacity:1;border-color:rgb(229 229 229/var(--tw-border-opacity,1))}.focus\\:ag-bg-neutral-100:focus{--tw-bg-opacity:1;background-color:rgb(245 245 245/var(--tw-bg-opacity,1))}.focus\\:ag-outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\\:ag-ring-1:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus\\:ag-ring-neutral-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(212 212 212/var(--tw-ring-opacity,1))}.focus-visible\\:ag-outline-none:focus-visible{outline:2px solid transparent;outline-offset:2px}.focus-visible\\:ag-ring-2:focus-visible{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus-visible\\:ag-ring-blue-500:focus-visible{--tw-ring-opacity:1;--tw-ring-color:rgb(59 130 246/var(--tw-ring-opacity,1))}.focus-visible\\:ag-ring-offset-2:focus-visible{--tw-ring-offset-width:2px}.focus-visible\\:after\\:ag-bg-neutral-300:focus-visible:after{content:var(--tw-content);--tw-bg-opacity:1;background-color:rgb(212 212 212/var(--tw-bg-opacity,1))}.disabled\\:ag-pointer-events-none:disabled{pointer-events:none}.disabled\\:ag-cursor-not-allowed:disabled{cursor:not-allowed}.disabled\\:ag-opacity-50:disabled{opacity:.5}.disabled\\:ag-opacity-60:disabled{opacity:.6}.data-\\[state\\=closed\\]\\:-ag-translate-x-full[data-state=closed]{--tw-translate-x:-100%}.data-\\[state\\=closed\\]\\:-ag-translate-x-full[data-state=closed],.data-\\[state\\=closed\\]\\:-ag-translate-y-full[data-state=closed]{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.data-\\[state\\=closed\\]\\:-ag-translate-y-full[data-state=closed]{--tw-translate-y:-100%}.data-\\[state\\=closed\\]\\:ag-translate-x-full[data-state=closed]{--tw-translate-x:100%}.data-\\[state\\=closed\\]\\:ag-translate-x-full[data-state=closed],.data-\\[state\\=closed\\]\\:ag-translate-y-full[data-state=closed]{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.data-\\[state\\=closed\\]\\:ag-translate-y-full[data-state=closed]{--tw-translate-y:100%}.data-\\[state\\=closed\\]\\:ag-opacity-0[data-state=closed]{opacity:0}.data-\\[state\\=open\\]\\:ag-animate-in[data-state=open]{animation-name:enter;animation-duration:.15s;--tw-enter-opacity:initial;--tw-enter-scale:initial;--tw-enter-rotate:initial;--tw-enter-translate-x:initial;--tw-enter-translate-y:initial}.data-\\[state\\=closed\\]\\:ag-animate-out[data-state=closed]{animation-name:exit;animation-duration:.15s;--tw-exit-opacity:initial;--tw-exit-scale:initial;--tw-exit-rotate:initial;--tw-exit-translate-x:initial;--tw-exit-translate-y:initial}.data-\\[state\\=closed\\]\\:ag-fade-out-0[data-state=closed],.data-\\[state\\=closed\\]\\:ag-fade-out[data-state=closed]{--tw-exit-opacity:0}.data-\\[state\\=open\\]\\:ag-fade-in-0[data-state=open],.data-\\[state\\=open\\]\\:ag-fade-in[data-state=open]{--tw-enter-opacity:0}.data-\\[state\\=closed\\]\\:ag-zoom-out[data-state=closed]{--tw-exit-scale:0}.data-\\[state\\=closed\\]\\:ag-zoom-out-95[data-state=closed]{--tw-exit-scale:.95}.data-\\[state\\=open\\]\\:ag-zoom-in[data-state=open]{--tw-enter-scale:0}.data-\\[state\\=open\\]\\:ag-zoom-in-95[data-state=open]{--tw-enter-scale:.95}.data-\\[state\\=closed\\]\\:ag-slide-out-to-bottom[data-state=closed]{--tw-exit-translate-y:100%}.data-\\[state\\=closed\\]\\:ag-slide-out-to-left[data-state=closed]{--tw-exit-translate-x:-100%}.data-\\[state\\=closed\\]\\:ag-slide-out-to-right[data-state=closed]{--tw-exit-translate-x:100%}.data-\\[state\\=closed\\]\\:ag-slide-out-to-top[data-state=closed]{--tw-exit-translate-y:-100%}.data-\\[state\\=open\\]\\:ag-slide-in-from-bottom[data-state=open]{--tw-enter-translate-y:100%}.data-\\[state\\=open\\]\\:ag-slide-in-from-left[data-state=open]{--tw-enter-translate-x:-100%}.data-\\[state\\=open\\]\\:ag-slide-in-from-right[data-state=open]{--tw-enter-translate-x:100%}.data-\\[state\\=open\\]\\:ag-slide-in-from-top[data-state=open]{--tw-enter-translate-y:-100%}@media (min-width:768px){.md\\:ag-h-1\\/2{height:50%}.md\\:ag-w-96{width:24rem}}@media (prefers-color-scheme:dark){.dark\\:ag-border-neutral-600:not(:where([data-ag-theme=light] *)){--tw-border-opacity:1;border-color:rgb(82 82 82/var(--tw-border-opacity,1))}.dark\\:ag-border-neutral-700:not(:where([data-ag-theme=light] *)){--tw-border-opacity:1;border-color:rgb(64 64 64/var(--tw-border-opacity,1))}.dark\\:ag-bg-\\[rgba\\(195\\2c 212\\2c 249\\2c 0\\.18\\)\\]:not(:where([data-ag-theme=light] *)){background-color:rgba(195,212,249,.18)}.dark\\:ag-bg-neutral-600:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(82 82 82/var(--tw-bg-opacity,1))}.dark\\:ag-bg-neutral-700:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.dark\\:ag-bg-neutral-800:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(38 38 38/var(--tw-bg-opacity,1))}.dark\\:ag-bg-neutral-800\\/30:not(:where([data-ag-theme=light] *)){background-color:rgba(38,38,38,.3)}.dark\\:ag-bg-neutral-800\\/60:not(:where([data-ag-theme=light] *)){background-color:rgba(38,38,38,.6)}.dark\\:ag-bg-neutral-900\\/60:not(:where([data-ag-theme=light] *)){background-color:hsla(0,0%,9%,.6)}.dark\\:ag-text-gray-100:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(243 244 246/var(--tw-text-opacity,1))}.dark\\:ag-text-neutral-100:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(245 245 245/var(--tw-text-opacity,1))}.dark\\:ag-text-neutral-300:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(212 212 212/var(--tw-text-opacity,1))}.dark\\:ag-text-neutral-400:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(163 163 163/var(--tw-text-opacity,1))}.dark\\:ag-text-neutral-500:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.dark\\:ag-text-red-400:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(248 113 113/var(--tw-text-opacity,1))}.dark\\:ag-text-white:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.dark\\:ag-decoration-neutral-600:not(:where([data-ag-theme=light] *)){text-decoration-color:#525252}.dark\\:ag-ring-white\\/10:not(:where([data-ag-theme=light] *)){--tw-ring-color:hsla(0,0%,100%,.1)}.dark\\:placeholder\\:ag-text-neutral-500:not(:where([data-ag-theme=light] *))::-moz-placeholder{--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.dark\\:placeholder\\:ag-text-neutral-500:not(:where([data-ag-theme=light] *))::placeholder{--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.dark\\:hover\\:ag-border-neutral-600:hover:not(:where([data-ag-theme=light] *)){--tw-border-opacity:1;border-color:rgb(82 82 82/var(--tw-border-opacity,1))}.dark\\:hover\\:ag-bg-neutral-600:hover:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(82 82 82/var(--tw-bg-opacity,1))}.dark\\:hover\\:ag-bg-neutral-700:hover:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.dark\\:hover\\:ag-bg-neutral-800\\/30:hover:not(:where([data-ag-theme=light] *)){background-color:rgba(38,38,38,.3)}.dark\\:hover\\:ag-bg-neutral-800\\/50:hover:not(:where([data-ag-theme=light] *)){background-color:rgba(38,38,38,.5)}.dark\\:hover\\:ag-bg-neutral-800\\/60:hover:not(:where([data-ag-theme=light] *)){background-color:rgba(38,38,38,.6)}.dark\\:hover\\:ag-bg-transparent:hover:not(:where([data-ag-theme=light] *)){background-color:transparent}.dark\\:hover\\:ag-text-neutral-200:hover:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(229 229 229/var(--tw-text-opacity,1))}.dark\\:hover\\:ag-decoration-neutral-400:hover:not(:where([data-ag-theme=light] *)){text-decoration-color:#a3a3a3}.dark\\:hover\\:after\\:ag-bg-neutral-400:hover:not(:where([data-ag-theme=light] *)):after{content:var(--tw-content);--tw-bg-opacity:1;background-color:rgb(163 163 163/var(--tw-bg-opacity,1))}.dark\\:focus\\:ag-border-neutral-600:focus:not(:where([data-ag-theme=light] *)){--tw-border-opacity:1;border-color:rgb(82 82 82/var(--tw-border-opacity,1))}.dark\\:focus\\:ag-bg-neutral-700:focus:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.dark\\:focus\\:ag-ring-neutral-500:focus:not(:where([data-ag-theme=light] *)){--tw-ring-opacity:1;--tw-ring-color:rgb(115 115 115/var(--tw-ring-opacity,1))}.dark\\:focus-visible\\:after\\:ag-bg-neutral-400:focus-visible:not(:where([data-ag-theme=light] *)):after{content:var(--tw-content);--tw-bg-opacity:1;background-color:rgb(163 163 163/var(--tw-bg-opacity,1))}}.dark\\:ag-border-neutral-600:where([data-ag-theme=dark] *){--tw-border-opacity:1;border-color:rgb(82 82 82/var(--tw-border-opacity,1))}.dark\\:ag-border-neutral-700:where([data-ag-theme=dark] *){--tw-border-opacity:1;border-color:rgb(64 64 64/var(--tw-border-opacity,1))}.dark\\:ag-bg-\\[rgba\\(195\\2c 212\\2c 249\\2c 0\\.18\\)\\]:where([data-ag-theme=dark] *){background-color:rgba(195,212,249,.18)}.dark\\:ag-bg-neutral-600:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(82 82 82/var(--tw-bg-opacity,1))}.dark\\:ag-bg-neutral-700:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.dark\\:ag-bg-neutral-800:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(38 38 38/var(--tw-bg-opacity,1))}.dark\\:ag-bg-neutral-800\\/30:where([data-ag-theme=dark] *){background-color:rgba(38,38,38,.3)}.dark\\:ag-bg-neutral-800\\/60:where([data-ag-theme=dark] *){background-color:rgba(38,38,38,.6)}.dark\\:ag-bg-neutral-900\\/60:where([data-ag-theme=dark] *){background-color:hsla(0,0%,9%,.6)}.dark\\:ag-text-gray-100:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(243 244 246/var(--tw-text-opacity,1))}.dark\\:ag-text-neutral-100:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(245 245 245/var(--tw-text-opacity,1))}.dark\\:ag-text-neutral-300:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(212 212 212/var(--tw-text-opacity,1))}.dark\\:ag-text-neutral-400:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(163 163 163/var(--tw-text-opacity,1))}.dark\\:ag-text-neutral-500:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.dark\\:ag-text-red-400:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(248 113 113/var(--tw-text-opacity,1))}.dark\\:ag-text-white:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.dark\\:ag-decoration-neutral-600:where([data-ag-theme=dark] *){text-decoration-color:#525252}.dark\\:ag-ring-white\\/10:where([data-ag-theme=dark] *){--tw-ring-color:hsla(0,0%,100%,.1)}.dark\\:placeholder\\:ag-text-neutral-500:where([data-ag-theme=dark] *)::-moz-placeholder{--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.dark\\:placeholder\\:ag-text-neutral-500:where([data-ag-theme=dark] *)::placeholder{--tw-text-opacity:1;color:rgb(115 115 115/var(--tw-text-opacity,1))}.dark\\:hover\\:ag-border-neutral-600:hover:where([data-ag-theme=dark] *){--tw-border-opacity:1;border-color:rgb(82 82 82/var(--tw-border-opacity,1))}.dark\\:hover\\:ag-bg-neutral-600:hover:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(82 82 82/var(--tw-bg-opacity,1))}.dark\\:hover\\:ag-bg-neutral-700:hover:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.dark\\:hover\\:ag-bg-neutral-800\\/30:hover:where([data-ag-theme=dark] *){background-color:rgba(38,38,38,.3)}.dark\\:hover\\:ag-bg-neutral-800\\/50:hover:where([data-ag-theme=dark] *){background-color:rgba(38,38,38,.5)}.dark\\:hover\\:ag-bg-neutral-800\\/60:hover:where([data-ag-theme=dark] *){background-color:rgba(38,38,38,.6)}.dark\\:hover\\:ag-bg-transparent:hover:where([data-ag-theme=dark] *){background-color:transparent}.dark\\:hover\\:ag-text-neutral-200:hover:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(229 229 229/var(--tw-text-opacity,1))}.dark\\:hover\\:ag-decoration-neutral-400:hover:where([data-ag-theme=dark] *){text-decoration-color:#a3a3a3}.dark\\:hover\\:after\\:ag-bg-neutral-400:hover:where([data-ag-theme=dark] *):after{content:var(--tw-content);--tw-bg-opacity:1;background-color:rgb(163 163 163/var(--tw-bg-opacity,1))}.dark\\:focus\\:ag-border-neutral-600:focus:where([data-ag-theme=dark] *){--tw-border-opacity:1;border-color:rgb(82 82 82/var(--tw-border-opacity,1))}.dark\\:focus\\:ag-bg-neutral-700:focus:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(64 64 64/var(--tw-bg-opacity,1))}.dark\\:focus\\:ag-ring-neutral-500:focus:where([data-ag-theme=dark] *){--tw-ring-opacity:1;--tw-ring-color:rgb(115 115 115/var(--tw-ring-opacity,1))}.dark\\:focus-visible\\:after\\:ag-bg-neutral-400:focus-visible:where([data-ag-theme=dark] *):after{content:var(--tw-content);--tw-bg-opacity:1;background-color:rgb(163 163 163/var(--tw-bg-opacity,1))}.\\[\\&_tr\\:last-child\\]\\:ag-border-0 tr:last-child{border-width:0}";
       document.head.appendChild(style);
     }
   });
@@ -50936,7 +51231,7 @@ export interface AiText {
     "frontend/style.css"() {
       "use strict";
       style2 = document.createElement("style");
-      style2.textContent = '*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }\n\n/*! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Courier,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.static{position:static}.relative{position:relative}.m-0{margin:0}.my-4{margin-top:1rem;margin-bottom:1rem}.my-6{margin-top:1.5rem;margin-bottom:1.5rem}.mb-1{margin-bottom:.25rem}.mb-2{margin-bottom:.5rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.ml-auto{margin-left:auto}.mt-2{margin-top:.5rem}.mt-3{margin-top:.75rem}.inline{display:inline}.flex{display:flex}.inline-flex{display:inline-flex}.\\!table{display:table!important}.table{display:table}.grid{display:grid}.hidden{display:none}.h-24{height:6rem}.min-h-\\[40px\\]{min-height:40px}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-24{width:6rem}.w-32{width:8rem}.w-40{width:10rem}.w-56{width:14rem}.w-64{width:16rem}.w-72{width:18rem}.w-80{width:20rem}.w-96{width:24rem}.w-full{width:100%}.min-w-0{min-width:0}.cursor-pointer{cursor:pointer}.list-none{list-style-type:none}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-center{justify-content:center}.gap-1{gap:.25rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.whitespace-pre-wrap{white-space:pre-wrap}.break-all{word-break:break-all}.rounded-md{border-radius:.375rem}.rounded-sm{border-radius:.1875rem}.border{border-width:1px}.border-0{border-width:0}.border-b{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-blue-500{--tw-border-opacity:1;border-color:rgb(59 130 246/var(--tw-border-opacity,1))}.border-gray-gray100{--tw-border-opacity:1;border-color:rgb(229 233 240/var(--tw-border-opacity,1))}.border-gray-gray200{--tw-border-opacity:1;border-color:rgb(218 222 230/var(--tw-border-opacity,1))}.border-gray-gray300{--tw-border-opacity:1;border-color:rgb(196 199 205/var(--tw-border-opacity,1))}.border-red-400{--tw-border-opacity:1;border-color:rgb(248 113 113/var(--tw-border-opacity,1))}.border-transparent{border-color:transparent}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246/var(--tw-bg-opacity,1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251/var(--tw-bg-opacity,1))}.bg-gray-gray50{--tw-bg-opacity:1;background-color:rgb(246 248 252/var(--tw-bg-opacity,1))}.bg-gray-gray75{--tw-bg-opacity:1;background-color:rgb(242 244 248/var(--tw-bg-opacity,1))}.bg-red-50{--tw-bg-opacity:1;background-color:rgb(254 242 242/var(--tw-bg-opacity,1))}.bg-transparent{background-color:transparent}.p-3{padding:.75rem}.p-4{padding:1rem}.px-1{padding-left:.25rem;padding-right:.25rem}.px-3{padding-left:.75rem;padding-right:.75rem}.py-0\\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-1\\.5{padding-top:.375rem;padding-bottom:.375rem}.py-2{padding-top:.5rem}.pb-2,.py-2{padding-bottom:.5rem}.pl-0{padding-left:0}.pl-4{padding-left:1rem}.pl-5{padding-left:1.25rem}.text-left{text-align:left}.text-right{text-align:right}.font-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Courier,monospace}.text-base{font-size:.8125rem;line-height:1.25rem}.text-sm{font-size:.6875rem;line-height:1rem}.font-medium{font-weight:500}.font-semibold{font-weight:600}.italic{font-style:italic}.text-blue-500{--tw-text-opacity:1;color:rgb(59 130 246/var(--tw-text-opacity,1))}.text-gray-gray400{--tw-text-opacity:1;color:rgb(151 154 160/var(--tw-text-opacity,1))}.text-gray-gray700{--tw-text-opacity:1;color:rgb(49 53 62/var(--tw-text-opacity,1))}.text-inherit{color:inherit}.underline{text-decoration-line:underline}.outline{outline-style:solid}.\\!filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)!important}.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}@media (prefers-color-scheme:dark){.dark\\:border-gray-gray600:not(:where([data-ag-theme=light] *)){--tw-border-opacity:1;border-color:rgb(65 69 77/var(--tw-border-opacity,1))}.dark\\:border-gray-gray700:not(:where([data-ag-theme=light] *)){--tw-border-opacity:1;border-color:rgb(49 53 62/var(--tw-border-opacity,1))}.dark\\:bg-gray-700:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(55 65 81/var(--tw-bg-opacity,1))}.dark\\:bg-gray-800:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(31 41 55/var(--tw-bg-opacity,1))}.dark\\:bg-gray-gray700:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(49 53 62/var(--tw-bg-opacity,1))}.dark\\:bg-gray-gray800:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(29 31 37/var(--tw-bg-opacity,1))}.dark\\:bg-red-950\\/40:not(:where([data-ag-theme=light] *)){background-color:rgba(69,10,10,.4)}.dark\\:text-gray-gray200:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(218 222 230/var(--tw-text-opacity,1))}}.dark\\:border-gray-gray600:where([data-ag-theme=dark] *){--tw-border-opacity:1;border-color:rgb(65 69 77/var(--tw-border-opacity,1))}.dark\\:border-gray-gray700:where([data-ag-theme=dark] *){--tw-border-opacity:1;border-color:rgb(49 53 62/var(--tw-border-opacity,1))}.dark\\:bg-gray-700:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(55 65 81/var(--tw-bg-opacity,1))}.dark\\:bg-gray-800:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(31 41 55/var(--tw-bg-opacity,1))}.dark\\:bg-gray-gray700:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(49 53 62/var(--tw-bg-opacity,1))}.dark\\:bg-gray-gray800:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(29 31 37/var(--tw-bg-opacity,1))}.dark\\:bg-red-950\\/40:where([data-ag-theme=dark] *){background-color:rgba(69,10,10,.4)}.dark\\:text-gray-gray200:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(218 222 230/var(--tw-text-opacity,1))}';
+      style2.textContent = '*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }\n\n/*! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Courier,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.static{position:static}.relative{position:relative}.m-0{margin:0}.my-4{margin-top:1rem;margin-bottom:1rem}.my-6{margin-top:1.5rem;margin-bottom:1.5rem}.mb-1{margin-bottom:.25rem}.mb-2{margin-bottom:.5rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.ml-auto{margin-left:auto}.mt-2{margin-top:.5rem}.mt-3{margin-top:.75rem}.mt-6{margin-top:1.5rem}.inline{display:inline}.flex{display:flex}.inline-flex{display:inline-flex}.\\!table{display:table!important}.table{display:table}.grid{display:grid}.hidden{display:none}.h-24{height:6rem}.min-h-\\[40px\\]{min-height:40px}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-24{width:6rem}.w-32{width:8rem}.w-40{width:10rem}.w-48{width:12rem}.w-52{width:13rem}.w-56{width:14rem}.w-64{width:16rem}.w-72{width:18rem}.w-80{width:20rem}.w-96{width:24rem}.w-full{width:100%}.min-w-0{min-width:0}.cursor-pointer{cursor:pointer}.list-none{list-style-type:none}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-center{justify-content:center}.gap-1{gap:.25rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-x-4{-moz-column-gap:1rem;column-gap:1rem}.gap-x-6{-moz-column-gap:1.5rem;column-gap:1.5rem}.gap-y-1{row-gap:.25rem}.gap-y-2{row-gap:.5rem}.whitespace-pre-wrap{white-space:pre-wrap}.break-all{word-break:break-all}.rounded-md{border-radius:.375rem}.rounded-sm{border-radius:.1875rem}.border{border-width:1px}.border-0{border-width:0}.border-b{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-blue-500{--tw-border-opacity:1;border-color:rgb(59 130 246/var(--tw-border-opacity,1))}.border-gray-gray100{--tw-border-opacity:1;border-color:rgb(229 233 240/var(--tw-border-opacity,1))}.border-gray-gray200{--tw-border-opacity:1;border-color:rgb(218 222 230/var(--tw-border-opacity,1))}.border-gray-gray300{--tw-border-opacity:1;border-color:rgb(196 199 205/var(--tw-border-opacity,1))}.border-red-400{--tw-border-opacity:1;border-color:rgb(248 113 113/var(--tw-border-opacity,1))}.border-transparent{border-color:transparent}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246/var(--tw-bg-opacity,1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251/var(--tw-bg-opacity,1))}.bg-gray-gray50{--tw-bg-opacity:1;background-color:rgb(246 248 252/var(--tw-bg-opacity,1))}.bg-gray-gray75{--tw-bg-opacity:1;background-color:rgb(242 244 248/var(--tw-bg-opacity,1))}.bg-red-50{--tw-bg-opacity:1;background-color:rgb(254 242 242/var(--tw-bg-opacity,1))}.bg-transparent{background-color:transparent}.p-3{padding:.75rem}.p-4{padding:1rem}.px-1{padding-left:.25rem;padding-right:.25rem}.px-3{padding-left:.75rem;padding-right:.75rem}.py-0\\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-1\\.5{padding-top:.375rem;padding-bottom:.375rem}.py-2{padding-top:.5rem}.pb-2,.py-2{padding-bottom:.5rem}.pl-0{padding-left:0}.pl-4{padding-left:1rem}.pl-5{padding-left:1.25rem}.text-left{text-align:left}.text-right{text-align:right}.font-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Courier,monospace}.text-base{font-size:.8125rem;line-height:1.25rem}.text-sm{font-size:.6875rem;line-height:1rem}.font-medium{font-weight:500}.font-semibold{font-weight:600}.italic{font-style:italic}.text-blue-500{--tw-text-opacity:1;color:rgb(59 130 246/var(--tw-text-opacity,1))}.text-gray-gray400{--tw-text-opacity:1;color:rgb(151 154 160/var(--tw-text-opacity,1))}.text-gray-gray700{--tw-text-opacity:1;color:rgb(49 53 62/var(--tw-text-opacity,1))}.text-inherit{color:inherit}.underline{text-decoration-line:underline}.outline{outline-style:solid}.\\!filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)!important}.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}@media (prefers-color-scheme:dark){.dark\\:border-gray-gray600:not(:where([data-ag-theme=light] *)){--tw-border-opacity:1;border-color:rgb(65 69 77/var(--tw-border-opacity,1))}.dark\\:border-gray-gray700:not(:where([data-ag-theme=light] *)){--tw-border-opacity:1;border-color:rgb(49 53 62/var(--tw-border-opacity,1))}.dark\\:bg-gray-700:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(55 65 81/var(--tw-bg-opacity,1))}.dark\\:bg-gray-800:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(31 41 55/var(--tw-bg-opacity,1))}.dark\\:bg-gray-gray700:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(49 53 62/var(--tw-bg-opacity,1))}.dark\\:bg-gray-gray800:not(:where([data-ag-theme=light] *)){--tw-bg-opacity:1;background-color:rgb(29 31 37/var(--tw-bg-opacity,1))}.dark\\:bg-red-950\\/40:not(:where([data-ag-theme=light] *)){background-color:rgba(69,10,10,.4)}.dark\\:text-gray-gray200:not(:where([data-ag-theme=light] *)){--tw-text-opacity:1;color:rgb(218 222 230/var(--tw-text-opacity,1))}}.dark\\:border-gray-gray600:where([data-ag-theme=dark] *){--tw-border-opacity:1;border-color:rgb(65 69 77/var(--tw-border-opacity,1))}.dark\\:border-gray-gray700:where([data-ag-theme=dark] *){--tw-border-opacity:1;border-color:rgb(49 53 62/var(--tw-border-opacity,1))}.dark\\:bg-gray-700:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(55 65 81/var(--tw-bg-opacity,1))}.dark\\:bg-gray-800:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(31 41 55/var(--tw-bg-opacity,1))}.dark\\:bg-gray-gray700:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(49 53 62/var(--tw-bg-opacity,1))}.dark\\:bg-gray-gray800:where([data-ag-theme=dark] *){--tw-bg-opacity:1;background-color:rgb(29 31 37/var(--tw-bg-opacity,1))}.dark\\:bg-red-950\\/40:where([data-ag-theme=dark] *){background-color:rgba(69,10,10,.4)}.dark\\:text-gray-gray200:where([data-ag-theme=dark] *){--tw-text-opacity:1;color:rgb(218 222 230/var(--tw-text-opacity,1))}';
       document.head.appendChild(style2);
     }
   });
@@ -51387,6 +51682,21 @@ export interface AiText {
     }
     return text.length > max ? `${text.slice(0, max)}\u2026` : text;
   }
+  function nestedLevels(tableKey, spec) {
+    const levels = {};
+    for (const [fieldKey, sub] of Object.entries(spec)) {
+      const target = includableLinks(tableKey).find((l) => l.fieldKey === fieldKey)?.target;
+      const targetMeta = target ? meta.tables[target] : void 0;
+      const fieldKeys = targetMeta ? Object.keys(targetMeta.fields).filter((k) => targetMeta.fields[k].type !== "multipleRecordLinks").slice(0, 3) : [];
+      levels[fieldKey] = {
+        title: `${meta.tables[tableKey].fields[fieldKey].name ?? fieldKey} \u2192 ${targetMeta?.name ?? "?"}`,
+        columns: [{ id: "record", header: targetMeta?.name ?? "Record", accessor: (r) => r.name }, ...fieldKeys],
+        nested: sub === true || !target ? void 0 : nestedLevels(target, sub),
+        emptyMessage: "No linked records"
+      };
+    }
+    return levels;
+  }
   var meta, tableKeys, dyn;
   var init_dyn = __esm({
     "frontend/tester/dyn.ts"() {
@@ -51620,18 +51930,18 @@ export interface AiText {
         function isValidElement5(object) {
           return "object" === typeof object && null !== object && object.$$typeof === REACT_ELEMENT_TYPE;
         }
-        var React36 = require_react(), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_VIEW_TRANSITION_TYPE = Symbol.for("react.view_transition"), REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = React36.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, hasOwnProperty = Object.prototype.hasOwnProperty, isArrayImpl = Array.isArray, createTask = console.createTask ? console.createTask : function() {
+        var React37 = require_react(), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_VIEW_TRANSITION_TYPE = Symbol.for("react.view_transition"), REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = React37.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, hasOwnProperty = Object.prototype.hasOwnProperty, isArrayImpl = Array.isArray, createTask = console.createTask ? console.createTask : function() {
           return null;
         };
-        React36 = {
+        React37 = {
           react_stack_bottom_frame: function(callStackForError) {
             return callStackForError();
           }
         };
         var specialPropKeyWarningShown;
         var didWarnAboutElementRef = {};
-        var unknownOwnerDebugStack = React36.react_stack_bottom_frame.bind(
-          React36,
+        var unknownOwnerDebugStack = React37.react_stack_bottom_frame.bind(
+          React37,
           UnknownOwner
         )();
         var unknownOwnerDebugTask = createTask(getTaskName(UnknownOwner));
@@ -51847,43 +52157,14 @@ export interface AiText {
     const fields = dyn.useFields(selectTable);
     const selectRows = dyn.useRecords(selectTable);
     const linkRows = dyn.useRecords(linkTable);
+    const nestedRows = dyn.useRecords(linkTable, { include: widestInclude(linkTable, 2) });
     const choices = selectKey ? fields[selectKey].choices : [];
-    return { selectTable, selectKey, choices, selectRows, linkTable, linkRows };
+    return { selectTable, selectKey, choices, selectRows, linkTable, linkRows, nestedRows };
   }
   function Components() {
     const live = useLiveData();
     return /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(import_jsx_dev_runtime2.Fragment, { children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Buttons, {}, void 0, false, {
-        fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 70,
-        columnNumber: 10
-      }, this),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Divide, { className: "my-4" }, void 0, false, {
-        fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 71,
-        columnNumber: 10
-      }, this),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Inputs, {}, void 0, false, {
-        fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 72,
-        columnNumber: 10
-      }, this),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Divide, { className: "my-4" }, void 0, false, {
-        fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 73,
-        columnNumber: 10
-      }, this),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Colors2, { choices: live.choices, selectKey: live.selectKey }, void 0, false, {
-        fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 74,
-        columnNumber: 10
-      }, this),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Divide, { className: "my-4" }, void 0, false, {
-        fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 75,
-        columnNumber: 10
-      }, this),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Selects, { live }, void 0, false, {
         fileName: "frontend/tester/panels/Components.tsx",
         lineNumber: 76,
         columnNumber: 10
@@ -51893,7 +52174,7 @@ export interface AiText {
         lineNumber: 77,
         columnNumber: 10
       }, this),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Overlays, { rows: live.linkRows, tableKey: live.linkTable }, void 0, false, {
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Inputs, {}, void 0, false, {
         fileName: "frontend/tester/panels/Components.tsx",
         lineNumber: 78,
         columnNumber: 10
@@ -51903,7 +52184,7 @@ export interface AiText {
         lineNumber: 79,
         columnNumber: 10
       }, this),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Feedback, {}, void 0, false, {
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Colors2, { choices: live.choices, selectKey: live.selectKey }, void 0, false, {
         fileName: "frontend/tester/panels/Components.tsx",
         lineNumber: 80,
         columnNumber: 10
@@ -51913,14 +52194,74 @@ export interface AiText {
         lineNumber: 81,
         columnNumber: 10
       }, this),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Tables, { rows: live.linkRows, tableKey: live.linkTable }, void 0, false, {
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Selects, { live }, void 0, false, {
         fileName: "frontend/tester/panels/Components.tsx",
         lineNumber: 82,
+        columnNumber: 10
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Divide, { className: "my-4" }, void 0, false, {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 83,
+        columnNumber: 10
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Overlays, { rows: live.linkRows, tableKey: live.linkTable }, void 0, false, {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 84,
+        columnNumber: 10
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Divide, { className: "my-4" }, void 0, false, {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 85,
+        columnNumber: 10
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Feedback, {}, void 0, false, {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 86,
+        columnNumber: 10
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Divide, { className: "my-4" }, void 0, false, {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 87,
+        columnNumber: 10
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Tables, { rows: live.linkRows, tableKey: live.linkTable }, void 0, false, {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 88,
+        columnNumber: 10
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Divide, { className: "my-4" }, void 0, false, {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 89,
+        columnNumber: 10
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(NestedTables, { rows: live.nestedRows, tableKey: live.linkTable }, void 0, false, {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 90,
+        columnNumber: 10
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Divide, { className: "my-4" }, void 0, false, {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 91,
+        columnNumber: 10
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(GroupTables, { rows: live.linkRows, tableKey: live.linkTable }, void 0, false, {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 92,
+        columnNumber: 10
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Divide, { className: "my-4" }, void 0, false, {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 93,
+        columnNumber: 10
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(InlineEdits, { choices: live.choices }, void 0, false, {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 94,
         columnNumber: 10
       }, this)
     ] }, void 0, true, {
       fileName: "frontend/tester/panels/Components.tsx",
-      lineNumber: 69,
+      lineNumber: 75,
       columnNumber: 7
     }, this);
   }
@@ -51930,67 +52271,67 @@ export interface AiText {
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { className: "grid gap-2", style: { gridTemplateColumns: `100px repeat(${SIZES.length}, max-content)` }, children: VARIANTS.map((variant) => /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(import_react13.default.Fragment, { children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Code, { children: variant }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 94,
+          lineNumber: 106,
           columnNumber: 19
         }, this),
         SIZES.map((size) => /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Button, { variant, size, icon: Plus, children: size }, size, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 96,
+          lineNumber: 108,
           columnNumber: 22
         }, this))
       ] }, variant, true, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 93,
+        lineNumber: 105,
         columnNumber: 16
       }, this)) }, void 0, false, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 91,
+        lineNumber: 103,
         columnNumber: 10
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { className: "flex flex-wrap items-center gap-2 mt-3", children: [
         ["icon-xs", "icon-sm", "icon", "icon-lg", "icon-xl"].map((size) => /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Button, { size, variant: "outline", icon: Pencil, "aria-label": size }, size, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 105,
+          lineNumber: 117,
           columnNumber: 16
         }, this)),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Button, { disabled: true, icon: Trash, variant: "destructive", children: "disabled" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 107,
+          lineNumber: 119,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(CaretButton, { open, onClick: () => setOpen(!open), label: open ? "Open" : "Closed", variant: "secondary" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 110,
+          lineNumber: 122,
           columnNumber: 13
         }, this),
         ["down", "up", "left", "right"].map((direction) => /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Caret, { direction }, direction, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 112,
+          lineNumber: 124,
           columnNumber: 16
         }, this)),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Caret, { variant: "triangle", size: "lg" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 114,
+          lineNumber: 126,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Icon, { icon: Bell, size: "lg" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 115,
+          lineNumber: 127,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Icon, { icon: Search, size: 24, className: "text-blue-500" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 116,
+          lineNumber: 128,
           columnNumber: 13
         }, this)
       ] }, void 0, true, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 103,
+        lineNumber: 115,
         columnNumber: 10
       }, this)
     ] }, void 0, true, {
       fileName: "frontend/tester/panels/Components.tsx",
-      lineNumber: 90,
+      lineNumber: 102,
       columnNumber: 7
     }, this);
   }
@@ -52004,96 +52345,96 @@ export interface AiText {
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { className: "flex flex-wrap items-baseline gap-4 mb-3", children: [
         ["title", "heading", "large", "default", "muted"].map((variant) => /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Text, { variant, children: variant }, variant, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 132,
+          lineNumber: 144,
           columnNumber: 16
         }, this)),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Text, { bold: true, children: "bold" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 136,
+          lineNumber: 148,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Text, { italic: true, children: "italic" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 137,
+          lineNumber: 149,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Text, { underline: true, children: "underline" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 138,
+          lineNumber: 150,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Text, { color: "redBright", children: 'color="redBright"' }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 139,
+          lineNumber: 151,
           columnNumber: 13
         }, this)
       ] }, void 0, true, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 130,
+        lineNumber: 142,
         columnNumber: 10
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { className: "flex flex-wrap items-end gap-3", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { children: [
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Label, { htmlFor: "t-input", children: "Input (default)" }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 143,
+            lineNumber: 155,
             columnNumber: 16
           }, this),
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Input, { id: "t-input", value: text, onChange: setText, placeholder: "Type\u2026" }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 144,
+            lineNumber: 156,
             columnNumber: 16
           }, this)
         ] }, void 0, true, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 142,
+          lineNumber: 154,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { children: [
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Label, { htmlFor: "t-ghost", children: "ghost / sm" }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 147,
+            lineNumber: 159,
             columnNumber: 16
           }, this),
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Input, { id: "t-ghost", variant: "ghost", size: "sm", defaultValue: "ghost input" }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 148,
+            lineNumber: 160,
             columnNumber: 16
           }, this)
         ] }, void 0, true, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 146,
+          lineNumber: 158,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Input, { size: "xs", placeholder: "xs", className: "w-24" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 150,
+          lineNumber: 162,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Input, { size: "lg", placeholder: "lg", className: "w-32" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 151,
+          lineNumber: 163,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Input, { disabled: true, placeholder: "disabled", className: "w-32" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 152,
+          lineNumber: 164,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Toggle, { checked: on, onChange: setOn, label: `Toggle ${on ? "on" : "off"}` }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 153,
+          lineNumber: 165,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Toggle, { size: "sm", checked: small, onChange: setSmall, label: "sm" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 154,
+          lineNumber: 166,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Toggle, { checked: true, disabled: true, onChange: () => {
         }, label: "disabled" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 155,
+          lineNumber: 167,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(
@@ -52111,19 +52452,19 @@ export interface AiText {
           false,
           {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 156,
+            lineNumber: 168,
             columnNumber: 13
           },
           this
         ),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(ButtonToggle, { checked: pinned, onChange: (v) => setPinned(Boolean(v)), icon: Check, children: pinned ? "Pinned" : "Pin" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 165,
+          lineNumber: 177,
           columnNumber: 13
         }, this)
       ] }, void 0, true, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 141,
+        lineNumber: 153,
         columnNumber: 10
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Text, { variant: "muted", className: "mt-2", children: [
@@ -52133,12 +52474,12 @@ export interface AiText {
         view
       ] }, void 0, true, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 169,
+        lineNumber: 181,
         columnNumber: 10
       }, this)
     ] }, void 0, true, {
       fileName: "frontend/tester/panels/Components.tsx",
-      lineNumber: 129,
+      lineNumber: 141,
       columnNumber: 7
     }, this);
   }
@@ -52158,7 +52499,7 @@ export interface AiText {
             false,
             {
               fileName: "frontend/tester/panels/Components.tsx",
-              lineNumber: 185,
+              lineNumber: 197,
               columnNumber: 22
             },
             this
@@ -52166,7 +52507,7 @@ export interface AiText {
         })
       ) }, void 0, false, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 179,
+        lineNumber: 191,
         columnNumber: 10
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { className: "flex flex-wrap items-center gap-2", children: [
@@ -52176,53 +52517,53 @@ export interface AiText {
           ":"
         ] }, void 0, true, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 195,
+          lineNumber: 207,
           columnNumber: 13
         }, this),
         choices.map((choice) => /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("span", { className: "inline-flex items-center gap-1", children: [
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Circle, { color: choice.color ?? null }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 198,
+            lineNumber: 210,
             columnNumber: 19
           }, this),
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Badge, { opts: choice }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 199,
+            lineNumber: 211,
             columnNumber: 19
           }, this)
         ] }, choice.id, true, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 197,
+          lineNumber: 209,
           columnNumber: 16
         }, this)),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Badge, { variant: "md", opts: { name: "md badge", color: "#7c37ef" } }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 202,
+          lineNumber: 214,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Badge, { opts: null }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 203,
+          lineNumber: 215,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(PillOption, { opt: { value: "avatar", label: "with avatar", profilePicUrl: "https://www.gravatar.com/avatar/?d=identicon" } }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 204,
+          lineNumber: 216,
           columnNumber: 13
         }, this),
         SIZES.map((size) => /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(PillOption, { size, opt: { value: size, label: size, color: "tealLight1" } }, size, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 206,
+          lineNumber: 218,
           columnNumber: 16
         }, this))
       ] }, void 0, true, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 194,
+        lineNumber: 206,
         columnNumber: 10
       }, this)
     ] }, void 0, true, {
       fileName: "frontend/tester/panels/Components.tsx",
-      lineNumber: 178,
+      lineNumber: 190,
       columnNumber: 7
     }, this);
   }
@@ -52240,52 +52581,52 @@ export interface AiText {
       "Live data: choices of ",
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Code, { children: live.selectKey ?? "\u2014" }, void 0, false, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 227,
+        lineNumber: 239,
         columnNumber: 61
       }, this),
       ", records of ",
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Code, { children: live.linkTable }, void 0, false, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 227,
+        lineNumber: 239,
         columnNumber: 110
       }, this),
       "."
     ] }, void 0, true, {
       fileName: "frontend/tester/panels/Components.tsx",
-      lineNumber: 227,
+      lineNumber: 239,
       columnNumber: 37
     }, this), children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { className: "flex flex-wrap items-start gap-3", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { children: [
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Label, { children: "single, pill" }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 230,
+            lineNumber: 242,
             columnNumber: 16
           }, this),
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Select, { pill: true, options: choiceOptions, value: single, onChange: setSingle, placeholder: "Pick a choice", className: "w-56" }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 231,
+            lineNumber: 243,
             columnNumber: 16
           }, this)
         ] }, void 0, true, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 229,
+          lineNumber: 241,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { children: [
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Label, { children: "multiple, searchable, records" }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 234,
+            lineNumber: 246,
             columnNumber: 16
           }, this),
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Select, { multiple: true, searchable: true, options: recordOptions, value: many, onChange: setMany, placeholder: "Pick records", className: "w-80" }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 235,
+            lineNumber: 247,
             columnNumber: 16
           }, this)
         ] }, void 0, true, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 233,
+          lineNumber: 245,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { children: [
@@ -52295,7 +52636,7 @@ export interface AiText {
             ", maxItems 50"
           ] }, void 0, true, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 238,
+            lineNumber: 250,
             columnNumber: 16
           }, this),
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(
@@ -52313,20 +52654,20 @@ export interface AiText {
             false,
             {
               fileName: "frontend/tester/panels/Components.tsx",
-              lineNumber: 239,
+              lineNumber: 251,
               columnNumber: 16
             },
             this
           )
         ] }, void 0, true, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 237,
+          lineNumber: 249,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { children: [
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Label, { children: "renderOption + disabled option" }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 250,
+            lineNumber: 262,
             columnNumber: 16
           }, this),
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(
@@ -52340,14 +52681,14 @@ export interface AiText {
                 " ",
                 /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Circle, { color: opt.color ?? null }, void 0, false, {
                   fileName: "frontend/tester/panels/Components.tsx",
-                  lineNumber: 257,
+                  lineNumber: 269,
                   columnNumber: 54
                 }, this),
                 " ",
                 opt.label
               ] }, void 0, true, {
                 fileName: "frontend/tester/panels/Components.tsx",
-                lineNumber: 256,
+                lineNumber: 268,
                 columnNumber: 22
               }, this),
               className: "w-56"
@@ -52356,35 +52697,35 @@ export interface AiText {
             false,
             {
               fileName: "frontend/tester/panels/Components.tsx",
-              lineNumber: 251,
+              lineNumber: 263,
               columnNumber: 16
             },
             this
           )
         ] }, void 0, true, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 249,
+          lineNumber: 261,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { children: [
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Label, { children: "disabled, empty" }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 264,
+            lineNumber: 276,
             columnNumber: 16
           }, this),
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Select, { disabled: true, options: [], placeholder: "Nothing", className: "w-40" }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 265,
+            lineNumber: 277,
             columnNumber: 16
           }, this)
         ] }, void 0, true, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 263,
+          lineNumber: 275,
           columnNumber: 13
         }, this)
       ] }, void 0, true, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 228,
+        lineNumber: 240,
         columnNumber: 10
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Text, { variant: "muted", className: "mt-2", children: [
@@ -52396,12 +52737,12 @@ export interface AiText {
         grouped ?? "\u2014"
       ] }, void 0, true, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 268,
+        lineNumber: 280,
         columnNumber: 10
       }, this)
     ] }, void 0, true, {
       fileName: "frontend/tester/panels/Components.tsx",
-      lineNumber: 227,
+      lineNumber: 239,
       columnNumber: 7
     }, this);
   }
@@ -52416,27 +52757,27 @@ export interface AiText {
         Object.entries(row.fields).map(([key, value]) => /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { children: [
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Label, { children: meta.tables[tableKey].fields[key]?.name ?? key }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 287,
+            lineNumber: 299,
             columnNumber: 22
           }, this),
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(RecordCellValue, { value }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 288,
+            lineNumber: 300,
             columnNumber: 22
           }, this)
         ] }, key, true, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 286,
+          lineNumber: 298,
           columnNumber: 19
         }, this)),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Button, { onClick: close, children: "Close" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 291,
+          lineNumber: 303,
           columnNumber: 16
         }, this)
       ] }, void 0, true, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 284,
+        lineNumber: 296,
         columnNumber: 13
       }, this)
     });
@@ -52444,41 +52785,41 @@ export interface AiText {
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Popover, { side: "bottom", align: "start", trapFocus: true, children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Popover.Trigger, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Button, { variant: "outline", children: "Popover with a form" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 301,
+          lineNumber: 313,
           columnNumber: 19
         }, this) }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 300,
+          lineNumber: 312,
           columnNumber: 16
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Popover.Content, { className: "p-3 w-64 flex flex-col gap-2", children: [
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Label, { htmlFor: "pop-in", children: "Name" }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 304,
+            lineNumber: 316,
             columnNumber: 19
           }, this),
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Input, { id: "pop-in", placeholder: "focus is trapped here" }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 305,
+            lineNumber: 317,
             columnNumber: 19
           }, this),
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Popover.Close, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Button, { size: "sm", children: "Done" }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 307,
+            lineNumber: 319,
             columnNumber: 22
           }, this) }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 306,
+            lineNumber: 318,
             columnNumber: 19
           }, this)
         ] }, void 0, true, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 303,
+          lineNumber: 315,
           columnNumber: 16
         }, this)
       ] }, void 0, true, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 299,
+        lineNumber: 311,
         columnNumber: 13
       }, this),
       ["top", "right", "bottom", "left"].map((side) => /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Tooltip, { children: [
@@ -52487,11 +52828,11 @@ export interface AiText {
           side
         ] }, void 0, true, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 314,
+          lineNumber: 326,
           columnNumber: 22
         }, this) }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 313,
+          lineNumber: 325,
           columnNumber: 19
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Tooltip.Content, { side, children: [
@@ -52499,68 +52840,68 @@ export interface AiText {
           side
         ] }, void 0, true, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 318,
+          lineNumber: 330,
           columnNumber: 19
         }, this)
       ] }, side, true, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 312,
+        lineNumber: 324,
         columnNumber: 16
       }, this)),
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Dialog.Root, { children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Dialog.Trigger, { asChild: true, children: /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Button, { children: "Dialog with a Select" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 323,
+          lineNumber: 335,
           columnNumber: 19
         }, this) }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 322,
+          lineNumber: 334,
           columnNumber: 16
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Dialog.Portal, { children: [
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Dialog.Overlay, {}, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 326,
+            lineNumber: 338,
             columnNumber: 19
           }, this),
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Dialog.Content, { className: "p-4 w-96 flex flex-col gap-3", children: [
             /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Dialog.Title, { children: "Pick a record" }, void 0, false, {
               fileName: "frontend/tester/panels/Components.tsx",
-              lineNumber: 328,
+              lineNumber: 340,
               columnNumber: 22
             }, this),
             /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Dialog.Description, { children: "The Select menu must render above the dialog overlay." }, void 0, false, {
               fileName: "frontend/tester/panels/Components.tsx",
-              lineNumber: 329,
+              lineNumber: 341,
               columnNumber: 22
             }, this),
             /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Select, { searchable: true, options, value: dialogChoice, onChange: setDialogChoice }, void 0, false, {
               fileName: "frontend/tester/panels/Components.tsx",
-              lineNumber: 330,
+              lineNumber: 342,
               columnNumber: 22
             }, this),
             /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Dialog.Close, { asChild: true, children: /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Button, { variant: "outline", children: "Close" }, void 0, false, {
               fileName: "frontend/tester/panels/Components.tsx",
-              lineNumber: 332,
+              lineNumber: 344,
               columnNumber: 25
             }, this) }, void 0, false, {
               fileName: "frontend/tester/panels/Components.tsx",
-              lineNumber: 331,
+              lineNumber: 343,
               columnNumber: 22
             }, this)
           ] }, void 0, true, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 327,
+            lineNumber: 339,
             columnNumber: 19
           }, this)
         ] }, void 0, true, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 325,
+          lineNumber: 337,
           columnNumber: 16
         }, this)
       ] }, void 0, true, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 321,
+        lineNumber: 333,
         columnNumber: 13
       }, this),
       ["right", "left", "top", "bottom"].map((side) => /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Sheet.Root, { children: [
@@ -52569,17 +52910,17 @@ export interface AiText {
           side
         ] }, void 0, true, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 340,
+          lineNumber: 352,
           columnNumber: 22
         }, this) }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 339,
+          lineNumber: 351,
           columnNumber: 19
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Sheet.Portal, { children: [
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Sheet.Overlay, {}, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 343,
+            lineNumber: 355,
             columnNumber: 22
           }, this),
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Sheet.Content, { side, className: "p-4", children: [
@@ -52588,36 +52929,36 @@ export interface AiText {
               side
             ] }, void 0, true, {
               fileName: "frontend/tester/panels/Components.tsx",
-              lineNumber: 345,
+              lineNumber: 357,
               columnNumber: 25
             }, this),
             /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Sheet.Description, { children: "Escape, overlay click or the button closes it." }, void 0, false, {
               fileName: "frontend/tester/panels/Components.tsx",
-              lineNumber: 346,
+              lineNumber: 358,
               columnNumber: 25
             }, this),
             /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Sheet.Close, { asChild: true, children: /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Button, { className: "mt-3", children: "Close" }, void 0, false, {
               fileName: "frontend/tester/panels/Components.tsx",
-              lineNumber: 348,
+              lineNumber: 360,
               columnNumber: 28
             }, this) }, void 0, false, {
               fileName: "frontend/tester/panels/Components.tsx",
-              lineNumber: 347,
+              lineNumber: 359,
               columnNumber: 25
             }, this)
           ] }, void 0, true, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 344,
+            lineNumber: 356,
             columnNumber: 22
           }, this)
         ] }, void 0, true, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 342,
+          lineNumber: 354,
           columnNumber: 19
         }, this)
       ] }, side, true, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 338,
+        lineNumber: 350,
         columnNumber: 16
       }, this)),
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Button, { variant: "outline", disabled: !rows[0], onClick: () => rows[0] && showRecord(rows[0]), children: [
@@ -52626,16 +52967,16 @@ export interface AiText {
         "\u201D"
       ] }, void 0, true, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 354,
+        lineNumber: 366,
         columnNumber: 13
       }, this)
     ] }, void 0, true, {
       fileName: "frontend/tester/panels/Components.tsx",
-      lineNumber: 298,
+      lineNumber: 310,
       columnNumber: 10
     }, this) }, void 0, false, {
       fileName: "frontend/tester/panels/Components.tsx",
-      lineNumber: 297,
+      lineNumber: 309,
       columnNumber: 7
     }, this);
   }
@@ -52646,68 +52987,68 @@ export interface AiText {
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { className: "flex flex-wrap items-center gap-2", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Button, { onClick: () => toast.info("Info toast"), children: "info" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 368,
+          lineNumber: 380,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Button, { variant: "secondary", onClick: () => toast.warning("Warning toast"), children: "warning" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 369,
+          lineNumber: 381,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Button, { variant: "destructive", onClick: () => toast.error("Error toast (role=alert)"), children: "error" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 372,
+          lineNumber: 384,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Button, { variant: "outline", onClick: () => toast.toast("Debounced by key", { key: "k", delay: 400 }), children: "debounced \xD71" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 375,
+          lineNumber: 387,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Button, { variant: "outline", onClick: () => toast.toast("Sticky 10s", { duration: 1e4 }), children: "10 s" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 378,
+          lineNumber: 390,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Button, { variant: "ghost", onClick: () => toast.clear(), children: "clear" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 381,
+          lineNumber: 393,
           columnNumber: 13
         }, this),
         ["xs", "sm", "base", "md", "lg", "xl"].map((size) => /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Spinner, { size, "aria-label": size }, size, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 385,
+          lineNumber: 397,
           columnNumber: 16
         }, this)),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Toggle, { checked: pending, onChange: setPending, label: "LoadingOverlay" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 387,
+          lineNumber: 399,
           columnNumber: 13
         }, this)
       ] }, void 0, true, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 367,
+        lineNumber: 379,
         columnNumber: 10
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { className: "relative h-24 mt-2 rounded-md border border-dashed border-gray-gray300 dark:border-gray-gray600 flex items-center justify-center", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Text, { variant: "muted", children: "content under the overlay" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 390,
+          lineNumber: 402,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(LoadingOverlay, { pending, label: "Loading\u2026", delay: 0 }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 391,
+          lineNumber: 403,
           columnNumber: 13
         }, this)
       ] }, void 0, true, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 389,
+        lineNumber: 401,
         columnNumber: 10
       }, this)
     ] }, void 0, true, {
       fileName: "frontend/tester/panels/Components.tsx",
-      lineNumber: 366,
+      lineNumber: 378,
       columnNumber: 7
     }, this);
   }
@@ -52718,86 +53059,86 @@ export interface AiText {
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Table2, { className: "mb-4", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(TableCaption, { children: "Static table: header, body, footer, caption" }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 403,
+          lineNumber: 415,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(TableHeader, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(TableRow, { children: [
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(TableHead, { children: "Table" }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 406,
+            lineNumber: 418,
             columnNumber: 19
           }, this),
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(TableHead, { className: "text-right", children: "Fields" }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 407,
+            lineNumber: 419,
             columnNumber: 19
           }, this)
         ] }, void 0, true, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 405,
+          lineNumber: 417,
           columnNumber: 16
         }, this) }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 404,
+          lineNumber: 416,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(TableBody, { children: tableKeys().map((key) => /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(TableRow, { children: [
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(TableCell, { children: meta.tables[key].name }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 413,
+            lineNumber: 425,
             columnNumber: 22
           }, this),
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(TableCell, { className: "text-right", children: Object.keys(meta.tables[key].fields).length }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 414,
+            lineNumber: 426,
             columnNumber: 22
           }, this)
         ] }, key, true, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 412,
+          lineNumber: 424,
           columnNumber: 19
         }, this)) }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 410,
+          lineNumber: 422,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(TableFooter, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(TableRow, { children: [
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(TableCell, { children: "Total" }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 420,
+            lineNumber: 432,
             columnNumber: 19
           }, this),
           /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(TableCell, { className: "text-right", children: tableKeys().reduce((n, k) => n + Object.keys(meta.tables[k].fields).length, 0) }, void 0, false, {
             fileName: "frontend/tester/panels/Components.tsx",
-            lineNumber: 421,
+            lineNumber: 433,
             columnNumber: 19
           }, this)
         ] }, void 0, true, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 419,
+          lineNumber: 431,
           columnNumber: 16
         }, this) }, void 0, false, {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 418,
+          lineNumber: 430,
           columnNumber: 13
         }, this)
       ] }, void 0, true, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 402,
+        lineNumber: 414,
         columnNumber: 10
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { className: "flex gap-2 items-center my-6", children: /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Toggle, { checked: loading, onChange: setLoading, label: "Set table below in loading state" }, void 0, false, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 427,
+        lineNumber: 439,
         columnNumber: 13
       }, this) }, void 0, false, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 426,
+        lineNumber: 438,
         columnNumber: 10
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Text, { variant: "muted", children: "Typed shorthand columns, custom cell, action column, zebra rowClassName:" }, void 0, false, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 429,
+        lineNumber: 441,
         columnNumber: 10
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(
@@ -52815,7 +53156,7 @@ export interface AiText {
               header: "custom cell",
               cell: ({ record }) => /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Badge, { opts: { name: record.name.slice(0, 20) || "\u2014", color: "purpleLight2" } }, void 0, false, {
                 fileName: "frontend/tester/panels/Components.tsx",
-                lineNumber: 441,
+                lineNumber: 453,
                 columnNumber: 58
               }, this),
               accessor: (r) => r.name
@@ -52828,23 +53169,461 @@ export interface AiText {
         false,
         {
           fileName: "frontend/tester/panels/Components.tsx",
-          lineNumber: 430,
+          lineNumber: 442,
           columnNumber: 10
         },
         this
       ),
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { className: "mt-3", children: /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(RecordTable, { records: [], emptyMessage: "Empty state: no records match.", columns: fieldKeys.slice(0, 2) }, void 0, false, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 449,
+        lineNumber: 461,
         columnNumber: 13
       }, this) }, void 0, false, {
         fileName: "frontend/tester/panels/Components.tsx",
-        lineNumber: 448,
+        lineNumber: 460,
         columnNumber: 10
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Text, { variant: "muted", className: "mt-6", children: "Expandable rows (renderExpanded): the first row opens by default; a row with no fields has no toggle." }, void 0, false, {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 463,
+        columnNumber: 10
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(
+        RecordTable,
+        {
+          records: rows.slice(0, 5),
+          columns: [{ id: "record", header: tableKey, accessor: (r) => r.name }, ...fieldKeys.slice(0, 2)],
+          canExpand: (r) => Object.keys(r.fields).length > 0,
+          defaultExpanded: (_, i) => i === 0,
+          renderExpanded: ({ record }) => /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("dl", { className: "grid gap-x-4 gap-y-1 p-3", style: { gridTemplateColumns: "max-content 1fr" }, children: Object.entries(record.fields).map(([key, value]) => /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(import_react13.default.Fragment, { children: [
+            /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("dt", { className: "text-gray-gray400", children: meta.tables[tableKey]?.fields[key]?.name ?? key }, void 0, false, {
+              fileName: "frontend/tester/panels/Components.tsx",
+              lineNumber: 473,
+              columnNumber: 25
+            }, this),
+            /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("dd", { className: "m-0", children: /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(RecordCellValue, { value }, void 0, false, {
+              fileName: "frontend/tester/panels/Components.tsx",
+              lineNumber: 474,
+              columnNumber: 45
+            }, this) }, void 0, false, {
+              fileName: "frontend/tester/panels/Components.tsx",
+              lineNumber: 474,
+              columnNumber: 25
+            }, this)
+          ] }, key, true, {
+            fileName: "frontend/tester/panels/Components.tsx",
+            lineNumber: 472,
+            columnNumber: 22
+          }, this)) }, void 0, false, {
+            fileName: "frontend/tester/panels/Components.tsx",
+            lineNumber: 470,
+            columnNumber: 16
+          }, this)
+        },
+        void 0,
+        false,
+        {
+          fileName: "frontend/tester/panels/Components.tsx",
+          lineNumber: 464,
+          columnNumber: 10
+        },
+        this
+      )
+    ] }, void 0, true, {
+      fileName: "frontend/tester/panels/Components.tsx",
+      lineNumber: 413,
+      columnNumber: 7
+    }, this);
+  }
+  function NestedTables({ rows, tableKey }) {
+    const spec = widestInclude(tableKey, 2);
+    const [depth, setDepth] = (0, import_react13.useState)("1");
+    const [expanded, setExpanded] = (0, import_react13.useState)({});
+    const paths = Object.keys(expanded).filter((path) => expanded[path]);
+    return /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(
+      Section,
+      {
+        title: "NestedRecordTable",
+        hint: /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(import_jsx_dev_runtime2.Fragment, { children: [
+          "Rows of ",
+          /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Code, { children: tableKey }, void 0, false, {
+            fileName: "frontend/tester/panels/Components.tsx",
+            lineNumber: 492,
+            columnNumber: 26
+          }, this),
+          " hydrated with ",
+          /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Code, { children: JSON.stringify(spec).replace(/"/g, "") }, void 0, false, {
+            fileName: "frontend/tester/panels/Components.tsx",
+            lineNumber: 492,
+            columnNumber: 64
+          }, this),
+          ": one sub-table per included link, each with its own columns."
+        ] }, void 0, true, {
+          fileName: "frontend/tester/panels/Components.tsx",
+          lineNumber: 492,
+          columnNumber: 16
+        }, this),
+        children: [
+          /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { className: "flex flex-wrap items-center gap-2 mb-2", children: [
+            /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(
+              ButtonToggle,
+              {
+                options: [
+                  { value: "0", label: "all collapsed" },
+                  { value: "1", label: "root open" },
+                  { value: "true", label: "all open" }
+                ],
+                value: depth,
+                onChange: (value) => {
+                  setDepth(String(value));
+                  setExpanded({});
+                },
+                size: "sm"
+              },
+              void 0,
+              false,
+              {
+                fileName: "frontend/tester/panels/Components.tsx",
+                lineNumber: 495,
+                columnNumber: 13
+              },
+              this
+            ),
+            /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Text, { variant: "muted", children: [
+              "controlled expansion \xB7 ",
+              paths.length ? paths.join(", ") : "no overrides yet"
+            ] }, void 0, true, {
+              fileName: "frontend/tester/panels/Components.tsx",
+              lineNumber: 505,
+              columnNumber: 13
+            }, this)
+          ] }, void 0, true, {
+            fileName: "frontend/tester/panels/Components.tsx",
+            lineNumber: 494,
+            columnNumber: 10
+          }, this),
+          /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(
+            NestedRecordTable,
+            {
+              records: rows.slice(0, 6),
+              columns: [{ id: "record", header: meta.tables[tableKey]?.name ?? tableKey, accessor: (r) => r.name }],
+              nested: nestedLevels(tableKey, spec),
+              defaultExpanded: depth === "true" ? true : Number(depth),
+              expanded,
+              onExpandedChange: setExpanded,
+              caption: `${tableKey}: first 6 records, ${Object.keys(spec).length} included link(s)`
+            },
+            void 0,
+            false,
+            {
+              fileName: "frontend/tester/panels/Components.tsx",
+              lineNumber: 507,
+              columnNumber: 10
+            },
+            this
+          )
+        ]
+      },
+      void 0,
+      true,
+      {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 490,
+        columnNumber: 7
+      },
+      this
+    );
+  }
+  function GroupTables({ rows, tableKey }) {
+    const fields = meta.tables[tableKey]?.fields ?? {};
+    const groupable = Object.keys(fields).filter(
+      (k) => ["singleSelect", "multipleSelects", "singleCollaborator", "multipleCollaborators", "multipleRecordLinks", "checkbox"].includes(fields[k].type)
+    );
+    const numeric = Object.keys(fields).find((k) => ["number", "currency", "percent", "duration", "count", "rating"].includes(fields[k].type));
+    const [first, setFirst] = (0, import_react13.useState)(groupable[0] ?? Object.keys(fields)[0] ?? "");
+    const [second, setSecond] = (0, import_react13.useState)(groupable[1] ?? "");
+    const [placement, setPlacement] = (0, import_react13.useState)("header");
+    const groupFields = second && second !== first ? [first, second] : [first];
+    const groups = first ? groupRecords(rows, { fields: groupFields }) : [];
+    const fieldOptions = Object.keys(fields).map((k) => ({ value: k, label: fields[k].name ?? k }));
+    const sum = (records) => records.reduce((total, r) => total + (typeof r.fields[numeric ?? ""] === "number" ? r.fields[numeric ?? ""] : 0), 0);
+    return /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Section, { title: "GroupTable", hint: /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(import_jsx_dev_runtime2.Fragment, { children: [
+      "groupRecords output as is; a second field nests the groups. Summary: distinct count",
+      numeric ? /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(import_jsx_dev_runtime2.Fragment, { children: [
+        " and the sum of ",
+        /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Code, { children: numeric }, void 0, false, {
+          fileName: "frontend/tester/panels/Components.tsx",
+          lineNumber: 534,
+          columnNumber: 155
+        }, this)
+      ] }, void 0, true, {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 534,
+        columnNumber: 137
+      }, this) : null,
+      "."
+    ] }, void 0, true, {
+      fileName: "frontend/tester/panels/Components.tsx",
+      lineNumber: 534,
+      columnNumber: 41
+    }, this), children: [
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { className: "flex flex-wrap items-center gap-2 mb-2", children: [
+        /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Select, { options: fieldOptions, value: first, onChange: (v) => setFirst(v ?? ""), size: "sm", searchable: true, className: "w-52" }, void 0, false, {
+          fileName: "frontend/tester/panels/Components.tsx",
+          lineNumber: 536,
+          columnNumber: 13
+        }, this),
+        /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Select, { options: [{ value: "", label: "(no second level)" }, ...fieldOptions], value: second, onChange: (v) => setSecond(v ?? ""), size: "sm", searchable: true, className: "w-52" }, void 0, false, {
+          fileName: "frontend/tester/panels/Components.tsx",
+          lineNumber: 537,
+          columnNumber: 13
+        }, this),
+        /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(
+          ButtonToggle,
+          {
+            options: [
+              { value: "header", label: "summary in header" },
+              { value: "footer", label: "summary in footer" }
+            ],
+            value: placement,
+            onChange: (value) => setPlacement(value),
+            size: "sm"
+          },
+          void 0,
+          false,
+          {
+            fileName: "frontend/tester/panels/Components.tsx",
+            lineNumber: 538,
+            columnNumber: 13
+          },
+          this
+        ),
+        /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Badge, { opts: { name: `${groups.length} groups`, color: "tealLight2" } }, void 0, false, {
+          fileName: "frontend/tester/panels/Components.tsx",
+          lineNumber: 547,
+          columnNumber: 13
+        }, this)
+      ] }, void 0, true, {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 535,
+        columnNumber: 10
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(
+        GroupTable,
+        {
+          groups,
+          columns: [
+            { id: "record", header: meta.tables[tableKey]?.name ?? tableKey, accessor: (r) => r.name },
+            ...groupFields,
+            ...numeric ? [{ id: numeric, align: "right" }] : []
+          ],
+          groupLabels: groupFields.map((k) => fields[k]?.name ?? k),
+          summary: (records) => __spreadValues({
+            record: `${new Set(records.map((r) => r.id)).size} distinct`
+          }, numeric ? { [numeric]: sum(records).toLocaleString() } : {}),
+          summaryPlacement: placement,
+          defaultExpanded: 1,
+          resizable: true
+        },
+        void 0,
+        false,
+        {
+          fileName: "frontend/tester/panels/Components.tsx",
+          lineNumber: 549,
+          columnNumber: 10
+        },
+        this
+      )
+    ] }, void 0, true, {
+      fileName: "frontend/tester/panels/Components.tsx",
+      lineNumber: 534,
+      columnNumber: 7
+    }, this);
+  }
+  function InlineEdits({ choices }) {
+    const toast = useToast();
+    const [name, setName] = (0, import_react13.useState)("Website redesign");
+    const [hours, setHours] = (0, import_react13.useState)(12.5);
+    const [amount, setAmount] = (0, import_react13.useState)(1999.99);
+    const [choice, setChoice] = (0, import_react13.useState)(choices[0]?.id ?? "");
+    const usd = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format;
+    const commit = (set, label) => (value) => {
+      set(value);
+      toast.info(`${label} \u2192 ${String(value)}`);
+    };
+    return /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Section, { title: "InlineEdit", hint: "Click or Enter to edit, Enter/blur saves, Escape cancels. The value only commits when it changed; a thrown error keeps the draft open.", children: /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { className: "grid gap-x-6 gap-y-2 items-center", style: { gridTemplateColumns: "max-content 1fr" }, children: [
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Label, { children: "text" }, void 0, false, {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 583,
+        columnNumber: 13
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(InlineEdit, { label: "Name", value: name, onCommit: commit(setName, "name"), placeholder: "Untitled" }, void 0, false, {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 584,
+        columnNumber: 13
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Label, { children: "number, right aligned" }, void 0, false, {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 585,
+        columnNumber: 13
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(InlineEdit, { label: "Hours", value: hours, onCommit: commit(setHours, "hours"), align: "right", className: "w-32" }, void 0, false, {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 586,
+        columnNumber: 13
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Label, { children: "currency: format / toInputValue / parse" }, void 0, false, {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 587,
+        columnNumber: 13
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(
+        InlineEdit,
+        {
+          label: "Amount",
+          value: amount,
+          onCommit: commit(setAmount, "amount"),
+          format: usd,
+          toInputValue: (value) => value.toFixed(2),
+          parse: (draft) => {
+            const number = Number(draft.replace(/[^0-9.-]/g, ""));
+            if (!draft.trim() || !Number.isFinite(number)) throw new Error("Enter an amount like 1999.99");
+            return number;
+          },
+          align: "right",
+          bold: true,
+          className: "w-40"
+        },
+        void 0,
+        false,
+        {
+          fileName: "frontend/tester/panels/Components.tsx",
+          lineNumber: 588,
+          columnNumber: 13
+        },
+        this
+      ),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Label, { children: "async commit that rejects empty" }, void 0, false, {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 603,
+        columnNumber: 13
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(
+        InlineEdit,
+        {
+          label: "Required name",
+          value: name,
+          onCommit: async (value) => {
+            await new Promise((resolve) => setTimeout(resolve, 400));
+            if (!value.trim()) throw new Error("Name is required.");
+            commit(setName, "name")(value);
+          }
+        },
+        void 0,
+        false,
+        {
+          fileName: "frontend/tester/panels/Components.tsx",
+          lineNumber: 604,
+          columnNumber: 13
+        },
+        this
+      ),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Label, { children: "renderValue + renderEditor (Select)" }, void 0, false, {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 613,
+        columnNumber: 13
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(
+        InlineEdit,
+        {
+          label: "Status",
+          value: choice,
+          onCommit: commit(setChoice, "status"),
+          renderValue: (value) => /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Badge, { opts: choices.find((c) => c.id === value) ?? { name: "(none)" } }, void 0, false, {
+            fileName: "frontend/tester/panels/Components.tsx",
+            lineNumber: 619,
+            columnNumber: 38
+          }, this),
+          renderEditor: ({ draft, setDraft, commit: save, cancel }) => /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { className: "flex items-center gap-1", children: [
+            /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(
+              Select,
+              {
+                options: choices.map((c) => ({ value: c.id, label: c.name, color: c.color })),
+                value: draft || void 0,
+                onChange: (v) => setDraft(v ?? ""),
+                size: "sm",
+                className: "w-48"
+              },
+              void 0,
+              false,
+              {
+                fileName: "frontend/tester/panels/Components.tsx",
+                lineNumber: 622,
+                columnNumber: 22
+              },
+              this
+            ),
+            /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Button, { size: "xs", onClick: () => void save(), children: "Save" }, void 0, false, {
+              fileName: "frontend/tester/panels/Components.tsx",
+              lineNumber: 629,
+              columnNumber: 22
+            }, this),
+            /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Button, { size: "xs", variant: "ghost", onClick: cancel, children: "Cancel" }, void 0, false, {
+              fileName: "frontend/tester/panels/Components.tsx",
+              lineNumber: 630,
+              columnNumber: 22
+            }, this)
+          ] }, void 0, true, {
+            fileName: "frontend/tester/panels/Components.tsx",
+            lineNumber: 621,
+            columnNumber: 19
+          }, this)
+        },
+        void 0,
+        false,
+        {
+          fileName: "frontend/tester/panels/Components.tsx",
+          lineNumber: 615,
+          columnNumber: 13
+        },
+        this
+      ),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Label, { children: "sizes, variants, disabled" }, void 0, false, {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 634,
+        columnNumber: 13
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { className: "flex flex-wrap items-center gap-3", children: [
+        ["xs", "sm", "base", "lg"].map((size) => /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(InlineEdit, { label: `Size ${size}`, size, value: size, onCommit: () => {
+        } }, size, false, {
+          fileName: "frontend/tester/panels/Components.tsx",
+          lineNumber: 637,
+          columnNumber: 19
+        }, this)),
+        /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(InlineEdit, { label: "Heading", variant: "heading", value: "heading variant", onCommit: () => {
+        } }, void 0, false, {
+          fileName: "frontend/tester/panels/Components.tsx",
+          lineNumber: 639,
+          columnNumber: 16
+        }, this),
+        /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(InlineEdit, { label: "Disabled", value: "disabled", disabled: true, onCommit: () => {
+        } }, void 0, false, {
+          fileName: "frontend/tester/panels/Components.tsx",
+          lineNumber: 640,
+          columnNumber: 16
+        }, this)
+      ] }, void 0, true, {
+        fileName: "frontend/tester/panels/Components.tsx",
+        lineNumber: 635,
+        columnNumber: 13
       }, this)
     ] }, void 0, true, {
       fileName: "frontend/tester/panels/Components.tsx",
-      lineNumber: 401,
+      lineNumber: 582,
+      columnNumber: 10
+    }, this) }, void 0, false, {
+      fileName: "frontend/tester/panels/Components.tsx",
+      lineNumber: 581,
       columnNumber: 7
     }, this);
   }
@@ -52854,6 +53633,7 @@ export interface AiText {
       "use strict";
       import_react13 = __toESM(require_react());
       init_lucide_react();
+      init_interface2();
       init_dist();
       init_dyn();
       init_kit();
@@ -53512,6 +54292,8 @@ export interface AiText {
     const [search2, setSearch] = (0, import_react16.useState)("");
     const [fuzzy, setFuzzy] = (0, import_react16.useState)(false);
     const [groupBy, setGroupBy] = (0, import_react16.useState)(fieldKeys.find((k) => meta.tables[tableKey].fields[k].type === "singleSelect") ?? fieldKeys[0]);
+    const [groupBy2, setGroupBy2] = (0, import_react16.useState)("");
+    const [placement, setPlacement] = (0, import_react16.useState)("header");
     const values = value.split(",").map((v) => v.trim()).filter(Boolean);
     const filter = op === "empty" || op === "notEmpty" ? { field, op } : op === "anyOf" || op === "noneOf" ? { field, op, value: values } : { field, op, value: values[0] ?? "" };
     const filtered = dyn.useQuery(tableKey, { where: [filter] });
@@ -53526,7 +54308,8 @@ export interface AiText {
     const not = ids(query(rows, { where: [{ field, op: "not", value: sample }] }));
     const both = ids(query(rows, { match: "all", where: [{ field, op: "notEmpty" }, { field, op: "is", value: sample }] }));
     const either = ids(query(rows, { match: "any", where: [{ field, op: "empty" }, { field, op: "notEmpty" }] }));
-    const groups = groupRecords(rows, { fields: [groupBy] });
+    const groupFields = groupBy2 && groupBy2 !== groupBy ? [groupBy, groupBy2] : [groupBy];
+    const groups = groupRecords(rows, { fields: groupFields });
     const groupedIds = new Set(groups.flatMap((g) => g.records.map((r) => r.id)));
     const checks = [
       check(`empty \u222A notEmpty = all (${field})`, sameSet(/* @__PURE__ */ new Set([...empty, ...notEmpty]), all)),
@@ -53543,135 +54326,182 @@ export interface AiText {
     return /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(import_jsx_dev_runtime7.Fragment, { children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("div", { className: "mb-3", children: /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(TablePicker, { value: tableKey, onChange: onPick }, void 0, false, {
         fileName: "frontend/tester/panels/Queries.tsx",
-        lineNumber: 71,
+        lineNumber: 74,
         columnNumber: 9
       }, this) }, void 0, false, {
-        fileName: "frontend/tester/panels/Queries.tsx",
-        lineNumber: 70,
-        columnNumber: 7
-      }, this),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(CheckList, { title: "Query algebra", checks }, void 0, false, {
         fileName: "frontend/tester/panels/Queries.tsx",
         lineNumber: 73,
         columnNumber: 7
       }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(CheckList, { title: "Query algebra", checks }, void 0, false, {
+        fileName: "frontend/tester/panels/Queries.tsx",
+        lineNumber: 76,
+        columnNumber: 7
+      }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(Section, { title: "Filter", hint: /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(import_jsx_dev_runtime7.Fragment, { children: "Comma-separate values for anyOf/noneOf. Selects/links match by id or name." }, void 0, false, {
         fileName: "frontend/tester/panels/Queries.tsx",
-        lineNumber: 75,
+        lineNumber: 78,
         columnNumber: 37
       }, this), children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("div", { className: "flex flex-wrap items-center gap-2 mb-2", children: [
           /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(Select, { options: fieldOptions, value: field, onChange: setField, size: "sm", searchable: true, className: "w-56" }, void 0, false, {
             fileName: "frontend/tester/panels/Queries.tsx",
-            lineNumber: 77,
+            lineNumber: 80,
             columnNumber: 11
           }, this),
           /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(Select, { options: OPS.map((o) => ({ value: o, label: o })), value: op, onChange: (v) => setOp(v), size: "sm", className: "w-32" }, void 0, false, {
             fileName: "frontend/tester/panels/Queries.tsx",
-            lineNumber: 78,
+            lineNumber: 81,
             columnNumber: 11
           }, this),
           op !== "empty" && op !== "notEmpty" && /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(Input, { value, onChange: setValue, placeholder: sample || "value", size: "sm", className: "w-56" }, void 0, false, {
             fileName: "frontend/tester/panels/Queries.tsx",
-            lineNumber: 80,
+            lineNumber: 83,
             columnNumber: 13
           }, this),
           /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(Badge, { opts: { name: `${filtered.length} / ${rows.length}`, color: "blueLight2" } }, void 0, false, {
             fileName: "frontend/tester/panels/Queries.tsx",
-            lineNumber: 82,
+            lineNumber: 85,
             columnNumber: 11
           }, this)
         ] }, void 0, true, {
           fileName: "frontend/tester/panels/Queries.tsx",
-          lineNumber: 76,
+          lineNumber: 79,
           columnNumber: 9
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(RecordTable, { records: filtered.slice(0, 15), columns: [{ id: "n", header: "name", accessor: (r) => r.name }, field] }, void 0, false, {
           fileName: "frontend/tester/panels/Queries.tsx",
-          lineNumber: 84,
+          lineNumber: 87,
           columnNumber: 9
         }, this)
       ] }, void 0, true, {
         fileName: "frontend/tester/panels/Queries.tsx",
-        lineNumber: 75,
+        lineNumber: 78,
         columnNumber: 7
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(Section, { title: "Search", hint: "Default matcher is accent/case-insensitive tokens; fuzzy uses @airgen/ui's fuseMatcher.", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("div", { className: "flex items-center gap-2 mb-2", children: [
           /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(Input, { value: search2, onChange: setSearch, placeholder: "Search all fields\u2026", size: "sm", className: "w-72" }, void 0, false, {
             fileName: "frontend/tester/panels/Queries.tsx",
-            lineNumber: 89,
+            lineNumber: 92,
             columnNumber: 11
           }, this),
           /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(ButtonToggle, { checked: fuzzy, onChange: (v) => setFuzzy(Boolean(v)), size: "sm", children: "fuzzy" }, void 0, false, {
             fileName: "frontend/tester/panels/Queries.tsx",
-            lineNumber: 90,
+            lineNumber: 93,
             columnNumber: 11
           }, this),
           /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(Badge, { opts: { name: `${searched.length} hits`, color: "purpleLight2" } }, void 0, false, {
             fileName: "frontend/tester/panels/Queries.tsx",
-            lineNumber: 93,
+            lineNumber: 96,
             columnNumber: 11
           }, this)
         ] }, void 0, true, {
           fileName: "frontend/tester/panels/Queries.tsx",
-          lineNumber: 88,
+          lineNumber: 91,
           columnNumber: 9
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("ol", { className: "m-0 pl-5", children: searched.slice(0, 10).map((r) => /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("li", { children: r.name }, r.id, false, {
           fileName: "frontend/tester/panels/Queries.tsx",
-          lineNumber: 97,
+          lineNumber: 100,
           columnNumber: 13
         }, this)) }, void 0, false, {
           fileName: "frontend/tester/panels/Queries.tsx",
-          lineNumber: 95,
+          lineNumber: 98,
           columnNumber: 9
         }, this)
       ] }, void 0, true, {
         fileName: "frontend/tester/panels/Queries.tsx",
-        lineNumber: 87,
+        lineNumber: 90,
         columnNumber: 7
       }, this),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(Section, { title: "groupRecords", hint: /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(import_jsx_dev_runtime7.Fragment, { children: "Multi-value cells put a record in one group per value." }, void 0, false, {
+      /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(Section, { title: "groupRecords + GroupTable", hint: /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(import_jsx_dev_runtime7.Fragment, { children: "Multi-value cells put a record in one group per value; a second field nests the groups." }, void 0, false, {
         fileName: "frontend/tester/panels/Queries.tsx",
-        lineNumber: 102,
-        columnNumber: 43
+        lineNumber: 105,
+        columnNumber: 56
       }, this), children: [
-        /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(Select, { options: fieldOptions, value: groupBy, onChange: setGroupBy, size: "sm", searchable: true, className: "w-56 mb-2" }, void 0, false, {
-          fileName: "frontend/tester/panels/Queries.tsx",
-          lineNumber: 103,
-          columnNumber: 9
-        }, this),
-        /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("div", { className: "flex flex-wrap gap-2", children: groups.slice(0, 40).map((group) => /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(Badge, { opts: { name: `${group.values[0] ?? "(empty)"} \xB7 ${group.records.length}`, color: "tealLight2" } }, group.key, false, {
-          fileName: "frontend/tester/panels/Queries.tsx",
-          lineNumber: 106,
-          columnNumber: 13
-        }, this)) }, void 0, false, {
-          fileName: "frontend/tester/panels/Queries.tsx",
-          lineNumber: 104,
-          columnNumber: 9
-        }, this),
-        /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("p", { className: "text-sm text-gray-gray400", children: [
-          groups.length,
-          " groups; ",
-          /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(Code, { children: "by: name" }, void 0, false, {
+        /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)("div", { className: "flex flex-wrap items-center gap-2 mb-2", children: [
+          /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(Select, { options: fieldOptions, value: groupBy, onChange: setGroupBy, size: "sm", searchable: true, className: "w-56" }, void 0, false, {
             fileName: "frontend/tester/panels/Queries.tsx",
-            lineNumber: 110,
-            columnNumber: 35
+            lineNumber: 107,
+            columnNumber: 11
+          }, this),
+          /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(
+            Select,
+            {
+              options: [{ value: "", label: "(no second level)" }, ...fieldOptions],
+              value: groupBy2,
+              onChange: setGroupBy2,
+              size: "sm",
+              searchable: true,
+              className: "w-56"
+            },
+            void 0,
+            false,
+            {
+              fileName: "frontend/tester/panels/Queries.tsx",
+              lineNumber: 108,
+              columnNumber: 11
+            },
+            this
+          ),
+          /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(
+            ButtonToggle,
+            {
+              options: [
+                { value: "header", label: "summary: header" },
+                { value: "footer", label: "summary: footer" }
+              ],
+              value: placement,
+              onChange: (value2) => setPlacement(value2),
+              size: "sm"
+            },
+            void 0,
+            false,
+            {
+              fileName: "frontend/tester/panels/Queries.tsx",
+              lineNumber: 116,
+              columnNumber: 11
+            },
+            this
+          ),
+          /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(Badge, { opts: { name: `${groups.length} groups \xB7 by: name`, color: "tealLight2" } }, void 0, false, {
+            fileName: "frontend/tester/panels/Queries.tsx",
+            lineNumber: 125,
+            columnNumber: 11
           }, this)
         ] }, void 0, true, {
           fileName: "frontend/tester/panels/Queries.tsx",
-          lineNumber: 109,
+          lineNumber: 106,
           columnNumber: 9
-        }, this)
+        }, this),
+        /* @__PURE__ */ (0, import_jsx_dev_runtime7.jsxDEV)(
+          GroupTable,
+          {
+            groups,
+            columns: [{ id: "n", header: "name", accessor: (r) => r.name }, ...groupFields],
+            groupLabels: groupFields.map((k) => meta.tables[tableKey].fields[k].name ?? k),
+            summary: (records) => ({ n: `${records.length} rows` }),
+            summaryPlacement: placement,
+            defaultExpanded: 1
+          },
+          void 0,
+          false,
+          {
+            fileName: "frontend/tester/panels/Queries.tsx",
+            lineNumber: 127,
+            columnNumber: 9
+          },
+          this
+        )
       ] }, void 0, true, {
         fileName: "frontend/tester/panels/Queries.tsx",
-        lineNumber: 102,
+        lineNumber: 105,
         columnNumber: 7
       }, this)
     ] }, void 0, true, {
       fileName: "frontend/tester/panels/Queries.tsx",
-      lineNumber: 69,
+      lineNumber: 72,
       columnNumber: 5
     }, this);
   }
@@ -54030,33 +54860,13 @@ export interface AiText {
         lineNumber: 120,
         columnNumber: 7
       }, this),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime9.jsxDEV)(Section, { title: "Hydrated rows", hint: "Linked rows render as their primary field; the second level as nested chips.", children: /* @__PURE__ */ (0, import_jsx_dev_runtime9.jsxDEV)(
-        RecordTable,
+      /* @__PURE__ */ (0, import_jsx_dev_runtime9.jsxDEV)(Section, { title: "NestedRecordTable", hint: "One sub-table per included link, built from the same spec; root rows open by default.", children: /* @__PURE__ */ (0, import_jsx_dev_runtime9.jsxDEV)(
+        NestedRecordTable,
         {
           records: rows.slice(0, limit),
-          columns: [
-            { id: "record", header: meta.tables[tableKey].name, accessor: (r) => r.name },
-            ...linkKeys.map((fieldKey) => ({
-              id: fieldKey,
-              header: `${meta.tables[tableKey].fields[fieldKey].name ?? fieldKey} (${(includableLinks(tableKey).find((l) => l.fieldKey === fieldKey) ?? { target: "?" }).target})`,
-              cell: ({ value }) => /* @__PURE__ */ (0, import_jsx_dev_runtime9.jsxDEV)(Hydrated, { value, spec: spec[fieldKey] }, void 0, false, {
-                fileName: "frontend/tester/panels/Relations.tsx",
-                lineNumber: 131,
-                columnNumber: 52
-              }, this)
-            }))
-          ],
-          caption: rows.length > limit ? /* @__PURE__ */ (0, import_jsx_dev_runtime9.jsxDEV)("button", { type: "button", onClick: () => setLimit(limit + 50), children: [
-            "Showing ",
-            limit,
-            " of ",
-            rows.length,
-            " \u2014 show more"
-          ] }, void 0, true, {
-            fileName: "frontend/tester/panels/Relations.tsx",
-            lineNumber: 136,
-            columnNumber: 15
-          }, this) : void 0
+          columns: [{ id: "record", header: meta.tables[tableKey].name, accessor: (r) => r.name }],
+          nested: nestedLevels(tableKey, spec),
+          defaultExpanded: 1
         },
         void 0,
         false,
@@ -54070,6 +54880,47 @@ export interface AiText {
         fileName: "frontend/tester/panels/Relations.tsx",
         lineNumber: 123,
         columnNumber: 7
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime9.jsxDEV)(Section, { title: "Hydrated rows", hint: "Linked rows render as their primary field; the second level as nested chips.", children: /* @__PURE__ */ (0, import_jsx_dev_runtime9.jsxDEV)(
+        RecordTable,
+        {
+          records: rows.slice(0, limit),
+          columns: [
+            { id: "record", header: meta.tables[tableKey].name, accessor: (r) => r.name },
+            ...linkKeys.map((fieldKey) => ({
+              id: fieldKey,
+              header: `${meta.tables[tableKey].fields[fieldKey].name ?? fieldKey} (${(includableLinks(tableKey).find((l) => l.fieldKey === fieldKey) ?? { target: "?" }).target})`,
+              cell: ({ value }) => /* @__PURE__ */ (0, import_jsx_dev_runtime9.jsxDEV)(Hydrated, { value, spec: spec[fieldKey] }, void 0, false, {
+                fileName: "frontend/tester/panels/Relations.tsx",
+                lineNumber: 139,
+                columnNumber: 52
+              }, this)
+            }))
+          ],
+          caption: rows.length > limit ? /* @__PURE__ */ (0, import_jsx_dev_runtime9.jsxDEV)("button", { type: "button", onClick: () => setLimit(limit + 50), children: [
+            "Showing ",
+            limit,
+            " of ",
+            rows.length,
+            " \u2014 show more"
+          ] }, void 0, true, {
+            fileName: "frontend/tester/panels/Relations.tsx",
+            lineNumber: 144,
+            columnNumber: 15
+          }, this) : void 0
+        },
+        void 0,
+        false,
+        {
+          fileName: "frontend/tester/panels/Relations.tsx",
+          lineNumber: 132,
+          columnNumber: 9
+        },
+        this
+      ) }, void 0, false, {
+        fileName: "frontend/tester/panels/Relations.tsx",
+        lineNumber: 131,
+        columnNumber: 7
       }, this)
     ] }, void 0, true, {
       fileName: "frontend/tester/panels/Relations.tsx",
@@ -54081,14 +54932,14 @@ export interface AiText {
     const entries2 = value ?? [];
     if (entries2.length === 0) return /* @__PURE__ */ (0, import_jsx_dev_runtime9.jsxDEV)(RecordCellValue, { value: null }, void 0, false, {
       fileName: "frontend/tester/panels/Relations.tsx",
-      lineNumber: 150,
+      lineNumber: 158,
       columnNumber: 36
     }, this);
     return /* @__PURE__ */ (0, import_jsx_dev_runtime9.jsxDEV)("div", { className: "flex flex-col gap-1", children: [
       entries2.slice(0, 6).map((entry) => /* @__PURE__ */ (0, import_jsx_dev_runtime9.jsxDEV)("div", { className: "flex flex-wrap items-center gap-1", children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime9.jsxDEV)(Badge, { variant: "sm", opts: { name: entry.name || "(unnamed)", color: "blueLight2" } }, void 0, false, {
           fileName: "frontend/tester/panels/Relations.tsx",
-          lineNumber: 155,
+          lineNumber: 163,
           columnNumber: 11
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime9.jsxDEV)("span", { className: "text-sm text-gray-gray400", children: [
@@ -54096,7 +54947,7 @@ export interface AiText {
           " fields"
         ] }, void 0, true, {
           fileName: "frontend/tester/panels/Relations.tsx",
-          lineNumber: 156,
+          lineNumber: 164,
           columnNumber: 11
         }, this),
         spec !== true && Object.keys(spec).map((nested) => /* @__PURE__ */ (0, import_jsx_dev_runtime9.jsxDEV)("span", { className: "text-sm", children: [
@@ -54105,12 +54956,12 @@ export interface AiText {
           (entry.fields[nested] ?? []).map((n) => n.name).join(", ") || "\u2014"
         ] }, nested, true, {
           fileName: "frontend/tester/panels/Relations.tsx",
-          lineNumber: 159,
+          lineNumber: 167,
           columnNumber: 15
         }, this))
       ] }, entry.id, true, {
         fileName: "frontend/tester/panels/Relations.tsx",
-        lineNumber: 154,
+        lineNumber: 162,
         columnNumber: 9
       }, this)),
       entries2.length > 6 && /* @__PURE__ */ (0, import_jsx_dev_runtime9.jsxDEV)("span", { className: "text-sm text-gray-gray400", children: [
@@ -54119,12 +54970,12 @@ export interface AiText {
         " more"
       ] }, void 0, true, {
         fileName: "frontend/tester/panels/Relations.tsx",
-        lineNumber: 165,
+        lineNumber: 173,
         columnNumber: 30
       }, this)
     ] }, void 0, true, {
       fileName: "frontend/tester/panels/Relations.tsx",
-      lineNumber: 152,
+      lineNumber: 160,
       columnNumber: 5
     }, this);
   }
@@ -54790,9 +55641,9 @@ export interface AiText {
 
   // .tmp/index.js
   var ReactDOM = require_react_dom();
-  var React35 = require_react();
+  var React36 = require_react();
   var ReactDOMServer = require_server_browser();
-  window["_airtableReact"] = React35;
+  window["_airtableReact"] = React36;
   window["_airtableReactDOM"] = ReactDOM;
   window["_airtableReactDOMServer"] = ReactDOMServer;
   var didRun = false;

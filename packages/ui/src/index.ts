@@ -12,6 +12,7 @@ export {Circle, type CircleProps} from './components/Circle.js';
 export {Divide, type DivideProps} from './components/Divide.js';
 export {Icon, type IconComponent, type IconProps} from './components/Icon.js';
 export {Input, type InputProps, type InputVariant} from './components/Input.js';
+export {InlineEdit, type InlineEditProps, type InlineEditEditorContext} from './components/InlineEdit.js';
 export {Label, type LabelProps} from './components/Label.js';
 export {Portal, type PortalProps} from './components/Portal.js';
 export {ThemeProvider, type ThemeProviderProps, type ColorScheme} from './providers/ThemeProvider.js';
@@ -34,8 +35,25 @@ export {
   type RecordTableCellContext,
   type RecordTableColumn,
   type RecordTableProps,
+  type RecordTableExpandContext,
+  type RecordTableExpandedMap,
   type RecordCellValueProps,
 } from './components/Table.js';
+export {
+  NestedRecordTable,
+  type NestedRecordTableProps,
+  type NestedSpec,
+  type NestedLevel,
+  type NestedRecordKey,
+  type NestedRecordOf,
+} from './components/NestedRecordTable.js';
+export {
+  GroupTable,
+  type GroupTableProps,
+  type RecordGroup,
+  type GroupContext,
+  type GroupSummary,
+} from './components/GroupTable.js';
 export {Text, type TextProps, type TextVariant} from './components/Text.js';
 export {Toggle, type ToggleProps, type ToggleSize} from './components/Toggle.js';
 

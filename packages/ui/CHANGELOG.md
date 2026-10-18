@@ -10,6 +10,19 @@ Pre-1.0, minor versions may contain breaking changes.
 
 ### Added
 
+- **`NestedRecordTable`** — renders rows hydrated with `useRecords(key,
+  {include})`: each row expands into one sub-table per included link,
+  recursively, with per-level columns. `nested` keys are typed from the
+  hydrated record, so un-included links are rejected at compile time.
+- **`GroupTable`** — renders `groupRecords` output with one collapsible
+  group row per value and nested levels for multi-field grouping. A `summary`
+  callback supplies per-column aggregations, placed in the group row or in a
+  totals row via `summaryPlacement`.
+- Expandable rows on `RecordTable`: `renderExpanded`, `canExpand`,
+  `defaultExpanded`, and controlled `expanded`/`onExpandedChange`.
+- `TableHead` with `scope="rowgroup"` no longer shows a resize handle.
+- `InlineEdit` with a stable text/number input, currency display/parsing hooks,
+  custom editor composition, keyboard save/cancel, and async commit/error handling.
 - Optional `columnLines` on `Table` and `RecordTable` for vertical dividers
   between columns, with light and dark theme colors.
 - Opt-in column resizing on `Table` and `RecordTable` with `resizable`.

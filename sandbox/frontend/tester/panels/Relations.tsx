@@ -5,8 +5,8 @@
  * "static shape per call site" rule).
  */
 import React, {useState} from 'react';
-import {Badge, ButtonToggle, RecordCellValue, RecordTable} from '@airgen/ui';
-import {dyn, includableLinks, meta, preview, tableKeys, widestInclude, type IncludeTree, type Row} from '../dyn';
+import {Badge, ButtonToggle, NestedRecordTable, RecordCellValue, RecordTable} from '@airgen/ui';
+import {dyn, includableLinks, meta, nestedLevels, preview, tableKeys, widestInclude, type IncludeTree, type Loose, type Row} from '../dyn';
 import {check, CheckList, Code, Section, TablePicker, type Check} from '../kit';
 
 interface Stats {
@@ -119,6 +119,14 @@ function IncludeRun({tableKey, spec}: {tableKey: string; spec: IncludeTree}) {
     <>
       <Section title="include" hint={<>useRecords(<Code>{`'${tableKey}'`}</Code>, {'{'}include: <Code>{specText(spec)}</Code>{'}'})</>}>
         <CheckList title="Hydration" checks={checks} />
+      </Section>
+      <Section title="NestedRecordTable" hint="One sub-table per included link, built from the same spec; root rows open by default.">
+        <NestedRecordTable
+          records={rows.slice(0, limit)}
+          columns={[{id: 'record', header: meta.tables[tableKey].name, accessor: (r: Loose) => (r as Row).name}]}
+          nested={nestedLevels(tableKey, spec)}
+          defaultExpanded={1}
+        />
       </Section>
       <Section title="Hydrated rows" hint="Linked rows render as their primary field; the second level as nested chips.">
         <RecordTable

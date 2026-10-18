@@ -1,7 +1,7 @@
 /** useQuery / query / groupRecords / search, with set-algebra checks that hold for any data. */
 import React, {useState} from 'react';
 import {cellText, groupRecords, query, type Filter} from 'airgen/interface';
-import {Badge, ButtonToggle, Input, RecordTable, Select, fuseMatcher} from '@airgen/ui';
+import {Badge, ButtonToggle, GroupTable, Input, RecordTable, Select, fuseMatcher} from '@airgen/ui';
 import {dyn, meta, tableKeys, type Row} from '../dyn';
 import {check, CheckList, Code, Section, TablePicker, type Check} from '../kit';
 
@@ -25,6 +25,8 @@ function QueriesFor({tableKey, onPick}: {tableKey: string; onPick: (key: string)
   const [search, setSearch] = useState('');
   const [fuzzy, setFuzzy] = useState(false);
   const [groupBy, setGroupBy] = useState(fieldKeys.find(k => meta.tables[tableKey].fields[k].type === 'singleSelect') ?? fieldKeys[0]);
+  const [groupBy2, setGroupBy2] = useState('');
+  const [placement, setPlacement] = useState<'header' | 'footer'>('header');
 
   const values = value.split(',').map(v => v.trim()).filter(Boolean);
   const filter = (
@@ -49,7 +51,8 @@ function QueriesFor({tableKey, onPick}: {tableKey: string; onPick: (key: string)
   const not = ids(query(rows, {where: [{field, op: 'not', value: sample}]}));
   const both = ids(query(rows, {match: 'all', where: [{field, op: 'notEmpty'}, {field, op: 'is', value: sample}]}));
   const either = ids(query(rows, {match: 'any', where: [{field, op: 'empty'}, {field, op: 'notEmpty'}]}));
-  const groups = groupRecords(rows, {fields: [groupBy]});
+  const groupFields = groupBy2 && groupBy2 !== groupBy ? [groupBy, groupBy2] : [groupBy];
+  const groups = groupRecords(rows, {fields: groupFields});
   const groupedIds = new Set(groups.flatMap(g => g.records.map(r => r.id)));
 
   const checks: Check[] = [
@@ -99,16 +102,36 @@ function QueriesFor({tableKey, onPick}: {tableKey: string; onPick: (key: string)
         </ol>
       </Section>
 
-      <Section title="groupRecords" hint={<>Multi-value cells put a record in one group per value.</>}>
-        <Select options={fieldOptions} value={groupBy} onChange={setGroupBy} size="sm" searchable className="w-56 mb-2" />
-        <div className="flex flex-wrap gap-2">
-          {groups.slice(0, 40).map(group => (
-            <Badge key={group.key} opts={{name: `${group.values[0] ?? '(empty)'} · ${group.records.length}`, color: 'tealLight2'}} />
-          ))}
+      <Section title="groupRecords + GroupTable" hint={<>Multi-value cells put a record in one group per value; a second field nests the groups.</>}>
+        <div className="flex flex-wrap items-center gap-2 mb-2">
+          <Select options={fieldOptions} value={groupBy} onChange={setGroupBy} size="sm" searchable className="w-56" />
+          <Select
+            options={[{value: '', label: '(no second level)'}, ...fieldOptions]}
+            value={groupBy2}
+            onChange={setGroupBy2}
+            size="sm"
+            searchable
+            className="w-56"
+          />
+          <ButtonToggle
+            options={[
+              {value: 'header', label: 'summary: header'},
+              {value: 'footer', label: 'summary: footer'},
+            ]}
+            value={placement}
+            onChange={value => setPlacement(value as 'header' | 'footer')}
+            size="sm"
+          />
+          <Badge opts={{name: `${groups.length} groups · by: name`, color: 'tealLight2'}} />
         </div>
-        <p className="text-sm text-gray-gray400">
-          {groups.length} groups; <Code>{'by: name'}</Code>
-        </p>
+        <GroupTable
+          groups={groups}
+          columns={[{id: 'n', header: 'name', accessor: (r: Row) => r.name}, ...groupFields]}
+          groupLabels={groupFields.map(k => meta.tables[tableKey].fields[k].name ?? k)}
+          summary={records => ({n: `${records.length} rows`})}
+          summaryPlacement={placement}
+          defaultExpanded={1}
+        />
       </Section>
     </>
   );

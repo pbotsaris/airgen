@@ -1,9 +1,10 @@
 import * as React from 'react';
 
+import {CaretButton} from './CaretButton.js';
 import {PillOption} from './PillOption.js';
 import {Spinner} from './Spinner.js';
 import {Text} from './Text.js';
-import {cx, mergeRefs} from '../utils.js';
+import {cx, mergeRefs, useControllableState, useStableId} from '../utils.js';
 
 export interface TableProps extends React.TableHTMLAttributes<HTMLTableElement> {
   /** Classes applied to the scroll container around the native table. */
@@ -166,7 +167,8 @@ export const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
   const headerRef = React.useRef<HTMLTableCellElement | null>(null);
   const mergedRef = React.useMemo(() => mergeRefs(headerRef, ref), [ref]);
   const drag = React.useRef<{pointerId: number; x: number; width: number; direction: number} | null>(null);
-  const enabled = context !== null && resizable && scope !== 'row' && colSpan === 1 && rowSpan === 1;
+  const enabled =
+    context !== null && resizable && scope !== 'row' && scope !== 'rowgroup' && colSpan === 1 && rowSpan === 1;
   const [measuredWidth, setMeasuredWidth] = React.useState<number>();
   React.useEffect(() => {
     if (enabled) setMeasuredWidth(headerRef.current?.getBoundingClientRect().width);
@@ -339,6 +341,19 @@ export type RecordTableColumn<TRecord extends {id: string; fields: object}> =
       accessor: (record: TRecord) => unknown;
     });
 
+/** Inputs to `renderExpanded`. */
+export interface RecordTableExpandContext<TRecord> {
+  /** Record whose row is expanded. */
+  record: TRecord;
+  /** Zero-based index in the supplied records. */
+  rowIndex: number;
+  /** Always true when rendering; present for symmetry with future hooks. */
+  expanded: boolean;
+}
+
+/** Per-row expansion overrides, keyed by the row key (`String(getRowKey(record))`). */
+export type RecordTableExpandedMap = Readonly<Record<string, boolean>>;
+
 export interface RecordTableProps<TRecord extends {id: string; fields: object}> {
   /** Enable pointer and keyboard column resizing. @defaultValue false */
   resizable?: boolean;
@@ -367,7 +382,22 @@ export interface RecordTableProps<TRecord extends {id: string; fields: object}> 
   className?: string;
   /** Classes on the native table element. */
   tableClassName?: string;
+  /**
+   * Adds a leading toggle column; the result renders in a full-width row
+   * under the record while it is expanded.
+   */
+  renderExpanded?: (context: RecordTableExpandContext<TRecord>) => React.ReactNode;
+  /** Rows that get a toggle; others keep an empty leading cell. @defaultValue () => true */
+  canExpand?: (record: TRecord, rowIndex: number) => boolean;
+  /** Initial state of rows absent from `expanded`. @defaultValue false */
+  defaultExpanded?: boolean | ((record: TRecord, rowIndex: number) => boolean);
+  /** Per-row overrides of `defaultExpanded`, keyed by the row key. Controlled when supplied. */
+  expanded?: RecordTableExpandedMap;
+  /** Receives the full override map after every toggle. */
+  onExpandedChange?: (expanded: RecordTableExpandedMap) => void;
 }
+
+const NO_OVERRIDES: RecordTableExpandedMap = {};
 
 /**
  * Renders records from airgen's generated `useRecords` hook. It deliberately
@@ -375,6 +405,11 @@ export interface RecordTableProps<TRecord extends {id: string; fields: object}> 
  * compatible with every Airtable SDK flavor. Inferred columns only include
  * field keys present in the supplied records; specify `columns` to keep empty
  * fields visible. Custom cells receive the record, resolved value, and row index.
+ *
+ * Pass `renderExpanded` for expandable rows: a toggle column is prepended and
+ * the renderer's output appears in a full-width row under each expanded
+ * record. Expansion is uncontrolled by default (`defaultExpanded`); supply
+ * `expanded` and `onExpandedChange` to control it.
  *
  * @example Typed field columns and a derived column
  * ```tsx
@@ -388,6 +423,11 @@ export interface RecordTableProps<TRecord extends {id: string; fields: object}> 
  *     {id: 'double', header: 'Double hours', accessor: record => record.fields.hours * 2},
  *   ]}
  * />;
+ * ```
+ *
+ * @example Expandable rows
+ * ```tsx
+ * <RecordTable records={records} renderExpanded={({record}) => <pre>{JSON.stringify(record.fields)}</pre>} />;
  * ```
  */
 export function RecordTable<TRecord extends {id: string; fields: object}>({
@@ -403,16 +443,34 @@ export function RecordTable<TRecord extends {id: string; fields: object}>({
   tableClassName,
   resizable,
   columnLines,
+  renderExpanded,
+  canExpand,
+  defaultExpanded = false,
+  expanded: expandedProp,
+  onExpandedChange,
 }: RecordTableProps<TRecord>) {
   const columns = resolveColumns(records, columnsProp);
+  const [expanded, setExpanded] = useControllableState<RecordTableExpandedMap>({
+    value: expandedProp,
+    defaultValue: NO_OVERRIDES,
+    onChange: onExpandedChange,
+  });
+  const baseId = useStableId('record-table');
+  const lead = renderExpanded ? 1 : 0;
+  const span = Math.max(lead + columns.length, 1);
 
   return (
     <div className={className} aria-busy={loading || undefined}>
       <Table className={tableClassName} resizable={resizable} columnLines={columnLines}>
         {caption != null && <TableCaption>{caption}</TableCaption>}
-        {columns.length > 0 && (
+        {lead + columns.length > 0 && (
           <TableHeader>
             <TableRow className="hover:ag-bg-transparent dark:hover:ag-bg-transparent">
+              {renderExpanded && (
+                <TableHead scope="col" resizable={false} className="ag-w-10 ag-pr-0" style={{width: 40}}>
+                  <span className="ag-sr-only">Expand</span>
+                </TableHead>
+              )}
               {columns.map(column => (
                 <TableHead
                   key={column.id}
@@ -432,45 +490,104 @@ export function RecordTable<TRecord extends {id: string; fields: object}>({
         )}
         <TableBody>
           {loading ? (
-            <TableRow className="hover:ag-bg-transparent dark:hover:ag-bg-transparent">
-              <TableCell colSpan={Math.max(columns.length, 1)} className="ag-h-20 ag-text-center">
-                <span className="ag-inline-flex ag-items-center ag-gap-2 ag-text-neutral-500 dark:ag-text-neutral-400">
-                  <Spinner aria-label={loadingLabel} />
-                  <span>{loadingLabel}</span>
-                </span>
-              </TableCell>
-            </TableRow>
+            <TableStateRow colSpan={span}>
+              <span className="ag-inline-flex ag-items-center ag-gap-2 ag-text-neutral-500 dark:ag-text-neutral-400">
+                <Spinner aria-label={loadingLabel} />
+                <span>{loadingLabel}</span>
+              </span>
+            </TableStateRow>
           ) : records.length === 0 ? (
-            <TableRow className="hover:ag-bg-transparent dark:hover:ag-bg-transparent">
-              <TableCell colSpan={Math.max(columns.length, 1)} className="ag-h-20 ag-text-center">
-                <Text as="span" variant="muted">
-                  {emptyMessage}
-                </Text>
-              </TableCell>
-            </TableRow>
+            <TableStateRow colSpan={span}>
+              <Text as="span" variant="muted">
+                {emptyMessage}
+              </Text>
+            </TableStateRow>
           ) : (
-            records.map((record, rowIndex) => (
-              <TableRow
-                key={getRowKey(record, rowIndex)}
-                className={typeof rowClassName === 'function' ? rowClassName(record, rowIndex) : rowClassName}
-              >
-                {columns.map(column => {
-                  const value = column.accessor
-                    ? column.accessor(record)
-                    : (record.fields as Record<string, unknown>)[column.id];
+            records.map((record, rowIndex) => {
+              const key = getRowKey(record, rowIndex);
+              const expandable = renderExpanded !== undefined && (canExpand ? canExpand(record, rowIndex) : true);
+              const isOpen =
+                expandable &&
+                (expanded[String(key)] ??
+                  (typeof defaultExpanded === 'function' ? defaultExpanded(record, rowIndex) : defaultExpanded));
+              const detailId = `${baseId}-detail-${rowIndex}`;
+              const leading = !renderExpanded ? undefined : !expandable ? null : (
+                <CaretButton
+                  size="icon-xs"
+                  variant="ghost"
+                  direction="right"
+                  open={isOpen}
+                  aria-label={isOpen ? 'Collapse row' : 'Expand row'}
+                  aria-controls={isOpen ? detailId : undefined}
+                  onClick={() => setExpanded(previous => ({...previous, [String(key)]: !isOpen}))}
+                />
+              );
 
-                  return (
-                    <TableCell key={column.id} className={cx(alignmentClass(column.align), column.cellClassName)}>
-                      {column.cell ? column.cell({record, value, rowIndex}) : <RecordCellValue value={value} />}
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            ))
+              return (
+                <React.Fragment key={key}>
+                  <RecordRow
+                    record={record}
+                    rowIndex={rowIndex}
+                    columns={columns}
+                    leading={leading}
+                    className={typeof rowClassName === 'function' ? rowClassName(record, rowIndex) : rowClassName}
+                  />
+                  {isOpen && renderExpanded && (
+                    <TableRow id={detailId} className="hover:ag-bg-transparent dark:hover:ag-bg-transparent">
+                      <TableCell colSpan={span} className="ag-p-0 ag-bg-neutral-50/60 dark:ag-bg-neutral-800/30">
+                        {renderExpanded({record, rowIndex, expanded: true})}
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </React.Fragment>
+              );
+            })
           )}
         </TableBody>
       </Table>
     </div>
+  );
+}
+
+/** @internal One record row: an optional leading cell, then one cell per resolved column. */
+export function RecordRow<TRecord extends {id: string; fields: object}>({
+  record,
+  rowIndex,
+  columns,
+  className,
+  leading,
+}: {
+  record: TRecord;
+  rowIndex: number;
+  columns: ReadonlyArray<ResolvedRecordTableColumn<TRecord>>;
+  className?: string;
+  /** `undefined` renders no leading cell; `null` an empty one. */
+  leading?: React.ReactNode;
+}) {
+  return (
+    <TableRow className={className}>
+      {leading !== undefined && <TableCell className="ag-w-10 ag-py-1 ag-pr-0">{leading}</TableCell>}
+      {columns.map(column => {
+        const value = column.accessor ? column.accessor(record) : (record.fields as Record<string, unknown>)[column.id];
+
+        return (
+          <TableCell key={column.id} className={cx(alignmentClass(column.align), column.cellClassName)}>
+            {column.cell ? column.cell({record, value, rowIndex}) : <RecordCellValue value={value} />}
+          </TableCell>
+        );
+      })}
+    </TableRow>
+  );
+}
+
+/** @internal Full-width row for loading and empty states. */
+export function TableStateRow({colSpan, children}: {colSpan: number; children: React.ReactNode}) {
+  return (
+    <TableRow className="hover:ag-bg-transparent dark:hover:ag-bg-transparent">
+      <TableCell colSpan={colSpan} className="ag-h-20 ag-text-center">
+        {children}
+      </TableCell>
+    </TableRow>
   );
 }
 
@@ -548,13 +665,15 @@ export function RecordCellValue({value, empty = '—', className}: RecordCellVal
   return <span className={className}>{typeof value === 'boolean' ? (value ? 'Yes' : 'No') : String(value)}</span>;
 }
 
-function alignmentClass(align: RecordTableColumn<{id: string; fields: object}>['align']): string | undefined {
+/** @internal */
+export function alignmentClass(align: RecordTableColumn<{id: string; fields: object}>['align']): string | undefined {
   if (align === 'center') return 'ag-text-center';
   if (align === 'right') return 'ag-text-right';
   return undefined;
 }
 
-interface ResolvedRecordTableColumn<
+/** @internal A column with its header resolved. */
+export interface ResolvedRecordTableColumn<
   TRecord extends {id: string; fields: object},
 > extends RecordTableColumnOptions<TRecord> {
   id: string;
@@ -562,7 +681,8 @@ interface ResolvedRecordTableColumn<
   accessor?: (record: TRecord) => unknown;
 }
 
-function resolveColumns<TRecord extends {id: string; fields: object}>(
+/** @internal Columns as given, or one per field key populated in `records`. */
+export function resolveColumns<TRecord extends {id: string; fields: object}>(
   records: ReadonlyArray<TRecord>,
   columns: ReadonlyArray<RecordTableFieldKey<TRecord> | RecordTableColumn<TRecord>> | undefined,
 ): Array<ResolvedRecordTableColumn<TRecord>> {
@@ -581,7 +701,8 @@ function resolveColumns<TRecord extends {id: string; fields: object}>(
   return Array.from(fieldKeys, id => ({id, header: humanizeFieldKey(id)}));
 }
 
-function humanizeFieldKey(fieldKey: string): string {
+/** @internal `contactEmail` → `Contact Email`. */
+export function humanizeFieldKey(fieldKey: string): string {
   const words = fieldKey.replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/[_-]+/g, ' ');
   return words.charAt(0).toUpperCase() + words.slice(1);
 }

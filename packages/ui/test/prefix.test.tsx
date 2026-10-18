@@ -18,9 +18,12 @@ import {Badge} from '../src/components/Badge';
 import {Button} from '../src/components/Button';
 import {ButtonToggle} from '../src/components/ButtonToggle';
 import {Input} from '../src/components/Input';
+import {InlineEdit} from '../src/components/InlineEdit';
 import {Text} from '../src/components/Text';
 import {Toggle} from '../src/components/Toggle';
 import {RecordTable} from '../src/components/Table';
+import {NestedRecordTable} from '../src/components/NestedRecordTable';
+import {GroupTable} from '../src/components/GroupTable';
 
 const packageDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PREFIX = 'ag-';
@@ -81,8 +84,27 @@ describe('ag- prefix', () => {
         </ButtonToggle>
         <Badge opts={{id: 'a', name: 'A', color: 'blueBright'}} />
         <Input value="" onChange={() => {}} />
+        <InlineEdit label="Name" value="Example" onCommit={() => {}} />
         <Toggle checked onChange={() => {}} label="On" />
         <RecordTable records={[{id: 'rec1', fields: {name: 'One'}}]} columns={['name']} />
+        <NestedRecordTable
+          records={[{id: 'rec1', fields: {name: 'One', tasks: [{id: 'rec2', fields: {title: 'Two'}}]}}]}
+          columns={['name']}
+          nested={{tasks: {columns: ['title']}}}
+          defaultExpanded
+        />
+        <GroupTable
+          groups={[{key: '["A","x"]', values: ['A', 'x'], records: [{id: 'rec1', fields: {name: 'One', hours: 2}}]}]}
+          columns={['name', 'hours']}
+          groupLabels={['Group', 'Sub']}
+          summary={records => ({hours: records.length})}
+        />
+        <GroupTable
+          groups={[{key: '["A"]', values: ['A'], records: [{id: 'rec1', fields: {name: 'One', hours: 2}}]}]}
+          columns={['name', 'hours']}
+          summary={records => ({hours: records.length})}
+          summaryPlacement="footer"
+        />
         <Text className="consumer-class">Consumer</Text>
       </div>,
     );

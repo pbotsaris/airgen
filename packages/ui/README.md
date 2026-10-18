@@ -22,12 +22,16 @@ heights), so components sit visually flush with the host SDK UI.
 - **Selection** — `Select` (single and `multiple`, keyboard navigation,
   typeahead, optional fuzzy search, grouped options, Airtable-colored pills,
   custom renderers) and `PillOption`.
+- **Inline editing** — `InlineEdit`, with text/number drafts, display formatting,
+  async save/error handling, and a custom editor callback.
 - **Overlays** — `Popover`, `Tooltip`, `Dialog`, `Sheet` (focus trap and
   restore, scroll lock, exit animations, `asChild` triggers).
 - **Feedback** — `ToastProvider`/`useToast` and `SheetProvider`/`useSheet`
   for imperative toasts and side panels.
 - **Tables** — semantic table primitives plus `RecordTable`, a typed renderer
-  for the `{id, fields, raw}` rows returned by airgen's `useRecords`.
+  for `useRecords` rows with optional expandable rows; `NestedRecordTable`
+  for rows hydrated with `include`; and `GroupTable` for `groupRecords`
+  output with nested, collapsible groups and per-group summaries.
 - **Helpers** — `airtableColorToHex`, `shouldUseLightText`, size class
   helpers, `SelectOption`/`SelectGroup` types.
 
@@ -120,6 +124,80 @@ dark themes and can be used with or without `resizable`:
 <RecordTable records={projects} columns={['name', 'status', 'owner']} columnLines resizable />
 ```
 
+### Expandable rows
+
+Pass `renderExpanded` to prepend a toggle column; its output renders in a
+full-width row under each expanded record. `canExpand` leaves some rows
+without a toggle, `defaultExpanded` (a boolean or a predicate) sets the
+initial state, and `expanded` plus `onExpandedChange` control it — a map of
+row keys to booleans that overrides the default, so "everything open except
+these" needs no enumeration:
+
+```tsx
+<RecordTable
+  records={projects}
+  columns={['name', 'status']}
+  canExpand={project => (project.fields.tasks?.length ?? 0) > 0}
+  renderExpanded={({record}) => <TaskList project={record} />}
+/>
+```
+
+### Nested tables for `include`
+
+`NestedRecordTable` renders rows hydrated with `useRecords(key, {include})`:
+each row expands into one sub-table per included link, and those nest in
+turn, each level with its own columns. The keys of `nested` are the links the
+record type carries hydrated, so an un-included link (still `{id, name}[]`) or
+a level deeper than `include` reached fails to compile ("object literal may
+only specify known properties"). Expansion is tracked per row path
+(`rec1/projects/proj1`), so collapsing a parent and reopening it restores its
+children; `defaultExpanded` takes `true` or a depth.
+
+```tsx
+import {NestedRecordTable} from '@airgen/ui';
+
+const people = useRecords('People', {include: {projects: {tasks: true}}});
+
+<NestedRecordTable
+  records={people}
+  columns={['name', 'email']}
+  defaultExpanded={1}
+  nested={{
+    projects: {
+      columns: ['name', 'status'],
+      nested: {tasks: {columns: ['title', 'done'], emptyMessage: 'No tasks yet'}},
+    },
+  }}
+/>;
+```
+
+### Grouped tables for `groupRecords`
+
+`GroupTable` takes `groupRecords` output as is. Grouping by several fields
+yields nested, individually collapsible group rows, one level per field;
+`groupLabels` prefixes each level's value and `emptyGroupLabel` names a `null`
+one. `summary` returns per-column aggregations for every group (parents see
+the distinct union of their leaves' records); `summaryPlacement` puts them in
+the group row (`'header'`, visible while collapsed) or in a totals row after
+the records (`'footer'`). `expanded`/`onExpandedChange` are keyed by group key
+(the `key` from `groupRecords` for leaves, the JSON of the values prefix for
+parents).
+
+```tsx
+import {GroupTable} from '@airgen/ui';
+import {groupRecords} from 'airgen';
+
+const groups = groupRecords(projects, {fields: ['status', 'owner']});
+
+<GroupTable
+  groups={groups}
+  columns={['name', 'status', 'owner', 'hours']}
+  groupLabels={['Status', 'Owner']}
+  summary={records => ({hours: records.reduce((total, r) => total + (r.fields.hours ?? 0), 0)})}
+  summaryPlacement="footer"
+/>;
+```
+
 `color` on options and `Button` accepts an Airtable color name
 (`"blueBright"`) or any CSS hex. The CSS ships precompiled with the
 package's own tokens; your project needs no Tailwind config (and if it has
@@ -177,6 +255,98 @@ cd packages/ui && npm run build && npm pack
 # then, in your extension:
 npm install /path/to/airgen-ui-<version>.tgz
 ```
+
+## Inline editing
+
+`InlineEdit` keeps a local draft until Enter or blur saves it. Escape discards
+the draft. `value` is controlled: update it in `onCommit` after saving. Return a
+promise to keep the field pending; throwing or rejecting displays an error and
+keeps the draft available for correction or retry. An unchanged parsed value
+does not call `onCommit`.
+
+```tsx
+<InlineEdit label="Name" value={name} onCommit={setName} />
+```
+
+For currency, keep the value numeric and format only the display. The same input,
+font, padding, border width, and alignment are used in both modes. Invisible
+sizers reserve space for both the committed display and its editable text, so
+entering edit mode does not resize the field. Long drafts scroll within the
+input; a newly committed value can resize it. Use `style={{width: '100%'}}` to
+fill a fixed container instead.
+
+```tsx
+const money = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+});
+
+<InlineEdit
+  label="Budget"
+  value={budget}
+  onCommit={async amount => {
+    await saveBudget(amount);
+    setBudget(amount);
+  }}
+  format={money.format}
+  align="right"
+/>;
+```
+
+Numeric values default to ungrouped editable text and finite-number parsing;
+empty or invalid drafts show an error instead of becoming zero. For localized
+input or application-specific precision rules, supply `toInputValue` and `parse`.
+For example, this decimal-comma parser accepts at most two fractional digits:
+
+```tsx
+<InlineEdit
+  label="Budget"
+  value={budget}
+  onCommit={setBudget}
+  format={new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format}
+  toInputValue={amount => amount.toFixed(2).replace('.', ',')}
+  parse={draft => {
+    if (!/^-?\d+(,\d{1,2})?$/.test(draft)) {
+      throw new Error('Enter an amount such as 1234,50.');
+    }
+    return Number(draft.replace(',', '.'));
+  }}
+  align="right"
+/>
+```
+
+Custom editors receive a string `draft`, `setDraft`, `commit`, `cancel`,
+`pending`, `error`, and `label`. Use `parse` to map the string draft into another
+public value type. `renderValue` optionally customizes the display; keep its
+content noninteractive because it renders inside an edit button. A custom
+editor defaults to explicit saving: Enter inserts newlines, and blur leaves the
+session open, including when focus moves into a portalled menu. Opt into
+`commitOnEnter` or `commitOnBlur` if your editor needs those behaviors. Blur
+saving treats portalled controls as outside the field.
+
+```tsx
+<InlineEdit
+  label="Description"
+  value={description}
+  onCommit={saveDescription}
+  renderEditor={({draft, setDraft, commit, cancel, pending, label}) => (
+    <div>
+      <textarea aria-label={label} value={draft} onChange={event => setDraft(event.target.value)} disabled={pending} />
+      <Button disabled={pending} onClick={() => void commit()}>
+        Save
+      </Button>
+      <Button disabled={pending} onClick={cancel}>
+        Cancel
+      </Button>
+    </div>
+  )}
+/>
+```
+
+Custom controls own their sizing and focus behavior inside the editor; the
+first focusable control receives focus on opening. Save and cancel restore
+focus to the trigger. Custom key handlers can prevent the default event to
+handle Enter or Escape themselves. No editor engine is required by `InlineEdit`.
 
 ## Requirements
 
