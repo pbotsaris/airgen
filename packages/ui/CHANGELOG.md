@@ -26,6 +26,14 @@ Pre-1.0, minor versions may contain breaking changes.
   the consumer's. Consumer-passed classes are unaffected; `pillSizeClasses()`
   now returns prefixed classes, which `@airgen/ui/styles.css` defines.
 
+### Fixed
+
+- **`Button` variants in dark mode.** `outline` painted a white background
+  with the page's light text, `secondary` stayed light gray, and `ghost`
+  hovered to near-white, so `ButtonToggle`, icon-only buttons and the usual
+  Popover/Sheet triggers were unreadable on a dark frame. All three now carry
+  dark variants matching the `Select` trigger.
+
 ### Added
 
 - **Table components** — semantic, shadcn-inspired `Table`, `TableHeader`,

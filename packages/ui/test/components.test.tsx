@@ -31,6 +31,20 @@ describe('Button', () => {
     render(<Button color="rebeccapurple">B</Button>);
     expect(screen.getByRole('button', {name: 'B'}).style.color).toBe('rebeccapurple');
   });
+  test.each(['outline', 'secondary', 'ghost'] as const)('%s pairs every light background and text color with a dark one', variant => {
+    render(
+      <Button variant={variant} aria-label={variant}>
+        x
+      </Button>,
+    );
+    const classes = screen.getByRole('button', {name: variant}).className.split(/\s+/);
+    const light = classes.filter(c => /^(hover:)?ag-(bg|text)-neutral-|^ag-bg-white$/.test(c));
+    expect(light.length).toBeGreaterThan(0);
+    for (const c of light) {
+      const [, state = '', kind] = /^(hover:)?ag-(bg|text)-/.exec(c)!;
+      expect(classes.some(d => d.startsWith(`dark:${state}ag-${kind}-`)), `${c} has no dark counterpart`).toBe(true);
+    }
+  });
 });
 
 describe('Text', () => {

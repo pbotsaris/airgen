@@ -1,6 +1,6 @@
 /**
- * ThemeProvider pins the `dark:` variant to Airtable's scheme instead of the
- * iframe's prefers-color-scheme (the OS setting), portals included.
+ * ThemeProvider forces the `dark:` variant on or off instead of following the
+ * frame's prefers-color-scheme, portals included.
  */
 import {execFileSync} from 'node:child_process';
 import fs from 'node:fs';

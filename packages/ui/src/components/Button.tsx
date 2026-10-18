@@ -6,10 +6,12 @@ import {airtableColorToHex} from '../colors.js';
 
 const variants = {
   default: 'ag-bg-neutral-700 ag-text-white hover:ag-bg-neutral-600',
-  outline: 'ag-border ag-border-neutral-300 ag-bg-white hover:ag-bg-neutral-100',
+  outline:
+    'ag-border ag-border-neutral-300 ag-bg-white ag-text-neutral-900 hover:ag-bg-neutral-100 dark:ag-border-neutral-600 dark:ag-bg-neutral-800 dark:ag-text-neutral-100 dark:hover:ag-bg-neutral-700',
   destructive: 'ag-bg-rose-600 ag-text-white hover:ag-bg-rose-700',
-  secondary: 'ag-bg-neutral-200 ag-text-neutral-900 hover:ag-bg-neutral-300',
-  ghost: 'hover:ag-bg-neutral-100',
+  secondary:
+    'ag-bg-neutral-200 ag-text-neutral-900 hover:ag-bg-neutral-300 dark:ag-bg-neutral-700 dark:ag-text-neutral-100 dark:hover:ag-bg-neutral-600',
+  ghost: 'hover:ag-bg-neutral-100 dark:hover:ag-bg-neutral-700',
   link: 'ag-underline ag-underline-offset-4 ag-decoration-neutral-300 hover:ag-decoration-neutral-500 dark:ag-decoration-neutral-600 dark:hover:ag-decoration-neutral-400 ag-transition-all ag-text-neutral-700 dark:ag-text-neutral-300',
 };
 
