@@ -24,6 +24,16 @@ test('each entry point imports only its own SDK ui module', () => {
   assert.deepEqual(sdkImports(readDist('base.js')), ['@airtable/blocks/base/ui']);
 });
 
+// useColorScheme is missing from stable SDKs before 1.19 (and early alpha
+// builds); a named import of it would fail their bundles, so every entry reads
+// the SDK off a namespace and treats the hook as optional.
+test('entry points import their SDK ui module as a namespace', () => {
+  for (const name of ['index.js', 'interface.js', 'base.js']) {
+    assert.match(readDist(name), /import \* as \w+ from ['"]@airtable\/blocks/, name);
+    assert.doesNotMatch(readDist(name), /import \{[^}]*\} from ['"]@airtable\/blocks/, name);
+  }
+});
+
 test('core modules import no SDK paths (structural-types invariant)', () => {
   for (const name of [
     'generator.js',

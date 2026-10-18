@@ -27,10 +27,14 @@ declare module '@airtable/blocks/interface/ui' {
     customPropertyValueByKey: {[key: string]: unknown};
     errorState: {error: Error} | null;
   };
+  /** Absent from early builds, hence optional: the entries read it off the namespace. */
+  export const useColorScheme: (() => {colorScheme: 'light' | 'dark'}) | undefined;
 }
 
 declare module '@airtable/blocks/base/ui' {
   export function useBase(): any;
   export function useWatchable(model: unknown, keys: ReadonlyArray<string>): void;
   export function useRecords(table: any): any;
+  /** Absent from early builds, hence optional: the entries read it off the namespace. */
+  export const useColorScheme: (() => {colorScheme: 'light' | 'dark'}) | undefined;
 }

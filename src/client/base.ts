@@ -5,14 +5,21 @@
  * 'airgen/base' so its createTypedHooks is bound to the same SDK flavor.
  */
 
-import {useBase, useRecords, useWatchable} from '@airtable/blocks/base/ui';
+import * as ui from '@airtable/blocks/base/ui';
 import {useMemo} from 'react';
 import {createSchemaObserver} from './SchemaObserver.js';
 import {makeCreateTypedHooks} from './useTypedRecords.js';
 import type {BlocksSdkAdapter} from './sdk.js';
 
 // No useCustomProperties: custom properties are an interface-SDK feature.
-const sdk: BlocksSdkAdapter = {useBase, useRecords, useWatchable, useMemo};
+// useColorScheme off the namespace: early interface-alpha builds don't export it.
+const sdk: BlocksSdkAdapter = {
+  useBase: ui.useBase,
+  useRecords: ui.useRecords,
+  useWatchable: ui.useWatchable,
+  useMemo,
+  useColorScheme: ui.useColorScheme,
+};
 
 export const SchemaObserver = createSchemaObserver(sdk, {hooksModule: 'airgen/base', sdkFlavor: 'base'});
 export const createTypedHooks = makeCreateTypedHooks(sdk);

@@ -118,6 +118,12 @@ export interface BlocksSdkAdapter {
    */
   useMemo?<T>(factory: () => T, deps: ReadonlyArray<unknown>): T;
   /**
+   * Airtable's light/dark theme, which the observer picks its palette from.
+   * Optional: the stable SDK only has it from 1.19, so each entry reads it
+   * off the module namespace and leaves it undefined on older builds.
+   */
+  useColorScheme?(): {colorScheme: 'light' | 'dark'};
+  /**
    * Interface SDK only; undefined on the stable and base flavors, where
    * `customProperties` overrides fall back to the generated tables with a
    * warning. `getDefinitions` must keep one identity across renders.

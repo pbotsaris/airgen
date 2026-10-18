@@ -6,7 +6,7 @@
  * createTypedHooks is bound to the same SDK flavor.
  */
 
-import {useBase, useCustomProperties, useRecords, useWatchable} from '@airtable/blocks/interface/ui';
+import * as ui from '@airtable/blocks/interface/ui';
 import {useMemo} from 'react';
 import {createSchemaObserver} from './SchemaObserver.js';
 import {makeCreateTypedHooks} from './useTypedRecords.js';
@@ -16,11 +16,13 @@ import type {BlocksSdkAdapter} from './sdk.js';
 // This SDK's useRecords reads `table.id` unguarded; a deleted or hidden
 // generated table must read as [] (adapter contract), not throw.
 const sdk: BlocksSdkAdapter = {
-  useBase,
-  useRecords: nullSafeUseRecords(useBase, useRecords),
-  useWatchable,
+  useBase: ui.useBase,
+  useRecords: nullSafeUseRecords(ui.useBase, ui.useRecords),
+  useWatchable: ui.useWatchable,
   useMemo,
-  useCustomProperties,
+  useCustomProperties: ui.useCustomProperties,
+  // Off the namespace: early interface-alpha builds don't export it.
+  useColorScheme: ui.useColorScheme,
 };
 
 export const SchemaObserver = createSchemaObserver(sdk, {hooksModule: 'airgen/interface', sdkFlavor: 'interface'});

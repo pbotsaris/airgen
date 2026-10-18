@@ -21,6 +21,12 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   esbuild compiled JSX with that config's `jsx` setting. The lookup now stops at
   the extension's root (the directory with `block.json`, else the nearest
   `package.json`).
+- **`<SchemaObserver />` in dark mode.** The panel had fixed light-theme
+  colors, so on a dark interface its "Copy schema" button all but vanished. It
+  now follows Airtable's theme through the SDK's `useColorScheme` (an optional
+  `BlocksSdkAdapter.useColorScheme`), painting its own dark surface. SDK builds
+  without the hook (stable before 1.19) keep the light palette; the entries
+  import the SDK as a namespace so those builds still bundle.
 
 ## [0.4.0]
 

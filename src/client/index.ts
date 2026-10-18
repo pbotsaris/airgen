@@ -6,7 +6,7 @@
  * module supplies the hooks and which specifier the generated file imports.
  */
 
-import {useBase, useRecords, useWatchable} from '@airtable/blocks/ui';
+import * as ui from '@airtable/blocks/ui';
 import {useMemo} from 'react';
 import {createSchemaObserver} from './SchemaObserver.js';
 import {makeCreateTypedHooks} from './useTypedRecords.js';
@@ -14,12 +14,15 @@ import type {BlocksSdkAdapter} from './sdk.js';
 
 // No useCustomProperties: custom properties are an interface-SDK feature.
 const sdk: BlocksSdkAdapter = {
-  useBase,
-  useWatchable,
+  useBase: ui.useBase,
+  useWatchable: ui.useWatchable,
   useMemo,
   // The SDK overloads take Table | View; airgen only ever passes the Table it
   // resolved from the same base, so the structural narrowing is safe.
-  useRecords: useRecords as BlocksSdkAdapter['useRecords'],
+  useRecords: ui.useRecords as BlocksSdkAdapter['useRecords'],
+  // Read off the namespace: the peer range starts before 1.19 added it, and a
+  // named import of a missing export breaks the bundle.
+  useColorScheme: (ui as Partial<Pick<typeof ui, 'useColorScheme'>>).useColorScheme,
 };
 
 export const SchemaObserver = createSchemaObserver(sdk);

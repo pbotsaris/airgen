@@ -14,7 +14,8 @@
  *
  * Built via `createSchemaObserver(sdk)` so each entry point can bind its SDK
  * flavor's hooks (see sdk.ts). Rendered with plain DOM elements, not the
- * Blocks component library — the interface SDK doesn't ship one.
+ * Blocks component library — the interface SDK doesn't ship one. Colors come
+ * from Airtable's theme via the adapter's `useColorScheme` (light without it).
  */
 
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
@@ -124,34 +125,97 @@ const DIAGNOSTICS_POLL_DELAYS_MS = [0, 500, 1000, 2000, 3000, 3000, 3000, 3000, 
  */
 const SETUP_NOTICE_POLL_MS = 3000;
 
-const panelStyle: React.CSSProperties = {
+type ColorScheme = 'light' | 'dark';
+
+interface Palette {
+  /** Strip background; light leaves the host's own surface showing. */
+  surface: string;
+  border: string;
+  text: string;
+  muted: string;
+  control: string;
+  controlText: string;
+  code: string;
+  ok: string;
+  error: string;
+  warning: string;
+  fix: string;
+  noticeSurface: string;
+  noticeBorder: string;
+  noticeTitle: string;
+}
+
+const PALETTES: {[scheme in ColorScheme]: Palette} = {
+  light: {
+    surface: 'transparent',
+    border: '#e0e0e0',
+    text: '#333333',
+    muted: '#666666',
+    control: 'rgba(0, 0, 0, 0.05)',
+    controlText: '#333333',
+    code: 'rgba(0, 0, 0, 0.06)',
+    ok: '#048a0e',
+    error: '#d33030',
+    warning: '#b58a00',
+    fix: '#8250df',
+    noticeSurface: '#fff8e1',
+    noticeBorder: '#f0d58c',
+    noticeTitle: '#8a6100',
+  },
+  // Painted, not transparent: the strip stays readable even on a host that
+  // leaves the frame white while Airtable reports dark.
+  dark: {
+    surface: '#1e1e1e',
+    border: '#3a3a3a',
+    text: '#e6e6e6',
+    muted: '#a0a0a0',
+    control: 'rgba(255, 255, 255, 0.12)',
+    controlText: '#f0f0f0',
+    code: 'rgba(255, 255, 255, 0.1)',
+    ok: '#4cc95a',
+    error: '#ff6b6b',
+    warning: '#e0b84a',
+    fix: '#b392f0',
+    noticeSurface: '#3a3020',
+    noticeBorder: '#6b5626',
+    noticeTitle: '#f0c86a',
+  },
+};
+
+/** Without the SDK's useColorScheme (stable SDK before 1.19), the light palette. */
+const useLightScheme = (): {colorScheme: ColorScheme} => ({colorScheme: 'light'});
+
+const panelStyle = (palette: Palette): React.CSSProperties => ({
   display: 'flex',
   alignItems: 'center',
   gap: 12,
   flexWrap: 'wrap',
   padding: 8,
-  borderBottom: '2px solid #e0e0e0',
+  background: palette.surface,
+  borderBottom: `2px solid ${palette.border}`,
   fontFamily: 'inherit',
-};
+});
 
 const textStyle: React.CSSProperties = {fontSize: 11, lineHeight: '14px'};
 
-const buttonStyle: React.CSSProperties = {
+const buttonStyle = (palette: Palette): React.CSSProperties => ({
   ...textStyle,
   fontWeight: 500,
   padding: '4px 8px',
   border: 'none',
   borderRadius: 3,
-  background: 'rgba(0, 0, 0, 0.05)',
-  color: '#333333',
+  background: palette.control,
+  color: palette.controlText,
   cursor: 'pointer',
-};
+});
 
 export function createSchemaObserver(
   sdk: BlocksSdkAdapter,
   config: SchemaObserverConfig = {},
 ): (props: SchemaObserverProps) => React.ReactElement | null {
   const generatorOptions = {hooksModule: config.hooksModule, sdkFlavor: config.sdkFlavor};
+  // Fixed per adapter, so the hook count never changes between renders.
+  const useColorScheme = sdk.useColorScheme ?? useLightScheme;
 
   function SchemaObserver({
     daemonUrl = 'http://localhost:3001',
@@ -162,6 +226,7 @@ export function createSchemaObserver(
   }: SchemaObserverProps): React.ReactElement | null {
     const base = sdk.useBase();
     sdk.useWatchable(base, ['schema']);
+    const palette = PALETTES[useColorScheme().colorScheme === 'dark' ? 'dark' : 'light'];
 
     const [status, setStatus] = useState<DaemonStatus>('unknown');
     const [lastSyncedAt, setLastSyncedAt] = useState<string | null>(null);
@@ -366,7 +431,7 @@ export function createSchemaObserver(
 
     if (!enabled) return children === undefined ? null : <>{children}</>;
 
-    const statusDisplay = getStatusDisplay(status);
+    const statusDisplay = getStatusDisplay(status, palette);
 
     return (
       <>
@@ -375,6 +440,7 @@ export function createSchemaObserver(
             title={`${diagnostics.config.file ?? 'tsconfig.json'} needs changes for the typecheck`}
             issues={diagnostics.config.issues}
             command={diagnostics.config.command}
+            palette={palette}
           />
         )}
         {diagnostics?.install && (
@@ -386,18 +452,19 @@ export function createSchemaObserver(
             }
             issues={diagnostics.install.issues}
             command={diagnostics.install.command}
+            palette={palette}
           />
         )}
-        <div style={panelStyle}>
+        <div style={panelStyle(palette)}>
           <span style={{...textStyle, color: statusDisplay.color, fontWeight: 600}}>airgen {statusDisplay.label}</span>
-          <span style={{...textStyle, color: '#666666'}}>
+          <span style={{...textStyle, color: palette.muted}}>
             {base.tables.length} table{base.tables.length === 1 ? '' : 's'}
             {lastSyncedAt ? ` · synced ${lastSyncedAt}` : status === 'disconnected' ? ' · run `npx airgen`' : ''}
           </span>
-          {drift && !drift.ok && <DriftDetails drift={drift} />}
-          <DiagnosticsDetails diagnostics={diagnostics} />
-          <FixesDetails fixes={fixes} applying={applying} onApply={applyFix} />
-          <button type="button" style={buttonStyle} onClick={copyToClipboard}>
+          {drift && !drift.ok && <DriftDetails drift={drift} palette={palette} />}
+          <DiagnosticsDetails diagnostics={diagnostics} palette={palette} />
+          <FixesDetails fixes={fixes} applying={applying} onApply={applyFix} palette={palette} />
+          <button type="button" style={buttonStyle(palette)} onClick={copyToClipboard}>
             {copied ? 'Copied!' : 'Copy schema'}
           </button>
         </div>
@@ -419,10 +486,12 @@ function NoticeBanner({
   title,
   issues,
   command,
+  palette,
 }: {
   title: string;
   issues: string[];
   command: string | null;
+  palette: Palette;
 }): React.ReactElement {
   const [copied, setCopied] = useState(false);
   const copy = useCallback(async () => {
@@ -437,25 +506,32 @@ function NoticeBanner({
   }, [command]);
 
   return (
-    <div style={{...panelStyle, background: '#fff8e1', borderBottom: '2px solid #f0d58c'}}>
-      <span style={{...textStyle, color: '#8a6100', fontWeight: 600}}>{title}</span>
-      <span style={{...textStyle, color: '#333333'}}>{issues.join(' · ')}</span>
+    <div
+      style={{
+        ...panelStyle(palette),
+        background: palette.noticeSurface,
+        borderBottom: `2px solid ${palette.noticeBorder}`,
+      }}
+    >
+      <span style={{...textStyle, color: palette.noticeTitle, fontWeight: 600}}>{title}</span>
+      <span style={{...textStyle, color: palette.text}}>{issues.join(' · ')}</span>
       {command !== null && (
         <span style={{display: 'flex', alignItems: 'center', gap: 6}}>
-          <span style={textStyle}>Run:</span>
+          <span style={{...textStyle, color: palette.text}}>Run:</span>
           <code
             style={{
               ...textStyle,
               fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
               padding: '2px 6px',
               borderRadius: 3,
-              background: 'rgba(0, 0, 0, 0.06)',
+              background: palette.code,
+              color: palette.text,
               userSelect: 'all',
             }}
           >
             {command}
           </code>
-          <button type="button" style={buttonStyle} onClick={copy}>
+          <button type="button" style={buttonStyle(palette)} onClick={copy}>
             {copied ? 'Copied!' : 'Copy'}
           </button>
         </span>
@@ -467,25 +543,31 @@ function NoticeBanner({
 const MAX_DRIFT_LINES = 5;
 const MAX_DIAGNOSTIC_LINES = 3;
 
-function DiagnosticsDetails({diagnostics}: {diagnostics: DiagnosticsPayload | null}): React.ReactElement | null {
+function DiagnosticsDetails({
+  diagnostics,
+  palette,
+}: {
+  diagnostics: DiagnosticsPayload | null;
+  palette: Palette;
+}): React.ReactElement | null {
   // null (no data yet / old daemon) and 'unavailable' both render nothing —
   // typechecking is an optional extra, not a required part of the strip.
   if (!diagnostics) return null;
 
   if (diagnostics.status === 'checking') {
-    return <span style={{...textStyle, color: '#666666'}}>… typechecking</span>;
+    return <span style={{...textStyle, color: palette.muted}}>… typechecking</span>;
   }
   if (diagnostics.status === 'ok') {
-    return <span style={{...textStyle, color: '#048a0e'}}>✓ types ok</span>;
+    return <span style={{...textStyle, color: palette.ok}}>✓ types ok</span>;
   }
   if (diagnostics.status !== 'errors') return null;
 
   return (
     <details style={textStyle}>
-      <summary style={{color: '#d33030', fontWeight: 600, cursor: 'pointer'}}>
+      <summary style={{color: palette.error, fontWeight: 600, cursor: 'pointer'}}>
         ✗ {diagnostics.total} type error{diagnostics.total === 1 ? '' : 's'}
       </summary>
-      <div style={{paddingTop: 4, color: '#333333'}}>
+      <div style={{paddingTop: 4, color: palette.text}}>
         {diagnostics.errors.slice(0, MAX_DIAGNOSTIC_LINES).map((error, index) => (
           <div key={index}>
             {error.file}:{error.line} — {truncate(error.message, 120)}
@@ -511,10 +593,12 @@ function FixesDetails({
   fixes,
   applying,
   onApply,
+  palette,
 }: {
   fixes: FixesPayload | null;
   applying: boolean;
   onApply: (body: {id: string} | {all: true}) => void;
+  palette: Palette;
 }): React.ReactElement | null {
   if (!fixes || fixes.fixes.length === 0) return null;
 
@@ -526,12 +610,12 @@ function FixesDetails({
 
   return (
     <details style={textStyle}>
-      <summary style={{color: '#8250df', fontWeight: 600, cursor: 'pointer'}}>{summary}</summary>
-      <div style={{paddingTop: 4, color: '#333333'}}>
+      <summary style={{color: palette.fix, fontWeight: 600, cursor: 'pointer'}}>{summary}</summary>
+      <div style={{paddingTop: 4, color: palette.text}}>
         {fixable.length > 1 && (
           <button
             type="button"
-            style={{...buttonStyle, marginBottom: 4}}
+            style={{...buttonStyle(palette), marginBottom: 4}}
             disabled={applying}
             onClick={() => onApply({all: true})}
           >
@@ -544,7 +628,7 @@ function FixesDetails({
             {fix.fixable ? (
               <button
                 type="button"
-                style={{...buttonStyle, marginLeft: 6}}
+                style={{...buttonStyle(palette), marginLeft: 6}}
                 disabled={applying}
                 onClick={() => onApply({id: fix.id})}
               >
@@ -552,7 +636,7 @@ function FixesDetails({
                 {fix.files.length === 1 ? '' : 's'})
               </button>
             ) : (
-              <div style={{color: '#666666', paddingLeft: 8}}>
+              <div style={{color: palette.muted, paddingLeft: 8}}>
                 {fix.usages.slice(0, MAX_USAGE_LINES).map((usage, index) => (
                   <div key={index}>
                     {usage.file}:{usage.line}
@@ -569,17 +653,17 @@ function FixesDetails({
 }
 
 /** One collapsed line in the strip; <details> expands without any state. */
-function DriftDetails({drift}: {drift: DriftReport}): React.ReactElement {
+function DriftDetails({drift, palette}: {drift: DriftReport; palette: Palette}): React.ReactElement {
   const parts: string[] = [];
   if (drift.counts.breaking > 0) parts.push(`${drift.counts.breaking} breaking`);
   if (drift.counts.warning > 0) parts.push(`${drift.counts.warning} warning`);
   if (drift.counts.info > 0) parts.push(`${drift.counts.info} renamed`);
-  const color = drift.counts.breaking > 0 ? '#d33030' : drift.counts.warning > 0 ? '#b58a00' : '#666666';
+  const color = drift.counts.breaking > 0 ? palette.error : drift.counts.warning > 0 ? palette.warning : palette.muted;
 
   return (
     <details style={textStyle}>
       <summary style={{color, fontWeight: 600, cursor: 'pointer'}}>drift: {parts.join(' · ')}</summary>
-      <div style={{paddingTop: 4, color: '#333333'}}>
+      <div style={{paddingTop: 4, color: palette.text}}>
         {drift.findings.slice(0, MAX_DRIFT_LINES).map((finding, index) => (
           <div key={index}>{finding.message}</div>
         ))}
@@ -589,7 +673,10 @@ function DriftDetails({drift}: {drift: DriftReport}): React.ReactElement {
   );
 }
 
-function getStatusDisplay(status: DaemonStatus): {
+function getStatusDisplay(
+  status: DaemonStatus,
+  palette: Palette,
+): {
   label: string;
   color: string;
 } {
@@ -597,19 +684,19 @@ function getStatusDisplay(status: DaemonStatus): {
     case 'connected':
       return {
         label: '● Connected',
-        color: '#048a0e',
+        color: palette.ok,
       };
 
     case 'disconnected':
       return {
         label: '○ Disconnected',
-        color: '#d33030',
+        color: palette.error,
       };
 
     default:
       return {
         label: '◌ Connecting…',
-        color: '#666666',
+        color: palette.muted,
       };
   }
 }
