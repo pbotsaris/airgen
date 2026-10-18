@@ -86,7 +86,7 @@ fi
 
 echo "==> running $PKG_NAME checks"
 if [ "$PKG" = "airgen" ]; then
-  npm test
+  npm run check   # what prepublishOnly runs, so publish cannot fail after the tag
 else
   npm run build --workspace "$PKG_NAME"
   npm test --workspace "$PKG_NAME"
