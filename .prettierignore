@@ -3,8 +3,6 @@ dist/
 node_modules/
 # Workspaces run their own toolchain
 packages/
-# Runtime-expansion plan (v0.3.0/docs/PLAN.md)
-v0.3.0/
 plan/
 # Tooling state and generated files
 .claude/

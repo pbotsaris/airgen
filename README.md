@@ -96,7 +96,7 @@ if (!result.ok) toast(result.error.message);
 
 Guides: [typecheck and fixes](docs/typecheck-and-fixes.md), [CLI, daemon, and security](docs/cli-and-daemon.md).
 
-## Upgrading to 0.4.0
+## Upgrading to 0.3.0
 
 Regenerate once under `npx airgen` and commit the file. Two things can need code changes: lookup cells are now `Array<LookupValue<T>>` instead of bare values, and the meta is version 2. See [docs/upgrading.md](docs/upgrading.md) and the [changelog](CHANGELOG.md).
 

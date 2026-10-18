@@ -1,6 +1,6 @@
 # Upgrading
 
-## 0.2.x to 0.4.0
+## 0.2.x to 0.3.0
 
 Start `npx airgen` once and commit the regenerated `airtable-schema.ts`. Existing imports (`useRecords`, `useTable`, `useSchemaDrift`) keep working; the file gains `<Table>Write` interfaces, `TableWriteMap`, and the `useFields`, `useMutations`, and `useQuery` exports.
 
