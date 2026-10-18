@@ -66,6 +66,18 @@ export function resolveTypescriptDir(cwd) {
   }
 }
 
+/** Major version of the consumer's `typescript`, or null when it isn't installed. */
+export function typescriptMajor(cwd) {
+  const dir = resolveTypescriptDir(cwd);
+  if (dir === null) return null;
+  try {
+    const {version} = JSON.parse(fs.readFileSync(path.join(dir, 'package.json'), 'utf8'));
+    return Number.parseInt(version, 10);
+  } catch {
+    return null;
+  }
+}
+
 /** Path to the consumer's tsc.js, or null when typescript isn't installed. */
 function resolveTsc(cwd) {
   const dir = resolveTypescriptDir(cwd);

@@ -87,6 +87,7 @@ function makeProject({
   config = TSCONFIG,
   configName = 'tsconfig.json',
   appName = 'app.ts',
+  typescript = path.join(projectRoot, 'node_modules', 'typescript'),
 } = {}) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'airgen-codemod-test-'));
   fs.writeFileSync(path.join(dir, configName), config);
@@ -97,7 +98,7 @@ function makeProject({
 
   linkIntoNodeModules(dir, {
     airgen: projectRoot,
-    typescript: path.join(projectRoot, 'node_modules', 'typescript'),
+    typescript,
     '@airtable': path.join(projectRoot, 'node_modules', '@airtable'),
     '@types': path.join(projectRoot, 'node_modules', '@types'),
     react: path.join(projectRoot, 'node_modules', 'react'),
@@ -108,7 +109,7 @@ function makeProject({
 
 async function withProject(setup, run) {
   const {dir, fix} = makeProject(setup);
-  const logs = [];
+  const logs = setup.logs ?? [];
   const server = await startDaemon({
     port: 0,
     outPath: path.join('src', 'airtable-schema.ts'),
@@ -392,4 +393,45 @@ test('a purely additive schema change produces no fixes', async () => {
     assert.equal(payload.status, 'idle');
     assert.deepEqual(payload.fixes, []);
   });
+});
+
+/**
+ * TypeScript 7's shape: `typescript` resolves to a version stub (no compiler
+ * API), and only `lib/tsc.js` remains for the typecheck to spawn.
+ */
+function fakeTypescript7() {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'airgen-fake-ts7-'));
+  fs.mkdirSync(path.join(dir, 'lib'));
+  fs.writeFileSync(
+    path.join(dir, 'package.json'),
+    JSON.stringify({
+      name: 'typescript',
+      version: '7.0.2',
+      exports: {'./package.json': './package.json', '.': './lib/version.cjs'},
+    }),
+  );
+  fs.writeFileSync(path.join(dir, 'lib', 'version.cjs'), "module.exports = {version: '7.0.2'};\n");
+  fs.writeFileSync(path.join(dir, 'lib', 'tsc.js'), 'process.exit(0);\n');
+  return dir;
+}
+
+test('under TypeScript 7 --fix reports why it is unavailable instead of failing obscurely', async () => {
+  const typescript = fakeTypescript7();
+  const logs = [];
+  try {
+    await withProject({typescript, logs}, async ({url}) => {
+      assert.ok(
+        logs.some(line => /TypeScript 7 has no JS compiler API/.test(line)),
+        `no startup notice in ${JSON.stringify(logs)}`,
+      );
+      await postSchema(url, regenerate(renameContactEmail));
+      const payload = await waitForFixes(url);
+      assert.equal(payload.status, 'unavailable');
+      assert.match(payload.reason, /TypeScript 7 has no JS compiler API/);
+      assert.match(payload.reason, /typecheck still works/);
+      assert.deepEqual(payload.fixes, []);
+    });
+  } finally {
+    fs.rmSync(typescript, {recursive: true, force: true});
+  }
 });

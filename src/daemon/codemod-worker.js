@@ -358,6 +358,12 @@ async function main() {
     process.stdout.write(JSON.stringify({ok: false, reason: `could not load typescript: ${error?.message ?? error}`}));
     return;
   }
+  // The daemon gates TypeScript 7 by version; this catches any other build
+  // without the JS API rather than failing on the first missing function.
+  if (typeof ts.createLanguageService !== 'function') {
+    process.stdout.write(JSON.stringify({ok: false, reason: 'this typescript build has no JS compiler API'}));
+    return;
+  }
 
   const service = createService(ts, {
     configPath: job.configPath,

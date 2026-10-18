@@ -18,7 +18,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import {findProjectConfig, resolveTypescriptDir} from './typecheck.js';
+import {findProjectConfig, typescriptMajor} from './typecheck.js';
 
 export const DEFAULT_OUT = 'frontend/airtable-schema.ts';
 
@@ -166,17 +166,6 @@ function listSources(dir) {
   };
   walk(dir);
   return {sources, assets};
-}
-
-function typescriptMajor(cwd) {
-  const dir = resolveTypescriptDir(cwd);
-  if (dir === null) return null;
-  try {
-    const {version} = JSON.parse(fs.readFileSync(path.join(dir, 'package.json'), 'utf8'));
-    return Number.parseInt(version, 10);
-  } catch {
-    return null;
-  }
 }
 
 const lower = value => (typeof value === 'string' ? value.toLowerCase() : undefined);

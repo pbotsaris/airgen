@@ -5,6 +5,16 @@ All notable changes to airgen are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- **`--fix` under TypeScript 7.** TypeScript 7 ships no JS compiler API, so the
+  codemod worker had nothing to drive and failed with an obscure error. The
+  daemon now detects the compiler's major version, says at startup that `--fix`
+  can't run, and reports fixes as unavailable with that reason. The typecheck
+  is unaffected.
+
 ## [0.4.0]
 
 Typed relations. `useRecords(key, {include})` follows link fields into the

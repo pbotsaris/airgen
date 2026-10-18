@@ -4,9 +4,9 @@ Known issues and planned improvements that aren't scheduled yet. One section per
 
 ## 1. Codemod under TypeScript 7
 
-**Problem.** `--fix` loads the consumer's `typescript` in `codemod-worker.js` and drives its language service. TypeScript 7 (the native port) ships no JS compiler API: `require('typescript')` resolves to `lib/version.cjs`, so the worker has nothing to call. `afsp_profit_loss` is on `typescript@^7.0.2`. The typecheck still works, because it only spawns `lib/tsc.js`.
+**Problem.** `--fix` drives the consumer's `typescript` language service in `codemod-worker.js`, and TypeScript 7 (the native port) ships no JS compiler API. Since the fix for this, the daemon detects TS ≥ 7 and reports `--fix` as unavailable with that reason, so a TS 7 project (`afsp_profit_loss`) gets typechecking but no assisted fixes.
 
-**Fix.** Not decided. Options: detect TS ≥ 7 and report `--fix` as unavailable with a clear reason (the minimum); drive TS 7's `typescript/unstable/sync` API; or fall back to a `typescript@5` the consumer installs alongside. Tests: a codemod test with a fake TS-7-shaped package that asserts the unavailable reason. Docs: `docs/typecheck-and-fixes.md`.
+**Fix.** Drive TS 7's `typescript/unstable/sync` API. It has symbols and per-file references (`getSymbolAtPosition`, `getReferencesToSymbolInFile`, `getReferencedSymbolsForNode`) but no `findRenameLocations`, and it reads files from disk, while the worker serves the *previous* generated file as an in-memory overlay (see `unstable/fs` for a virtual filesystem). Wait until the API stops being `unstable`, or accept rewriting the worker against it. Alternative: let a consumer point `--fix` at a `typescript@5` installed alongside under an alias. Tests: the existing codemod suite, run against the TS 7 backend. Docs: `docs/typecheck-and-fixes.md`.
 
 ## 2. `@airgen/ui` utilities lose to the consumer's Tailwind
 

@@ -24,12 +24,21 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 import {diffGeneratedFiles} from './schema-diff.js';
-import {findProjectConfig, resolveTypescriptDir, PROJECT_CONFIG_LABEL} from './typecheck.js';
+import {findProjectConfig, resolveTypescriptDir, typescriptMajor, PROJECT_CONFIG_LABEL} from './typecheck.js';
 
 const WORKER = fileURLToPath(new URL('./codemod-worker.js', import.meta.url));
 const ANALYSIS_TIMEOUT_MS = 120_000;
 const FIX_TTL_MS = 10 * 60 * 1000;
 const MAX_OUTPUT_BYTES = 32 * 1024 * 1024;
+
+/**
+ * TypeScript 7 (the native port) ships no JS compiler API: `require('typescript')`
+ * resolves to a version stub, so the worker has no language service to drive.
+ * The typecheck is unaffected; it only spawns `tsc`.
+ */
+const NO_JS_API_FROM = 7;
+const noJsApiReason = major =>
+  `TypeScript ${major} has no JS compiler API, so --fix can't locate affected code (the typecheck still works)`;
 
 /** Files the codemod may write. Mirrors EDITABLE in codemod-worker.js. */
 const EDITABLE = new Set(['.ts', '.tsx', '.mts', '.cts', '.js', '.jsx', '.mjs', '.cjs']);
@@ -94,6 +103,11 @@ function runWorker(job) {
  * @param {{cwd: string, outPath: string, log: (msg: string) => void}} options
  */
 export function createCodemod({cwd, outPath, log}) {
+  // Said once up front, so --fix doesn't look armed until the first rename.
+  // Re-checked per analysis too: the compiler can change mid-session.
+  const startupMajor = typescriptMajor(cwd);
+  if (startupMajor !== null && startupMajor >= NO_JS_API_FROM) log(noJsApiReason(startupMajor));
+
   /** @type {Map<string, object>} */
   const pending = new Map();
   let status = 'idle';
@@ -168,7 +182,14 @@ export function createCodemod({cwd, outPath, log}) {
       status = 'unavailable';
       reason = configPath
         ? 'typescript not found in project node_modules'
-        : `no ${PROJECT_CONFIG_LABEL} found at or above the output directory`;
+        : `no ${PROJECT_CONFIG_LABEL} found for the extension`;
+      return;
+    }
+    const major = typescriptMajor(cwd);
+    if (major !== null && major >= NO_JS_API_FROM) {
+      pending.clear();
+      status = 'unavailable';
+      reason = noJsApiReason(major);
       return;
     }
 

@@ -106,6 +106,8 @@ String literals are rewritten only when the type checker confirms what they are;
 
 Applied edits are printed to the terminal and the project is re-typechecked immediately, so the panel confirms the fix landed. **Undo is git**: these are ordinary dev-loop edits, like an editor refactor.
 
+Locating code needs TypeScript's JS compiler API, which TypeScript 7 (the native port) doesn't ship. On a TypeScript 7 project the daemon says so at startup and the panel reports fixes as unavailable; the typecheck panel is unaffected, since it only runs `tsc`.
+
 This is the one feature that writes outside the generated file, so it exists only under `--fix`. Edits are confined to your project directory and to source extensions, a pending fix is single-use, and if you edit a file after the analysis ran the apply is refused rather than applied at stale offsets.
 
 ## If your extension is JavaScript
